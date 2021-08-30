@@ -33,8 +33,7 @@ def propExample := prop!{p ∧ q → r ∧ p ∨ ¬ s1 → s2 }
 #print propExample
 #eval propExample
 
-#eval PropForm.toString propExample
-#eval propExample.toString
+#eval toString propExample
 
 -- end textbook: prop!
 
@@ -107,7 +106,7 @@ def PropForm.eval (v : PropAssignment) : PropForm → Bool
 
 
 -- textbook: propassign
-#check mkPropAssignment ["p", "q", "r"]
+#check PropAssignment.mk ["p", "q", "r"]
 #check propassign!{p, q, r}
 
 #eval propExample.eval propassign!{p, q, r}
@@ -128,7 +127,7 @@ def allSublists : List α → List (List α)
 -- textbook: truthTable
 def truthTable (A : PropForm) : List (List Bool × Bool) :=
   let vars := A.vars
-  let assignments := (allSublists vars).map mkPropAssignment
+  let assignments := (allSublists vars).map PropAssignment.mk
   let evalLine := fun v : PropAssignment => (vars.map v, A.eval v)
   assignments.map evalLine
 
@@ -191,7 +190,7 @@ end hidden
 
 -- textbook: toNnfForm test
 #eval propExample.toNnfForm
-#eval propExample.toNnfForm.toString
+#eval toString propExample.toNnfForm
 -- end textbook: toNnfForm test
 
 
@@ -251,8 +250,8 @@ def exCnf2 := cnf!{
 #print exCnf1
 #print exCnf2
 
-#eval Clause.toString exClause1
-#eval CnfForm.toString exCnf2
+#eval toString exClause1
+#eval toString exCnf2
 -- end textbook: syntax for literals, etc.
 
 -- textbook: operations on clauses
@@ -275,7 +274,7 @@ def CnfForm.disj (cnf1 cnf2 : CnfForm) : CnfForm :=
 (cnf1.map (fun cls => cnf2.map cls.union)).Union
 
 #eval cnf!{p, q, u -v}.disj cnf!{r1 r2, s1 s2, t1 t2 t3}
-#eval CnfForm.toString $ cnf!{p, q, u -v}.disj cnf!{r1 r2, s1 s2, t1 t2 t3}
+#eval toString $ cnf!{p, q, u -v}.disj cnf!{r1 r2, s1 s2, t1 t2 t3}
 -- end textbook: CNF disjunction
 
 -- textbook: toCnfForm
