@@ -17,7 +17,7 @@ workspace through your browser.
 
 1. Register for Gitpod account at [https://gitpod.io/login/](https://gitpod.io/login/).
 
-2. Go to [https://gitpod.io/#/https://avigad.github.io/lamr/](https://gitpod.io/#/https://avigad.github.io/lamr/). In other words, preface the url of this repository with `https://gitpod.io/#`.
+2. Go to [https://gitpod.io/#/https://github.com/avigad/lamr](https://gitpod.io/#/https://github.com/avigad/lamr). In other words, preface the url of this repository with `https://gitpod.io/#`.
 This will start a new workspace based on this repository.
 
 3. It may take a little while for the workspace to start, but when it does, you will be looking
