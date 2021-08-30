@@ -1,7 +1,7 @@
 # Logic and Mechanized Reasoning
 
 This repository is designed to accompany the course by the same name. The textbook is available at
-[avigad.github.io/lamr](avigad.github.io/lamr). The repository contains a supporting library
+[https://avigad.github.io/lamr](https://avigad.github.io/lamr). The repository contains a supporting library
 and files containing examples from the textbook that you can edit and experiment with.
 
 The course requires the Lean 4 programming language and theorem prover, as well as
