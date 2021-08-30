@@ -82,6 +82,7 @@ on Windows, OS/X, or Linux.
 above.
 
 3. Inside the top folder of the repository, type `leanproject build` to compile the library files.
+Also, copy the examples folder from the `LAMR` folder to the `User` folder.
 
 4. Open the repository folder in VS Code.
 
