@@ -59,7 +59,7 @@ repositories in the cloud. If you are familiar with these or willing to
 [learn](https://guides.github.com/) how to use them, you can fork this repository to your
 github account and use the fork as a file system for the virtual machine.
 
-1. Create a fork of [https://avigad.github.io/lamr/](https://avigad.github.io/lamr/) by clicking
+1. Create a fork of [https://gitpod.io/#/https://github.com/avigad/lamr](https://gitpod.io/#/https://github.com/avigad/lamr) by clicking
 the `Fork` button in the upper right corner.
 
 2. Follow the instructions above to start a virtual machine on your copy of the repository.
