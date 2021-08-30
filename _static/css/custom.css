@@ -1,0 +1,11 @@
+.rst-content .admonition .admonition-title:before {
+    content: none;
+}
+
+.rst-content .admonition-theorem .admonition-title:before {
+    content: none;
+}
+
+.rst-content .admonition-proof .admonition-title:before {
+    content: none;
+}

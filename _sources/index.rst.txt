@@ -1,0 +1,31 @@
+.. Logic and Mechanized Reasoning documentation master file, created by
+   sphinx-quickstart on Wed Jun  9 15:14:10 2021.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Logic and Mechanized Reasoning
+==============================
+
+.. toctree::
+   :maxdepth: 2
+   :numbered:
+   :caption: Contents:
+
+   introduction
+   mathematical_background
+   using_lean
+   propositional_logic
+   implementing_propositional_logic
+   using_sat_solvers
+   deduction_and_search
+   terms_and_formulas
+   implementing_terms_and_formulas
+   using_smt_solvers
+   first_order_logic
+   implementing_first_order_logic
+   using_first_order_theorem_provers
+   simple_type_theory
+
+.. * :ref:`genindex`
+   * :ref:`modindex`
+   * :ref:`search`

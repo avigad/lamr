@@ -1,0 +1,258 @@
+.. highlight:: lean
+
+.. _chapter_implementing_propositional_logic:
+
+Implementing Propositional Logic
+================================
+
+.. _section: implementing_propositional_formulas:
+
+Propositional formulas
+----------------------
+
+We have seen that the set of propositional formulas can be defined
+inductively, and
+we have seen that Lean makes it easy to specify inductively defined types.
+It's a match made in heaven!
+Here is the definition of the type of propositional formulas that we will
+use in this course:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: PropForm
+   :end-before: -- end textbook: PropForm
+
+You can find this example in the file `implementing_propositional_logic/examples.lean` in the `User` folder of the course repository.
+
+The command `import LAMR.Util.Propositional` at the top of the file
+imports the part of the library with functions that we provide for you
+to deal with propositional logic.
+We will often put a copy of a definition from the library in an
+examples file so you can experiment with it.
+Here we have put it in a namespace called `hidden` so that
+our copy's full name is `hidden.PropForm`,
+which won't conflict with the one in the library.
+Outside the `hidden` namespace, the command `#print PropForm`
+refers to the real one, that is, the one in the library.
+The command `open PropForm` means that we can write, for example,
+`tr` for the first constructor instead of `PropForm.tr`.
+Try writing some propositional formulas of your own.
+There should be squiggly blue lines under the the `#print`
+and `#check` commands in VSCode,
+indicating that there is Lean output associated with these.
+You can see it by hovering over the commands,
+or by moving the caret to the command and checking the
+`Lean infoview` window.
+
+The phrase `deriving Repr, DecidableEq` tells Lean to automatically
+define functions to be used to test equality of two expressions
+of type `PropForm` and to display the result of an `#eval`.
+We'll generally leave these out of the display from now on.
+You an always use `#check` and `#print` to learn more about
+a definition in the library. If you hold down `ctrl` and click on an identifier,
+the VSCode Lean extension will take you to the definition in the library.
+Simply holding down `ctrl` and hovering over it will show you the
+definition in a pop-up window.
+Try taking a look at the definition of `PropForm` in the library.
+
+Writing propositional formulas using constructors can be a
+pain in the neck.
+In the library, we have used Lean's mechanisms for defining new syntax
+to implement nicer syntax.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: prop!
+   :end-before: -- end textbook: prop!
+
+You can get the symbols by typing `\\and`, `\\to`, `\\or`, `\\not`, and `\\iff`
+in VS Code. And, in general, when you see a symbol in VSCode,
+hovering over it with the mouse shows you how to type it.
+Once again, try typing some examples of your own.
+The library defines the function `PropForm.toString` that produces
+a more readable version of a propositional formula,
+one that, when inserted within the `prop!{...}` brackets,
+should produce the same result.
+
+Because `PropForm` is inductively defined, we can easily define
+functions using structural recursion.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: PropForm rec
+   :end-before: -- end textbook: PropForm rec
+
+The function `List.union` returns concatenation of the two lists with
+duplicates removed, assuming that the original two lists had no duplicate elements.
+
+
+.. _implementing_propositional_semantics:
+
+Semantics
+---------
+
+The course library defines the type `PropAssignment` to be `String → Bool`.
+If `v` has type `PropAssignment`, you should think of the expression `v s` as
+assigning a truth value to the variable named `s`.
+The following function then evaluates the truth value of any propositional
+formula under assignment `v`:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: PropForm.eval
+   :end-before: -- end textbook: PropForm.eval
+
+The example at the end defines `v` to be the assignment that
+assigns the value `true` to the strings `"p"`, `"q"`, and `"r"`
+and false to all the others.
+This is a reasonably convenient way to describe truth assignments manually,
+so the library provides a function `mkPropAssignment` and notation `propassign!{...}` to support that.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: propassign
+   :end-before: -- end textbook: propassign
+
+You should think about how the next function manages to compute a list
+of all the sublists of a given list.
+It is analogous to the power set operation in set theory.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: allSublists
+   :end-before: -- end textbook: allSublists
+
+With that in hand, here is a function that computes the truth table of a
+propositional formula.
+The value of `truthTable A` is a list of pairs:
+the first element of the pair is the list of `true`/`false` values assigned
+to the elements of `vars A`, and the second element
+is the truth value of `A` under that assignment.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: truthTable
+   :end-before: -- end textbook: truthTable
+
+We can now use the list operation `List.all` to test whether a formula is valid,
+and we can use `List.some` to test whether it is satisfiable.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: isValid
+   :end-before: -- end textbook: isValid
+
+
+.. _section_implementing_propositional_normal_forms:
+
+Normal Forms
+------------
+
+The library defines an inductive type of negation-normal form formulas:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: NnfForm
+   :end-before: -- end textbook: NnfForm
+
+It is then straightforward to define the negation operation for formulas in
+negation normal form, and a translation from propositional formulas
+to formulas in negation normal form.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: toNnfForm
+   :end-before: -- end textbook: toNnfForm
+
+Putting the first in the namespace `NnfForm` has the effect that given `A : NnfForm`,
+we can write `A.neg` instead of `NnfForm.neg A`.
+Similarly, putting the second definition in the namespace `PropForm` means we can write
+`A.toNnfForm` to put a propositional formula in negation normal form.
+
+We can try them out on the example defined above:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: toNnfForm test
+   :end-before: -- end textbook: toNnfForm test
+
+To handle conjunctive normal form, the library defines a type `Lit` of literals.
+A `Clause` is then a list of literals, and a `CnfForm` is a list of clauses.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: Lit, Clause, CnfForm
+   :end-before: -- end textbook: Lit, Clause, CnfForm
+
+As usual, you can use `#check` and `#print` to find information about them, and ctrl-click
+to see the definitions in the library.
+Since, as usual, defining things using constructors can be annoying,
+the library defines syntax for writing expressions of these types.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: syntax for literals, etc.
+   :end-before: -- end textbook: syntax for literals, etc.
+
+Let us now consider what is needed to put an arbitrary propositional formula in
+conjunctive normal form. In :numref:`section_normal_forms`, we saw that the key
+is to show that the disjunction of two CNF formulas is again CNF.
+Lean's library has a function `List.insert`, which adds an element to a list;
+if the element already appears in the list, it does nothing.
+It has a function `List.union` that will form the union of two lists;
+if the original two lists have no duplicates, the union won't either.
+Finally, we have a function `List.Union` which takes the union of a list of lists.
+Since clauses are lists, we can use them on clauses:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: operations on clauses
+   :end-before: -- end textbook: operations on clauses
+
+We can now take the disjunction of a single clause and a CNF formula by taking
+the union of the clause with each element of the CNF formula.
+We can implement that with the function `List.map`:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: disjunction of a clause and a CNF formula
+   :end-before: -- end textbook: disjunction of a clause and a CNF formula
+
+This applied the function "take the union with `exClause0`" to each element of `exCnf1`,
+and returns the resulting list.
+We can now define the disjunction of two CNF formulas by taking all the
+clauses in the first,
+taking the disjunction of each clause with the second CNF,
+and then taking the union of all of those, corresponding to the conjunctions
+of the CNFs. Here is the library definition, and an example:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: CNF disjunction
+   :end-before: -- end textbook: CNF disjunction
+
+Functional programmers like this sort of definition; it's short, clever,
+and inscrutable.
+You should think about defining the disjunction of two CNF formulas by hand,
+using recursions over clauses and CNF formulas.
+Your solution will most likely reconstruct the effect of the instance `map` and
+`Union` in the library definition,
+and that will help you understand why they make sense.
+
+In any case, with this in hand, it is easy to define the translation from
+negation normal form formulas and arbitrary propositional formulas to
+CNF.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: toCnfForm
+   :end-before: -- end textbook: toCnfForm
+
+We can try them out:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
+   :start-after: -- textbook: CnfForm test
+   :end-before: -- end textbook: CnfForm test
+
+
+Exercises
+---------
+
+#. Write a Lean function that, given any element of `PropForm`, outputs a
+   list of all the subformulas.
+
+#. Write a Lean function that, given a list of propositional formulas and another
+   propositional formula, determines whether the second is a logical consequence
+   of the first.
+
+#. Write a Lean function that, given a clause, tests whether any literal `Lit.pos p`
+   appears together with its negation `Lit.neg p`.
+   Write another Lean function that, given a formula in conjunctive normal form,
+   deletes all these clauses.
+
+
+
+

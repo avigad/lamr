@@ -1,0 +1,696 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>2. Mathematical Background &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "{\\to}", "liff": "{\\leftrightarrow}", "proves": "{\\vdash}", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1]}}}</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Using Lean" href="using_lean.html" />
+    <link rel="prev" title="1. Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Mathematical Background</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#induction-and-recursion-on-the-natural-numbers">2.1. Induction and recursion on the natural numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-induction">2.2. Complete induction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generalized-induction-and-recursion">2.3. Generalized induction and recursion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#invariants">2.4. Invariants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">2.5. Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean.html">3. Using Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">6. Using SAT Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_and_search.html">7. Deduction and search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">8. Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">9. Implementing Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">10. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">11. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">12. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">13. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">14. Simple Type Theory</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Logic and Mechanized Reasoning</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">2. </span>Mathematical Background</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/mathematical_background.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <span class="target" id="chapter-mathematical-background"></span><div class="section" id="mathematical-background">
+<h1><span class="section-number">2. </span>Mathematical Background<a class="headerlink" href="#mathematical-background" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="induction-and-recursion-on-the-natural-numbers">
+<span id="section-induction-and-recursion-on-the-natural-numbers"></span><h2><span class="section-number">2.1. </span>Induction and recursion on the natural numbers<a class="headerlink" href="#induction-and-recursion-on-the-natural-numbers" title="Permalink to this headline">¶</a></h2>
+<p>In its most basic form, the principle of induction on the natural numbers
+says that if you want to prove that every natural number has some property,
+it suffices to show that zero has the property,
+and that whenever some number <span class="math notranslate nohighlight">\(n\)</span> has the property, so does <span class="math notranslate nohighlight">\(n + 1\)</span>.
+Here is an example.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>For every natural number <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(\sum_{i \le n} i = n (n + 1) / 2\)</span>.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>Use induction on <span class="math notranslate nohighlight">\(n\)</span>. In the base case, we have
+<span class="math notranslate nohighlight">\(\sum_{i \le 0} i = 0 = 0 (0 + 1) / 2\)</span>. For the induction step,
+assuming <span class="math notranslate nohighlight">\(\sum_{i \le n} i = n (n + 1) / 2\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\sum_{i \le n + 1} i &amp; = \sum_{i \le n} i + (n + 1) \\
+  &amp;= n (n + 1) / 2 + 2 (n + 1) / 2 \\
+  &amp;= (n + 1) (n + 2) / 2\end{split}\]</div>
+</div>
+<p>The story is often told that Gauss, as a schoolchild,
+discovered this formula by writing</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}S &amp;= 1 + \ldots + n \\
+S &amp;= n + \ldots + 1\end{split}\]</div>
+<p>and then adding the two rows and dividing by two.
+The proof by induction doesn’t provide insight as to how one might <em>discover</em>
+the theorem,
+but once you have guessed it, it provides a short and effective
+means for establishing that it is true.</p>
+<p>In a similar vein, you might notice that an initial segment of the odd
+numbers yields a perfect square. For example, we have
+<span class="math notranslate nohighlight">\(1 + 3 + 5 + 7 + 9 = 25\)</span>.
+Here is a proof of the general fact:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>For every natural number <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(\sum_{i \le n} (2 i + 1) = (n + 1)^2\)</span>.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>The base case is easy, and assuming the inductive hypothesis, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\sum_{i \le n + 1} (2 i + 1) &amp; = \sum_{i \le n} (2i + 1) + 2 (n + 1) + 1 \\
+  &amp;= (n + 1)^2 + 2n + 3 \\
+  &amp;= n^2 + 4n + 4 \\
+  &amp;= (n + 2)^2.\end{split}\]</div>
+</div>
+<p>A close companion to induction is the principle of <em>recursion</em>.
+Recursion enables us to define functions on the natural numbers,
+and induction allows us to prove things about them.
+For example, let <span class="math notranslate nohighlight">\(g : \mathbb{N} \to \mathbb{N}\)</span> be the function defined by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}g(0)   &amp;= 1 \\
+g(n+1) &amp;= (n+1) \cdot g(n)\end{split}\]</div>
+<p>Then <span class="math notranslate nohighlight">\(g\)</span> is what is known as the <em>factorial</em> function,
+whereby <span class="math notranslate nohighlight">\(g(n)\)</span> is conventionally written <span class="math notranslate nohighlight">\(n!\)</span>.
+The point is that if you don’t know what the factorial function is,
+the two equations above provide a complete specification.
+There is exactly one function, defined on the natural numbers,
+that meets that description.</p>
+<p>Here is an identity involving the factorial function:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p><span class="math notranslate nohighlight">\(\sum_{i \le n} i \cdot i! = (n + 1)! - 1\)</span>.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>The base case is easy. Assuming the claim holds for <span class="math notranslate nohighlight">\(n\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\sum_{i \le n+1} i \cdot i! &amp;= \sum_{i \le n} i \cdot i! + (n+1) \cdot (n+1)! \\
+  &amp;= (n + 1)! + (n+1) \cdot (n+1)! - 1 \\
+  &amp;= (n + 1)! (1 + (n + 1)) - 1 \\
+  &amp;= (n + 2)! - 1\end{split}\]</div>
+</div>
+<p>This is a pattern found throughout mathematics and computer science:
+define functions and operations using recursion, and then use induction
+to prove things about them.</p>
+<p>The <em>Towers of Hanoi</em> puzzle provides a textbook example of a problem
+that can be solved recursively. The puzzle consists of three pegs and
+disks of different diameters that slide onto the pegs.
+The initial configuration has <span class="math notranslate nohighlight">\(n\)</span> disks stacked on one of the pegs
+in decreasing order, with the largest one at the bottom and the smallest
+one at the top.
+Suppose the pegs are numbered 1, 2, and 3, with the disks starting on peg 1.
+The required task is to move all the disks from peg 1 to peg 2, one at a time,
+with the constraint that a larger disk is never placed on top of a smaller one.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>To move n disks from peg A to peg B with auxiliary peg C:
+    if n = 0
+        return
+    else
+        move n - 1 disks from peg A to peg C using auxiliary peg B
+        move 1 disk from peg A to peg B
+        move n - 1 disks from peg C to peg B using auxiliary peg A
+</pre></div>
+</div>
+<p>We will show in class that this requires <span class="math notranslate nohighlight">\(2^n - 1\)</span> moves.
+The exercises below ask you to show that <em>any</em> solution requires
+at least this many moves.</p>
+</div>
+<div class="section" id="complete-induction">
+<span id="section-complete-induction"></span><h2><span class="section-number">2.2. </span>Complete induction<a class="headerlink" href="#complete-induction" title="Permalink to this headline">¶</a></h2>
+<p>As we have described it, the principle of induction is pretty rigid:
+in the inductive step, to show that <span class="math notranslate nohighlight">\(n+1\)</span> has some property,
+we can only use the corresponding property of <span class="math notranslate nohighlight">\(n\)</span>.
+The principle of <em>complete</em> induction is much more flexible.</p>
+<div class="admonition-principle-of-complete-induction admonition">
+<p class="admonition-title">Principle of complete induction</p>
+<p>To show that every natural number <span class="math notranslate nohighlight">\(n\)</span> has some property,
+show that <span class="math notranslate nohighlight">\(n\)</span> has that property whenever all smaller numbers do.</p>
+</div>
+<p>As an exercise, we ask you to prove the principle of complete induction using the ordinary principle of induction. Remember that a natural number greater than or equal to 2 is <em>composite</em> if it can be written as a product of two smaller numbers, and <em>prime</em> otherwise.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>Every number greater than two can be factored into primes.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>Let <span class="math notranslate nohighlight">\(n\)</span> be any natural number greater than or equal
+to 2. If <span class="math notranslate nohighlight">\(n\)</span> is prime, we are done. Otherwise, write
+<span class="math notranslate nohighlight">\(n = m \cdot k\)</span>, where <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(k\)</span> are smaller than <span class="math notranslate nohighlight">\(n\)</span> (and hence greater than 1).
+By the inductive hypothesis, <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(k\)</span>
+can each be factored into prime numbers, and combining
+these yields a factorization of <span class="math notranslate nohighlight">\(n\)</span>.</p>
+</div>
+<p>Here is another example we will discuss in class:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>For any <span class="math notranslate nohighlight">\(n \ge 3\)</span>, the sum of the angles in any
+<span class="math notranslate nohighlight">\(n\)</span>-gon is <span class="math notranslate nohighlight">\(180 (n - 2)\)</span>.</p>
+</div>
+<p>The companion to complete induction on the natural numbers is
+a form of recursion known as course-of-values recursion,
+which allows you to define a function <span class="math notranslate nohighlight">\(f\)</span> by giving
+the value of <span class="math notranslate nohighlight">\(f(n)\)</span> in terms of the value of <span class="math notranslate nohighlight">\(f\)</span>
+at arbitrary smaller values of <span class="math notranslate nohighlight">\(n\)</span>.
+For example, we can define the sequence of Fibonacci
+numbers as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}F_0 &amp;= 0 \\
+F_1 &amp; = 1 \\
+F_{n + 2} &amp;= F_{n + 1} + F_n\end{split}\]</div>
+<p>The fibonacci numbers satisfy lots of interesting identities,
+some of which are given in the exercises.</p>
+<p>In fact, you can define a function by recursion as long as
+<em>some</em> associated measure decreases with each recursive
+call. Define a function <span class="math notranslate nohighlight">\(f(n, k)\)</span> for <span class="math notranslate nohighlight">\(k \le n\)</span> by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f(n, k) = \begin{cases}
+    1 &amp; \text{if $k = 0$ or $k = n$} \\
+    f(n-1, k) + f(n-1, k-1) &amp; \text{otherwise}
+  \end{cases}\end{split}\]</div>
+<p>Here it is the first argument that decreases. In class,
+we’ll discuss a proof that this defines the function</p>
+<div class="math notranslate nohighlight">
+\[{n \choose k} = \frac{n!}{k!(n-k)!}\]</div>
+<p>which is simultaneously equal to number of ways of choosing <span class="math notranslate nohighlight">\(k\)</span>
+objects out of <span class="math notranslate nohighlight">\(n\)</span> without repetition.</p>
+<p>Finally, here is a recursive description of the greatest common
+divisor of two nonnegative integers:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\fn{gcd}(x, y) = \begin{cases}
+        x &amp; \text{if $y = 0$} \\
+        \fn{gcd}(y, \fn{mod}(x, y)) &amp; \text{otherwise}
+    \end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\fn{mod}(x, y)\)</span> is the remainder when dividing <span class="math notranslate nohighlight">\(x\)</span> by <span class="math notranslate nohighlight">\(y\)</span>.</p>
+</div>
+<div class="section" id="generalized-induction-and-recursion">
+<span id="section-generalized-induction-and-recursion"></span><h2><span class="section-number">2.3. </span>Generalized induction and recursion<a class="headerlink" href="#generalized-induction-and-recursion" title="Permalink to this headline">¶</a></h2>
+<p>The natural numbers are characterized inductively by the following clauses:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(0\)</span> is a natural number.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(x\)</span> is a natural number, so is <span class="math notranslate nohighlight">\(\fn{succ}(x)\)</span>.</p></li>
+</ul>
+<p>Here the function <span class="math notranslate nohighlight">\(\fn{succ}(x)\)</span> is known as the <em>successor</em>
+function, namely, the function that, given any number, returns
+the next one in the sequence.
+The natural numbers structure is also sometimes said to be <em>freely generated</em>
+by  this data.
+The fact that it is <em>generated</em> by <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(\fn{succ}(x)\)</span>
+means that it  is the <em>smallest</em> set that contains <span class="math notranslate nohighlight">\(0\)</span> and is
+closed under <span class="math notranslate nohighlight">\(\fn{succ}(x)\)</span>;
+in other words,  any set of natural numbers that contains <span class="math notranslate nohighlight">\(0\)</span> and
+is closed under <span class="math notranslate nohighlight">\(\fn{succ}(x)\)</span> contains all of them.
+This is just the principle of induction in disguise.
+The fact that it is generated <em>freely</em> by these elements means that
+there is no confusion between them: <span class="math notranslate nohighlight">\(0\)</span> is not a successor,
+and if <span class="math notranslate nohighlight">\(\fn{succ}(x)=\fn{succ}(y)\)</span>, then <span class="math notranslate nohighlight">\(x = y\)</span>.
+Intuitively, being generated by <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(\fn{succ}(x)\)</span>
+means that any number can be represented by an expression built up from these,
+and being generated freely means that the representation is unique.</p>
+<p>The natural numbers are an example of an <em>inductively defined structure</em>.
+These come up often in logic and computer science.
+It is often useful to define functions by recursion on such structures,
+and to use induction to prove things about them.
+We will describe the general schema here with some examples that
+often come up in computer science.</p>
+<p>Let <span class="math notranslate nohighlight">\(\alpha\)</span> be any data type. The set of all <em>lists</em> of elements
+of <span class="math notranslate nohighlight">\(\alpha\)</span>, which we will write as <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>,
+is defined inductively as follows:</p>
+<ul class="simple">
+<li><p>The element <span class="math notranslate nohighlight">\(\fn{nil}\)</span> is an element of <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(a\)</span> is an element of <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\ell\)</span> is an element
+of <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>, then the element <span class="math notranslate nohighlight">\(\fn{cons}(a, \ell)\)</span>
+is an element of <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>.</p></li>
+</ul>
+<p>Here <span class="math notranslate nohighlight">\(\fn{nil}\)</span> is intended to describe the empty list, <span class="math notranslate nohighlight">\([]\)</span>, and
+<span class="math notranslate nohighlight">\(\fn{cons}(a, \ell)\)</span> is intended to describe the result of adding
+<span class="math notranslate nohighlight">\(a\)</span> to the beginning of <span class="math notranslate nohighlight">\(\ell\)</span>. So, for example, the list of
+natural numbers <span class="math notranslate nohighlight">\([1, 2, 3]\)</span> would be written <span class="math notranslate nohighlight">\(\fn{cons}(1, \fn{cons}(2, \fn{cons}(3, \fn{nil})))\)</span>. Think of <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span> as
+having a constructor <span class="math notranslate nohighlight">\(\fn{cons}(a, \cdot)\)</span> for each <span class="math notranslate nohighlight">\(a\)</span>.
+Then, in the terminology above, <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span> is generated
+inductively by <span class="math notranslate nohighlight">\(\fn{nil}\)</span> and those constructors.</p>
+<p>Henceforth, for clarity, we’ll use the notation <span class="math notranslate nohighlight">\([]\)</span> for <span class="math notranslate nohighlight">\(\fn{nil}\)</span>
+and <span class="math notranslate nohighlight">\(a \mathbin{::} \ell\)</span> for <span class="math notranslate nohighlight">\(\fn{cons}(a, \ell)\)</span>.
+More generally, we can take <span class="math notranslate nohighlight">\([a, b, c, \ldots]\)</span> to be an abbreviation for
+<span class="math notranslate nohighlight">\(a \mathbin{::} (b \mathbin{::} (c \mathbin{::} \ldots []))\)</span>.</p>
+<p>Saying that <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span> is inductively defined means
+that we principles of recursion and induction on it. For example, the following
+concatenates two lists:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\fn{append}([], m) &amp;= m \\
+\fn{append}((a \mathbin{::} \ell), m) &amp;= a \mathbin{::} (\fn{append}(\ell, m))\end{split}\]</div>
+<p>Here the recursion is on the first argument.
+As with the natural numbers, the recursive definition specifies
+what to do for each of the constructors.
+We’ll use the notation <span class="math notranslate nohighlight">\(\ell \append m\)</span> for <span class="math notranslate nohighlight">\(\fn{append}(\ell, m)\)</span>,
+and with this notation, the two defining clauses read as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}[] \append m &amp;= m \\
+(a \mathbin{::} \ell) \append m &amp;= a \mathbin{::} (\ell \append m)\end{split}\]</div>
+<p>From the definition, we have <span class="math notranslate nohighlight">\([] \append \ell = \ell\)</span> for every <span class="math notranslate nohighlight">\(\ell\)</span>,
+but <span class="math notranslate nohighlight">\(m \append [] = m\)</span> is something we have to prove.</p>
+<div class="admonition-proposition admonition">
+<p class="admonition-title">Proposition</p>
+<p>For every <span class="math notranslate nohighlight">\(m\)</span>, we have <span class="math notranslate nohighlight">\(m \append [] = m\)</span>.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>We use induction on <span class="math notranslate nohighlight">\(m\)</span>. In the base case, we have
+<span class="math notranslate nohighlight">\([] \append [] = []\)</span> from the definition of <span class="math notranslate nohighlight">\(\fn{append}\)</span>.
+For the induction step, suppose we have <span class="math notranslate nohighlight">\(m \append [] = m\)</span>.
+Then we also have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}(a \mathbin{::} m) \append [] &amp;= a \mathbin{::} (m \append []) \\
+    &amp;= a \mathbin{::} m.\end{split}\]</div>
+</div>
+<p>The definition of the append function is an example of <em>structural recursion</em>,
+called that because the definition proceeds by recursion on the structure
+of the inductively defined type. In particular, there is a clause of the
+definition corresponding to each constructor.
+The proof we have just seen is an instance of <em>structural induction</em>,
+called that because, once again, there is part of the proof for each
+constructor.
+The base case, for <span class="math notranslate nohighlight">\(\fn{nil}\)</span>, is straightforward, because that
+constructor has no arguments.
+The inductive step, for <span class="math notranslate nohighlight">\(\fn{cons}\)</span>, comes with an inductive hypothesis
+because the <span class="math notranslate nohighlight">\(\fn{cons}\)</span> constructor has a recursive argument.
+In class, we’ll do a similar proof that the <span class="math notranslate nohighlight">\(\fn{append}\)</span> operation
+is associative.</p>
+<p>The following function (sometimes called <span class="math notranslate nohighlight">\(\fn{snoc}\)</span>) appends a single element at the end:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\fn{append1}([], a) &amp;= \fn{cons}(a, \fn{nil}) \\
+\fn{append1}(\fn{cons}(b, \ell), a) &amp;= \fn{cons}(b, \fn{append1}(\ell, a))\end{split}\]</div>
+<p>An easy induction on <span class="math notranslate nohighlight">\(\ell\)</span> shows that, as you would expect,
+<span class="math notranslate nohighlight">\(\fn{append1}(\ell, a)\)</span> is equal to <span class="math notranslate nohighlight">\(\ell \append [a]\)</span>.</p>
+<p>The following function reverses a list:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\fn{reverse}([]) &amp;= [] \\
+\fn{reverse}(\fn{cons}(a, \ell)) &amp;= \fn{append1}(\fn{reverse}(\ell), a)\end{split}\]</div>
+<p>In class, or for homework, we’ll work through proofs that that the following holds for
+every pair of lists <span class="math notranslate nohighlight">\(\ell\)</span> and <span class="math notranslate nohighlight">\(m\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\fn{reverse}(\ell \append m) = \fn{reverse}(m) \append \fn{reverse}(\ell)\]</div>
+<p>Here is another example of a property that can be proved by induction:</p>
+<div class="math notranslate nohighlight">
+\[\fn{reverse}(\fn{reverse}(\ell)) = \ell\]</div>
+<p>From a mathematical point of view, this definition of the reverse function above
+is as good as any other, since it specifies the function we want unambiguously.
+But in <a class="reference internal" href="using_lean.html#chapter-using-lean"><span class="std std-numref">Chapter 3</span></a> we will see that such a definition can also be interpreted as executable code in a functional programming language such as Lean. In this case, the execution is quadratic in the length of the list (think about why). The following definition is more efficient in that sense:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\fn{reverseAux}([], m) &amp;= m \\
+\fn{reverseAux}((a \mathbin{::} \ell), m) &amp;= \fn{reverseAux}(\ell, (a \mathbin{::} m)) \\
+\\
+\fn{reverse'}(\ell) &amp;= \fn{reverseAux}(\ell, [])\end{split}\]</div>
+<p>The idea is that <span class="math notranslate nohighlight">\(\fn{reverseAux}\)</span> adds all the elements of the first argument
+to the second one in reverse order. So the second arguments acts as an <em>accumulator</em>.
+In fact, because it is a tail recursive description, the code generated by Lean is
+quite efficient.
+In class, we’ll discuss an inductive proof that
+<span class="math notranslate nohighlight">\(\fn{reverse}(\ell) = \fn{reverse'}(\ell)\)</span> for every <span class="math notranslate nohighlight">\(\ell\)</span>.</p>
+<p>It is worth mentioning that structural induction is not the only
+way to prove things about lists, and structural recursion is not the only
+way to define functions by recursion.
+Generally speaking, we can assign any complexity measure to a data type,
+and do induction on complexity,
+as long as the measure is well founded. (This will be the case,
+for example, for measures that take values in the natural numbers,
+with the usual ordering on size.)
+For example, we can define the length of a list as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\fn{length}([]) &amp;= 0 \\
+\fn{length}(a \mathbin{::} \ell) &amp;= \fn{length}(\ell) + 1\end{split}\]</div>
+<p>Then we can define a function <span class="math notranslate nohighlight">\(f\)</span> on lists by giving the value
+of <span class="math notranslate nohighlight">\(f(\ell)\)</span> in terms of the value of <span class="math notranslate nohighlight">\(f\)</span> on smaller lists,
+and we can prove a property of lists using the fact that the
+property holds of all smaller lists as an inductive hypothesis.
+These are ordinary instances of recursion and induction on the natural
+numbers.</p>
+<p>As another example, we consider the type of finite binary trees,
+defined inductively as follows:</p>
+<ul class="simple">
+<li><p>The element <span class="math notranslate nohighlight">\(\fn{empty}\)</span> is a binary tree.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are finite binary trees, so is the
+<span class="math notranslate nohighlight">\(\fn{node}(s, t)\)</span>.</p></li>
+</ul>
+<p>In this definition, <span class="math notranslate nohighlight">\(\fn{empty}\)</span> is intended to denote the empty
+tree, and <span class="math notranslate nohighlight">\(\fn{node}(s, t)\)</span> is intended to denote the
+binary tree that consists of a node at the top and has <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span>
+as the left and right subtrees, respectively.</p>
+<p>Be careful: it is more common to take the set of binary trees to consist of
+only the <em>nonempty</em> trees, in which case, what we have defined here are
+called the <em>extended</em> binary trees.
+Adding the empty tree results in a nice inductive characterization.
+If we started with a one-node tree as the base case, we
+would have to allow for three types of compound tree:
+one type with a node and a subtree to the left,
+one with a node and a subtree to the right,
+and one with a node with both left and right subtrees.</p>
+<p>We can count the number of nodes in an extended binary tree with
+the following recursive definition:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\fn{size}(\fn{empty}) &amp;= 0 \\
+\fn{size}(\fn{node}(s, t)) &amp;= 1 + \fn{size}(s) + \fn{size}(t)\end{split}\]</div>
+<p>We can compute the depth of an extended binary tree as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\fn{depth}(\fn{empty}) &amp;= 0 \\
+\fn{depth}(\fn{node}(s, t)) &amp;= 1 + \max(\fn{size}(s), \fn{size}(t))\end{split}\]</div>
+<p>Again, be careful: many authors take the depth of a tree to be the
+length of the longest path from the root to a leaf,
+in which case, what we have defined here computes the depth <em>plus one</em>
+for nonempty trees.</p>
+</div>
+<div class="section" id="invariants">
+<span id="section-invariants"></span><h2><span class="section-number">2.4. </span>Invariants<a class="headerlink" href="#invariants" title="Permalink to this headline">¶</a></h2>
+<p>The <em>mutilated chessboard</em> problems involves an <span class="math notranslate nohighlight">\(8 \times 8\)</span> chessboard with the
+top right and bottom left corners removed.
+Imagine you are given a set of dominoes, each of which can cover exactly two squares.
+It is possible to cover all the squares of the mutilated chessboard using dominoes,
+so that each square is covered by exactly one domino?</p>
+<p>A moment’s reflection shows that the answer is no. If you imagine the chessboard
+squares colored red and black in the usual way, you’ll notice that the two squares
+we removed have the same color, say, black. That means that there are more red
+squares than black squares. On the other hand, every domino covers exactly one
+square of each color. So no matter how many dominoes we put down, we’ll never
+have them color more red squares than black squares.</p>
+<a class="reference internal image-reference" href="_images/mchess.png"><img alt="mutilated chessboard" class="align-center" src="_images/mchess.png" style="height: 200px;" /></a>
+<p>The fact that any way of putting down dominoes covers the same number of red and
+black squares is an instance of an <em>invariant</em>, which is a powerful idea in
+both mathematics and computer science. An invariant is something—a quantity, or a property—that doesn’t change as something else does (in this case, the number of
+dominoes).</p>
+<p>Often the natural way to establish an invariant uses induction. In this case,
+it is obvious that putting down one domino doesn’t change the difference between
+the number of red and black squares covered, since each domino covers one of each.
+By induction on <span class="math notranslate nohighlight">\(n\)</span>, putting down <span class="math notranslate nohighlight">\(n\)</span> dominoes doesn’t change the difference
+either.</p>
+<p>The following puzzle, called the <em>MU puzzle</em>, comes from the book <em>Gödel, Escher, Bach</em>
+by Douglas Hofstadter. It concerns strings consisting of the letters <cite>M</cite>, <cite>I</cite>, and <cite>U</cite>.
+Starting with the string <cite>MI</cite>, we are allowed to apply any of the following rules:</p>
+<ol class="arabic simple">
+<li><p>Replace <cite>sI</cite> by <cite>sIU</cite>, that is, add a <cite>U</cite> to the end of any string that ends with <cite>I</cite>.</p></li>
+<li><p>Replace <cite>Ms</cite> by <cite>Mss</cite>, that is, double the string after the initial <cite>M</cite>.</p></li>
+<li><p>Replace <cite>sIIIt</cite> by <cite>sUt</cite>, that is, replace any three consecutive <cite>Is</cite> with a <cite>U</cite>.</p></li>
+<li><p>Replace <cite>sUUt</cite> by <cite>st</cite>, that is, delete any consecutive pair of <cite>Us</cite>.</p></li>
+</ol>
+<p>The puzzle asks whether it is possible to derive the string <cite>MU</cite>.
+The answer is no: it turns out that a string is derivable if and only if it consists
+of an <cite>M</cite> followed by any number of <cite>Is</cite> and <cite>Us</cite>, as long as the number of <cite>Is</cite> is not
+divisible by 3. In class, we’ll prove the “only if” part of this equivalence.
+Try the “if” part if you like a challenge.</p>
+<p>As a final example, in class we’ll discuss the Golomb <em>tromino theorem</em>. A <em>tromino</em>
+is an L-shaped configuration of three squares. Golomb’s theorem says that any
+<span class="math notranslate nohighlight">\(2^n \times 2^n\)</span> chessboard with one square removed can be tiled with trominoes.
+We’ll prove this together in class.</p>
+</div>
+<div class="section" id="exercises">
+<span id="section-mathematical-background-exercises"></span><h2><span class="section-number">2.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Prove the formula for the sum of a geometric series:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\sum_{i &lt; n} a r^i = \frac{a(r^n - 1)}{r - 1}\]</div>
+</div></blockquote>
+</li>
+<li><p>Prove that for every <span class="math notranslate nohighlight">\(n &gt; 4\)</span>, <span class="math notranslate nohighlight">\(n! &gt; 2^n\)</span>.</p></li>
+<li><p>Show that the solution to the towers of Hanoi given in
+<a class="reference internal" href="#section-induction-and-recursion-on-the-natural-numbers"><span class="std std-numref">Section 2.1</span></a> is optimal: for every <span class="math notranslate nohighlight">\(n\)</span>,
+it takes at least <cite>2^n - 1</cite> moves to move all the disks from one peg to another.</p></li>
+<li><p>Consider the variation on the towers of Hanoi problem in which you can only move
+a disk to an <em>adjacent</em> peg. In other words, you can move a disk from peg 1 to peg 2,
+from peg 2 to peg 1, from peg 2 to peg 3, or from peg 3 to peg 2, but not from
+peg 1 to peg 3 or from peg 3 to peg 1.</p>
+<p>Describe a recursive procedure for solving this problem, and show that is requires
+<span class="math notranslate nohighlight">\(3^n - 1\)</span> moves. If you are ambitious, show that this is optimal, and that
+it goes through all the <span class="math notranslate nohighlight">\(3^n\)</span> valid positions.</p>
+</li>
+<li><p>Consider the variation on the towers of Hanoi in which pegs can be moved cyclicly:
+from peg 1 to peg 2, from peg 2 to peg 3, or from peg 3 to peg 1. Describe a
+recursive procedure to solve this problem.</p></li>
+<li><p>Use the ordinary principle of induction to prove the principle of complete induction.</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(F_0, F_1, F_2, \ldots\)</span> be the sequence of Fibonacci numbers.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Let <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> be the two roots of the equation
+<span class="math notranslate nohighlight">\(x^2 = x + 1\)</span>. Show that for every <span class="math notranslate nohighlight">\(n\)</span>,
+<span class="math notranslate nohighlight">\(F_n = (\alpha^n - \beta^n)/\sqrt{5}\)</span>.</p></li>
+<li><p>Show <span class="math notranslate nohighlight">\(\sum_{i &lt; n} F_i = F_{n+1} - 1\)</span>.</p></li>
+<li><p>Show <span class="math notranslate nohighlight">\(\sum_{i \le n} F_i^2 = F_n F_{n+1}\)</span>.</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Show that with <cite>n</cite> straight lines we can divide the plane into at most <cite>(n^2 +  n + 2)</cite> regions, and that this is sharp.</p></li>
+<li><p>Show that the recursive description of <span class="math notranslate nohighlight">\(\fn{gcd}(x,y)\)</span> presented in
+<a class="reference internal" href="#section-generalized-induction-and-recursion"><span class="std std-numref">Section 2.3</span></a> correctly computes the greatest
+common divisor of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, where we define <span class="math notranslate nohighlight">\(\fn{gcd}(0,0)\)</span>
+equal to 0. You can restrict attention to nonnegative values of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.
+(Hint: you can use the fact that for for every <span class="math notranslate nohighlight">\(y\)</span> not equal to 0,
+we can write <span class="math notranslate nohighlight">\(x = \fn{div}(x, y) \cdot y + \fn{mod}(x, y)\)</span>,
+where <span class="math notranslate nohighlight">\(\fn{div}(x, y)\)</span> is the integer part of <span class="math notranslate nohighlight">\(x\)</span> divided by <span class="math notranslate nohighlight">\(y\)</span>.
+First show that for every <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(\fn{gcd}(x, y) = \fn{gcd}(x + ky, y)\)</span>,
+and use that fact.</p></li>
+<li><p>Use structural induction to prove</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\fn{reverse}(\ell \append m) = \fn{reverse}(m) \append \fn{reverse}(\ell).\]</div>
+</div></blockquote>
+</li>
+<li><p>Use structural induction to prove</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\fn{reverse}(\fn{reverse}(\ell)) = \ell.\]</div>
+</div></blockquote>
+</li>
+<li><p>Prove that for every <span class="math notranslate nohighlight">\(\ell\)</span> we have</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\fn{reverse}'(\ell) = \fn{reverse}(\ell).\]</div>
+</div></blockquote>
+</li>
+<li><p>Prove that for every <span class="math notranslate nohighlight">\(\ell\)</span> and <span class="math notranslate nohighlight">\(m\)</span> we have</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\fn{length}(\ell \append m) = \fn{length}(\ell) + \fn{length}(m).\]</div>
+</div></blockquote>
+</li>
+<li><p>How many binary trees of depth <span class="math notranslate nohighlight">\(n\)</span> are there? Prove your answer is correct.</p></li>
+<li><p>Show that a string is derivable in the MU puzzle if and only if it consists
+of an M followed by any number of Is and Us, as long as the number of Is is
+not divisible by 3.</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="using_lean.html" class="btn btn-neutral float-right" title="3. Using Lean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="1. Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Jeremy Avigad, Seul Baek, Marijn J. H. Heule, Wojciech Nawrocki, and Emre Yolcu.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

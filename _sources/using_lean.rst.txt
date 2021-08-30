@@ -1,0 +1,617 @@
+.. highlight:: lean
+
+.. _chapter_using_lean:
+
+Using Lean
+==========
+
+.. _section_about_lean:
+
+About Lean
+----------
+
+*Lean* is a new programming language and interactive proof assistant being developed
+at Microsoft Research.
+It is currently in an experimental, development stage, which makes it
+a risky choice for this course.
+But in many ways it is an ideal system for working with logical syntax
+and putting logic to use.
+Lean is an exciting project, and the system fun to use.
+So please bear with us.
+Using Lean puts us out on the frontier,
+but if you adopt a pioneering attitude,
+you will be in a good position to enjoy all the cool things
+that Lean has to offer.
+
+You can learn more about Lean on the `Lean home page <http://leanprover.github.io/>`_,
+on the `Lean community home page <https://leanprover-community.github.io/>`_,
+and by asking questions on the `Lean Zulip chat <https://leanprover.zulipchat.com/>`_,
+which you are heartily encouraged to join.
+To be more precise, there are currently two versions of Lean:
+
+- Lean 3 is reasonably stable, and primarily an interactive proof assistant.
+  It has a very large mathematical library, known as `mathlib <https://github.com/leanprover-community/mathlib>`_.
+
+- Lean 4 is being designed as a performant programming language, and it is still under
+  development.
+  It can also be used as a proof assistant, though it does not yet have a
+  substantial library.
+  Its language and syntax are similar to that of Lean 3,
+  but it is not backward compatible.
+
+In this course, we will use Lean 4, even though it is still in the early development phase
+and not well documented. As we will see, it has a lot of features that make that
+worthwhile. In particular, Lean 4 is designed to be an ideal language for implementing
+powerful logic-based systems, as evidenced by the fact that most of Lean 4 is implemented
+in Lean 4 itself.
+
+The goal of this section is to give you a better sense of what Lean is, how it can
+possibly be a programming language and proof assistant at the same time,
+and why that makes sense.
+The rest of the introduction will give you a quick tour of some of its features,
+and we will learn more about them as the course progresses.
+
+At the core, Lean is an implementation of a formal logical foundation known as *type theory*.
+More specifically, it is an implementation of *dependent type theory*, and even
+more specifically than that, it implements a version of the *Calculus of Inductive Constructions*.
+Saying that it implements a formal logic foundation means that there is a precise
+grammar for writing expressions, and precise rules for using them.
+In Lean, every well-formed expression has a type.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: expressions
+   :end-before: -- end textbook: expressions
+
+You can find this example in the file `using_lean/examples1.lean` in the `User` folder of the course repository.
+Feel free to edit that file and try examples of your own.
+You can always find the original file in the folder `LAMR/Examples`,
+which you should not edit.
+
+If you hover over the `#check` statements or move your cursor to one
+of these lines and check the information window,
+Lean reports the result of the command.
+It tells you that `2 + 2` has type `Nat`, `-5` has type `Int`, and so on.
+In fact, in the formal foundation, types are expressions as well.
+The types of all the expressions above are listed below:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: types
+   :end-before: -- end textbook: types
+
+Now Lean tells you each of these has type `Type`, indicating that they are
+all data types. If you know the type of an expression, you can ask Lean to confirm it:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: asserting types
+   :end-before: -- end textbook: asserting types
+
+Lean will report an error if it cannot construe the expression as
+having the indicated type.
+
+In Lean, you can define new objects with the `def` command.
+The new definition becomes part of the *environment*: the defined expression
+is associated with the identifier that appears after the word `def`.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: some definitions
+   :end-before: -- end textbook: some definitions
+
+The type annotations indicate the intended types of the arguments
+and the result, but they can be omitted when Lean can infer them from the context:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: definitions without type ascriptions
+   :end-before: -- end textbook: definitions without type ascriptions
+
+So far, so good: in Lean, we can define expressions and check their types.
+What makes Lean into a programming language is that the logical foundation has
+a computational semantics, under which expressions can be *evaluated*.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: evaluating expressions
+   :end-before: -- end textbook: evaluating expressions
+
+The `#eval` command evaluates the expression and then
+displays the return value.
+Evaluation can also have *side effects*,
+which are generally related to system IO.
+For example, displaying the string "Hello, world!"
+is a side effect of the following evaluation:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: using IO
+   :end-before: -- end textbook: using IO
+
+Theoretical computer scientists are used to
+thinking about programs as expressions
+and identifying the act of running the program with the
+act of evaluating the expression.
+In Lean, this view is made manifest,
+and the expressions are defined in a formal system
+with a precise specification.
+
+But what makes Lean into a proof assistant?
+To start with, some expressions in the proof system
+express propositions:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: some propositions
+   :end-before: -- end textbook: some propositions
+
+Lean confirms that each of these is a proposition
+by reporting that each of them has type `Prop`.
+Notice that they do not all express *true* propositions;
+theorem proving is about certifying the ones that are.
+But the language of Lean is flexible enough to express just about
+any meaningful mathematical statement at all. For example,
+here is the statement of Fermat's last theorem:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: Fermat's last theorem
+   :end-before: -- end textbook: Fermat's last theorem
+
+In Lean's formal system, data types are expressions of type `Type`,
+and if `T` is a type, an expression of type `T` denotes an object
+of that type. We have also seen that propositions are expressions
+of type `Prop`. In the formal system, if `P` is a proposition,
+a proof of `P` is just an expression of type `P`.
+This is the final piece of the puzzle:
+we use Lean as a proof assistant by writing down a proposition `P`,
+writing down an expression `p`, and asking Lean to confirm that
+`p` has type `P`. The fact that `2 + 2 = 4` has an easy proof,
+that we will explain later:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: an easy proof
+   :end-before: -- end textbook: an easy proof
+
+In contrast, proving Fermat's last theorem is considerably harder.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples1.lean
+   :start-after: -- textbook: harder to prove
+   :end-before: -- end textbook: harder to prove
+
+Lean knows that `sorry` is not a real proof, and it flags a warning there.
+If you manage to replace `sorry` by a real Lean expression, please let us know.
+We will be very impressed.
+
+So, in Lean, one can write programs and execute them, and one can state
+propositions and prove them.
+In fact, one can state propositions about programs and then prove those
+statements as well.
+This is known as *software verification*; it is a means of obtaining
+a strong guarantee that
+a computer program behaves as intended, something that is important,
+say, if you are using the software to control a nuclear reactor or
+fly an airplane.
+
+This course is not about software verification.
+We will be using Lean 4 primarily as a programming language,
+one in which we can easily define logical expressions and manipulate them.
+To a small extent, we will also write some simple proofs in Lean.
+This will help us think about proof systems and rules,
+and understand how they work.
+Taken together, these two activities embody the general vision
+that animates this course:
+knowing how to work with formally specified expressions and rules
+opens up a world of opportunity.
+It is the key to unlocking the secrets of the universe.
+
+.. _section_using_lean_as_a_functional_programming_language:
+
+Using Lean as a functional programming language
+-----------------------------------------------
+
+There is a preliminary user's manual for Lean,
+still a work in progress, `here <https://leanprover.github.io/lean4/doc/>`_. The fact that Lean is a functional programming language means
+that instead of presenting a program as a list of instructions,
+you simply *define* functions and ask Lean to evaluate them.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: defining functions
+   :end-before: -- end textbook: defining functions
+
+There is no global state: any value a function can act on
+is passed as an explicit argument and is never changed.
+For that reason, functional programming languages are amenable
+to parallelization.
+
+Nonetheless, Lean can do handle system IO using the *IO monad*,
+and can accommodate an imperative style of programming using *do notation*.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: hello world
+   :end-before: -- end textbook: hello world
+
+Recursive definitions are built into Lean.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: factorial
+   :end-before: -- end textbook: factorial
+
+Here is a solution to the Towers of Hanoi problem:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: hanoi
+   :end-before: -- end textbook: hanoi
+
+You can also define things by recursion on lists:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: recursion on lists
+   :end-before: -- end textbook: recursion on lists
+
+In fact, there are a number of useful functions built
+into Lean's library. The function `List.range n` returns the list
+`[0, 1, ..., n-1]`, and the functions `List.map` and `List.foldl`
+and `List.foldr` implement the usual map and fold functions for lists.
+By opening the `List` namespace, we can refer to these as `range`, `map`,
+`foldl`, and `foldr`. In the examples below,
+the dollar sign has the same effect as putting parentheses around
+everything that appears afterward.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: list functions
+   :end-before: -- end textbook: list functions
+
+The scope of the `open` command is limited to the section,
+and the cryptic inscription `(. + .)` is notation for the
+addition function. Lean also supports projection notation
+that is useful when the corresponding namespace is not open:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: projection notation
+   :end-before: -- end textbook: projection notation
+
+Because `myRange` has type `List Nat`, Lean interprets
+`myrange.map fun x => x + 3` as `List.map (fun x => x + 3) myrange`.
+In other words, it automatically interprets `map` as being
+in the `List` namespace,
+and then it interprets `myrange` as the first `List` argument.
+
+This course assumes you have some familiarity with functional programming.
+There is a free online textbook, `Learn You a Haskell for Great Good <http://learnyouahaskell.com/>`_ that you might find helpful;
+porting some of the examples there to Lean is a good exercise.
+We will all suffer from the fact that documentation for Lean 4
+barely exists at the moment,
+but we will do our best to provide you with enough examples
+for you to be able to figure out how to do what you need to do.
+One trick is to nose around the Lean code base itself.
+If you ctrl-click on the name of a function in the Lean library,
+the editor will jump to the definition, and you can look around
+and see what else is there.
+Another strategy is simply to ask us, ask each other, or ask
+questions on the Lean Zulip chat.
+We are all in this together.
+
+When working with a functional programming language,
+there are often clever tricks for doing things that you
+may be more comfortable doing in an imperative programming language.
+For example, as explained in :numref:`section_generalized_induction_and_recursion`,
+here are Lean's definitions of the `reverse` and `append` functions for lists:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: reverse and append
+   :end-before: -- end textbook: reverse and append
+
+The function `reverseAux l r` reverses the elements of list `l`
+and adds them to the front of `r`. When called from `reverse l`,
+the argument `r` acts as an *accumulator*, storing the partial result.
+Because `reverseAux` is tail recursive, Lean's compiler
+can implement it efficiently as a loop rather than a recursive function.
+We have defined these functions in a namespace named `hidden`
+so that they don't conflict with the ones in Lean's library
+if you open the `List` namespace.
+
+In Lean's foundation, every function is totally defined.
+In particular, every function that Lean computes has to
+terminates (in principle) on every input.
+Lean 4 will eventually support arbitrary recursive definitions in which
+the arguments in a recursive call decrease by some measure,
+but some work is needed to justify these calls in the underlying
+foundation. In the meanwhile, we can always cheat by using the `partial` keyword,
+which will let us perform arbitrary recursive calls.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: gcd
+   :end-before: -- end textbook: gcd
+
+Using `partial` takes us outside the formal foundation; Lean
+will not let us prove anything about `gcd` when we define it this way.
+Using `partial` also makes it easy for us to shoot ourselves in the foot:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: bad definition
+   :end-before: -- end textbook: bad definition
+
+On homework exercises, you should try to use structural recursion
+when you can,
+but don't hesitate to use `partial` whenever Lean complains
+about a recursive definition.
+We will not penalize you for it.
+
+The following definition of the Fibonacci numbers does not require
+the `partial` keyword:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: inefficient Fibonacci
+   :end-before: -- end textbook: inefficient Fibonacci
+
+But it is inefficient; you should convince yourself that
+the natural evaluation strategy requires exponential time.
+The following definition avoids that.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples2.lean
+   :start-after: -- textbook: efficient Fibonacci
+   :end-before: -- end textbook: efficient Fibonacci
+
+Producing a *list* of Fibonacci numbers, however, as we have done here
+is inefficient; you should convince yourself that the running
+time is quadratic.
+In the exercises, we ask you to define a function that computes
+a list of Fibonacci values with running time linear in the
+length of the list.
+
+
+.. _section_inductive_data_types_in_lean:
+
+Inductive data types in Lean
+----------------------------
+
+One reason that computer scientists and logicians tend to like
+functional programming languages is that they often provide
+good support for defining inductive data types and then
+using structural recursion on such types.
+For example, here is a Lean definition of the extended
+binary trees that we defined in mathematical terms in
+:numref:`section_generalized_induction_and_recursion`:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples3.lean
+   :start-after: -- textbook: BinTree
+   :end-before: -- end textbook: BinTree
+
+The command `import Init` imports a part of the initial library for us to use.
+The command `open BinTree` allows us to write `empty` and `node` instead of
+`BinTree.empty` and `BinTree.node`.
+Note the Lean convention of capitalizing the names of data types.
+
+We can now define the functions `size` and `depth` by structural recursion:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples3.lean
+   :start-after: -- textbook: recursion on BinTree
+   :end-before: -- end textbook: recursion on BinTree
+
+In fact, the `List` data type is also inductively defined.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples3.lean
+   :start-after: -- textbook: List
+   :end-before: -- end textbook: List
+
+You should try writing the inductive definition on your own. Call
+it `MyList`, and then try `#print MyList` to see how it compares.
+
+
+.. _section_using_lean_as_a_proof_assistant:
+
+Using Lean as a proof assistant
+-------------------------------
+
+A feature of working with a system like Lean,
+which is based on a formal logical foundation,
+is that you can not only define data types and functions
+but also prove things about them.
+The goal of this section is to give you a flavor of using Lean
+as a proof assistant.
+It isn't easy: Lean syntax is finicky and its error messages are often
+inscrutable.
+In class, we'll try to give you some pointers as to how to interact
+with Lean to construct proofs.
+The examples in this section will serve as a basis for discussion.
+
+Remember that Lean's core library defines the `List` data type
+and notation for it.
+In the example below, we import the library,
+open the namespace, declare some variables, and try out the notation.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples4.lean
+   :start-after: -- textbook: List
+   :end-before: -- end textbook: List
+
+The `variable` command does not do anything substantive.
+It tells Lean that when the corresponding identifiers are used
+in definitions and theorems that follow,
+they should be interpreted as arguments to those theorems and proofs,
+with the indicated types.
+The curly brackets around the declaration `α : Type` indicate that that
+argument is meant to be *implicit*, which is to say,
+users do not have to write it explicitly.
+Rather, Lean is expected to infer it from the context.
+
+The library proves the theorems `[] ++ as` and
+`(a :: as) ++ bs = a :: (as ++ bs)` under the names `nil_append`
+and `cons_append`, respectively.
+You can see them by writing `#check nil_append` and `#check cons_append`.
+Remember that we took these to be the defining equations for the
+`append` function in :numref:`section_generalized_induction_and_recursion`.
+Although Lean uses a different definition of the append function,
+for illustrative purposes we will treat them as the defining equations
+and base our subsequent proofs on that.
+
+Lean's library also proves `as ++ []` under the name `append_nil`,
+but to illustrate how proofs like this go, we will prove it again
+under the name `append_nil'`.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples4.lean
+   :start-after: -- textbook: append_nil'
+   :end-before: -- end textbook: append_nil'
+
+In class, we will help you make sense of this.
+The `by` command tell Lean that we are going to write
+a *tactic* proof.
+In other words, instead of writing the proof as an expression,
+we are going to give Lean a list of instructions
+that tell it how to prove the theorem.
+At the start of the tactic proof, the theorem in question
+is our *goal*.
+At each step, tactics act on one more more of the remaining goals;
+when no more goals remain, the theorem is proved.
+
+In this case, there are only two tactics that are needed.
+The `induction` tactic, as the name suggests, sets up a proof
+by induction, and the `rw` tactic *rewrites* the goal
+using given equations.
+Moving the cursor around in the editor windows shows you the
+goals at the corresponding state of the proof.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples4.lean
+   :start-after: -- textbook: append_assoc'
+   :end-before: -- end textbook: append_assoc'
+
+Here is a similar proof of the associativity of the `append` function.
+Note that the left arrow in the expression `←cons_append`
+tell Lean that we want to use the equation from right to left instead of
+from left to right.
+
+Now let us consider Lean's definition of the `reverse` function:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples4.lean
+   :start-after: -- textbook: reverse
+   :end-before: -- end textbook: reverse
+
+We will use these identities in the proofs that follow.
+Let's think about what it would take to prove the identity
+`reverse (as ++ bs) = reverse bs ++ reverse as`.
+Since `reverse` is defined in terms of `reverseAux`,
+we should expect to have to prove something about `reverseAux`.
+And since the identity mentions the `append` function,
+it is natural to try to characterize the way that
+`reverseAux` interacts with `append`.
+These are the two identities we need:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples4.lean
+   :start-after: -- textbook: reverse identities
+   :end-before: -- end textbook: reverse identities
+
+Note the `generalizing` clause in the induction. What it means is that
+what we are proving by induction on `as` is that the identity holds
+*for every choice of* `bs`.
+This means that, when we apply the inductive hypothesis,
+we can apply it to any choice of the parameter `bs`.
+You should try deleting the `generalizing` clause to see what goes
+wrong when we omit it.
+
+With those facts in hand, we have the identity we are after:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples4.lean
+   :start-after: -- textbook: reverse_append
+   :end-before: -- end textbook: reverse_append
+
+.. TODO:
+   Expand these explanations.
+   Add more exercises.
+   (For example, use extended binary trees and formalize proofs from previous chapter.)
+
+
+
+.. _section_using_lean_as_an_imperative_programming_language:
+
+Using Lean as an imperative programming language
+------------------------------------------------
+
+The fact that Lean is a functional programming language means that there
+is no global notion of *state*.
+Functions take values as input and return values as output;
+there are no global or even local variables that are changed by
+the result of a function call.
+
+But one of the interesting features of Lean is a functional programming language is
+that it incorporates features that make it *feel* like an imperative programming
+language. The following example shows how to print out, for each value :math:`i`
+less than 100, the the sum of the numbers up to :math:`i`.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples5.lean
+   :start-after: -- textbook: showSums
+   :end-before: -- end textbook: showSums
+
+You can use a loop not just to print values, but also to compute values.
+The following is a boolean test for primality:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples5.lean
+   :start-after: -- textbook: isPrime
+   :end-before: -- end textbook: isPrime
+
+You can use such a function with the list primitives to construct a list of the
+first 10,000 prime numbers.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples5.lean
+   :start-after: -- textbook: list of primes
+   :end-before: -- end textbook: list of primes
+
+But you can also use it with Lean's support for *arrays*.
+Within the formal foundation these are modeled as lists,
+but the compiler implements them as dynamic arrays, and for efficiency
+it will modify values rather than copy them whenever the old value is
+not referred to by another part of an expression.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples5.lean
+   :start-after: -- textbook: primes
+   :end-before: -- end textbook: primes
+
+Notice the notation: `#[]` denotes a fresh array (Lean infers the type from context),
+and the `Array.push` function adds a new element at the end of the array.
+
+The following example shows how to compute a two-dimensional array and print it out.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean/examples5.lean
+   :start-after: -- textbook: mulTable
+   :end-before: -- end textbook: mulTable
+
+
+Exercises
+---------
+
+#. Using operations on `List`, write a Lean function that for every :math:`n` returns
+   the list of all the divisors of :math:`n` that are less than :math:`n`.
+
+#. A natural number :math:`n` is *perfect* if it is equal to the sum of the divisors less
+   than :math:`n.` Write a Lean function (with return type `Bool`) that determines
+   whether a number :math:`n` is perfect. Use it to find all the perfect numbers less
+   than 1,000.
+
+#. Define a recursive function :math:`\fn{sublists}(\ell)` that, for every list :math:`\ell`,
+   returns a list of all the sublists of :math:`\ell`. For example, given the list :math:`[1, 2, 3]`,
+   it should compute the list
+
+   .. math::
+
+      [ [], [1], [2], [3], [1,2], [1,3], [2, 3], [1, 2, 3] ].
+
+   The elements need not be listed in that same order.
+
+#. Prove in Lean that the length of :math:`\fn{sublists}(\ell)` is
+   :math:`2^{\fn{length}(\ell)}`.
+
+#. Define a function :math:`\fn{permutations}(\ell)` that returns a list of all the permutations
+   of :math:`\ell`.
+
+#. Prove in Lean that the length of :math:`\fn{permutations}(\ell)` is
+   :math:`\fn{factorial}(\fn{length}(\ell))`.
+
+#. Define in Lean a function that, assuming :math:`\ell` is a list of lists representing
+   an :math:`n \times n` array, returns a list of lists representing the transpose of that
+   array.
+
+#. Write a program that solves the Tower of Hanoi problem with :math:`n` disks
+   on the assumption that disks can only be moved to an *adjacent* peg.
+   (See :numref:`section_mathematical_background_exercises`.)
+
+#. Write a program that solves the Tower of Hanoi problem with :math:`n` disks
+   on the assumption that disks can only be moved clockwise.
+   (See :numref:`section_mathematical_background_exercises`.)
+
+#. Define a Lean data type of binary trees in which every node is numbered
+   by a label. Define a Lean function to compute the sum of the nodes in such
+   a tree. Also write functions to list the elements in a preorder, postorder,
+   and inorder traversal.
+
+.. TODO: Need formal proofs involving lists, etc.

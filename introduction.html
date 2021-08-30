@@ -1,0 +1,344 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>1. Introduction &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. Mathematical Background" href="mathematical_background.html" />
+    <link rel="prev" title="Logic and Mechanized Reasoning" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#historical-background">1.1. Historical background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#an-overview-of-this-course">1.2. An overview of this course</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean.html">3. Using Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">6. Using SAT Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_and_search.html">7. Deduction and search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">8. Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">9. Implementing Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">10. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">11. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">12. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">13. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">14. Simple Type Theory</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Logic and Mechanized Reasoning</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">1. </span>Introduction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<span id="chapter-introduction"></span><h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="historical-background">
+<span id="section-historical-background"></span><h2><span class="section-number">1.1. </span>Historical background<a class="headerlink" href="#historical-background" title="Permalink to this headline">¶</a></h2>
+<p>In the thirteenth century, Ramon Lull,
+an eccentric Franciscan monk on the Island of Majorca,
+wrote a work called the <em>Ars Magna</em>, which contains mechanical devices
+designed to aid reasoning. For example, Lull claimed that the reason that infidels did not
+accept the Christian god was that they failed to appreciate the
+multiplicity of God’s attributes,
+so he designed nested paper circles with letters and words signifying these attributes.
+By rotating the circles, one obtained various combinations of the words and symbols,
+signifying compound attributes.
+For example, in one configuration, one might read off the result that God’s
+greatness is true and good, and that his power is wise and great.
+Other devices and diagrams would assist in reasoning about virtues and vices,
+and so on.</p>
+<a class="reference internal image-reference" href="_images/lull_wheel.png"><img alt="Lull's wheel" class="align-center" src="_images/lull_wheel.png" style="width: 200px;" /></a>
+<p>Today, this sounds silly, but the work was based on three fundamental ideas
+that are still of central importance.</p>
+<ul class="simple">
+<li><p>First, we can use symbols, or tokens, to stand for ideas or concepts.</p></li>
+<li><p>Second, compound ideas and concepts are formed by putting together simpler ones.</p></li>
+<li><p>And, third, mechanical devices—even as simple a concentric rotating
+wheels—can serve as aids to reasoning.</p></li>
+</ul>
+<p>The first two ideas go back to ancient times and can be found in the
+work of Aristotle. The third, however, is usually attributed to Lull,
+marking his work as the origin of mechanized reasoning.</p>
+<p>Four centuries later, Lull’s work resonated with Gottfied Leibniz,
+who invented calculus around the same time that Isaac Newton
+did so independently.
+Leibniz was also impressed by the possibility of symbolic representations
+of concepts and rules for reasoning.
+He spoke of developing a <em>characteristica universalis</em>—a universal
+language of thought—and a <em>calculus ratiocinator</em>—a calculus for reasoning.
+In a famous passage, he wrote:</p>
+<blockquote>
+<div><p>If controversies were to arise, there would be no more need of disputation
+between two philosophers than between two calculators.
+For it would suffice for them to take their pencils in their hands and to sit
+down at the abacus, and say to each other (and if they so wish also to a
+friend called to help): Let us calculate.</p>
+</div></blockquote>
+<p>The last phrase—<em>calculemus!</em> in the original Latin—has become a
+motto of computer scientists and computationally-minded mathematicians today.</p>
+<p>The development of modern logic in the late eighteenth and early
+nineteen centuries began to bring Leibniz’ vision to fruition.
+In 1931, Kurt Gödel wrote:</p>
+<blockquote>
+<div><p>The development of mathematics towards greater precision has led,
+as is well known, to the formalization of large tracts of it,
+so that one can prove any theorem using nothing but a few
+mechanical rules.</p>
+</div></blockquote>
+<p>It is notable that the use of the word “mechanical” here—<em>mechanischen</em>
+in the original German—predates the modern computer by a decade or so.</p>
+<p>What logicians from the time of Aristotle to the present day
+have in common is that they are all at least slightly crazy.
+They are driven by the view that knowledge is rooted in language
+and that the key to knowledge lies in having just the right symbolic
+representations of language and rules of use.
+But often it’s the crazy people that change the world.
+The logical view of language and knowledge lies at the heart of computer science
+and provides the foundation for some of our most valuable technologies today,
+including programming languages, automated reasoning and AI,
+and databases.</p>
+<p>That’s what this course is about: the logician’s view of the world,
+the power of symbolic representations of language,
+and the way those representations facilitate the mechanization of
+reasoning and the acquisition of knowledge.</p>
+<p>The logicians’ view complements the view from statistics and machine learning,
+where representations of knowledge tend to be very large, approximate,
+and hard to represent is succinct symbolic terms.
+Such methods have had stunning successes in recent years,
+but there are still branches of computer science and AI where symbolic methods
+are paramount.
+It is an important open question as to the best way to combine logical,
+statistical, and machine learning methods in the years to come.</p>
+</div>
+<div class="section" id="an-overview-of-this-course">
+<span id="section-an-overview-of-this-course"></span><h2><span class="section-number">1.2. </span>An overview of this course<a class="headerlink" href="#an-overview-of-this-course" title="Permalink to this headline">¶</a></h2>
+<p>This course is designed to teach you the mathematical theory behind
+symbolic logic,
+with an eye towards putting it to good use.
+An interesting aspect of the course is that it develops three
+interacting strands in parallel:</p>
+<ul class="simple">
+<li><p><em>Theory.</em> We will teach you the syntax and semantics of
+propositional and first-order logic.
+If time allows, we will give you a brief overview of related topics,
+like simple type theory and higher-order logic.</p></li>
+<li><p><em>Implementation.</em> We will teach you how to implement logical
+syntax—terms and formulas—in a functional programming language
+called <em>Lean</em>. We will also teach you how to carry out
+fundamental operations and transformations on these objects.</p></li>
+<li><p><em>Application.</em> We will show you how to use logic-based automated reasoning
+tools to solve interesting and difficult problems. In particular,
+we will use a SAT solver called CaDiCaL, an SMT solver called Z3,
+and a first-order theorem prover called Vampire (and by then you
+will understand what all these terms mean).</p></li>
+</ul>
+<p>The first strand will be an instance of pure mathematics. We will
+build on the skills you have learned in Mathematical Foundations of
+Computer Science (15-151). The goal is to teach you to think about and talk about logic
+in a mathematically rigorous way.</p>
+<p>The second strand will give you an opportunity to code up some of what
+you have learned and put it to good use.
+Our goal is to provide a foundation for you to use logic-based computational methods
+in the future, whether you choose to make use of them in small or large ways.
+In the third strand, for illustative purposes,
+we will focus mainly on solving puzzles and combinatorial problems.
+This will give you a sense of how the tools can also be used
+on proof and constraint satisfaction problems that come up in fields like
+program verification, discrete optimization, and AI.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="mathematical_background.html" class="btn btn-neutral float-right" title="2. Mathematical Background" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Logic and Mechanized Reasoning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Jeremy Avigad, Seul Baek, Marijn J. H. Heule, Wojciech Nawrocki, and Emre Yolcu.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,715 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>4. Propositional Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "{\\to}", "liff": "{\\leftrightarrow}", "proves": "{\\vdash}", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1]}}}</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5. Implementing Propositional Logic" href="implementing_propositional_logic.html" />
+    <link rel="prev" title="3. Using Lean" href="using_lean.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean.html">3. Using Lean</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Propositional Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#syntax">4.1. Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#semantics">4.2. Semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculating-with-propositions">4.3. Calculating with propositions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#complete-sets-of-connectives">4.4. Complete sets of connectives</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#normal-forms">4.5. Normal forms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">4.6. Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">6. Using SAT Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_and_search.html">7. Deduction and search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">8. Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">9. Implementing Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">10. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">11. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">12. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">13. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">14. Simple Type Theory</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Logic and Mechanized Reasoning</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">4. </span>Propositional Logic</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/propositional_logic.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="propositional-logic">
+<span id="chapter-propositional-logic"></span><h1><span class="section-number">4. </span>Propositional Logic<a class="headerlink" href="#propositional-logic" title="Permalink to this headline">¶</a></h1>
+<p>We are finally ready to turn to the proper subject matter of this course, logic.
+We will see that although propositional logic has limited expressive power,
+it can be used to carry out useful combinatorial reasoning in a wide
+range of applications.</p>
+<div class="section" id="syntax">
+<span id="section-syntax-propositional-logic"></span><h2><span class="section-number">4.1. </span>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<p>We start with a stock of variables <span class="math notranslate nohighlight">\(p_0, p_1, p_2, \ldots\)</span>
+that we take to range over propositions, like “the sky is blue”
+or “2 + 2 = 5”.
+We’ll make the interpretation of propositional logic explicit
+in the next section, but, intuitively,
+propositions are things that can be either true or false.
+(More precisely, this is the <em>classical</em> interpretation of propositional
+logic, which is the one we will focus on in this course.)
+Each propositional variable is a <em>formula</em>,
+and we also include symbols <span class="math notranslate nohighlight">\(\top\)</span> and <span class="math notranslate nohighlight">\(\bot\)</span>
+for “true” and “false” respectively.
+We also provide means for building new formulas from old ones.
+The following is a paradigm instance of an inductive definition.</p>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>The set of propositional formulas is generated inductively
+as follows:</p>
+<ul class="simple">
+<li><p>Each variable <span class="math notranslate nohighlight">\(p_i\)</span> is a formula.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\top\)</span> and <span class="math notranslate nohighlight">\(\bot\)</span> are formulas.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(A\)</span> is a formula, so is <span class="math notranslate nohighlight">\(\lnot A\)</span> (“not <span class="math notranslate nohighlight">\(A\)</span>”).</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are formulas, so are</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(A \land B\)</span> (“<span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>”),</p></li>
+<li><p><span class="math notranslate nohighlight">\(A \lor B\)</span> (“<span class="math notranslate nohighlight">\(A\)</span> or <span class="math notranslate nohighlight">\(B\)</span>”),</p></li>
+<li><p><span class="math notranslate nohighlight">\(A \to B\)</span> (“<span class="math notranslate nohighlight">\(A\)</span> implies <span class="math notranslate nohighlight">\(B\)</span>”), and</p></li>
+<li><p><span class="math notranslate nohighlight">\(A \liff B\)</span> (“<span class="math notranslate nohighlight">\(A\)</span> if and only if <span class="math notranslate nohighlight">\(B\)</span>”).</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>We will see later that there is some redundancy here; we could get by with fewer
+connectives and define the others in terms of those. Conversely, there are other
+connectives that can be defined in terms of these.
+But the ones we have included form a <em>complete</em> set of connectives, which is to say,
+any conceivable connective can be defined in terms of these, in a sense we will
+clarify later.</p>
+<p>The fact that the set is generated inductively means that we
+can use recursion to define functions on the set of propositional formulas,
+as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathit{complexity}(p_i) &amp; = 0 \\
+\mathit{complexity}(\top) &amp; = 0 \\
+\mathit{complexity}(\bot) &amp; = 0 \\
+\mathit{complexity}(\lnot A) &amp; = \mathit{complexity}(A) + 1 \\
+\mathit{complexity}(A \land B) &amp; = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
+\mathit{complexity}(A \lor B) &amp; = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
+\mathit{complexity}(A \to B) &amp; = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
+\mathit{complexity}(A \liff B) &amp; = \mathit{complexity}(A) + \mathit{complexity}(B) + 1\end{split}\]</div>
+<p>The function <span class="math notranslate nohighlight">\(\mathit{complexity}(A)\)</span> counts the number of connectives.
+The function <span class="math notranslate nohighlight">\(\mathit{depth}(A)\)</span>, defined in a similar way, computes the depth of the parse tree.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathit{depth}(p_i) &amp; = 0 \\
+\mathit{depth}(\top) &amp; = 0 \\
+\mathit{depth}(\bot) &amp; = 0 \\
+\mathit{depth}(\lnot A) &amp; = \mathit{depth}(A) + 1 \\
+\mathit{depth}(A \land B) &amp; = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1 \\
+\mathit{depth}(A \lor B) &amp; = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1 \\
+\mathit{depth}(A \to B) &amp; = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1 \\
+\mathit{depth}(A \liff B) &amp; = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1\end{split}\]</div>
+<p>Here’s an example of a proof by induction:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>For every formula <span class="math notranslate nohighlight">\(A\)</span>, we have <span class="math notranslate nohighlight">\(\mathit{complexity}(A) \le 2^{\mathit{depth}(A)} - 1\)</span>.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>In the base case, we have</p>
+<div class="math notranslate nohighlight">
+\[\mathit{complexity}(p_i) = 0 = 2^0 - 1 = 2^{\mathit{depth}(p_i)} - 1,\]</div>
+<p>and similarly for <span class="math notranslate nohighlight">\(\top\)</span> and <span class="math notranslate nohighlight">\(\bot\)</span>. In the case for negation, assuming the claim
+holds of <span class="math notranslate nohighlight">\(A\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathit{complexity}(\lnot A) &amp; = \mathit{complexity}(A) + 1 \\
+  &amp; \le 2^{\mathit{depth}(A)} - 1 + 1 \\
+  &amp; \le 2^{\mathit{depth}(A)} + 2^{\mathit{depth}(A)} - 1 \\
+  &amp; \le 2^{\mathit{depth}(A) + 1} - 1 \\
+  &amp; = 2^{\mathit{depth}(\lnot A)} - 1.\end{split}\]</div>
+<p>Finally, assuming the claim holds of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathit{complexity}(A \land B) &amp; = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
+  &amp; \le 2^{\mathit{depth}(A)} - 1 + 2^{\mathit{depth}(B)} - 1 + 1 \\
+  &amp; \le 2 \cdot 2^{\max(\mathit{depth}(A), \mathit{depth}(B))} - 1 \\
+  &amp; = 2^{\max(\mathit{depth}(A), \mathit{depth}(B)) + 1} - 1 \\
+  &amp; = 2^{\mathit{depth}(A \land B)} - 1,\end{split}\]</div>
+<p>and similarly for the other binary connectives.</p>
+</div>
+<p>In our metatheory, we will use variables <span class="math notranslate nohighlight">\(p, q, r, \ldots\)</span> to range over
+propositional variables, and <span class="math notranslate nohighlight">\(A, B, C, \ldots\)</span> to range over propositional
+formulas. The formulas <span class="math notranslate nohighlight">\(p_i\)</span>, <span class="math notranslate nohighlight">\(\top\)</span>,
+and <span class="math notranslate nohighlight">\(\bot\)</span> are called <em>atomic</em> formulas. If <span class="math notranslate nohighlight">\(A\)</span> is a formula, <span class="math notranslate nohighlight">\(B\)</span> is a <em>subformula</em> of <span class="math notranslate nohighlight">\(A\)</span>
+if <span class="math notranslate nohighlight">\(B\)</span> occurs somewhere in <span class="math notranslate nohighlight">\(A\)</span>. We can make this precise
+by defining the set of subformulas of any formula <span class="math notranslate nohighlight">\(A\)</span> inductively as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathit{subformulas}(A) &amp; = \{ A \} \quad \text{if $A$ is atomic} \\
+\mathit{subformulas}(\lnot A) &amp; = \{ \lnot A \} \cup \mathit{subformulas}(A) \\
+\mathit{subformulas}(A \star B) &amp; = \{ A \star B \} \cup \mathit{subformulas}(A) \cup \mathit{subformulas}(B)\end{split}\]</div>
+<p>In the last clause, the star is supposed to represent any binary connective.</p>
+<p>If <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are formulas and <span class="math notranslate nohighlight">\(p\)</span> is a propositional variable,
+the notation <span class="math notranslate nohighlight">\(A[B/p]\)</span> denotes the result of substituting <span class="math notranslate nohighlight">\(B\)</span> for <span class="math notranslate nohighlight">\(p\)</span>
+in <span class="math notranslate nohighlight">\(A\)</span>. Beware: the notation for this varies widely; <span class="math notranslate nohighlight">\(A[p \mapsto B]\)</span>
+is also becoming common in computer science. The meaning is once again given by
+a recursive definition:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}p_i[B/p] &amp; = \begin{cases}
+                B &amp; \text{if $p$ is $p_i$} \\
+                p_i &amp; \text{otherwise}
+            \end{cases} \\
+(\lnot C) [B/p] &amp; = \lnot (C[B /p]) \\
+(C \star D) [B / p] &amp; = C[B / p] \star D[B / p]\end{split}\]</div>
+</div>
+<div class="section" id="semantics">
+<span id="semantics-propositional-logic"></span><h2><span class="section-number">4.2. </span>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h2>
+<p>Consider the formula <span class="math notranslate nohighlight">\(p \land (\lnot q \lor r)\)</span>. Is it true? Well,
+that depends on the propositions <span class="math notranslate nohighlight">\(p\)</span>, <span class="math notranslate nohighlight">\(q\)</span>, and <span class="math notranslate nohighlight">\(r\)</span>.
+More precisely, it depends on whether they are true — and, in fact, that is
+all it depends on. In other words, once we specify which of <span class="math notranslate nohighlight">\(p\)</span>, <span class="math notranslate nohighlight">\(q\)</span>, and <span class="math notranslate nohighlight">\(r\)</span> are true and which are false,
+the truth value of <span class="math notranslate nohighlight">\(p \land (\lnot q \lor r)\)</span> is completely determined.</p>
+<p>To make this last claim precise,
+we will use the set <span class="math notranslate nohighlight">\(\{ \top, \bot \}\)</span> to represent the truth values
+<em>true</em> and <em>false</em>. It doesn’t really matter what sorts of mathematical objects
+those are, as long as they are distinct. You can take them to be the
+corresponding propositional formulas, or you can take <span class="math notranslate nohighlight">\(\top\)</span> to be the number 1
+and <span class="math notranslate nohighlight">\(\bot\)</span> to be the number 0.
+A <em>truth assignment</em> is a function from propositional variables to the set <span class="math notranslate nohighlight">\(\{ \top, \bot \}\)</span>,
+that is, a function which assigns a value of true or false to each propositional
+variable. Any truth assignment <span class="math notranslate nohighlight">\(v\)</span> extends to a function <span class="math notranslate nohighlight">\(\bar v\)</span> that
+assigns a value of <span class="math notranslate nohighlight">\(\top\)</span> or <span class="math notranslate nohighlight">\(\bot\)</span> to any propositional formula.
+It is defined recursively as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\bar v (p_i) &amp; = v(p_i) \\
+\bar v (\top) &amp; = \top \\
+\bar v (\bot) &amp; = \bot \\
+\bar v (\lnot A) &amp; =
+  \begin{cases}
+    \top &amp; \text{if $\bar v(A) = \bot$} \\
+    \bot &amp; \text{otherwise}
+  \end{cases} \\
+\bar v (A \land B) &amp; =
+  \begin{cases}
+    \top &amp; \text{if $\bar v(A) = \top$ and $\bar v(B) = \top$} \\
+    \bot &amp; \text{otherwise}
+  \end{cases} \\
+\bar v (A \lor B) &amp; =
+  \begin{cases}
+    \top &amp; \text{if $\bar v(A) = \top$ or $\bar v(B) = \top$} \\
+    \bot &amp; \text{otherwise}
+  \end{cases} \\
+\bar v (A \to B) &amp; =
+  \begin{cases}
+    \top &amp; \text{if $\bar v(A) = \bot$ or $\bar v(B) = \top$} \\
+    \bot &amp; \text{otherwise}
+  \end{cases} \\
+\bar v (A \liff B) &amp; =
+  \begin{cases}
+    \top &amp; \text{if $\bar v(A) = \bar v(B)$} \\
+    \bot &amp; \text{otherwise}
+  \end{cases}\end{split}\]</div>
+<p>It is common to write <span class="math notranslate nohighlight">\([\![A]\!]_v\)</span> instead of <span class="math notranslate nohighlight">\(\bar v(A)\)</span>.
+Double-square brackets like these are often used to denote a semantic
+value that is assigned to a syntactic object. Think of <span class="math notranslate nohighlight">\([\![A]\!]_v\)</span>
+as giving the <em>meaning</em> of <span class="math notranslate nohighlight">\(A\)</span> with respect to the interpretation
+given by <span class="math notranslate nohighlight">\(v\)</span>. In this case, variables are interpreted as standing
+for truth values and the meaning of the formula is the resulting truth
+value, but in the chapters to come we will come across other semantic
+interpretations of this sort.</p>
+<p>The following definitions are now fundamental to logic.
+Make sure you are clear on the terminology and know how to use it.
+If you can use these terms correctly, you can pass as a logician.
+If you get the terminology wrong, you’ll be frowned upon.</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\([\![A]\!]_v = \top\)</span>, we say that <span class="math notranslate nohighlight">\(A\)</span> is <em>satisfied</em>
+by <span class="math notranslate nohighlight">\(v\)</span>, or that <span class="math notranslate nohighlight">\(v\)</span> is a <em>satisfying assignment</em> for <span class="math notranslate nohighlight">\(A\)</span>.
+We also sometimes write <span class="math notranslate nohighlight">\(\models_v A\)</span>.</p></li>
+<li><p>A formula <span class="math notranslate nohighlight">\(A\)</span> is <em>satisfiable</em> if there is some truth assignment
+that satisfies it. A formula <span class="math notranslate nohighlight">\(A\)</span> is <em>unsatisfiable</em> if it is not
+satisfiable.</p></li>
+<li><p>A formula <span class="math notranslate nohighlight">\(A\)</span> is <em>valid</em>, or a <em>tautology</em> if it is satisfied by <em>every</em>
+truth assignment. In other words, <span class="math notranslate nohighlight">\(A\)</span> is valid if
+<span class="math notranslate nohighlight">\([\![A]\!]_v = \top\)</span> for every truth assignment <span class="math notranslate nohighlight">\(v\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(\Gamma\)</span> is a set of propositional formulas, we say that
+<span class="math notranslate nohighlight">\(\Gamma\)</span> is <em>satisfied by</em> <span class="math notranslate nohighlight">\(v\)</span> if every formula in <span class="math notranslate nohighlight">\(\Gamma\)</span>
+is satisfied by <span class="math notranslate nohighlight">\(v\)</span>. In other words, <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfied by <span class="math notranslate nohighlight">\(v\)</span>
+if <span class="math notranslate nohighlight">\([\![A]\!]_v = \top\)</span> for every <span class="math notranslate nohighlight">\(A\)</span> in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p></li>
+<li><p>A set of formulas <span class="math notranslate nohighlight">\(\Gamma\)</span> is <em>satisfiable</em> if it is satisfied by some
+truth assignment <span class="math notranslate nohighlight">\(v\)</span>. Otherwise, it is <em>unsatisfiable</em>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(\Gamma\)</span> is a set of propositional formulas and <span class="math notranslate nohighlight">\(A\)</span> is a
+propositional formula, we say <span class="math notranslate nohighlight">\(\Gamma\)</span> entails <span class="math notranslate nohighlight">\(A\)</span> if every
+truth assignment that satisfies <span class="math notranslate nohighlight">\(\Gamma\)</span> also satisfies <span class="math notranslate nohighlight">\(A\)</span>.
+Roughly speaking, this says that whenever the formulas in <span class="math notranslate nohighlight">\(\Gamma\)</span> are
+true, then <span class="math notranslate nohighlight">\(A\)</span> is also true. In this case, <span class="math notranslate nohighlight">\(A\)</span> is also said to be
+a <em>logical consequence</em> of <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p></li>
+<li><p>Two formulas <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are <em>logically equivalent</em> if each
+one entails the other, that is, we have <span class="math notranslate nohighlight">\(\{A\} \models B\)</span> and
+<span class="math notranslate nohighlight">\(\{ B \} \models A\)</span>. When that happens, we write <span class="math notranslate nohighlight">\(A \equiv B\)</span>.</p></li>
+</ul>
+<p>There is a lot to digest here, but it is important that you become comfortable
+with these definitions. The mathematical analysis of truth and logical
+consequence is one of the crowning achievements of modern logic, and
+this basic framework for reasoning about expressions and their meaning has
+been applied to countless other settings in logic and computer science.</p>
+<p>You should also get used to using semantic notions in proofs. For example:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>A propositional formula <span class="math notranslate nohighlight">\(A\)</span> is valid if and only if <span class="math notranslate nohighlight">\(\lnot A\)</span>
+is unsatisfiable.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p><span class="math notranslate nohighlight">\(A\)</span> is valid if and only if <span class="math notranslate nohighlight">\([\![A]\!]_v = \top\)</span> for every
+truth assignment <span class="math notranslate nohighlight">\(v\)</span>. By the definition of <span class="math notranslate nohighlight">\([\![\lnot A]\!]_v\)</span>,
+this happens if and only if <span class="math notranslate nohighlight">\([\![\lnot A]\!]_v = \bot\)</span> for every
+<span class="math notranslate nohighlight">\(v\)</span>, which is the same as saying that <span class="math notranslate nohighlight">\(\lnot A\)</span> is
+unsatisfiable.</p>
+</div>
+</div>
+<div class="section" id="calculating-with-propositions">
+<span id="section-calculating-with-propositions"></span><h2><span class="section-number">4.3. </span>Calculating with propositions<a class="headerlink" href="#calculating-with-propositions" title="Permalink to this headline">¶</a></h2>
+<p>Remember that Leibniz imagined that one day we would be able to
+calculate with propositions.
+What he had noticed is that propositions, like numbers, obey algebraic
+laws.
+Here are some of them:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A \lor \lnot A \equiv \top\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \land \lnot A \equiv \bot\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot \lnot A \equiv A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \lor A \equiv A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \land A \equiv A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \lor \bot \equiv A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \land \bot \equiv \bot\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \lor \top \equiv \top\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \land \top \equiv A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \lor B \equiv B \lor A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \land B \equiv B \land A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((A \lor B) \lor C \equiv A \lor (B \lor C)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((A \land B) \land C \equiv A \land (B \land C)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot(A \land B) \equiv \lnot A \lor \lnot B\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot(A \lor B) \equiv \lnot A \land \lnot B\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \land (B \lor C) \equiv (A \land B) \lor (A \land C)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \lor (B \land C) \equiv (A \lor B) \land (A \lor C)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \land (A \lor B) \equiv A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \lor (A \land B) \equiv A\)</span></p></li>
+</ul>
+<p>The equivalences <span class="math notranslate nohighlight">\(\lnot(A \land B) \equiv \lnot A \lor \lnot B\)</span> and
+<span class="math notranslate nohighlight">\(\lnot(A \lor B) \equiv \lnot A \land \lnot B\)</span> are known as <em>De Morgan’s laws</em>.
+It is not hard to show that all the logical connectives respect equivalence,
+and hence substituting equivalent formulas for a variable in a formula results in
+equivalent formulas.
+This means that, as Leibniz imagined, we can prove that a Boolean
+formula is valid by calculating to show that it is equivalent to <span class="math notranslate nohighlight">\(\top\)</span>.
+Here is an example.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>For any propositional formulas <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>, we have
+<span class="math notranslate nohighlight">\((A \land \lnot B) \lor B \equiv A \lor B\)</span>.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}(A \land \lnot B) \lor B &amp; \equiv (A \lor B) \land (\lnot B \lor B)
+\\
+&amp; \equiv (A \lor B) \land \top \\
+&amp; \equiv (A \lor B).\end{split}\]</div>
+</div>
+<p>Mathematicians have a trick, called <em>quotienting</em>, for turning an
+equivalence relation into an equality. If we interpret <span class="math notranslate nohighlight">\(A\)</span>,
+<span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(C\)</span> as <em>equivalence classes</em> of formulas instead of
+formulas, the equivalences listed above become identities.
+The resulting algebraic structure is known as a <em>Boolean algebra</em>,
+and we can view the preceding proof as establishing an identity that holds in
+any Boolean algebra. The same trick is used, for example, to interpret an equivalence
+between numbers modulo 12, like <span class="math notranslate nohighlight">\(5 + 9 \equiv 2\)</span> as an identity on
+the structure <span class="math notranslate nohighlight">\(\bZ / 12 \bZ\)</span>.</p>
+</div>
+<div class="section" id="complete-sets-of-connectives">
+<span id="section-complete-sets-of-connectives"></span><h2><span class="section-number">4.4. </span>Complete sets of connectives<a class="headerlink" href="#complete-sets-of-connectives" title="Permalink to this headline">¶</a></h2>
+<p>You may have noticed that our choice of connectives is redundant.
+For example, the following equivalences show that we can get by
+with <span class="math notranslate nohighlight">\(\lnot\)</span>, <span class="math notranslate nohighlight">\(\lor\)</span>, and <span class="math notranslate nohighlight">\(\bot\)</span> alone:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}A \land B &amp; \equiv \lnot (\lnot A \lor \lnot B) \\
+A \to B &amp; \equiv \lnot A \land \lnot B \\
+A \liff B &amp; \equiv (A \to B) \land (B \to A) \\
+\top &amp; \equiv \lnot \bot\end{split}\]</div>
+<p>We can even define <span class="math notranslate nohighlight">\(\bot\)</span> as <span class="math notranslate nohighlight">\(P \land \lnot P\)</span> for
+any propositional variable <span class="math notranslate nohighlight">\(P\)</span>,
+though that has the sometimes annoying consequence that we cannot
+express the constants <span class="math notranslate nohighlight">\(\top\)</span> and <span class="math notranslate nohighlight">\(\bot\)</span> without using a
+propositional variable.</p>
+<p>Let <span class="math notranslate nohighlight">\(f(x_0, \ldots, x_{n-1})\)</span> be a function that takes <span class="math notranslate nohighlight">\(n\)</span>
+truth values and returns a truth value.
+A formula <span class="math notranslate nohighlight">\(A\)</span> with variables <span class="math notranslate nohighlight">\(p_0, \ldots, p_{n-1}\)</span>
+is said to <em>represent</em> <span class="math notranslate nohighlight">\(f\)</span> if for every truth assignment <cite>v</cite>,</p>
+<div class="math notranslate nohighlight">
+\[\tval{A}_v = f(v(p_0), \ldots, v(p_{n-1})).\]</div>
+<p>If you think of <span class="math notranslate nohighlight">\(f\)</span> as a truth table, this says that
+the truth table of <span class="math notranslate nohighlight">\(A\)</span> is <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<p>A set of connectives is said to be <em>complete</em> if every function
+<span class="math notranslate nohighlight">\(f\)</span> is represented by some formula <span class="math notranslate nohighlight">\(A\)</span> involving those connectives.
+In class, we’ll discuss how to prove that <span class="math notranslate nohighlight">\(\{ \land, \lnot \}\)</span>
+is a complete set of connectives in that sense.</p>
+<p>It is now straightforward to show that a certain set of connectives is
+complete: just show how to define <span class="math notranslate nohighlight">\(\lor\)</span> and <span class="math notranslate nohighlight">\(\lnot\)</span> in terms of them.
+Showing that a set of connectives is <em>not</em> complete typically requires some
+more ingenuity. One idea, as suggested in <a class="reference internal" href="mathematical_background.html#section-invariants"><span class="std std-numref">Section 2.4</span></a>,
+is to look for some invariant property of the formulas that <em>are</em> represented.</p>
+</div>
+<div class="section" id="normal-forms">
+<span id="section-normal-forms"></span><h2><span class="section-number">4.5. </span>Normal forms<a class="headerlink" href="#normal-forms" title="Permalink to this headline">¶</a></h2>
+<p>For both theoretical reasons and practical reasons, it is often useful to know that formulas
+can be expressed in particularly simple or convenient forms.</p>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>The set of propositional formulas in <em>negation normal form</em> (NNF) is generated inductively
+as follows:</p>
+<ul class="simple">
+<li><p>Each variable <span class="math notranslate nohighlight">\(p_i\)</span> is in negation normal form.</p></li>
+<li><p>The negation <span class="math notranslate nohighlight">\(\lnot p_i\)</span> of a propositional variable is in negation normal form.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\top\)</span> and <span class="math notranslate nohighlight">\(\bot\)</span> are in negation normal form.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are in negation normal form, then so are <span class="math notranslate nohighlight">\(A \land B\)</span> and
+<span class="math notranslate nohighlight">\(A \lor B\)</span>.</p></li>
+</ul>
+</div>
+<p>More concisely, the set of formulas in negation normal form is the smallest set of formulas
+containing <span class="math notranslate nohighlight">\(\top\)</span>, <span class="math notranslate nohighlight">\(\bot\)</span>, atomic formulas, and negated atomic formulas,
+and closed under conjunction and disjunction.</p>
+<div class="admonition-proposition admonition">
+<p class="admonition-title">Proposition</p>
+<p>Every propositional formula is equivalent to one in negation normal form.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>First use the identities <span class="math notranslate nohighlight">\(A \liff B \equiv (A \limplies B) \land (B \limplies A)\)</span>
+and <span class="math notranslate nohighlight">\(A \limplies B \equiv \lnot A \lor B\)</span> to get rid of <span class="math notranslate nohighlight">\(\liff\)</span> and
+<span class="math notranslate nohighlight">\(\limplies\)</span>. Then use De Morgan’s laws together with
+<span class="math notranslate nohighlight">\(\lnot \lnot A \equiv A\)</span>, <span class="math notranslate nohighlight">\(\lnot \top \equiv \bot\)</span>, and
+<span class="math notranslate nohighlight">\(\lnot \top \equiv \bot\)</span> to push negations down to the atomic formulas.</p>
+</div>
+<p>More formally, we can prove by induction on propositional formulas <span class="math notranslate nohighlight">\(A\)</span> that both
+<span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(\lnot A\)</span> are equivalent to formulas in negation normal form.
+(You should try to write that proof down carefully.)
+Putting a formula in negation normal form is reasonably efficient.
+You should convince yourself that if <span class="math notranslate nohighlight">\(A\)</span> is in negation normal form,
+then putting <span class="math notranslate nohighlight">\(\lnot A\)</span> in negation normal form amounts to switching all the following
+in <span class="math notranslate nohighlight">\(A\)</span>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\top\)</span> with <span class="math notranslate nohighlight">\(\bot\)</span></p></li>
+<li><p>variables <span class="math notranslate nohighlight">\(p_i\)</span> with their negations <span class="math notranslate nohighlight">\(\lnot p_i\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\land\)</span> with <span class="math notranslate nohighlight">\(\lor\)</span>.</p></li>
+</ul>
+<p>We will see that <em>conjunctive normal form</em> (CNF) and <em>disjunctive normal form</em> (DNF) are also
+important representations of propositional formulas. By definition, a <em>literal</em>
+is an atomic formula <span class="math notranslate nohighlight">\(p_i\)</span> or the negation <span class="math notranslate nohighlight">\(\lnot p_i\)</span> of an atomic formula.
+A formula is in conjunctive normal form if it can be written as conjunction of disjunctions
+of literals, in other words, if it can be written as a big “and” of “or” expressions:</p>
+<div class="math notranslate nohighlight">
+\[\bigwedge_{i &lt; n} \left( \bigvee_{j &lt; m_i} \pm \ell_j \right).\]</div>
+<p>where each <span class="math notranslate nohighlight">\(\ell_j\)</span> is a literal. Here is an example:</p>
+<div class="math notranslate nohighlight">
+\[(p \lor \lnot q \lor r) \land (\lnot p \lor s) \land (\lnot r \lor s \lor \lnot t).\]</div>
+<p>We can think of <span class="math notranslate nohighlight">\(\bot\)</span> as the empty disjunction (because a disjunction is true only when
+one of the disjuncts is true) and we can think of <span class="math notranslate nohighlight">\(\top\)</span> as the empty conjunction (because
+a conjunction is true when all of its conjuncts are true, which happens trivially when there
+aren’t any).</p>
+<p>Dually, a formula is in disjunctive normal form if it is an “or” and “and” expressions:</p>
+<div class="math notranslate nohighlight">
+\[\bigvee_{i &lt; n} \left( \bigwedge_{j &lt; m_i} \pm \ell_j \right).\]</div>
+<p>If you switch <span class="math notranslate nohighlight">\(\land\)</span> and <span class="math notranslate nohighlight">\(\lor\)</span> in the previous example, you have a
+formula in disjunctive normal form.</p>
+<p>It is pretty clear that if you take the conjunction of two formulas in CNF the result
+is a CNF formula (modulo associating parentheses), and, similarly,
+the disjunction of two formulas in DNF is again DNF. The following is less obvious:</p>
+<div class="admonition-lemma admonition">
+<p class="admonition-title">Lemma</p>
+<p>The disjunction of two CNF formulas is equivalent to a CNF formula,
+and dually for DNF formulas.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>For the first claim, we use the equivalence
+<span class="math notranslate nohighlight">\(A \lor (B \land C) \equiv (A \land B) \lor (A \land C)\)</span>.
+By induction on <span class="math notranslate nohighlight">\(n\)</span>, we have that for every sequence of formulas
+<span class="math notranslate nohighlight">\(B_0, \ldots, B_{n-1}\)</span> we have
+<span class="math notranslate nohighlight">\(A \lor \bigwedge_{i &lt; n} B_i \equiv \bigwedge_{i &lt; n} (A \lor B_i).\)</span>
+Then by induction on <span class="math notranslate nohighlight">\(n'\)</span> we have
+<span class="math notranslate nohighlight">\(\bigwedge_{i' &lt; n'} A_i' \lor \bigwedge_{i &lt; n} B_i \equiv
+\bigwedge_{i' &lt; n'} \bigwedge_{i &lt; n} (A'_i \lor B_i).\)</span>
+Since each <span class="math notranslate nohighlight">\(A_{i'}\)</span> and each <span class="math notranslate nohighlight">\(B_i\)</span> is a disjunction of literals,
+this yields the result.</p>
+<p>The second claim is proved similarly, switching <span class="math notranslate nohighlight">\(\land\)</span> and <span class="math notranslate nohighlight">\(\lor\)</span>.</p>
+</div>
+<div class="admonition-proposition admonition">
+<p class="admonition-title">Proposition</p>
+<p>Every propositional formula is equivalent to one in conjunctive normal form,
+and also to one in disjunctive normal form.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>Since we already know that every formula is equivalent to one in negation normal
+form, we can use induction on that set of formulas. The claim is clearly true
+of <span class="math notranslate nohighlight">\(\top\)</span>, <span class="math notranslate nohighlight">\(\bot\)</span>, <span class="math notranslate nohighlight">\(p_i\)</span>, and <span class="math notranslate nohighlight">\(\lnot p_i\)</span>.
+By the previous lemma, whenever it is true
+of <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span>, it is also true of <span class="math notranslate nohighlight">\(A \land B\)</span> and <span class="math notranslate nohighlight">\(A \lor B\)</span>.</p>
+</div>
+<p>In contrast to putting formulas in negation normal form, the exercises below show that
+the smallest CNF or DNF equivalent of a formula <span class="math notranslate nohighlight">\(A\)</span> can be exponentially longer
+than <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<p>We will see that conjunctive normal form is commonly used in automated reasoning.
+Notice that if a disjunction of literals contains a duplicated literal, deleting the
+duplicate results in an equivalent formula.
+A disjunction of literals is called a <em>clause</em>. Since the order of the disjuncts
+and repetitions don’t matter,
+we generally identify clauses with the corresponding set of literals;
+for example, the clause <span class="math notranslate nohighlight">\(p \lor \lnot q \lor r\)</span> is associated with the set
+<span class="math notranslate nohighlight">\(\{ p, \lnot q, r \}\)</span>.
+If a clause contains a pair <span class="math notranslate nohighlight">\(p_i\)</span> and <span class="math notranslate nohighlight">\(\lnot p_i\)</span>,
+it is equivalent to <span class="math notranslate nohighlight">\(\top\)</span>.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> is a set of clauses, we think of <span class="math notranslate nohighlight">\(\Gamma\)</span> as saying that
+all the clauses in <span class="math notranslate nohighlight">\(\Gamma\)</span> are true.
+With this identification, every formula in conjunctive normal form is equivalent
+to a set of clauses.
+An empty clause corresponds to <span class="math notranslate nohighlight">\(\bot\)</span>,
+and an empty set of clauses corresponds to <span class="math notranslate nohighlight">\(\top\)</span>.</p>
+<p>The dual notion to a clause is a conjunction like <span class="math notranslate nohighlight">\(\lnot p \land q \land \lnot r\)</span>.
+If each variable occurs at most once (either positively or negatively),
+we can think of this as a <em>partial truth assignment</em>.
+In this example, any truth assignment that satisfies the formula has to set
+<span class="math notranslate nohighlight">\(p\)</span> false, <span class="math notranslate nohighlight">\(q\)</span> true, and <span class="math notranslate nohighlight">\(r\)</span> false.</p>
+</div>
+<div class="section" id="exercises">
+<h2><span class="section-number">4.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Prove that if <span class="math notranslate nohighlight">\(A\)</span> is a subformula of <span class="math notranslate nohighlight">\(B\)</span> and <span class="math notranslate nohighlight">\(B\)</span> is a subformula
+of <span class="math notranslate nohighlight">\(C\)</span> then <span class="math notranslate nohighlight">\(A\)</span> is a subformula of <span class="math notranslate nohighlight">\(C\)</span>. (Hint: prove by
+induction on <span class="math notranslate nohighlight">\(C\)</span> that for every <span class="math notranslate nohighlight">\(B \in \mathit{subformulas}(C)\)</span>,
+every subformula of <span class="math notranslate nohighlight">\(B\)</span> is a subformula of <span class="math notranslate nohighlight">\(C\)</span>.)</p></li>
+<li><p>Prove that for every <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(p\)</span>,
+<span class="math notranslate nohighlight">\(\mathit{depth}(A[B/p]) \le \mathit{depth}(A) + \mathit{depth}(B)\)</span>.</p></li>
+<li><p>Prove that <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are logically equivalent if and only if
+the formula <span class="math notranslate nohighlight">\(A \liff B\)</span> is valid.</p></li>
+<li><p>Use algebraic calculations to show that all of the following are tautologies:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(((A \land \lnot B) \lor B) \liff (A \lor B)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((A \limplies \lnot A) \limplies \lnot A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((A \limplies B) \liff (\lnot B \limplies \lnot A)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \limplies (B \limplies A \land B)\)</span></p></li>
+</ul>
+</li>
+<li><p>The <em>Sheffer stroke</em> <span class="math notranslate nohighlight">\(A \mid B\)</span>, also known as “nand,” says that <span class="math notranslate nohighlight">\(A\)</span>
+and <span class="math notranslate nohighlight">\(B\)</span> are not both true. Show that <span class="math notranslate nohighlight">\(\{ \mid \}\)</span> is a complete set
+of connectives. Do the same for “nor,” that is, the binary connective that holds
+if neither <span class="math notranslate nohighlight">\(A\)</span> nor <span class="math notranslate nohighlight">\(B\)</span> is true.</p></li>
+<li><p>Show that <span class="math notranslate nohighlight">\(\{ \land, \lnot \}\)</span> and <span class="math notranslate nohighlight">\(\{ \limplies, \bot \}\)</span> are complete sets of
+connectives.</p></li>
+<li><p>Show that <span class="math notranslate nohighlight">\(\{ \limplies, \lor, \land \}\)</span> is not a complete set of connectives.
+Conclude that <span class="math notranslate nohighlight">\(\{ \limplies, \lor, \land, \liff, \top \}\)</span> is not
+a complete set of connectives.</p></li>
+<li><p>Show that <span class="math notranslate nohighlight">\(\{ \bot, \liff \}\)</span> is not a complete set of connectives.
+Conclude that <span class="math notranslate nohighlight">\(\{ \bot, \top, \lnot, \liff, \oplus \}\)</span> is not complete.
+Here <span class="math notranslate nohighlight">\(A \oplus B\)</span> is the “exclusive or,” which is to say, <span class="math notranslate nohighlight">\(A \oplus B\)</span>
+is true if one of <span class="math notranslate nohighlight">\(A\)</span> or <span class="math notranslate nohighlight">\(B\)</span> is true but not both.</p></li>
+<li><p>Using the property <span class="math notranslate nohighlight">\(A \lor (B \land C) \equiv (A \lor B) \land (A \lor C)\)</span>
+and the dual statement with <span class="math notranslate nohighlight">\(\land\)</span> and <span class="math notranslate nohighlight">\(\lor\)</span> switched, put
+<span class="math notranslate nohighlight">\((p_1 \land p_2) \lor (q_1 \land q_2) \lor (r_1 \land r_2)\)</span> in
+conjunctive normal form.</p></li>
+<li><p>The boolean function <span class="math notranslate nohighlight">\(\fn{parity}(x_0, x_1, \ldots, x_{n-1})\)</span> holds if and only if
+an odd number of the <span class="math notranslate nohighlight">\(x_i\)</span> s are true.
+It is represented by the formula <span class="math notranslate nohighlight">\(p_0 \oplus p_1 \oplus \cdots \oplus p_{n-1}\)</span>.
+Show that any CNF formula representing the parity function has to have at least
+<span class="math notranslate nohighlight">\(2^n\)</span> clauses.</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="implementing_propositional_logic.html" class="btn btn-neutral float-right" title="5. Implementing Propositional Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="using_lean.html" class="btn btn-neutral float-left" title="3. Using Lean" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Jeremy Avigad, Seul Baek, Marijn J. H. Heule, Wojciech Nawrocki, and Emre Yolcu.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

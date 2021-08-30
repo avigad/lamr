@@ -1,0 +1,585 @@
+.. _chapter_mathematical_background:
+
+.. Here is how to refer to this chapter: :numref:`Chapter %s <chapter_mathematical_background>`.
+   For a section, just use :numref:`section_link`
+
+Mathematical Background
+=======================
+
+.. _section_induction_and_recursion_on_the_natural_numbers:
+
+Induction and recursion on the natural numbers
+----------------------------------------------
+
+In its most basic form, the principle of induction on the natural numbers
+says that if you want to prove that every natural number has some property,
+it suffices to show that zero has the property,
+and that whenever some number :math:`n` has the property, so does :math:`n + 1`.
+Here is an example.
+
+.. admonition:: Theorem
+
+    For every natural number :math:`n`, :math:`\sum_{i \le n} i = n (n + 1) / 2`.
+
+
+.. admonition:: Proof
+
+    Use induction on :math:`n`. In the base case, we have
+    :math:`\sum_{i \le 0} i = 0 = 0 (0 + 1) / 2`. For the induction step,
+    assuming :math:`\sum_{i \le n} i = n (n + 1) / 2`, we have
+
+    .. math::
+
+        \sum_{i \le n + 1} i & = \sum_{i \le n} i + (n + 1) \\
+          &= n (n + 1) / 2 + 2 (n + 1) / 2 \\
+          &= (n + 1) (n + 2) / 2
+
+The story is often told that Gauss, as a schoolchild,
+discovered this formula by writing
+
+.. math::
+
+    S &= 1 + \ldots + n \\
+    S &= n + \ldots + 1
+
+and then adding the two rows and dividing by two.
+The proof by induction doesn't provide insight as to how one might *discover*
+the theorem,
+but once you have guessed it, it provides a short and effective
+means for establishing that it is true.
+
+In a similar vein, you might notice that an initial segment of the odd
+numbers yields a perfect square. For example, we have
+:math:`1 + 3 + 5 + 7 + 9 = 25`.
+Here is a proof of the general fact:
+
+.. admonition:: Theorem
+
+    For every natural number :math:`n`, :math:`\sum_{i \le n} (2 i + 1) = (n + 1)^2`.
+
+.. admonition:: Proof
+
+    The base case is easy, and assuming the inductive hypothesis, we have
+
+    .. math::
+
+        \sum_{i \le n + 1} (2 i + 1) & = \sum_{i \le n} (2i + 1) + 2 (n + 1) + 1 \\
+          &= (n + 1)^2 + 2n + 3 \\
+          &= n^2 + 4n + 4 \\
+          &= (n + 2)^2.
+
+A close companion to induction is the principle of *recursion*.
+Recursion enables us to define functions on the natural numbers,
+and induction allows us to prove things about them.
+For example, let :math:`g : \mathbb{N} \to \mathbb{N}` be the function defined by
+
+.. math::
+
+    g(0)   &= 1 \\
+    g(n+1) &= (n+1) \cdot g(n)
+
+Then :math:`g` is what is known as the *factorial* function,
+whereby :math:`g(n)` is conventionally written :math:`n!`.
+The point is that if you don't know what the factorial function is,
+the two equations above provide a complete specification.
+There is exactly one function, defined on the natural numbers,
+that meets that description.
+
+Here is an identity involving the factorial function:
+
+.. admonition:: Theorem
+
+    :math:`\sum_{i \le n} i \cdot i! = (n + 1)! - 1`.
+
+.. admonition:: Proof
+
+    The base case is easy. Assuming the claim holds for :math:`n`, we have
+
+    .. math::
+
+        \sum_{i \le n+1} i \cdot i! &= \sum_{i \le n} i \cdot i! + (n+1) \cdot (n+1)! \\
+          &= (n + 1)! + (n+1) \cdot (n+1)! - 1 \\
+          &= (n + 1)! (1 + (n + 1)) - 1 \\
+          &= (n + 2)! - 1
+
+This is a pattern found throughout mathematics and computer science:
+define functions and operations using recursion, and then use induction
+to prove things about them.
+
+The *Towers of Hanoi* puzzle provides a textbook example of a problem
+that can be solved recursively. The puzzle consists of three pegs and
+disks of different diameters that slide onto the pegs.
+The initial configuration has :math:`n` disks stacked on one of the pegs
+in decreasing order, with the largest one at the bottom and the smallest
+one at the top.
+Suppose the pegs are numbered 1, 2, and 3, with the disks starting on peg 1.
+The required task is to move all the disks from peg 1 to peg 2, one at a time,
+with the constraint that a larger disk is never placed on top of a smaller one.
+
+.. code-block:: none
+
+    To move n disks from peg A to peg B with auxiliary peg C:
+        if n = 0
+            return
+        else
+            move n - 1 disks from peg A to peg C using auxiliary peg B
+            move 1 disk from peg A to peg B
+            move n - 1 disks from peg C to peg B using auxiliary peg A
+
+We will show in class that this requires :math:`2^n - 1` moves.
+The exercises below ask you to show that *any* solution requires
+at least this many moves.
+
+
+.. _section_complete_induction:
+
+Complete induction
+------------------
+
+As we have described it, the principle of induction is pretty rigid:
+in the inductive step, to show that :math:`n+1` has some property,
+we can only use the corresponding property of :math:`n`.
+The principle of *complete* induction is much more flexible.
+
+.. admonition:: Principle of complete induction
+
+    To show that every natural number :math:`n` has some property,
+    show that :math:`n` has that property whenever all smaller numbers do.
+
+As an exercise, we ask you to prove the principle of complete induction using the ordinary principle of induction. Remember that a natural number greater than or equal to 2 is *composite* if it can be written as a product of two smaller numbers, and *prime* otherwise.
+
+.. admonition:: Theorem
+
+    Every number greater than two can be factored into primes.
+
+.. admonition:: Proof
+
+    Let :math:`n` be any natural number greater than or equal
+    to 2. If :math:`n` is prime, we are done. Otherwise, write
+    :math:`n = m \cdot k`, where :math:`m` and :math:`k` are smaller than :math:`n` (and hence greater than 1).
+    By the inductive hypothesis, :math:`m` and :math:`k`
+    can each be factored into prime numbers, and combining
+    these yields a factorization of :math:`n`.
+
+Here is another example we will discuss in class:
+
+.. admonition:: Theorem
+
+    For any :math:`n \ge 3`, the sum of the angles in any
+    :math:`n`-gon is :math:`180 (n - 2)`.
+
+The companion to complete induction on the natural numbers is
+a form of recursion known as course-of-values recursion,
+which allows you to define a function :math:`f` by giving
+the value of :math:`f(n)` in terms of the value of :math:`f`
+at arbitrary smaller values of :math:`n`.
+For example, we can define the sequence of Fibonacci
+numbers as follows:
+
+.. math::
+
+    F_0 &= 0 \\
+    F_1 & = 1 \\
+    F_{n + 2} &= F_{n + 1} + F_n
+
+The fibonacci numbers satisfy lots of interesting identities,
+some of which are given in the exercises.
+
+In fact, you can define a function by recursion as long as
+*some* associated measure decreases with each recursive
+call. Define a function :math:`f(n, k)` for :math:`k \le n` by
+
+.. math::
+
+    f(n, k) = \begin{cases}
+        1 & \text{if $k = 0$ or $k = n$} \\
+        f(n-1, k) + f(n-1, k-1) & \text{otherwise}
+      \end{cases}
+
+Here it is the first argument that decreases. In class,
+we'll discuss a proof that this defines the function
+
+.. math::
+
+    {n \choose k} = \frac{n!}{k!(n-k)!}
+
+which is simultaneously equal to number of ways of choosing :math:`k`
+objects out of :math:`n` without repetition.
+
+Finally, here is a recursive description of the greatest common
+divisor of two nonnegative integers:
+
+.. math::
+
+    \fn{gcd}(x, y) = \begin{cases}
+            x & \text{if $y = 0$} \\
+            \fn{gcd}(y, \fn{mod}(x, y)) & \text{otherwise}
+        \end{cases}
+
+where :math:`\fn{mod}(x, y)` is the remainder when dividing :math:`x` by :math:`y`.
+
+.. _section_generalized_induction_and_recursion:
+
+Generalized induction and recursion
+-----------------------------------
+
+The natural numbers are characterized inductively by the following clauses:
+
+- :math:`0` is a natural number.
+- If :math:`x` is a natural number, so is :math:`\fn{succ}(x)`.
+
+Here the function :math:`\fn{succ}(x)` is known as the *successor*
+function, namely, the function that, given any number, returns
+the next one in the sequence.
+The natural numbers structure is also sometimes said to be *freely generated*
+by  this data.
+The fact that it is *generated* by :math:`0` and :math:`\fn{succ}(x)`
+means that it  is the *smallest* set that contains :math:`0` and is
+closed under :math:`\fn{succ}(x)`;
+in other words,  any set of natural numbers that contains :math:`0` and
+is closed under :math:`\fn{succ}(x)` contains all of them.
+This is just the principle of induction in disguise.
+The fact that it is generated *freely* by these elements means that
+there is no confusion between them: :math:`0` is not a successor,
+and if :math:`\fn{succ}(x)=\fn{succ}(y)`, then :math:`x = y`.
+Intuitively, being generated by :math:`0` and :math:`\fn{succ}(x)`
+means that any number can be represented by an expression built up from these,
+and being generated freely means that the representation is unique.
+
+The natural numbers are an example of an *inductively defined structure*.
+These come up often in logic and computer science.
+It is often useful to define functions by recursion on such structures,
+and to use induction to prove things about them.
+We will describe the general schema here with some examples that
+often come up in computer science.
+
+Let :math:`\alpha` be any data type. The set of all *lists* of elements
+of :math:`\alpha`, which we will write as :math:`\fn{List}(\alpha)`,
+is defined inductively as follows:
+
+- The element :math:`\fn{nil}` is an element of :math:`\fn{List}(\alpha)`.
+
+- If :math:`a` is an element of :math:`\alpha` and :math:`\ell` is an element
+  of :math:`\fn{List}(\alpha)`, then the element :math:`\fn{cons}(a, \ell)`
+  is an element of :math:`\fn{List}(\alpha)`.
+
+Here :math:`\fn{nil}` is intended to describe the empty list, :math:`[]`, and
+:math:`\fn{cons}(a, \ell)` is intended to describe the result of adding
+:math:`a` to the beginning of :math:`\ell`. So, for example, the list of
+natural numbers :math:`[1, 2, 3]` would be written :math:`\fn{cons}(1, \fn{cons}(2, \fn{cons}(3, \fn{nil})))`. Think of :math:`\fn{List}(\alpha)` as
+having a constructor :math:`\fn{cons}(a, \cdot)` for each :math:`a`.
+Then, in the terminology above, :math:`\fn{List}(\alpha)` is generated
+inductively by :math:`\fn{nil}` and those constructors.
+
+Henceforth, for clarity, we'll use the notation :math:`[]` for :math:`\fn{nil}`
+and :math:`a \mathbin{::} \ell` for :math:`\fn{cons}(a, \ell)`.
+More generally, we can take :math:`[a, b, c, \ldots]` to be an abbreviation for
+:math:`a \mathbin{::} (b \mathbin{::} (c \mathbin{::} \ldots []))`.
+
+Saying that :math:`\fn{List}(\alpha)` is inductively defined means
+that we principles of recursion and induction on it. For example, the following
+concatenates two lists:
+
+.. math::
+
+    \fn{append}([], m) &= m \\
+    \fn{append}((a \mathbin{::} \ell), m) &= a \mathbin{::} (\fn{append}(\ell, m))
+
+Here the recursion is on the first argument.
+As with the natural numbers, the recursive definition specifies
+what to do for each of the constructors.
+We'll use the notation :math:`\ell \append m` for :math:`\fn{append}(\ell, m)`,
+and with this notation, the two defining clauses read as follows:
+
+.. math::
+
+    [] \append m &= m \\
+    (a \mathbin{::} \ell) \append m &= a \mathbin{::} (\ell \append m)
+
+From the definition, we have :math:`[] \append \ell = \ell` for every :math:`\ell`,
+but :math:`m \append [] = m` is something we have to prove.
+
+.. admonition:: Proposition
+
+    For every :math:`m`, we have :math:`m \append [] = m`.
+
+.. admonition:: Proof
+
+    We use induction on :math:`m`. In the base case, we have
+    :math:`[] \append [] = []` from the definition of :math:`\fn{append}`.
+    For the induction step, suppose we have :math:`m \append [] = m`.
+    Then we also have
+
+    .. math::
+
+        (a \mathbin{::} m) \append [] &= a \mathbin{::} (m \append []) \\
+            &= a \mathbin{::} m.
+
+The definition of the append function is an example of *structural recursion*,
+called that because the definition proceeds by recursion on the structure
+of the inductively defined type. In particular, there is a clause of the
+definition corresponding to each constructor.
+The proof we have just seen is an instance of *structural induction*,
+called that because, once again, there is part of the proof for each
+constructor.
+The base case, for :math:`\fn{nil}`, is straightforward, because that
+constructor has no arguments.
+The inductive step, for :math:`\fn{cons}`, comes with an inductive hypothesis
+because the :math:`\fn{cons}` constructor has a recursive argument.
+In class, we'll do a similar proof that the :math:`\fn{append}` operation
+is associative.
+
+The following function (sometimes called :math:`\fn{snoc}`) appends a single element at the end:
+
+.. math::
+
+    \fn{append1}([], a) &= \fn{cons}(a, \fn{nil}) \\
+    \fn{append1}(\fn{cons}(b, \ell), a) &= \fn{cons}(b, \fn{append1}(\ell, a))
+
+An easy induction on :math:`\ell` shows that, as you would expect,
+:math:`\fn{append1}(\ell, a)` is equal to :math:`\ell \append [a]`.
+
+The following function reverses a list:
+
+.. math::
+
+    \fn{reverse}([]) &= [] \\
+    \fn{reverse}(\fn{cons}(a, \ell)) &= \fn{append1}(\fn{reverse}(\ell), a)
+
+In class, or for homework, we'll work through proofs that that the following holds for
+every pair of lists :math:`\ell` and :math:`m`:
+
+.. math::
+
+    \fn{reverse}(\ell \append m) = \fn{reverse}(m) \append \fn{reverse}(\ell)
+
+Here is another example of a property that can be proved by induction:
+
+.. math::
+
+    \fn{reverse}(\fn{reverse}(\ell)) = \ell
+
+From a mathematical point of view, this definition of the reverse function above
+is as good as any other, since it specifies the function we want unambiguously.
+But in :numref:`Chapter %s <chapter_using_lean>` we will see that such a definition can also be interpreted as executable code in a functional programming language such as Lean. In this case, the execution is quadratic in the length of the list (think about why). The following definition is more efficient in that sense:
+
+.. math::
+
+    \fn{reverseAux}([], m) &= m \\
+    \fn{reverseAux}((a \mathbin{::} \ell), m) &= \fn{reverseAux}(\ell, (a \mathbin{::} m)) \\
+    \\
+    \fn{reverse'}(\ell) &= \fn{reverseAux}(\ell, [])
+
+The idea is that :math:`\fn{reverseAux}` adds all the elements of the first argument
+to the second one in reverse order. So the second arguments acts as an *accumulator*.
+In fact, because it is a tail recursive description, the code generated by Lean is
+quite efficient.
+In class, we'll discuss an inductive proof that
+:math:`\fn{reverse}(\ell) = \fn{reverse'}(\ell)` for every :math:`\ell`.
+
+It is worth mentioning that structural induction is not the only
+way to prove things about lists, and structural recursion is not the only
+way to define functions by recursion.
+Generally speaking, we can assign any complexity measure to a data type,
+and do induction on complexity,
+as long as the measure is well founded. (This will be the case,
+for example, for measures that take values in the natural numbers,
+with the usual ordering on size.)
+For example, we can define the length of a list as follows:
+
+.. math::
+
+    \fn{length}([]) &= 0 \\
+    \fn{length}(a \mathbin{::} \ell) &= \fn{length}(\ell) + 1
+
+Then we can define a function :math:`f` on lists by giving the value
+of :math:`f(\ell)` in terms of the value of :math:`f` on smaller lists,
+and we can prove a property of lists using the fact that the
+property holds of all smaller lists as an inductive hypothesis.
+These are ordinary instances of recursion and induction on the natural
+numbers.
+
+As another example, we consider the type of finite binary trees,
+defined inductively as follows:
+
+- The element :math:`\fn{empty}` is a binary tree.
+
+- If :math:`s` and :math:`t` are finite binary trees, so is the
+  :math:`\fn{node}(s, t)`.
+
+In this definition, :math:`\fn{empty}` is intended to denote the empty
+tree, and :math:`\fn{node}(s, t)` is intended to denote the
+binary tree that consists of a node at the top and has :math:`s` and :math:`t`
+as the left and right subtrees, respectively.
+
+Be careful: it is more common to take the set of binary trees to consist of
+only the *nonempty* trees, in which case, what we have defined here are
+called the *extended* binary trees.
+Adding the empty tree results in a nice inductive characterization.
+If we started with a one-node tree as the base case, we
+would have to allow for three types of compound tree:
+one type with a node and a subtree to the left,
+one with a node and a subtree to the right,
+and one with a node with both left and right subtrees.
+
+We can count the number of nodes in an extended binary tree with
+the following recursive definition:
+
+.. math::
+
+    \fn{size}(\fn{empty}) &= 0 \\
+    \fn{size}(\fn{node}(s, t)) &= 1 + \fn{size}(s) + \fn{size}(t)
+
+We can compute the depth of an extended binary tree as follows:
+
+.. math::
+
+    \fn{depth}(\fn{empty}) &= 0 \\
+    \fn{depth}(\fn{node}(s, t)) &= 1 + \max(\fn{size}(s), \fn{size}(t))
+
+Again, be careful: many authors take the depth of a tree to be the
+length of the longest path from the root to a leaf,
+in which case, what we have defined here computes the depth *plus one*
+for nonempty trees.
+
+.. _section_invariants:
+
+Invariants
+----------
+
+The *mutilated chessboard* problems involves an :math:`8 \times 8` chessboard with the
+top right and bottom left corners removed.
+Imagine you are given a set of dominoes, each of which can cover exactly two squares.
+It is possible to cover all the squares of the mutilated chessboard using dominoes,
+so that each square is covered by exactly one domino?
+
+A moment's reflection shows that the answer is no. If you imagine the chessboard
+squares colored red and black in the usual way, you'll notice that the two squares
+we removed have the same color, say, black. That means that there are more red
+squares than black squares. On the other hand, every domino covers exactly one
+square of each color. So no matter how many dominoes we put down, we'll never
+have them color more red squares than black squares.
+
+.. image:: ../figures/mchess.*
+   :height: 200 px
+   :alt: mutilated chessboard
+   :align: center
+
+The fact that any way of putting down dominoes covers the same number of red and
+black squares is an instance of an *invariant*, which is a powerful idea in
+both mathematics and computer science. An invariant is something---a quantity, or a property---that doesn't change as something else does (in this case, the number of
+dominoes).
+
+Often the natural way to establish an invariant uses induction. In this case,
+it is obvious that putting down one domino doesn't change the difference between
+the number of red and black squares covered, since each domino covers one of each.
+By induction on :math:`n`, putting down :math:`n` dominoes doesn't change the difference
+either.
+
+The following puzzle, called the *MU puzzle*, comes from the book *Gödel, Escher, Bach*
+by Douglas Hofstadter. It concerns strings consisting of the letters `M`, `I`, and `U`.
+Starting with the string `MI`, we are allowed to apply any of the following rules:
+
+#. Replace `sI` by `sIU`, that is, add a `U` to the end of any string that ends with `I`.
+#. Replace `Ms` by `Mss`, that is, double the string after the initial `M`.
+#. Replace `sIIIt` by `sUt`, that is, replace any three consecutive `Is` with a `U`.
+#. Replace `sUUt` by `st`, that is, delete any consecutive pair of `Us`.
+
+The puzzle asks whether it is possible to derive the string `MU`.
+The answer is no: it turns out that a string is derivable if and only if it consists
+of an `M` followed by any number of `Is` and `Us`, as long as the number of `Is` is not
+divisible by 3. In class, we'll prove the "only if" part of this equivalence.
+Try the "if" part if you like a challenge.
+
+As a final example, in class we'll discuss the Golomb *tromino theorem*. A *tromino*
+is an L-shaped configuration of three squares. Golomb's theorem says that any
+:math:`2^n \times 2^n` chessboard with one square removed can be tiled with trominoes.
+We'll prove this together in class.
+
+.. _section_mathematical_background_exercises:
+
+Exercises
+---------
+
+#. Prove the formula for the sum of a geometric series:
+
+    .. math::
+
+        \sum_{i < n} a r^i = \frac{a(r^n - 1)}{r - 1}
+
+#. Prove that for every :math:`n > 4`, :math:`n! > 2^n`.
+
+#. Show that the solution to the towers of Hanoi given in
+   :numref:`section_induction_and_recursion_on_the_natural_numbers` is optimal: for every :math:`n`,
+   it takes at least `2^n - 1` moves to move all the disks from one peg to another.
+
+#. Consider the variation on the towers of Hanoi problem in which you can only move
+   a disk to an *adjacent* peg. In other words, you can move a disk from peg 1 to peg 2,
+   from peg 2 to peg 1, from peg 2 to peg 3, or from peg 3 to peg 2, but not from
+   peg 1 to peg 3 or from peg 3 to peg 1.
+
+   Describe a recursive procedure for solving this problem, and show that is requires
+   :math:`3^n - 1` moves. If you are ambitious, show that this is optimal, and that
+   it goes through all the :math:`3^n` valid positions.
+
+#. Consider the variation on the towers of Hanoi in which pegs can be moved cyclicly:
+   from peg 1 to peg 2, from peg 2 to peg 3, or from peg 3 to peg 1. Describe a
+   recursive procedure to solve this problem.
+
+#. Use the ordinary principle of induction to prove the principle of complete induction.
+
+#. Let :math:`F_0, F_1, F_2, \ldots` be the sequence of Fibonacci numbers.
+
+    #. Let :math:`\alpha` and :math:`\beta` be the two roots of the equation
+       :math:`x^2 = x + 1`. Show that for every :math:`n`,
+       :math:`F_n = (\alpha^n - \beta^n)/\sqrt{5}`.
+
+    #. Show :math:`\sum_{i < n} F_i = F_{n+1} - 1`.
+
+    #. Show :math:`\sum_{i \le n} F_i^2 = F_n F_{n+1}`.
+
+#. Show that with `n` straight lines we can divide the plane into at most `(n^2 +  n + 2)` regions, and that this is sharp.
+
+#. Show that the recursive description of :math:`\fn{gcd}(x,y)` presented in
+   :numref:`section_generalized_induction_and_recursion` correctly computes the greatest
+   common divisor of :math:`x` and :math:`y`, where we define :math:`\fn{gcd}(0,0)`
+   equal to 0. You can restrict attention to nonnegative values of :math:`x` and :math:`y`.
+   (Hint: you can use the fact that for for every :math:`y` not equal to 0,
+   we can write :math:`x = \fn{div}(x, y) \cdot y + \fn{mod}(x, y)`,
+   where :math:`\fn{div}(x, y)` is the integer part of :math:`x` divided by :math:`y`.
+   First show that for every :math:`k`, :math:`\fn{gcd}(x, y) = \fn{gcd}(x + ky, y)`,
+   and use that fact.
+
+#. Use structural induction to prove
+
+    .. math::
+
+        \fn{reverse}(\ell \append m) = \fn{reverse}(m) \append \fn{reverse}(\ell).
+
+#. Use structural induction to prove
+
+    .. math::
+
+        \fn{reverse}(\fn{reverse}(\ell)) = \ell.
+
+#. Prove that for every :math:`\ell` we have
+
+    .. math::
+
+        \fn{reverse}'(\ell) = \fn{reverse}(\ell).
+
+#. Prove that for every :math:`\ell` and :math:`m` we have
+
+    .. math::
+
+        \fn{length}(\ell \append m) = \fn{length}(\ell) + \fn{length}(m).
+
+#. How many binary trees of depth :math:`n` are there? Prove your answer is correct.
+
+#. Show that a string is derivable in the MU puzzle if and only if it consists
+   of an M followed by any number of Is and Us, as long as the number of Is is
+   not divisible by 3.
+
+
+
+

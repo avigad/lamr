@@ -1,0 +1,587 @@
+.. _chapter_propositional_logic:
+
+Propositional Logic
+===================
+
+We are finally ready to turn to the proper subject matter of this course, logic.
+We will see that although propositional logic has limited expressive power,
+it can be used to carry out useful combinatorial reasoning in a wide
+range of applications.
+
+.. _section_syntax_propositional_logic:
+
+Syntax
+------
+
+We start with a stock of variables :math:`p_0, p_1, p_2, \ldots`
+that we take to range over propositions, like "the sky is blue"
+or "2 + 2 = 5".
+We'll make the interpretation of propositional logic explicit
+in the next section, but, intuitively,
+propositions are things that can be either true or false.
+(More precisely, this is the *classical* interpretation of propositional
+logic, which is the one we will focus on in this course.)
+Each propositional variable is a *formula*,
+and we also include symbols :math:`\top` and :math:`\bot`
+for "true" and "false" respectively.
+We also provide means for building new formulas from old ones.
+The following is a paradigm instance of an inductive definition.
+
+.. admonition:: Definition
+
+    The set of propositional formulas is generated inductively
+    as follows:
+
+    - Each variable :math:`p_i` is a formula.
+    - :math:`\top` and :math:`\bot` are formulas.
+    - If :math:`A` is a formula, so is :math:`\lnot A` ("not :math:`A`").
+    - If :math:`A` and :math:`B` are formulas, so are
+
+      - :math:`A \land B` (":math:`A` and :math:`B`"),
+      - :math:`A \lor B` (":math:`A` or :math:`B`"),
+      - :math:`A \to B` (":math:`A` implies :math:`B`"), and
+      - :math:`A \liff B` (":math:`A` if and only if :math:`B`").
+
+We will see later that there is some redundancy here; we could get by with fewer
+connectives and define the others in terms of those. Conversely, there are other
+connectives that can be defined in terms of these.
+But the ones we have included form a *complete* set of connectives, which is to say,
+any conceivable connective can be defined in terms of these, in a sense we will
+clarify later.
+
+The fact that the set is generated inductively means that we
+can use recursion to define functions on the set of propositional formulas,
+as follows:
+
+.. math::
+
+    \mathit{complexity}(p_i) & = 0 \\
+    \mathit{complexity}(\top) & = 0 \\
+    \mathit{complexity}(\bot) & = 0 \\
+    \mathit{complexity}(\lnot A) & = \mathit{complexity}(A) + 1 \\
+    \mathit{complexity}(A \land B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
+    \mathit{complexity}(A \lor B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
+    \mathit{complexity}(A \to B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
+    \mathit{complexity}(A \liff B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1
+
+The function :math:`\mathit{complexity}(A)` counts the number of connectives.
+The function :math:`\mathit{depth}(A)`, defined in a similar way, computes the depth of the parse tree.
+
+.. math::
+
+    \mathit{depth}(p_i) & = 0 \\
+    \mathit{depth}(\top) & = 0 \\
+    \mathit{depth}(\bot) & = 0 \\
+    \mathit{depth}(\lnot A) & = \mathit{depth}(A) + 1 \\
+    \mathit{depth}(A \land B) & = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1 \\
+    \mathit{depth}(A \lor B) & = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1 \\
+    \mathit{depth}(A \to B) & = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1 \\
+    \mathit{depth}(A \liff B) & = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1
+
+Here's an example of a proof by induction:
+
+.. admonition:: Theorem
+
+    For every formula :math:`A`, we have :math:`\mathit{complexity}(A) \le 2^{\mathit{depth}(A)} - 1`.
+
+.. admonition:: Proof
+
+    In the base case, we have
+
+    .. math::
+
+        \mathit{complexity}(p_i) = 0 = 2^0 - 1 = 2^{\mathit{depth}(p_i)} - 1,
+
+    and similarly for :math:`\top` and :math:`\bot`. In the case for negation, assuming the claim
+    holds of :math:`A`, we have
+
+    .. math::
+
+         \mathit{complexity}(\lnot A) & = \mathit{complexity}(A) + 1 \\
+           & \le 2^{\mathit{depth}(A)} - 1 + 1 \\
+           & \le 2^{\mathit{depth}(A)} + 2^{\mathit{depth}(A)} - 1 \\
+           & \le 2^{\mathit{depth}(A) + 1} - 1 \\
+           & = 2^{\mathit{depth}(\lnot A)} - 1.
+
+    Finally, assuming the claim holds of :math:`A` and :math:`B`, we have
+
+    .. math::
+
+         \mathit{complexity}(A \land B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
+           & \le 2^{\mathit{depth}(A)} - 1 + 2^{\mathit{depth}(B)} - 1 + 1 \\
+           & \le 2 \cdot 2^{\max(\mathit{depth}(A), \mathit{depth}(B))} - 1 \\
+           & = 2^{\max(\mathit{depth}(A), \mathit{depth}(B)) + 1} - 1 \\
+           & = 2^{\mathit{depth}(A \land B)} - 1,
+
+    and similarly for the other binary connectives.
+
+In our metatheory, we will use variables :math:`p, q, r, \ldots` to range over
+propositional variables, and :math:`A, B, C, \ldots` to range over propositional
+formulas. The formulas :math:`p_i`, :math:`\top`,
+and :math:`\bot` are called *atomic* formulas. If :math:`A` is a formula, :math:`B` is a *subformula* of :math:`A`
+if :math:`B` occurs somewhere in :math:`A`. We can make this precise
+by defining the set of subformulas of any formula :math:`A` inductively as follows:
+
+.. math::
+
+    \mathit{subformulas}(A) & = \{ A \} \quad \text{if $A$ is atomic} \\
+    \mathit{subformulas}(\lnot A) & = \{ \lnot A \} \cup \mathit{subformulas}(A) \\
+    \mathit{subformulas}(A \star B) & = \{ A \star B \} \cup \mathit{subformulas}(A) \cup \mathit{subformulas}(B)
+
+In the last clause, the star is supposed to represent any binary connective.
+
+If :math:`A` and :math:`B` are formulas and :math:`p` is a propositional variable,
+the notation :math:`A[B/p]` denotes the result of substituting :math:`B` for :math:`p`
+in :math:`A`. Beware: the notation for this varies widely; :math:`A[p \mapsto B]`
+is also becoming common in computer science. The meaning is once again given by
+a recursive definition:
+
+.. math::
+
+    p_i[B/p] & = \begin{cases}
+                    B & \text{if $p$ is $p_i$} \\
+                    p_i & \text{otherwise}
+                \end{cases} \\
+    (\lnot C) [B/p] & = \lnot (C[B /p]) \\
+    (C \star D) [B / p] & = C[B / p] \star D[B / p]
+
+.. _semantics_propositional_logic:
+
+Semantics
+---------
+
+Consider the formula :math:`p \land (\lnot q \lor r)`. Is it true? Well,
+that depends on the propositions :math:`p`, :math:`q`, and :math:`r`.
+More precisely, it depends on whether they are true — and, in fact, that is
+all it depends on. In other words, once we specify which of :math:`p`, :math:`q`, and :math:`r` are true and which are false,
+the truth value of :math:`p \land (\lnot q \lor r)` is completely determined.
+
+To make this last claim precise,
+we will use the set :math:`\{ \top, \bot \}` to represent the truth values
+*true* and *false*. It doesn't really matter what sorts of mathematical objects
+those are, as long as they are distinct. You can take them to be the
+corresponding propositional formulas, or you can take :math:`\top` to be the number 1
+and :math:`\bot` to be the number 0.
+A *truth assignment* is a function from propositional variables to the set :math:`\{ \top, \bot \}`,
+that is, a function which assigns a value of true or false to each propositional
+variable. Any truth assignment :math:`v` extends to a function :math:`\bar v` that
+assigns a value of :math:`\top` or :math:`\bot` to any propositional formula.
+It is defined recursively as follows:
+
+.. math::
+
+    \bar v (p_i) & = v(p_i) \\
+    \bar v (\top) & = \top \\
+    \bar v (\bot) & = \bot \\
+    \bar v (\lnot A) & =
+      \begin{cases}
+        \top & \text{if $\bar v(A) = \bot$} \\
+        \bot & \text{otherwise}
+      \end{cases} \\
+    \bar v (A \land B) & =
+      \begin{cases}
+        \top & \text{if $\bar v(A) = \top$ and $\bar v(B) = \top$} \\
+        \bot & \text{otherwise}
+      \end{cases} \\
+    \bar v (A \lor B) & =
+      \begin{cases}
+        \top & \text{if $\bar v(A) = \top$ or $\bar v(B) = \top$} \\
+        \bot & \text{otherwise}
+      \end{cases} \\
+    \bar v (A \to B) & =
+      \begin{cases}
+        \top & \text{if $\bar v(A) = \bot$ or $\bar v(B) = \top$} \\
+        \bot & \text{otherwise}
+      \end{cases} \\
+    \bar v (A \liff B) & =
+      \begin{cases}
+        \top & \text{if $\bar v(A) = \bar v(B)$} \\
+        \bot & \text{otherwise}
+      \end{cases}
+
+It is common to write :math:`[\![A]\!]_v` instead of :math:`\bar v(A)`.
+Double-square brackets like these are often used to denote a semantic
+value that is assigned to a syntactic object. Think of :math:`[\![A]\!]_v`
+as giving the *meaning* of :math:`A` with respect to the interpretation
+given by :math:`v`. In this case, variables are interpreted as standing
+for truth values and the meaning of the formula is the resulting truth
+value, but in the chapters to come we will come across other semantic
+interpretations of this sort.
+
+The following definitions are now fundamental to logic.
+Make sure you are clear on the terminology and know how to use it.
+If you can use these terms correctly, you can pass as a logician.
+If you get the terminology wrong, you'll be frowned upon.
+
+- If :math:`[\![A]\!]_v = \top`, we say that :math:`A` is *satisfied*
+  by :math:`v`, or that :math:`v` is a *satisfying assignment* for :math:`A`.
+  We also sometimes write :math:`\models_v A`.
+
+- A formula :math:`A` is *satisfiable* if there is some truth assignment
+  that satisfies it. A formula :math:`A` is *unsatisfiable* if it is not
+  satisfiable.
+
+- A formula :math:`A` is *valid*, or a *tautology* if it is satisfied by *every*
+  truth assignment. In other words, :math:`A` is valid if
+  :math:`[\![A]\!]_v = \top` for every truth assignment :math:`v`.
+
+- If :math:`\Gamma` is a set of propositional formulas, we say that
+  :math:`\Gamma` is *satisfied by* :math:`v` if every formula in :math:`\Gamma`
+  is satisfied by :math:`v`. In other words, :math:`\Gamma` is satisfied by :math:`v`
+  if :math:`[\![A]\!]_v = \top` for every :math:`A` in :math:`\Gamma`.
+
+- A set of formulas :math:`\Gamma` is *satisfiable* if it is satisfied by some
+  truth assignment :math:`v`. Otherwise, it is *unsatisfiable*.
+
+- If :math:`\Gamma` is a set of propositional formulas and :math:`A` is a
+  propositional formula, we say :math:`\Gamma` entails :math:`A` if every
+  truth assignment that satisfies :math:`\Gamma` also satisfies :math:`A`.
+  Roughly speaking, this says that whenever the formulas in :math:`\Gamma` are
+  true, then :math:`A` is also true. In this case, :math:`A` is also said to be
+  a *logical consequence* of :math:`\Gamma`.
+
+- Two formulas :math:`A` and :math:`B` are *logically equivalent* if each
+  one entails the other, that is, we have :math:`\{A\} \models B` and
+  :math:`\{ B \} \models A`. When that happens, we write :math:`A \equiv B`.
+
+There is a lot to digest here, but it is important that you become comfortable
+with these definitions. The mathematical analysis of truth and logical
+consequence is one of the crowning achievements of modern logic, and
+this basic framework for reasoning about expressions and their meaning has
+been applied to countless other settings in logic and computer science.
+
+You should also get used to using semantic notions in proofs. For example:
+
+.. admonition:: Theorem
+
+  A propositional formula :math:`A` is valid if and only if :math:`\lnot A`
+  is unsatisfiable.
+
+.. admonition:: Proof
+
+  :math:`A` is valid if and only if :math:`[\![A]\!]_v = \top` for every
+  truth assignment :math:`v`. By the definition of :math:`[\![\lnot A]\!]_v`,
+  this happens if and only if :math:`[\![\lnot A]\!]_v = \bot` for every
+  :math:`v`, which is the same as saying that :math:`\lnot A` is
+  unsatisfiable.
+
+.. _section_calculating_with_propositions:
+
+Calculating with propositions
+-----------------------------
+
+Remember that Leibniz imagined that one day we would be able to
+calculate with propositions.
+What he had noticed is that propositions, like numbers, obey algebraic
+laws.
+Here are some of them:
+
+-  :math:`A \lor \lnot A \equiv \top`
+-  :math:`A \land \lnot A \equiv \bot`
+-  :math:`\lnot \lnot A \equiv A`
+-  :math:`A \lor A \equiv A`
+-  :math:`A \land A \equiv A`
+-  :math:`A \lor \bot \equiv A`
+-  :math:`A \land \bot \equiv \bot`
+-  :math:`A \lor \top \equiv \top`
+-  :math:`A \land \top \equiv A`
+-  :math:`A \lor B \equiv B \lor A`
+-  :math:`A \land B \equiv B \land A`
+-  :math:`(A \lor B) \lor C \equiv A \lor (B \lor C)`
+-  :math:`(A \land B) \land C \equiv A \land (B \land C)`
+-  :math:`\lnot(A \land B) \equiv \lnot A \lor \lnot B`
+-  :math:`\lnot(A \lor B) \equiv \lnot A \land \lnot B`
+-  :math:`A \land (B \lor C) \equiv (A \land B) \lor (A \land C)`
+-  :math:`A \lor (B \land C) \equiv (A \lor B) \land (A \lor C)`
+-  :math:`A \land (A \lor B) \equiv A`
+-  :math:`A \lor (A \land B) \equiv A`
+
+The equivalences :math:`\lnot(A \land B) \equiv \lnot A \lor \lnot B` and
+:math:`\lnot(A \lor B) \equiv \lnot A \land \lnot B` are known as *De Morgan's laws*.
+It is not hard to show that all the logical connectives respect equivalence,
+and hence substituting equivalent formulas for a variable in a formula results in
+equivalent formulas.
+This means that, as Leibniz imagined, we can prove that a Boolean
+formula is valid by calculating to show that it is equivalent to :math:`\top`.
+Here is an example.
+
+.. admonition:: Theorem
+
+    For any propositional formulas :math:`A` and :math:`B`, we have
+    :math:`(A \land \lnot B) \lor B \equiv A \lor B`.
+
+.. admonition:: Proof
+
+    .. math::
+
+      (A \land \lnot B) \lor B & \equiv (A \lor B) \land (\lnot B \lor B)
+      \\
+      & \equiv (A \lor B) \land \top \\
+      & \equiv (A \lor B).
+
+Mathematicians have a trick, called *quotienting*, for turning an
+equivalence relation into an equality. If we interpret :math:`A`,
+:math:`B`, and :math:`C` as *equivalence classes* of formulas instead of
+formulas, the equivalences listed above become identities.
+The resulting algebraic structure is known as a *Boolean algebra*,
+and we can view the preceding proof as establishing an identity that holds in
+any Boolean algebra. The same trick is used, for example, to interpret an equivalence
+between numbers modulo 12, like :math:`5 + 9 \equiv 2` as an identity on
+the structure :math:`\bZ / 12 \bZ`.
+
+
+.. _section_complete_sets_of_connectives:
+
+Complete sets of connectives
+----------------------------
+
+You may have noticed that our choice of connectives is redundant.
+For example, the following equivalences show that we can get by
+with :math:`\lnot`, :math:`\lor`, and :math:`\bot` alone:
+
+.. math::
+
+    A \land B & \equiv \lnot (\lnot A \lor \lnot B) \\
+    A \to B & \equiv \lnot A \land \lnot B \\
+    A \liff B & \equiv (A \to B) \land (B \to A) \\
+    \top & \equiv \lnot \bot
+
+We can even define :math:`\bot` as :math:`P \land \lnot P` for
+any propositional variable :math:`P`,
+though that has the sometimes annoying consequence that we cannot
+express the constants :math:`\top` and :math:`\bot` without using a
+propositional variable.
+
+Let :math:`f(x_0, \ldots, x_{n-1})` be a function that takes :math:`n`
+truth values and returns a truth value.
+A formula :math:`A` with variables :math:`p_0, \ldots, p_{n-1}`
+is said to *represent* :math:`f` if for every truth assignment `v`,
+
+.. math::
+
+    \tval{A}_v = f(v(p_0), \ldots, v(p_{n-1})).
+
+If you think of :math:`f` as a truth table, this says that
+the truth table of :math:`A` is :math:`f`.
+
+A set of connectives is said to be *complete* if every function
+:math:`f` is represented by some formula :math:`A` involving those connectives.
+In class, we'll discuss how to prove that :math:`\{ \land, \lnot \}`
+is a complete set of connectives in that sense.
+
+It is now straightforward to show that a certain set of connectives is
+complete: just show how to define :math:`\lor` and :math:`\lnot` in terms of them.
+Showing that a set of connectives is *not* complete typically requires some
+more ingenuity. One idea, as suggested in :numref:`section_invariants`,
+is to look for some invariant property of the formulas that *are* represented.
+
+.. admonition: Proposition
+
+    :math:`\{ \liff \}` is not a complete set of connectives.
+
+.. admonition: Proof
+
+    Show by induction on propositional formulas that any formula involving
+    only :math:`\liff` and a single variable :math:`p` and the constant
+    :math:`\top` is equivalent to either :math:`p` or :math:`\top`. This implies
+    that the negation
+    function is not representable. (If a formula uses more than one
+    variable, the definition of representability says that truth value
+    can't change if we replace the extra variables by :math:`\top`.)
+
+    The base case is immediate, and assuming the inductive hypothesis for
+    :math:`A` and :math:`B`, the formula :math:`A \liff B` is equivalent to
+    :math:`p \liff p`, :math:`p \liff \top`, :math:`\top \liff p`, or
+    :math:`\top \liff \top`. The first and last are equivalent to :math:`\top`,
+    and the middle one is equivalent to :math:`p`.
+
+.. _section_normal_forms:
+
+Normal forms
+------------
+
+For both theoretical reasons and practical reasons, it is often useful to know that formulas
+can be expressed in particularly simple or convenient forms.
+
+.. admonition:: Definition
+
+    The set of propositional formulas in *negation normal form* (NNF) is generated inductively
+    as follows:
+
+    - Each variable :math:`p_i` is in negation normal form.
+    - The negation :math:`\lnot p_i` of a propositional variable is in negation normal form.
+    - :math:`\top` and :math:`\bot` are in negation normal form.
+    - If :math:`A` and :math:`B` are in negation normal form, then so are :math:`A \land B` and
+      :math:`A \lor B`.
+
+More concisely, the set of formulas in negation normal form is the smallest set of formulas
+containing :math:`\top`, :math:`\bot`, atomic formulas, and negated atomic formulas,
+and closed under conjunction and disjunction.
+
+.. admonition:: Proposition
+
+    Every propositional formula is equivalent to one in negation normal form.
+
+.. admonition:: Proof
+
+    First use the identities :math:`A \liff B \equiv (A \limplies B) \land (B \limplies A)`
+    and :math:`A \limplies B \equiv \lnot A \lor B` to get rid of :math:`\liff` and
+    :math:`\limplies`. Then use De Morgan's laws together with
+    :math:`\lnot \lnot A \equiv A`, :math:`\lnot \top \equiv \bot`, and
+    :math:`\lnot \top \equiv \bot` to push negations down to the atomic formulas.
+
+More formally, we can prove by induction on propositional formulas :math:`A` that both
+:math:`A` and :math:`\lnot A` are equivalent to formulas in negation normal form.
+(You should try to write that proof down carefully.)
+Putting a formula in negation normal form is reasonably efficient.
+You should convince yourself that if :math:`A` is in negation normal form,
+then putting :math:`\lnot A` in negation normal form amounts to switching all the following
+in :math:`A`:
+
+- :math:`\top` with :math:`\bot`
+- variables :math:`p_i` with their negations :math:`\lnot p_i`
+- :math:`\land` with :math:`\lor`.
+
+We will see that *conjunctive normal form* (CNF) and *disjunctive normal form* (DNF) are also
+important representations of propositional formulas. By definition, a *literal*
+is an atomic formula :math:`p_i` or the negation :math:`\lnot p_i` of an atomic formula.
+A formula is in conjunctive normal form if it can be written as conjunction of disjunctions
+of literals, in other words, if it can be written as a big "and" of "or" expressions:
+
+.. math::
+
+  \bigwedge_{i < n} \left( \bigvee_{j < m_i} \pm \ell_j \right).
+
+where each :math:`\ell_j` is a literal. Here is an example:
+
+.. math::
+
+  (p \lor \lnot q \lor r) \land (\lnot p \lor s) \land (\lnot r \lor s \lor \lnot t).
+
+We can think of :math:`\bot` as the empty disjunction (because a disjunction is true only when
+one of the disjuncts is true) and we can think of :math:`\top` as the empty conjunction (because
+a conjunction is true when all of its conjuncts are true, which happens trivially when there
+aren't any).
+
+Dually, a formula is in disjunctive normal form if it is an "or" and "and" expressions:
+
+.. math::
+
+  \bigvee_{i < n} \left( \bigwedge_{j < m_i} \pm \ell_j \right).
+
+If you switch :math:`\land` and :math:`\lor` in the previous example, you have a
+formula in disjunctive normal form.
+
+It is pretty clear that if you take the conjunction of two formulas in CNF the result
+is a CNF formula (modulo associating parentheses), and, similarly,
+the disjunction of two formulas in DNF is again DNF. The following is less obvious:
+
+.. admonition:: Lemma
+
+    The disjunction of two CNF formulas is equivalent to a CNF formula,
+    and dually for DNF formulas.
+
+.. admonition:: Proof
+
+    For the first claim, we use the equivalence
+    :math:`A \lor (B \land C) \equiv (A \land B) \lor (A \land C)`.
+    By induction on :math:`n`, we have that for every sequence of formulas
+    :math:`B_0, \ldots, B_{n-1}` we have
+    :math:`A \lor \bigwedge_{i < n} B_i \equiv \bigwedge_{i < n} (A \lor B_i).`
+    Then by induction on :math:`n'` we have
+    :math:`\bigwedge_{i' < n'} A_i' \lor \bigwedge_{i < n} B_i \equiv
+    \bigwedge_{i' < n'} \bigwedge_{i < n} (A'_i \lor B_i).`
+    Since each :math:`A_{i'}` and each :math:`B_i` is a disjunction of literals,
+    this yields the result.
+
+    The second claim is proved similarly, switching :math:`\land` and :math:`\lor`.
+
+.. admonition:: Proposition
+
+    Every propositional formula is equivalent to one in conjunctive normal form,
+    and also to one in disjunctive normal form.
+
+.. admonition:: Proof
+
+    Since we already know that every formula is equivalent to one in negation normal
+    form, we can use induction on that set of formulas. The claim is clearly true
+    of :math:`\top`, :math:`\bot`, :math:`p_i`, and :math:`\lnot p_i`.
+    By the previous lemma, whenever it is true
+    of :math:`A` and :math:`B`, it is also true of :math:`A \land B` and :math:`A \lor B`.
+
+In contrast to putting formulas in negation normal form, the exercises below show that
+the smallest CNF or DNF equivalent of a formula :math:`A` can be exponentially longer
+than :math:`A`.
+
+We will see that conjunctive normal form is commonly used in automated reasoning.
+Notice that if a disjunction of literals contains a duplicated literal, deleting the
+duplicate results in an equivalent formula.
+A disjunction of literals is called a *clause*. Since the order of the disjuncts
+and repetitions don't matter,
+we generally identify clauses with the corresponding set of literals;
+for example, the clause :math:`p \lor \lnot q \lor r` is associated with the set
+:math:`\{ p, \lnot q, r \}`.
+If a clause contains a pair :math:`p_i` and :math:`\lnot p_i`,
+it is equivalent to :math:`\top`.
+If :math:`\Gamma` is a set of clauses, we think of :math:`\Gamma` as saying that
+all the clauses in :math:`\Gamma` are true.
+With this identification, every formula in conjunctive normal form is equivalent
+to a set of clauses.
+An empty clause corresponds to :math:`\bot`,
+and an empty set of clauses corresponds to :math:`\top`.
+
+The dual notion to a clause is a conjunction like :math:`\lnot p \land q \land \lnot r`.
+If each variable occurs at most once (either positively or negatively),
+we can think of this as a *partial truth assignment*.
+In this example, any truth assignment that satisfies the formula has to set
+:math:`p` false, :math:`q` true, and :math:`r` false.
+
+
+Exercises
+---------
+
+#. Prove that if :math:`A` is a subformula of :math:`B` and :math:`B` is a subformula
+   of :math:`C` then :math:`A` is a subformula of :math:`C`. (Hint: prove by
+   induction on :math:`C` that for every :math:`B \in \mathit{subformulas}(C)`,
+   every subformula of :math:`B` is a subformula of :math:`C`.)
+
+#. Prove that for every :math:`A`, :math:`B`, and :math:`p`,
+   :math:`\mathit{depth}(A[B/p]) \le \mathit{depth}(A) + \mathit{depth}(B)`.
+
+#. Prove that :math:`A` and :math:`B` are logically equivalent if and only if
+   the formula :math:`A \liff B` is valid.
+
+#. Use algebraic calculations to show that all of the following are tautologies:
+
+   - :math:`((A \land \lnot B) \lor B) \liff (A \lor B)`
+   - :math:`(A \limplies \lnot A) \limplies \lnot A`
+   - :math:`(A \limplies B) \liff (\lnot B \limplies \lnot A)`
+   - :math:`A \limplies (B \limplies A \land B)`
+
+#. The *Sheffer stroke* :math:`A \mid B`, also known as "nand," says that :math:`A`
+   and :math:`B` are not both true. Show that :math:`\{ \mid \}` is a complete set
+   of connectives. Do the same for "nor," that is, the binary connective that holds
+   if neither :math:`A` nor :math:`B` is true.
+
+#. Show that :math:`\{ \land, \lnot \}` and :math:`\{ \limplies, \bot \}` are complete sets of
+   connectives.
+
+#. Show that :math:`\{ \limplies, \lor, \land \}` is not a complete set of connectives.
+   Conclude that :math:`\{ \limplies, \lor, \land, \liff, \top \}` is not
+   a complete set of connectives.
+
+#. Show that :math:`\{ \bot, \liff \}` is not a complete set of connectives.
+   Conclude that :math:`\{ \bot, \top, \lnot, \liff, \oplus \}` is not complete.
+   Here :math:`A \oplus B` is the "exclusive or," which is to say, :math:`A \oplus B`
+   is true if one of :math:`A` or :math:`B` is true but not both.
+
+#. Using the property :math:`A \lor (B \land C) \equiv (A \lor B) \land (A \lor C)`
+   and the dual statement with :math:`\land` and :math:`\lor` switched, put
+   :math:`(p_1 \land p_2) \lor (q_1 \land q_2) \lor (r_1 \land r_2)` in
+   conjunctive normal form.
+
+#. The boolean function :math:`\fn{parity}(x_0, x_1, \ldots, x_{n-1})` holds if and only if
+   an odd number of the :math:`x_i` s are true.
+   It is represented by the formula :math:`p_0 \oplus p_1 \oplus \cdots \oplus p_{n-1}`.
+   Show that any CNF formula representing the parity function has to have at least
+   :math:`2^n` clauses.
