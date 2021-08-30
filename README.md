@@ -81,7 +81,7 @@ on Windows, OS/X, or Linux.
 2. Clone this repository, using `git clone` or the `Download ZIP` option on the `Code` button
 above.
 
-3. Inside the top folder of the repository, type `leanproject build` to compile the library files.
+3. Inside the top folder of the repository, type `leanpkg build` to compile the library files.
 Also, copy the examples folder from the `LAMR` folder to the `User` folder.
 
 4. Open the repository folder in VS Code.
