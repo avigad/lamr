@@ -1,7 +1,12 @@
 # Logic and Mechanized Reasoning
 
-This repository is designed to accompany the course by the same name. The textbook is available at
-[https://avigad.github.io/lamr](https://avigad.github.io/lamr). The repository contains a supporting library
+This repository is designed to accompany the course by the same name. See also:
+
+- the textbook (in progress): [https://avigad.github.io/lamr](https://avigad.github.io/lamr)
+- a PDF version of the textbook: [https://avigad.github.io/lamr/logic_and_mechanized_reasoning.pdf](https://avigad.github.io/lamr/logic_and_mechanized_reasoning.pdf)
+- the course home page: [https://www.cs.cmu.edu/~mheule/15217-f21/](https://www.cs.cmu.edu/~mheule/15217-f21/)
+
+This repository contains a supporting library
 and files containing examples from the textbook that you can edit and experiment with.
 
 The course requires the Lean 4 programming language and theorem prover, as well as
