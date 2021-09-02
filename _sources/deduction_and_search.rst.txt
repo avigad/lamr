@@ -3,192 +3,193 @@
 Deduction and search
 ====================
 
-We have seen that there is a simple algorithm for determining whether
-a formula of propositional logic is valid,
-namely, simple evaluate the formula under all truth assignments
-to its variables.
-A *deductive system* or *proof* system is supposed to
-provide a system of axioms and rules that can be used to establish
-validity more efficiently.
-In fact, it is an open theoretical question as to whether
-any such system can do substantially better than providing the
-entire truth table in the worst case.
-But we have seen that SAT solvers can do much better in practice,
-and when they determine that a result in unsatisfiable,
-they generally can be set to output a proof that can be checked
-by an independent checker.
-The proof-based approach to testing validity is also closer
-to informal reasoning practice:
-it seems more natural to use rules to establish the validity of a formula like
-:math:`(A \to B) \land (B \to C) \to (A \to C)`
-than to write out the truth table.
-And when we turn to first-order logic, we will see that, in that case,
-there is no algorithm that can determine the validity of formulas.
-In that case, the best we can do is search for a proof in a suitable
-deductive calculus.
+..
+  We have seen that there is a simple algorithm for determining whether
+  a formula of propositional logic is valid,
+  namely, simple evaluate the formula under all truth assignments
+  to its variables.
+  A *deductive system* or *proof* system is supposed to
+  provide a system of axioms and rules that can be used to establish
+  validity more efficiently.
+  In fact, it is an open theoretical question as to whether
+  any such system can do substantially better than providing the
+  entire truth table in the worst case.
+  But we have seen that SAT solvers can do much better in practice,
+  and when they determine that a result in unsatisfiable,
+  they generally can be set to output a proof that can be checked
+  by an independent checker.
+  The proof-based approach to testing validity is also closer
+  to informal reasoning practice:
+  it seems more natural to use rules to establish the validity of a formula like
+  :math:`(A \to B) \land (B \to C) \to (A \to C)`
+  than to write out the truth table.
+  And when we turn to first-order logic, we will see that, in that case,
+  there is no algorithm that can determine the validity of formulas.
+  In that case, the best we can do is search for a proof in a suitable
+  deductive calculus.
 
-When it comes to talking about formal proofs, the words *proof*, *deduction*,
-and *derivation* are often used interchangeably.
-The last two are sometimes useful to distinguish formal derivations from
-ordinary (informal) mathematical proofs.
-
-
-Proof systems
--------------
-
-Talk about proof systems in general.
-
-Introduce notation: :math:`\proves A` and :math:`\Gamma \proves A`.
-
-Introduce terminology: soundness, completeness.
-
-Talk about the deduction rule.
-
-Talk about trivial proof system for CNF formulas. (Alas, Tseitin preserves
-satisfiability, not validity; so this doesn't constitute an efficient proof system!)
-
-(Include a brief discussion of complexity.
-The satisfiability problem is NP-complete.
-The notion of a polynomially-bounded
-proof system, and mention that it is an open question whether such a thing
-exists.)
+  When it comes to talking about formal proofs, the words *proof*, *deduction*,
+  and *derivation* are often used interchangeably.
+  The last two are sometimes useful to distinguish formal derivations from
+  ordinary (informal) mathematical proofs.
 
 
-Natural deduction
------------------
+  Proof systems
+  -------------
 
-Sequents, rules.
+  Talk about proof systems in general.
 
-Soundness.
+  Introduce notation: :math:`\proves A` and :math:`\Gamma \proves A`.
 
-Sketch completeness.
+  Introduce terminology: soundness, completeness.
 
-Definitions.
+  Talk about the deduction rule.
 
+  Talk about trivial proof system for CNF formulas. (Alas, Tseitin preserves
+  satisfiability, not validity; so this doesn't constitute an efficient proof system!)
 
-A sequent calculus
-------------------
-
-Describe a short sequent calculus for NNF formulas.
-
-Prove soundness and completeness.
-
-Cut rule, definitions.
-
-
-Resolution
-----------
-
-The resolution rule.
-
-Soundness and completeness as a refutation calculus:
-the empty clause is derivable if and only if the original set
-of clauses is unsatisfiable.
-
-Prove it in the following form: either the empty clause is
-derivable, or there is a satisfying assignment.
-
-Describe unit propagation and pure literal elimination.
-
-Definitions and extended resolution.
-
-The resolution algorithm.
+  (Include a brief discussion of complexity.
+  The satisfiability problem is NP-complete.
+  The notion of a polynomially-bounded
+  proof system, and mention that it is an open question whether such a thing
+  exists.)
 
 
-The DPLL algorithm
-------------------
+  Natural deduction
+  -----------------
 
-(This is just a sketch)
+  Sequents, rules.
 
-The Davis--Putnam--Logemann--Loveland (DPLL) algorithm is a procedure
-for determining whether or not a propositional formula is satisfiable.
-In the worst case, it runs in time :math:`O(2^n)`, where :math:`n` is the length
-of the input. But together with a technique known as *CDCL*, described
-in the next section, it forms the basis for the most efficient SAT solvers
-available today.
+  Soundness.
 
-As was the case with the resolution calculus, we can describe DPLL as a
-procedure that tries to refute a set of clauses, and, if it fails,
-produces a satisfying assignment.
-The procedure corresponds to a variant of the resolution calculus
-in which the resolution rule is replaced by the splitting rule:
+  Sketch completeness.
 
-.. raw:: html
-
-    <div class="math notranslate nohighlight">
-    \[\begin{prooftree}
-    \AXC{$\Gamma \cup \{ p \}$}
-    \AXC{$\Gamma \cup \{ \lnot p \} $}
-    \BIC{$\Gamma$}
-    \end{prooftree}\]</div>
-
-.. raw:: latex
-
-    \begin{prooftree}
-    \AXC{$\Gamma \cup \{ p \}$}
-    \AXC{$\Gamma \cup \{ \lnot p \}$}
-    \BIC{$\Gamma$}
-    \end{prooftree}
-
-Here :math:`\Gamma` is a set of clauses, :math:`\Gamma \cup \{ p \}` is
-:math:`\Gamma` with a new singleton clause :math:`p`, and
-:math:`\Gamma \cup \{ \lnot p \}` is :math:`\Gamma` with a new singleton clause :math:`p`.
-Read downwards, the rule says
-that if we can refute :math:`\Gamma \cup \{ p \}` and we can refute
-:math:`\Gamma \cup \{ \lnot p \}`,
-then we can refute the set of clauses :math:`\Gamma`.
-Read upwards, it says that if we are looking for a satisfying assignment
-for :math:`\Gamma`,
-we should look for either a satisfying assignment in which :math:`p`
-has the value :math:`\top`,
-or one in which :math:`p` has the value :math:`\bot`.
-Once again, the rule goes both ways:
-if we can refute :math:`\Gamma`
-then we can refute both :math:`\Gamma \cup \{ p \}` and :math:`\Gamma \cup \{ \lnot p \}`;
-dually, if we have a satisfying assignment for either :math:`\Gamma \cup \{ p \}` and :math:`\Gamma \cup \{ \lnot p \}`,
-we have a satisfying assignment for :math:`\Gamma`.
-The point is that in each branch we can immediately apply the unit
-resolution and pure literal rule and get rid of the variable :math:`p`
-entirely.
-
-The DPLL algorithm is as follows:
-
-    Given a set of clauses :math:`\Gamma`:
-
-      - eagerly apply unit propagation and pure literal rule
-      - if the resulting set :math:`\Gamma` is empty, it is satisfiable.
-      - if one of the clauses is the empty clause, :math:`\Gamma` is unsatisfiable.
-      - otherwise, pick a propositional variable, :math:`p`, and recursively
-
-        - look for a satisfying assignment of :math:`\Gamma \cup \{p \}`
-        - if :math:`\Gamma \cup \{p \}` is unsatisfiable, look for a satisfying assignment of
-          :math:`\Gamma \cup \{ \lnot p\}`
-
-(State soundness and completeness.)
+  Definitions.
 
 
-Conflict driven clause learning
--------------------------------
+  A sequent calculus
+  ------------------
 
-The fact that the satisfiability problem is NP-complete is viewed as evidence
-that there is no algorithm that runs in polynomial time worst-case complexity.
-This had long been interpreted as evidence that there are no efficient algorithms
-for determining satisfiability.
-But some breakthrough ideas in the 1990s led to the development of satisfiability
-algorithms that work extremely well on many of the types of problems that
-come up in practice.
-One of those ideas is the use of *conflict driven clauses learning*, or CDCL.
+  Describe a short sequent calculus for NNF formulas.
 
-(Explain CDCL here.)
+  Prove soundness and completeness.
+
+  Cut rule, definitions.
 
 
-Propositional logic in Lean
----------------------------
+  Resolution
+  ----------
 
-Explain the type `Prop` and the encoding of propositional formulas.
+  The resolution rule.
 
-Explain how to use Lean as a proof system.
+  Soundness and completeness as a refutation calculus:
+  the empty clause is derivable if and only if the original set
+  of clauses is unsatisfiable.
 
-Give complete list of propositional rules (tactics).
+  Prove it in the following form: either the empty clause is
+  derivable, or there is a satisfying assignment.
+
+  Describe unit propagation and pure literal elimination.
+
+  Definitions and extended resolution.
+
+  The resolution algorithm.
+
+
+  The DPLL algorithm
+  ------------------
+
+  (This is just a sketch)
+
+  The Davis--Putnam--Logemann--Loveland (DPLL) algorithm is a procedure
+  for determining whether or not a propositional formula is satisfiable.
+  In the worst case, it runs in time :math:`O(2^n)`, where :math:`n` is the length
+  of the input. But together with a technique known as *CDCL*, described
+  in the next section, it forms the basis for the most efficient SAT solvers
+  available today.
+
+  As was the case with the resolution calculus, we can describe DPLL as a
+  procedure that tries to refute a set of clauses, and, if it fails,
+  produces a satisfying assignment.
+  The procedure corresponds to a variant of the resolution calculus
+  in which the resolution rule is replaced by the splitting rule:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$\Gamma \cup \{ p \}$}
+      \AXC{$\Gamma \cup \{ \lnot p \} $}
+      \BIC{$\Gamma$}
+      \end{prooftree}\]</div>
+
+  .. raw:: latex
+
+      \begin{prooftree}
+      \AXC{$\Gamma \cup \{ p \}$}
+      \AXC{$\Gamma \cup \{ \lnot p \}$}
+      \BIC{$\Gamma$}
+      \end{prooftree}
+
+  Here :math:`\Gamma` is a set of clauses, :math:`\Gamma \cup \{ p \}` is
+  :math:`\Gamma` with a new singleton clause :math:`p`, and
+  :math:`\Gamma \cup \{ \lnot p \}` is :math:`\Gamma` with a new singleton clause :math:`p`.
+  Read downwards, the rule says
+  that if we can refute :math:`\Gamma \cup \{ p \}` and we can refute
+  :math:`\Gamma \cup \{ \lnot p \}`,
+  then we can refute the set of clauses :math:`\Gamma`.
+  Read upwards, it says that if we are looking for a satisfying assignment
+  for :math:`\Gamma`,
+  we should look for either a satisfying assignment in which :math:`p`
+  has the value :math:`\top`,
+  or one in which :math:`p` has the value :math:`\bot`.
+  Once again, the rule goes both ways:
+  if we can refute :math:`\Gamma`
+  then we can refute both :math:`\Gamma \cup \{ p \}` and :math:`\Gamma \cup \{ \lnot p \}`;
+  dually, if we have a satisfying assignment for either :math:`\Gamma \cup \{ p \}` and :math:`\Gamma \cup \{ \lnot p \}`,
+  we have a satisfying assignment for :math:`\Gamma`.
+  The point is that in each branch we can immediately apply the unit
+  resolution and pure literal rule and get rid of the variable :math:`p`
+  entirely.
+
+  The DPLL algorithm is as follows:
+
+      Given a set of clauses :math:`\Gamma`:
+
+        - eagerly apply unit propagation and pure literal rule
+        - if the resulting set :math:`\Gamma` is empty, it is satisfiable.
+        - if one of the clauses is the empty clause, :math:`\Gamma` is unsatisfiable.
+        - otherwise, pick a propositional variable, :math:`p`, and recursively
+
+          - look for a satisfying assignment of :math:`\Gamma \cup \{p \}`
+          - if :math:`\Gamma \cup \{p \}` is unsatisfiable, look for a satisfying assignment of
+            :math:`\Gamma \cup \{ \lnot p\}`
+
+  (State soundness and completeness.)
+
+
+  Conflict driven clause learning
+  -------------------------------
+
+  The fact that the satisfiability problem is NP-complete is viewed as evidence
+  that there is no algorithm that runs in polynomial time worst-case complexity.
+  This had long been interpreted as evidence that there are no efficient algorithms
+  for determining satisfiability.
+  But some breakthrough ideas in the 1990s led to the development of satisfiability
+  algorithms that work extremely well on many of the types of problems that
+  come up in practice.
+  One of those ideas is the use of *conflict driven clauses learning*, or CDCL.
+
+  (Explain CDCL here.)
+
+
+  Propositional logic in Lean
+  ---------------------------
+
+  Explain the type `Prop` and the encoding of propositional formulas.
+
+  Explain how to use Lean as a proof system.
+
+  Give complete list of propositional rules (tactics).
 
 
