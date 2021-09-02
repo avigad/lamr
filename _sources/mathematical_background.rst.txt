@@ -454,25 +454,25 @@ It is possible to cover all the squares of the mutilated chessboard using domino
 so that each square is covered by exactly one domino?
 
 A moment's reflection shows that the answer is no. If you imagine the chessboard
-squares colored red and black in the usual way, you'll notice that the two squares
-we removed have the same color, say, black. That means that there are more red
+squares colored white and black in the usual way, you'll notice that the two squares
+we removed have the same color, say, black. That means that there are more white
 squares than black squares. On the other hand, every domino covers exactly one
 square of each color. So no matter how many dominoes we put down, we'll never
-have them color more red squares than black squares.
+have them color more white squares than black squares.
 
 .. image:: ../figures/mchess.*
    :height: 200 px
    :alt: mutilated chessboard
    :align: center
 
-The fact that any way of putting down dominoes covers the same number of red and
+The fact that any way of putting down dominoes covers the same number of white and
 black squares is an instance of an *invariant*, which is a powerful idea in
 both mathematics and computer science. An invariant is something---a quantity, or a property---that doesn't change as something else does (in this case, the number of
 dominoes).
 
 Often the natural way to establish an invariant uses induction. In this case,
 it is obvious that putting down one domino doesn't change the difference between
-the number of red and black squares covered, since each domino covers one of each.
+the number of white and black squares covered, since each domino covers one of each.
 By induction on :math:`n`, putting down :math:`n` dominoes doesn't change the difference
 either.
 
@@ -538,7 +538,7 @@ Exercises
 
     #. Show :math:`\sum_{i \le n} F_i^2 = F_n F_{n+1}`.
 
-#. Show that with `n` straight lines we can divide the plane into at most `(n^2 +  n + 2)` regions, and that this is sharp.
+#. Show that with `n` straight lines we can divide the plane into at most :math:`n^2 + n + 2` regions, and that this is sharp.
 
 #. Show that the recursive description of :math:`\fn{gcd}(x,y)` presented in
    :numref:`section_generalized_induction_and_recursion` correctly computes the greatest

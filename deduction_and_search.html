@@ -36,6 +36,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "{\\to}", "liff": "{\\leftrightarrow}", "proves": "{\\vdash}", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1]}}}</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -96,7 +98,16 @@
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">6. Using SAT Solvers</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Deduction and search</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Deduction and search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#proof-systems">7.1. Proof systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#natural-deduction">7.2. Natural deduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-sequent-calculus">7.3. A sequent calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resolution">7.4. Resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-dpll-algorithm">7.5. The DPLL algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conflict-driven-clause-learning">7.6. Conflict driven clause learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#propositional-logic-in-lean">7.7. Propositional logic in Lean</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">8. Terms and Formulas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">9. Implementing Terms and Formulas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">10. Using SMT solvers</a></li>
@@ -173,6 +184,149 @@
             
   <div class="section" id="deduction-and-search">
 <span id="id1"></span><h1><span class="section-number">7. </span>Deduction and search<a class="headerlink" href="#deduction-and-search" title="Permalink to this headline">¶</a></h1>
+<p>We have seen that there is a simple algorithm for determining whether
+a formula of propositional logic is valid,
+namely, simple evaluate the formula under all truth assignments
+to its variables.
+A <em>deductive system</em> or <em>proof</em> system is supposed to
+provide a system of axioms and rules that can be used to establish
+validity more efficiently.
+In fact, it is an open theoretical question as to whether
+any such system can do substantially better than providing the
+entire truth table in the worst case.
+But we have seen that SAT solvers can do much better in practice,
+and when they determine that a result in unsatisfiable,
+they generally can be set to output a proof that can be checked
+by an independent checker.
+The proof-based approach to testing validity is also closer
+to informal reasoning practice:
+it seems more natural to use rules to establish the validity of a formula like
+<span class="math notranslate nohighlight">\((A \to B) \land (B \to C) \to (A \to C)\)</span>
+than to write out the truth table.
+And when we turn to first-order logic, we will see that, in that case,
+there is no algorithm that can determine the validity of formulas.
+In that case, the best we can do is search for a proof in a suitable
+deductive calculus.</p>
+<p>When it comes to talking about formal proofs, the words <em>proof</em>, <em>deduction</em>,
+and <em>derivation</em> are often used interchangeably.
+The last two are sometimes useful to distinguish formal derivations from
+ordinary (informal) mathematical proofs.</p>
+<div class="section" id="proof-systems">
+<h2><span class="section-number">7.1. </span>Proof systems<a class="headerlink" href="#proof-systems" title="Permalink to this headline">¶</a></h2>
+<p>Talk about proof systems in general.</p>
+<p>Introduce notation: <span class="math notranslate nohighlight">\(\proves A\)</span> and <span class="math notranslate nohighlight">\(\Gamma \proves A\)</span>.</p>
+<p>Introduce terminology: soundness, completeness.</p>
+<p>Talk about the deduction rule.</p>
+<p>Talk about trivial proof system for CNF formulas. (Alas, Tseitin preserves
+satisfiability, not validity; so this doesn’t constitute an efficient proof system!)</p>
+<p>(Include a brief discussion of complexity.
+The satisfiability problem is NP-complete.
+The notion of a polynomially-bounded
+proof system, and mention that it is an open question whether such a thing
+exists.)</p>
+</div>
+<div class="section" id="natural-deduction">
+<h2><span class="section-number">7.2. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Permalink to this headline">¶</a></h2>
+<p>Sequents, rules.</p>
+<p>Soundness.</p>
+<p>Sketch completeness.</p>
+<p>Definitions.</p>
+</div>
+<div class="section" id="a-sequent-calculus">
+<h2><span class="section-number">7.3. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this headline">¶</a></h2>
+<p>Describe a short sequent calculus for NNF formulas.</p>
+<p>Prove soundness and completeness.</p>
+<p>Cut rule, definitions.</p>
+</div>
+<div class="section" id="resolution">
+<h2><span class="section-number">7.4. </span>Resolution<a class="headerlink" href="#resolution" title="Permalink to this headline">¶</a></h2>
+<p>The resolution rule.</p>
+<p>Soundness and completeness as a refutation calculus:
+the empty clause is derivable if and only if the original set
+of clauses is unsatisfiable.</p>
+<p>Prove it in the following form: either the empty clause is
+derivable, or there is a satisfying assignment.</p>
+<p>Describe unit propagation and pure literal elimination.</p>
+<p>Definitions and extended resolution.</p>
+<p>The resolution algorithm.</p>
+</div>
+<div class="section" id="the-dpll-algorithm">
+<h2><span class="section-number">7.5. </span>The DPLL algorithm<a class="headerlink" href="#the-dpll-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>(This is just a sketch)</p>
+<p>The Davis–Putnam–Logemann–Loveland (DPLL) algorithm is a procedure
+for determining whether or not a propositional formula is satisfiable.
+In the worst case, it runs in time <span class="math notranslate nohighlight">\(O(2^n)\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the length
+of the input. But together with a technique known as <em>CDCL</em>, described
+in the next section, it forms the basis for the most efficient SAT solvers
+available today.</p>
+<p>As was the case with the resolution calculus, we can describe DPLL as a
+procedure that tries to refute a set of clauses, and, if it fails,
+produces a satisfying assignment.
+The procedure corresponds to a variant of the resolution calculus
+in which the resolution rule is replaced by the splitting rule:</p>
+<div class="math notranslate nohighlight">
+\[\begin{prooftree}
+\AXC{$\Gamma \cup \{ p \}$}
+\AXC{$\Gamma \cup \{ \lnot p \} $}
+\BIC{$\Gamma$}
+\end{prooftree}\]</div><p>Here <span class="math notranslate nohighlight">\(\Gamma\)</span> is a set of clauses, <span class="math notranslate nohighlight">\(\Gamma \cup \{ p \}\)</span> is
+<span class="math notranslate nohighlight">\(\Gamma\)</span> with a new singleton clause <span class="math notranslate nohighlight">\(p\)</span>, and
+<span class="math notranslate nohighlight">\(\Gamma \cup \{ \lnot p \}\)</span> is <span class="math notranslate nohighlight">\(\Gamma\)</span> with a new singleton clause <span class="math notranslate nohighlight">\(p\)</span>.
+Read downwards, the rule says
+that if we can refute <span class="math notranslate nohighlight">\(\Gamma \cup \{ p \}\)</span> and we can refute
+<span class="math notranslate nohighlight">\(\Gamma \cup \{ \lnot p \}\)</span>,
+then we can refute the set of clauses <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+Read upwards, it says that if we are looking for a satisfying assignment
+for <span class="math notranslate nohighlight">\(\Gamma\)</span>,
+we should look for either a satisfying assignment in which <span class="math notranslate nohighlight">\(p\)</span>
+has the value <span class="math notranslate nohighlight">\(\top\)</span>,
+or one in which <span class="math notranslate nohighlight">\(p\)</span> has the value <span class="math notranslate nohighlight">\(\bot\)</span>.
+Once again, the rule goes both ways:
+if we can refute <span class="math notranslate nohighlight">\(\Gamma\)</span>
+then we can refute both <span class="math notranslate nohighlight">\(\Gamma \cup \{ p \}\)</span> and <span class="math notranslate nohighlight">\(\Gamma \cup \{ \lnot p \}\)</span>;
+dually, if we have a satisfying assignment for either <span class="math notranslate nohighlight">\(\Gamma \cup \{ p \}\)</span> and <span class="math notranslate nohighlight">\(\Gamma \cup \{ \lnot p \}\)</span>,
+we have a satisfying assignment for <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+The point is that in each branch we can immediately apply the unit
+resolution and pure literal rule and get rid of the variable <span class="math notranslate nohighlight">\(p\)</span>
+entirely.</p>
+<p>The DPLL algorithm is as follows:</p>
+<blockquote>
+<div><p>Given a set of clauses <span class="math notranslate nohighlight">\(\Gamma\)</span>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>eagerly apply unit propagation and pure literal rule</p></li>
+<li><p>if the resulting set <span class="math notranslate nohighlight">\(\Gamma\)</span> is empty, it is satisfiable.</p></li>
+<li><p>if one of the clauses is the empty clause, <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable.</p></li>
+<li><p>otherwise, pick a propositional variable, <span class="math notranslate nohighlight">\(p\)</span>, and recursively</p>
+<ul>
+<li><p>look for a satisfying assignment of <span class="math notranslate nohighlight">\(\Gamma \cup \{p \}\)</span></p></li>
+<li><p>if <span class="math notranslate nohighlight">\(\Gamma \cup \{p \}\)</span> is unsatisfiable, look for a satisfying assignment of
+<span class="math notranslate nohighlight">\(\Gamma \cup \{ \lnot p\}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>(State soundness and completeness.)</p>
+</div>
+<div class="section" id="conflict-driven-clause-learning">
+<h2><span class="section-number">7.6. </span>Conflict driven clause learning<a class="headerlink" href="#conflict-driven-clause-learning" title="Permalink to this headline">¶</a></h2>
+<p>The fact that the satisfiability problem is NP-complete is viewed as evidence
+that there is no algorithm that runs in polynomial time worst-case complexity.
+This had long been interpreted as evidence that there are no efficient algorithms
+for determining satisfiability.
+But some breakthrough ideas in the 1990s led to the development of satisfiability
+algorithms that work extremely well on many of the types of problems that
+come up in practice.
+One of those ideas is the use of <em>conflict driven clauses learning</em>, or CDCL.</p>
+<p>(Explain CDCL here.)</p>
+</div>
+<div class="section" id="propositional-logic-in-lean">
+<h2><span class="section-number">7.7. </span>Propositional logic in Lean<a class="headerlink" href="#propositional-logic-in-lean" title="Permalink to this headline">¶</a></h2>
+<p>Explain the type <cite>Prop</cite> and the encoding of propositional formulas.</p>
+<p>Explain how to use Lean as a proof system.</p>
+<p>Give complete list of propositional rules (tactics).</p>
+</div>
 </div>
 
 

@@ -533,19 +533,19 @@ Imagine you are given a set of dominoes, each of which can cover exactly two squ
 It is possible to cover all the squares of the mutilated chessboard using dominoes,
 so that each square is covered by exactly one domino?</p>
 <p>A moment’s reflection shows that the answer is no. If you imagine the chessboard
-squares colored red and black in the usual way, you’ll notice that the two squares
-we removed have the same color, say, black. That means that there are more red
+squares colored white and black in the usual way, you’ll notice that the two squares
+we removed have the same color, say, black. That means that there are more white
 squares than black squares. On the other hand, every domino covers exactly one
 square of each color. So no matter how many dominoes we put down, we’ll never
-have them color more red squares than black squares.</p>
+have them color more white squares than black squares.</p>
 <a class="reference internal image-reference" href="_images/mchess.png"><img alt="mutilated chessboard" class="align-center" src="_images/mchess.png" style="height: 200px;" /></a>
-<p>The fact that any way of putting down dominoes covers the same number of red and
+<p>The fact that any way of putting down dominoes covers the same number of white and
 black squares is an instance of an <em>invariant</em>, which is a powerful idea in
 both mathematics and computer science. An invariant is something—a quantity, or a property—that doesn’t change as something else does (in this case, the number of
 dominoes).</p>
 <p>Often the natural way to establish an invariant uses induction. In this case,
 it is obvious that putting down one domino doesn’t change the difference between
-the number of red and black squares covered, since each domino covers one of each.
+the number of white and black squares covered, since each domino covers one of each.
 By induction on <span class="math notranslate nohighlight">\(n\)</span>, putting down <span class="math notranslate nohighlight">\(n\)</span> dominoes doesn’t change the difference
 either.</p>
 <p>The following puzzle, called the <em>MU puzzle</em>, comes from the book <em>Gödel, Escher, Bach</em>
@@ -603,7 +603,7 @@ recursive procedure to solve this problem.</p></li>
 </ol>
 </div></blockquote>
 </li>
-<li><p>Show that with <cite>n</cite> straight lines we can divide the plane into at most <cite>(n^2 +  n + 2)</cite> regions, and that this is sharp.</p></li>
+<li><p>Show that with <cite>n</cite> straight lines we can divide the plane into at most <span class="math notranslate nohighlight">\(n^2 + n + 2\)</span> regions, and that this is sharp.</p></li>
 <li><p>Show that the recursive description of <span class="math notranslate nohighlight">\(\fn{gcd}(x,y)\)</span> presented in
 <a class="reference internal" href="#section-generalized-induction-and-recursion"><span class="std std-numref">Section 2.3</span></a> correctly computes the greatest
 common divisor of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, where we define <span class="math notranslate nohighlight">\(\fn{gcd}(0,0)\)</span>
