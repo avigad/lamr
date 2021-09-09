@@ -435,7 +435,7 @@ We can compute the depth of an extended binary tree as follows:
 .. math::
 
     \fn{depth}(\fn{empty}) &= 0 \\
-    \fn{depth}(\fn{node}(s, t)) &= 1 + \max(\fn{size}(s), \fn{size}(t))
+    \fn{depth}(\fn{node}(s, t)) &= 1 + \max(\fn{depth}(s), \fn{depth}(t))
 
 Again, be careful: many authors take the depth of a tree to be the
 length of the longest path from the root to a leaf,
