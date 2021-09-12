@@ -252,14 +252,3 @@ Exercises
    appears together with its negation `Lit.neg p`.
    Write another Lean function that, given a formula in conjunctive normal form,
    deletes all these clauses.
-
-
-dk@danielakaufmann.at
-
-
-amateurish
-    1
-  1 1 1
-1 1 1 1 1 
-  1 1 1
-    1
