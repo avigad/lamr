@@ -1,39 +1,10 @@
-import LAMR.Util.Propositional.Syntax
+import LAMR.Util.Propositional
 
-namespace PropForm
+namespace hidden
 
-def toNnfForm : PropForm → NnfForm
-  | tr         => NnfForm.lit Lit.tr
-  | fls        => NnfForm.lit Lit.fls
-  | var n      => NnfForm.lit (Lit.pos n)
-  | neg p      => p.toNnfForm.neg
-  | conj p q   => NnfForm.conj p.toNnfForm q.toNnfForm
-  | disj p q   => NnfForm.disj p.toNnfForm q.toNnfForm
-  | impl p q   => NnfForm.disj p.toNnfForm.neg q.toNnfForm
-  | biImpl p q => NnfForm.conj (NnfForm.disj p.toNnfForm.neg q.toNnfForm)
-                               (NnfForm.disj q.toNnfForm.neg p.toNnfForm)
+open NnfForm
 
-end PropForm
-
-/-
-Translation to CNF.
--/
-
-def NnfForm.toCnfForm : NnfForm → CnfForm
-  | NnfForm.lit (Lit.pos s) => [ [Lit.pos s] ]
-  | NnfForm.lit (Lit.neg s) => [ [Lit.neg s] ]
-  | NnfForm.lit Lit.tr      => []
-  | NnfForm.lit Lit.fls     => [ [] ]
-  | NnfForm.conj A B        => A.toCnfForm.conj B.toCnfForm
-  | NnfForm.disj A B        => A.toCnfForm.disj B.toCnfForm
-
-def PropForm.toCnfForm (A : PropForm) : CnfForm := A.toNnfForm.toCnfForm
-
-/-
-Tseitin.
--/
-
-namespace NnfForm
+-- textbook: mkDefs
 
 def defLit (n : Nat) := Lit.pos s!"def_{n}"
 
@@ -54,7 +25,53 @@ where
     | none   => let newdefs := defs.push (op fA fB)
                 (defLit (newdefs.size - 1), newdefs)
 
--- turns "A iff B" into a CnfForm
+-- end textbook: mkDefs
+
+end hidden
+
+-- textbook: ex1
+def ex1 := prop!{¬ (p ∧ q ↔ r) ∧ (s → p ∧ t)}.toNnfForm
+
+#eval toString ex1
+-- end textbook: ex1
+
+/-
+removing extra parentheses, we get
+
+  (p ∧ q ∧ ¬ r) ∨ (r ∧ (¬ p ∨ ¬ q)) ∧ (¬ s ∨ (p ∧ t))
+-/
+
+-- textbook: ex1 defs
+#eval  ex1.mkDefs #[]
+
+def printDefs (A : NnfForm) : IO Unit := do
+  let ⟨fm, defs⟩ := A.mkDefs #[]
+  IO.println s!"{fm}, where"
+  for i in [:defs.size] do
+    IO.println s!"def_{i} := {defs[i]}"
+
+#eval printDefs ex1
+
+/-
+output:
+
+def_7, where
+def_0 := (p ∧ q)
+def_1 := (def_0 ∧ (¬ r))
+def_2 := ((¬ p) ∨ (¬ q))
+def_3 := (r ∧ def_2)
+def_4 := (def_1 ∨ def_3)
+def_5 := (p ∧ t)
+def_6 := ((¬ s) ∨ def_5)
+def_7 := (def_4 ∧ def_6)
+-/
+-- end textbook: ex1 defs
+
+namespace hidden
+
+open NnfForm
+
+-- textbook: defToCnf
 def defToCnf (A B : NnfForm) : CnfForm :=
   (conj (disj A.neg B) (disj B.neg A)).toCnfForm
 
@@ -62,7 +79,9 @@ def defsToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
   where aux : List NnfForm → Nat → CnfForm
   | [],          n => []
   | nnf :: nnfs, n => defToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
+-- end textbook: defToCnf
 
+-- textbook: toCnf
 def orToCnf : NnfForm → Clause → Array NnfForm → Clause × Array NnfForm
   | lit Lit.tr,  cls, defs  => ([Lit.tr], defs)
   | lit Lit.fls, cls, defs  => (cls, defs)
@@ -87,5 +106,47 @@ def andToCnf : NnfForm → Array NnfForm → CnfForm × Array NnfForm
 def toCnf (A : NnfForm) : CnfForm :=
   let ⟨cnf, defs⟩ := andToCnf A #[]
   cnf.union (defsToCnf defs)
+-- end textbook: toCnf
 
-end NnfForm
+end hidden
+
+-- textbook: ex1.toCnf
+#eval toString ex1.toCnf
+
+/-
+Here is ex1:
+
+((p ∧ q ∧ ¬ r) ∨ (r ∧ (¬ p ∨ ¬ q)) ∧ (¬ s ∨ (p ∧ t))
+
+Here is the CNF formula:
+
+def_3 def_1,
+def_4 -s,
+-def_0 p,
+-def_0 q,
+-p -q def_0,
+-def_1 def_0,
+-def_1 -r,
+-def_0 r def_1,
+-def_2 -p -q,
+p def_2,
+q def_2,
+-def_3 r,
+-def_3 def_2,
+-r -def_2 def_3,
+-def_4 p,
+-def_4 t,
+-p -t def_4
+
+Here we check to make sure it works:
+
+def_0 := p ∧ q
+def_1 := p ∧ q ∧ ¬ r
+def_2 := ¬ p ∨ ¬ q
+def_3 := r ∧ (¬ p ∨ ¬ q)
+def_4 := p ∧ t
+
+def_3 def_1 := (p ∧ q ∧ ¬ r) ∨ (p ∧ q ∧ ¬ r)
+def_4 -s    := ¬ s ∨ (p ∧ t)
+-/
+-- end textbook: ex1.toCnf

@@ -1,5 +1,11 @@
 import Mathlib
 
+-- TODO: move to Mathlib
+
+def List.Union [DecidableEq α]: List (List α) → List α
+  | [] => []
+  | (l ::ls) => l.union (ls.Union)
+
 /-
 Propositional formulas.
 -/
@@ -13,7 +19,7 @@ inductive PropForm
   | disj   : PropForm → PropForm → PropForm
   | impl   : PropForm → PropForm → PropForm
   | biImpl : PropForm → PropForm → PropForm
-  deriving Repr, DecidableEq
+  deriving Repr, DecidableEq, Inhabited
 
 namespace PropForm
 
@@ -57,17 +63,57 @@ instance : ToString PropForm := ⟨PropForm.toString⟩
 end PropForm
 
 /-
+Literals.
+-/
+
+inductive Lit
+  | tr  : Lit
+  | fls : Lit
+  | pos : String → Lit
+  | neg : String → Lit
+  deriving Repr, DecidableEq, Inhabited
+
+namespace Lit
+
+declare_syntax_cat proplit
+
+syntax "lit!{" proplit "}" : term
+syntax "⊤" : proplit
+syntax "⊥" : proplit
+syntax ident : proplit
+syntax "-" ident : proplit
+
+macro_rules
+  | `(lit!{ ⊤ })           => `(tr)
+  | `(lit!{ ⊥ })           => `(fls)
+  | `(lit!{ - $x:ident })  => `(neg $(Lean.quote x.getId.toString))
+  | `(lit!{ $x:ident })    => `(pos $(Lean.quote x.getId.toString))
+
+private def toString : Lit → String
+  | tr    => "⊤"
+  | fls   => "⊥"
+  | pos s => s
+  | neg s => "-" ++ s
+
+instance : ToString Lit := ⟨toString⟩
+
+def negate : Lit → Lit
+  | tr   => fls
+  | fls  => tr
+  | pos s => neg s
+  | neg s => pos s
+
+end Lit
+
+/-
 Formulas in Negation-normal form.
 -/
 
 inductive NnfForm :=
-  | var (s : String)     : NnfForm
-  | negVar (s : String)  : NnfForm
-  | tr                   : NnfForm
-  | fls                  : NnfForm
+  | lit  (l : Lit)       : NnfForm
   | conj (p q : NnfForm) : NnfForm
   | disj (p q : NnfForm) : NnfForm
-  deriving Repr, DecidableEq
+  deriving Repr, DecidableEq, Inhabited
 
 namespace NnfForm
 
@@ -84,54 +130,30 @@ syntax:max "(" nnfform ")"              : nnfform
 syntax:max "¬ " ident                   : nnfform
 
 macro_rules
-  | `(nnf!{$p:ident})   => `(Nnf.var $(Lean.quote p.getId.toString))
-  | `(nnf!{¬ $p:ident}) => `(Nnf.negVar $(Lean.quote p.getId.toString))
+  | `(nnf!{$p:ident})   => `(NnfForm.lit (Lit.pos $(Lean.quote p.getId.toString)))
+  | `(nnf!{¬ $p:ident}) => `(NnfForm.lit (Lit.neg $(Lean.quote p.getId.toString)))
   | `(nnf!{⊤})          => `(NnfForm.tr)
   | `(nnf!{⊥})          => `(NnfForm.fls)
-  | `(nnf!{$p ∧ $q})    => `(Nnf.conj nnf!{$p} nnf!{$q})
-  | `(nnf!{$p ∨ $q})    => `(Nnf.disj nnf!{$p} nnf!{$q})
+  | `(nnf!{$p ∧ $q})    => `(NnfForm.conj nnf!{$p} nnf!{$q})
+  | `(nnf!{$p ∨ $q})    => `(NnfForm.disj nnf!{$p} nnf!{$q})
   | `(nnf!{($p:nnfform)}) => `(nnf!{$p})
 
 private def toString : NnfForm → String
-  | var s    => s
-  | negVar s  => "(¬ " ++ s ++ ")"
-  | tr       => "⊤"
-  | fls      => "⊥"
-  | conj p q => "(" ++ toString p ++ " ∧ " ++ toString q ++ ")"
-  | disj p q => "(" ++ toString p ++ " ∨ " ++ toString q ++ ")"
+  | lit (Lit.pos s)  => s
+  | lit (Lit.neg s)  => "(¬ " ++ s ++ ")"
+  | lit Lit.tr       => "⊤"
+  | lit Lit.fls      => "⊥"
+  | conj p q         => "(" ++ toString p ++ " ∧ " ++ toString q ++ ")"
+  | disj p q         => "(" ++ toString p ++ " ∨ " ++ toString q ++ ")"
 
 instance : ToString NnfForm := ⟨toString⟩
 
+def neg : NnfForm → NnfForm
+  | lit l    => lit l.negate
+  | conj p q => disj (neg p) (neg q)
+  | disj p q => conj (neg p) (neg q)
+
 end NnfForm
-
-/-
-Literals.
--/
-
-inductive Lit
-  | pos : String → Lit
-  | neg : String → Lit
-  deriving Repr, DecidableEq
-
-namespace Lit
-
-declare_syntax_cat proplit
-
-syntax "lit!{" proplit "}" : term
-syntax ident : proplit
-syntax "-" ident : proplit
-
-macro_rules
-  | `(lit!{ - $x:ident })  => `(neg $(Lean.quote x.getId.toString))
-  | `(lit!{ $x:ident })    => `(pos $(Lean.quote x.getId.toString))
-
-private def toString : Lit → String
-  | pos s => s
-  | neg s => "-" ++ s
-
-instance : ToString Lit := ⟨toString⟩
-
-end Lit
 
 /-
 Clauses.
@@ -143,6 +165,7 @@ namespace Clause
 
 instance : DecidableEq Clause := inferInstanceAs (DecidableEq (List Lit))
 instance : Repr Clause := inferInstanceAs (Repr (List Lit))
+instance : Inhabited Clause := inferInstanceAs (Inhabited (List Lit))
 
 def mk (ls : List Lit) : Clause := ls
 
@@ -173,6 +196,7 @@ namespace CnfForm
 
 instance : DecidableEq CnfForm := inferInstanceAs (DecidableEq (List Clause))
 instance : Repr CnfForm := inferInstanceAs (Repr (List Clause))
+instance : Inhabited CnfForm := inferInstanceAs (Inhabited (List Clause))
 
 def mk (cs : List Clause) : CnfForm := cs
 
@@ -191,8 +215,14 @@ macro_rules
 private def toString (cnf : CnfForm) : String :=
   String.intercalate ", " (cnf.map Clause.toString)
 
-instance : ToString CnfForm :=
-  ⟨toString⟩
+instance : ToString CnfForm := ⟨toString⟩
+
+instance : Append CnfForm := inferInstanceAs (Append (List Clause))
+
+def disj (cnf1 cnf2 : CnfForm) : CnfForm :=
+(cnf1.map (fun cls => cnf2.map cls.union)).Union
+
+def conj (cnf1 cnf2 : CnfForm) : CnfForm := cnf1.union cnf2
 
 end CnfForm
 

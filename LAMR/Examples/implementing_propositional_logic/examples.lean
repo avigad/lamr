@@ -145,11 +145,14 @@ def PropForm.isSat(A : PropForm) : Bool := List.any (truthTable A) Prod.snd
 
 namespace hidden
 -- textbook: NnfForm
+inductive Lit
+  | tr  : Lit
+  | fls : Lit
+  | pos : String → Lit
+  | neg : String → Lit
+
 inductive NnfForm :=
-  | var (s : String)     : NnfForm
-  | negVar (s : String)  : NnfForm
-  | tr                   : NnfForm
-  | fls                  : NnfForm
+  | lit  (l : Lit)       : NnfForm
   | conj (p q : NnfForm) : NnfForm
   | disj (p q : NnfForm) : NnfForm
 -- end textbook: NnfForm
@@ -158,24 +161,24 @@ end hidden
 
 namespace hidden
 -- textbook: toNnfForm
-namespace NnfForm
 
-def neg : NnfForm → NnfForm
-  | tr       => fls
-  | fls      => tr
-  | var n    => negVar n
-  | negVar n => var n
+def Lit.negate : Lit → Lit
+  | tr   => fls
+  | fls  => tr
+  | pos s => neg s
+  | neg s => pos s
+
+def NnfForm.neg : NnfForm → NnfForm
+  | lit l    => lit l.negate
   | conj p q => disj (neg p) (neg q)
   | disj p q => conj (neg p) (neg q)
-
-end NnfForm
 
 namespace PropForm
 
 def toNnfForm : PropForm → NnfForm
-  | tr         => NnfForm.tr
-  | fls        => NnfForm.fls
-  | var n      => NnfForm.var n
+  | tr         => NnfForm.lit Lit.tr
+  | fls        => NnfForm.lit Lit.fls
+  | var n      => NnfForm.lit (Lit.pos n)
   | neg p      => p.toNnfForm.neg
   | conj p q   => NnfForm.conj p.toNnfForm q.toNnfForm
   | disj p q   => NnfForm.disj p.toNnfForm q.toNnfForm
@@ -195,15 +198,13 @@ end hidden
 
 
 namespace hidden₂
--- textbook: Lit, Clause, CnfForm
-inductive Lit
-  | pos : String → Lit
-  | neg : String → Lit
+-- textbook: Clause and CnfForm
 
 def Clause := List Lit
 
 def CnfForm := List Clause
--- end textbook: Lit, Clause, CnfForm
+-- end textbook: Clause and CnfForm
+
 end hidden₂
 
 
@@ -279,12 +280,12 @@ def CnfForm.disj (cnf1 cnf2 : CnfForm) : CnfForm :=
 
 -- textbook: toCnfForm
 def NnfForm.toCnfForm : NnfForm → CnfForm
-  | NnfForm.var s    => [ [Lit.pos s] ]
-  | NnfForm.negVar s => [ [Lit.neg s] ]
-  | NnfForm.tr       => []
-  | NnfForm.fls      => [ [] ]
-  | NnfForm.conj A B => A.toCnfForm.union B.toCnfForm
-  | NnfForm.disj A B => A.toCnfForm.disj B.toCnfForm
+  | NnfForm.lit (Lit.pos s) => [ [Lit.pos s] ]
+  | NnfForm.lit (Lit.neg s) => [ [Lit.neg s] ]
+  | NnfForm.lit Lit.tr      => []
+  | NnfForm.lit Lit.fls     => [ [] ]
+  | NnfForm.conj A B        => A.toCnfForm.conj B.toCnfForm
+  | NnfForm.disj A B        => A.toCnfForm.disj B.toCnfForm
 
 def PropForm.toCnfForm (A : PropForm) : CnfForm := A.toNnfForm.toCnfForm
 -- end textbook: toCnfForm

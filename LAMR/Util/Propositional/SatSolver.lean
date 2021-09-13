@@ -11,7 +11,10 @@ def SNH := HashMap String Nat
 def NSH := HashMap Nat String
 def HH := SNH × NSH
 
+-- TODO: better handling of true and false
 def litVar : Lit → String
+| Lit.tr    => "⊤"
+| Lit.fls   => "⊥"
 | Lit.pos s => s
 | Lit.neg s => s
 
@@ -52,6 +55,8 @@ protected partial def String.toNatCore : Nat → String → Option Nat
 protected def String.toNat (s : String) : Option Nat := String.toNatCore 0 s
 
 def Lit.toDimacs (h : SNH) : Lit → String
+| tr    => ""  -- should not happen
+| fls   => ""
 | pos s => toString (h.findD s 0)
 | neg s => "-" ++ toString (h.findD s 0)
 
@@ -119,19 +124,9 @@ where
         goLits (lit :: acc) litSs
     | [] => (false, acc)
 
-def formatLit : Lit → String
-| Lit.neg s => "-" ++ s
-| Lit.pos s => s
-
-def formatCla : Clause → String
-| ls => "[" ++ (" ".intercalate $ ls.map formatLit) ++ "]"
-
-def formatCnf : CnfForm → String
-| ls => "\n".intercalate $ ls.map formatCla
-
 def formatResult : SatResult → String
-| Sat ls => "Satisfying assignment : " ++ formatCla ls
-| Unsat m => "Unsat proof : \n" ++ formatCnf m
+| Sat ls => "Satisfying assignment : " ++ toString ls
+| Unsat m => "Unsat proof : \n" ++ toString m
 
 def is_odd : Nat → Bool
 | k + 2 => is_odd k
