@@ -169,8 +169,8 @@ To handle conjunctive normal form, the library defines a type `Lit` of literals.
 A `Clause` is then a list of literals, and a `CnfForm` is a list of clauses.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
-   :start-after: -- textbook: Lit, Clause, CnfForm
-   :end-before: -- end textbook: Lit, Clause, CnfForm
+   :start-after: -- textbook: Clause and CnfForm
+   :end-before: -- end textbook: Clause and CnfForm
 
 As usual, you can use `#check` and `#print` to find information about them, and ctrl-click
 to see the definitions in the library.

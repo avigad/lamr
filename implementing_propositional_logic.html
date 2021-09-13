@@ -382,11 +382,14 @@ and we can use <cite>List.some</cite> to test whether it is satisfiable.</p>
 <div class="section" id="normal-forms">
 <span id="section-implementing-propositional-normal-forms"></span><h2><span class="section-number">5.3. </span>Normal Forms<a class="headerlink" href="#normal-forms" title="Permalink to this headline">¶</a></h2>
 <p>The library defines an inductive type of negation-normal form formulas:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">NnfForm</span> <span class="o">:=</span>
-  <span class="bp">|</span> <span class="n">var</span> <span class="o">(</span><span class="n">s</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span>     <span class="o">:</span> <span class="n">NnfForm</span>
-  <span class="bp">|</span> <span class="n">negVar</span> <span class="o">(</span><span class="n">s</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span>  <span class="o">:</span> <span class="n">NnfForm</span>
-  <span class="bp">|</span> <span class="n">tr</span>                   <span class="o">:</span> <span class="n">NnfForm</span>
-  <span class="bp">|</span> <span class="n">fls</span>                  <span class="o">:</span> <span class="n">NnfForm</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">Lit</span>
+  <span class="bp">|</span> <span class="n">tr</span>  <span class="o">:</span> <span class="n">Lit</span>
+  <span class="bp">|</span> <span class="n">fls</span> <span class="o">:</span> <span class="n">Lit</span>
+  <span class="bp">|</span> <span class="n">pos</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">Lit</span>
+  <span class="bp">|</span> <span class="n">neg</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">Lit</span>
+
+<span class="kd">inductive</span> <span class="n">NnfForm</span> <span class="o">:=</span>
+  <span class="bp">|</span> <span class="n">lit</span>  <span class="o">(</span><span class="n">l</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span>       <span class="o">:</span> <span class="n">NnfForm</span>
   <span class="bp">|</span> <span class="n">conj</span> <span class="o">(</span><span class="n">p</span> <span class="n">q</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">NnfForm</span>
   <span class="bp">|</span> <span class="n">disj</span> <span class="o">(</span><span class="n">p</span> <span class="n">q</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">NnfForm</span>
 </pre></div>
@@ -394,24 +397,23 @@ and we can use <cite>List.some</cite> to test whether it is satisfiable.</p>
 <p>It is then straightforward to define the negation operation for formulas in
 negation normal form, and a translation from propositional formulas
 to formulas in negation normal form.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">namespace</span> <span class="n">NnfForm</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">Lit.negate</span> <span class="o">:</span> <span class="n">Lit</span> <span class="bp">→</span> <span class="n">Lit</span>
+  <span class="bp">|</span> <span class="n">tr</span>   <span class="bp">=&gt;</span> <span class="n">fls</span>
+  <span class="bp">|</span> <span class="n">fls</span>  <span class="bp">=&gt;</span> <span class="n">tr</span>
+  <span class="bp">|</span> <span class="n">pos</span> <span class="n">s</span> <span class="bp">=&gt;</span> <span class="n">neg</span> <span class="n">s</span>
+  <span class="bp">|</span> <span class="n">neg</span> <span class="n">s</span> <span class="bp">=&gt;</span> <span class="n">pos</span> <span class="n">s</span>
 
-<span class="kd">def</span> <span class="n">neg</span> <span class="o">:</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">NnfForm</span>
-  <span class="bp">|</span> <span class="n">tr</span>       <span class="bp">=&gt;</span> <span class="n">fls</span>
-  <span class="bp">|</span> <span class="n">fls</span>      <span class="bp">=&gt;</span> <span class="n">tr</span>
-  <span class="bp">|</span> <span class="n">var</span> <span class="n">n</span>    <span class="bp">=&gt;</span> <span class="n">negVar</span> <span class="n">n</span>
-  <span class="bp">|</span> <span class="n">negVar</span> <span class="n">n</span> <span class="bp">=&gt;</span> <span class="n">var</span> <span class="n">n</span>
+<span class="kd">def</span> <span class="n">NnfForm.neg</span> <span class="o">:</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">NnfForm</span>
+  <span class="bp">|</span> <span class="n">lit</span> <span class="n">l</span>    <span class="bp">=&gt;</span> <span class="n">lit</span> <span class="n">l.negate</span>
   <span class="bp">|</span> <span class="n">conj</span> <span class="n">p</span> <span class="n">q</span> <span class="bp">=&gt;</span> <span class="n">disj</span> <span class="o">(</span><span class="n">neg</span> <span class="n">p</span><span class="o">)</span> <span class="o">(</span><span class="n">neg</span> <span class="n">q</span><span class="o">)</span>
   <span class="bp">|</span> <span class="n">disj</span> <span class="n">p</span> <span class="n">q</span> <span class="bp">=&gt;</span> <span class="n">conj</span> <span class="o">(</span><span class="n">neg</span> <span class="n">p</span><span class="o">)</span> <span class="o">(</span><span class="n">neg</span> <span class="n">q</span><span class="o">)</span>
-
-<span class="kd">end</span> <span class="n">NnfForm</span>
 
 <span class="kn">namespace</span> <span class="n">PropForm</span>
 
 <span class="kd">def</span> <span class="n">toNnfForm</span> <span class="o">:</span> <span class="n">PropForm</span> <span class="bp">→</span> <span class="n">NnfForm</span>
-  <span class="bp">|</span> <span class="n">tr</span>         <span class="bp">=&gt;</span> <span class="n">NnfForm.tr</span>
-  <span class="bp">|</span> <span class="n">fls</span>        <span class="bp">=&gt;</span> <span class="n">NnfForm.fls</span>
-  <span class="bp">|</span> <span class="n">var</span> <span class="n">n</span>      <span class="bp">=&gt;</span> <span class="n">NnfForm.var</span> <span class="n">n</span>
+  <span class="bp">|</span> <span class="n">tr</span>         <span class="bp">=&gt;</span> <span class="n">NnfForm.lit</span> <span class="n">Lit.tr</span>
+  <span class="bp">|</span> <span class="n">fls</span>        <span class="bp">=&gt;</span> <span class="n">NnfForm.lit</span> <span class="n">Lit.fls</span>
+  <span class="bp">|</span> <span class="n">var</span> <span class="n">n</span>      <span class="bp">=&gt;</span> <span class="n">NnfForm.lit</span> <span class="o">(</span><span class="n">Lit.pos</span> <span class="n">n</span><span class="o">)</span>
   <span class="bp">|</span> <span class="n">neg</span> <span class="n">p</span>      <span class="bp">=&gt;</span> <span class="n">p.toNnfForm.neg</span>
   <span class="bp">|</span> <span class="n">conj</span> <span class="n">p</span> <span class="n">q</span>   <span class="bp">=&gt;</span> <span class="n">NnfForm.conj</span> <span class="n">p.toNnfForm</span> <span class="n">q.toNnfForm</span>
   <span class="bp">|</span> <span class="n">disj</span> <span class="n">p</span> <span class="n">q</span>   <span class="bp">=&gt;</span> <span class="n">NnfForm.disj</span> <span class="n">p.toNnfForm</span> <span class="n">q.toNnfForm</span>
@@ -433,11 +435,7 @@ Similarly, putting the second definition in the namespace <cite>PropForm</cite> 
 </div>
 <p>To handle conjunctive normal form, the library defines a type <cite>Lit</cite> of literals.
 A <cite>Clause</cite> is then a list of literals, and a <cite>CnfForm</cite> is a list of clauses.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">Lit</span>
-  <span class="bp">|</span> <span class="n">pos</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">Lit</span>
-  <span class="bp">|</span> <span class="n">neg</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">Lit</span>
-
-<span class="kd">def</span> <span class="n">Clause</span> <span class="o">:=</span> <span class="n">List</span> <span class="n">Lit</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">Clause</span> <span class="o">:=</span> <span class="n">List</span> <span class="n">Lit</span>
 
 <span class="kd">def</span> <span class="n">CnfForm</span> <span class="o">:=</span> <span class="n">List</span> <span class="n">Clause</span>
 </pre></div>
@@ -534,12 +532,12 @@ and that will help you understand why they make sense.</p>
 negation normal form formulas and arbitrary propositional formulas to
 CNF.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">NnfForm.toCnfForm</span> <span class="o">:</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">CnfForm</span>
-  <span class="bp">|</span> <span class="n">NnfForm.var</span> <span class="n">s</span>    <span class="bp">=&gt;</span> <span class="o">[</span> <span class="o">[</span><span class="n">Lit.pos</span> <span class="n">s</span><span class="o">]</span> <span class="o">]</span>
-  <span class="bp">|</span> <span class="n">NnfForm.negVar</span> <span class="n">s</span> <span class="bp">=&gt;</span> <span class="o">[</span> <span class="o">[</span><span class="n">Lit.neg</span> <span class="n">s</span><span class="o">]</span> <span class="o">]</span>
-  <span class="bp">|</span> <span class="n">NnfForm.tr</span>       <span class="bp">=&gt;</span> <span class="o">[]</span>
-  <span class="bp">|</span> <span class="n">NnfForm.fls</span>      <span class="bp">=&gt;</span> <span class="o">[</span> <span class="o">[]</span> <span class="o">]</span>
-  <span class="bp">|</span> <span class="n">NnfForm.conj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="n">A.toCnfForm.union</span> <span class="n">B.toCnfForm</span>
-  <span class="bp">|</span> <span class="n">NnfForm.disj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="n">A.toCnfForm.disj</span> <span class="n">B.toCnfForm</span>
+  <span class="bp">|</span> <span class="n">NnfForm.lit</span> <span class="o">(</span><span class="n">Lit.pos</span> <span class="n">s</span><span class="o">)</span> <span class="bp">=&gt;</span> <span class="o">[</span> <span class="o">[</span><span class="n">Lit.pos</span> <span class="n">s</span><span class="o">]</span> <span class="o">]</span>
+  <span class="bp">|</span> <span class="n">NnfForm.lit</span> <span class="o">(</span><span class="n">Lit.neg</span> <span class="n">s</span><span class="o">)</span> <span class="bp">=&gt;</span> <span class="o">[</span> <span class="o">[</span><span class="n">Lit.neg</span> <span class="n">s</span><span class="o">]</span> <span class="o">]</span>
+  <span class="bp">|</span> <span class="n">NnfForm.lit</span> <span class="n">Lit.tr</span>      <span class="bp">=&gt;</span> <span class="o">[]</span>
+  <span class="bp">|</span> <span class="n">NnfForm.lit</span> <span class="n">Lit.fls</span>     <span class="bp">=&gt;</span> <span class="o">[</span> <span class="o">[]</span> <span class="o">]</span>
+  <span class="bp">|</span> <span class="n">NnfForm.conj</span> <span class="n">A</span> <span class="n">B</span>        <span class="bp">=&gt;</span> <span class="n">A.toCnfForm.conj</span> <span class="n">B.toCnfForm</span>
+  <span class="bp">|</span> <span class="n">NnfForm.disj</span> <span class="n">A</span> <span class="n">B</span>        <span class="bp">=&gt;</span> <span class="n">A.toCnfForm.disj</span> <span class="n">B.toCnfForm</span>
 
 <span class="kd">def</span> <span class="n">PropForm.toCnfForm</span> <span class="o">(</span><span class="n">A</span> <span class="o">:</span> <span class="n">PropForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span> <span class="n">A.toNnfForm.toCnfForm</span>
 </pre></div>

@@ -471,7 +471,7 @@ For example, the following equivalences show that we can get by
 with <span class="math notranslate nohighlight">\(\lnot\)</span>, <span class="math notranslate nohighlight">\(\lor\)</span>, and <span class="math notranslate nohighlight">\(\bot\)</span> alone:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}A \land B &amp; \equiv \lnot (\lnot A \lor \lnot B) \\
-A \to B &amp; \equiv \lnot A \land \lnot B \\
+A \to B &amp; \equiv \lnot A \lor B \\
 A \liff B &amp; \equiv (A \to B) \land (B \to A) \\
 \top &amp; \equiv \lnot \bot\end{split}\]</div>
 <p>We can even define <span class="math notranslate nohighlight">\(\bot\)</span> as <span class="math notranslate nohighlight">\(P \land \lnot P\)</span> for
@@ -503,18 +503,24 @@ is to look for some invariant property of the formulas that <em>are</em> represe
 can be expressed in particularly simple or convenient forms.</p>
 <div class="admonition-definition admonition">
 <p class="admonition-title">Definition</p>
+<p>An <em>atomic</em> formula is a variable or one of the constants <span class="math notranslate nohighlight">\(\top\)</span> or <span class="math notranslate nohighlight">\(\bot\)</span>.
+A <em>literal</em> is an atomic formula or a negated atomic formula.</p>
+</div>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
 <p>The set of propositional formulas in <em>negation normal form</em> (NNF) is generated inductively
 as follows:</p>
 <ul class="simple">
-<li><p>Each variable <span class="math notranslate nohighlight">\(p_i\)</span> is in negation normal form.</p></li>
-<li><p>The negation <span class="math notranslate nohighlight">\(\lnot p_i\)</span> of a propositional variable is in negation normal form.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\top\)</span> and <span class="math notranslate nohighlight">\(\bot\)</span> are in negation normal form.</p></li>
+<li><p>Each literal is in negation normal form.</p></li>
 <li><p>If <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are in negation normal form, then so are <span class="math notranslate nohighlight">\(A \land B\)</span> and
 <span class="math notranslate nohighlight">\(A \lor B\)</span>.</p></li>
 </ul>
 </div>
 <p>More concisely, the set of formulas in negation normal form is the smallest set of formulas
-containing <span class="math notranslate nohighlight">\(\top\)</span>, <span class="math notranslate nohighlight">\(\bot\)</span>, atomic formulas, and negated atomic formulas,
+containing the literals and closed under conjunction and disjunction.
+If we identify <span class="math notranslate nohighlight">\(\top\)</span> with <span class="math notranslate nohighlight">\(\lnot \bot\)</span> and <span class="math notranslate nohighlight">\(\lnot \top\)</span> with <span class="math notranslate nohighlight">\(\bot\)</span>,
+we can alternatively characterize the formulas in negation normal form as the smallest set
+of formulas containing <span class="math notranslate nohighlight">\(\top\)</span>, <span class="math notranslate nohighlight">\(\bot\)</span>, variables, and their negations,
 and closed under conjunction and disjunction.</p>
 <div class="admonition-proposition admonition">
 <p class="admonition-title">Proposition</p>
@@ -525,8 +531,7 @@ and closed under conjunction and disjunction.</p>
 <p>First use the identities <span class="math notranslate nohighlight">\(A \liff B \equiv (A \limplies B) \land (B \limplies A)\)</span>
 and <span class="math notranslate nohighlight">\(A \limplies B \equiv \lnot A \lor B\)</span> to get rid of <span class="math notranslate nohighlight">\(\liff\)</span> and
 <span class="math notranslate nohighlight">\(\limplies\)</span>. Then use De Morgan’s laws together with
-<span class="math notranslate nohighlight">\(\lnot \lnot A \equiv A\)</span>, <span class="math notranslate nohighlight">\(\lnot \top \equiv \bot\)</span>, and
-<span class="math notranslate nohighlight">\(\lnot \top \equiv \bot\)</span> to push negations down to the atomic formulas.</p>
+<span class="math notranslate nohighlight">\(\lnot \lnot A \equiv A\)</span> to push negations down to the atomic formulas.</p>
 </div>
 <p>More formally, we can prove by induction on propositional formulas <span class="math notranslate nohighlight">\(A\)</span> that both
 <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(\lnot A\)</span> are equivalent to formulas in negation normal form.
@@ -541,8 +546,7 @@ in <span class="math notranslate nohighlight">\(A\)</span>:</p>
 <li><p><span class="math notranslate nohighlight">\(\land\)</span> with <span class="math notranslate nohighlight">\(\lor\)</span>.</p></li>
 </ul>
 <p>We will see that <em>conjunctive normal form</em> (CNF) and <em>disjunctive normal form</em> (DNF) are also
-important representations of propositional formulas. By definition, a <em>literal</em>
-is an atomic formula <span class="math notranslate nohighlight">\(p_i\)</span> or the negation <span class="math notranslate nohighlight">\(\lnot p_i\)</span> of an atomic formula.
+important representations of propositional formulas.
 A formula is in conjunctive normal form if it can be written as conjunction of disjunctions
 of literals, in other words, if it can be written as a big “and” of “or” expressions:</p>
 <div class="math notranslate nohighlight">
@@ -600,12 +604,14 @@ than <span class="math notranslate nohighlight">\(A\)</span>.</p>
 <p>We will see that conjunctive normal form is commonly used in automated reasoning.
 Notice that if a disjunction of literals contains a duplicated literal, deleting the
 duplicate results in an equivalent formula.
+We can similarly delete any occurrence of <span class="math notranslate nohighlight">\(\bot\)</span>.
 A disjunction of literals is called a <em>clause</em>. Since the order of the disjuncts
 and repetitions don’t matter,
 we generally identify clauses with the corresponding set of literals;
 for example, the clause <span class="math notranslate nohighlight">\(p \lor \lnot q \lor r\)</span> is associated with the set
 <span class="math notranslate nohighlight">\(\{ p, \lnot q, r \}\)</span>.
 If a clause contains a pair <span class="math notranslate nohighlight">\(p_i\)</span> and <span class="math notranslate nohighlight">\(\lnot p_i\)</span>,
+or if it contains <span class="math notranslate nohighlight">\(\top\)</span>,
 it is equivalent to <span class="math notranslate nohighlight">\(\top\)</span>.
 If <span class="math notranslate nohighlight">\(\Gamma\)</span> is a set of clauses, we think of <span class="math notranslate nohighlight">\(\Gamma\)</span> as saying that
 all the clauses in <span class="math notranslate nohighlight">\(\Gamma\)</span> are true.

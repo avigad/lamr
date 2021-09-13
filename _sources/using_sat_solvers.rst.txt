@@ -68,10 +68,144 @@ Using SAT Solvers
 
   .. _section_the_tseitin_transformation:
 
+..
   The Tseitin transformation
   --------------------------
 
-  The Tseitin transformation is an efficient procedure to transform any propositional formula
+  Most SAT solvers are designed to determine the satisfiability of formulas in conjunctive normal form.
+  :numref:`section_normal_forms` shows that, in principle, this does not sacrifice generality,
+  because any propositional formula :math:`A` can be transformed to
+  an equivalent CNF formula :math:`B`.
+  The problem is that, in general, however, the smallest such :math:`B` may be exponentially longer than :math:`A`,
+  which makes the transformation impractical.
+  (See the exercises at the end of :numref:`Chapter %s<chapter_propositional_logic>`.)
+
+  The Tseitin transformation provides an elegant workaround:
+  instead of looking for an *equivalent* formula :math:`B`, we look for one
+  that is *equisatisfiable*, which is to say, one that is satisfiable if and only if :math:`A` is.
+  For example, suppose that instead of distributing :math:`p` across the conjunction in
+  :math:`p \lor (q \land r)`,
+  we can introduce a new definition :math:`d` for :math:`q \land r`.
+  We can express the equivalence :math:`d \liff (q \land r)` in conjunctive normal form as
+
+  .. math::
+
+      (\lnot d \lor q) \land (\lnot d \lor r) \land (\lnot q \lor \lnot r \lor d).
+
+  Assuming that equivalence holds, the original formula :math:`p \lor (q \land r)` is
+  equivalent to :math:`p \lor d`, which we can add to the conjunction above,
+  to yield a CNF formula.
+
+  The resulting CNF formula implies :math:`p \lor (q \land r)`, but not the other way
+  around: :math:`p \lor (q \land r)` does not imply :math:`d \liff (q \land r)`.
+  But the two formulas are equisatisfiable: given any truth assignment to
+  the first,
+  we can give :math:`d` the truth value of :math:`q \land r`, and, conversely,
+  for any truth assignment satisfying the second, :math:`d` *has* to have that value.
+  So determining whether or not the second formula satisfiable is tantamount to determining
+  whether the first one is.
+  This may seems to be a roundabout translation, but the point is that the number
+  of definitions is bounded by the length of the original formula
+  and the size of the CNF representation of each definition is bounded by a constant.
+  So the length of the resulting formula is linear in the original length.
+
+  The following code, found in the `LAMR` library in the `NnfForm` namespace,
+  runs through a formula in
+  negation normal form and produces a list of definitions `def_0`, `def_1`, `def_2`, and so on, each of which represents a conjunction or disjunction of
+  two variables.
+  We assume that none these are the names of variables in the original formula.
+  (A more sophisticated implementation would check the original formula and start the
+  numbering high enough to avoid a clash.)
+
+  .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+    :start-after: -- textbook: mkDefs
+    :end-before: -- end textbook: mkDefs
+
+  The function takes an NNF formula and a list of definitions,
+  and it returns an augmented list of definitions and a literal
+  representing the original formula.
+  More precisely, the list `defs` is an array of disjunctions and conjunctions
+  of variables,
+  where the first one corresponds to `def_0`, the next one corresponds to `def_1`,
+  and so on.
+  In the cases where the original formula is a conjunction or a disjunction,
+  the function first recursively creates definitions for the
+  component formulas and then adds a new definition for the original formula.
+  The auxiliary function `add_def` first checks to see whether
+  the formula to be added is already found in the array;
+  for example, if `p ∧ def_0` is already there in position 7,
+  it returns `def_7` as the definition of the formula and leaves the array
+  unchanged.
+
+  To illustrate, we start by putting the formula
+
+  .. math::
+
+    \lnot (p \land q \liff r) \land (s \limplies p \land t)
+
+  in negation normal form.
+
+  .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+    :start-after: -- textbook: ex1
+    :end-before: -- end textbook: ex1
+
+  Removing extraneous parentheses, we get
+
+  .. math::
+
+      ((p \land q \land \lnot r) \lor (r \land (\lnot p \lor \lnot q)) \land
+      (\lnot s \lor (p \land t)).
+
+  In the following, we compute the list of definitions corresponding
+  to `ex1`, and then we use a little program to print them out in a more
+  pleasant form.
+
+  .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+    :start-after: -- textbook: ex1 defs
+    :end-before: -- end textbook: ex1 defs
+
+  It isn't hard to put a definition of the form :math:`(A \liff B)` into
+  conjunctive normal form. The LAMR library defines a function to do that,
+  and another one that turns the entire list of definitions returned by
+  `mkDefs` into a single CNF formula.
+
+  .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+    :start-after: -- textbook: defToCnf
+    :end-before: -- end textbook: defToCnf
+
+  If we take the resulting formula and add a conjunct for the
+  variable representing the top level, we have an equivalent CNF formula,
+  as desired.
+
+  A moment's reflection shows that we can do better. For example, if
+  the formula :math:`A` is already in CNF, we don't have to introduce
+  any definitions at all. The following functions from the library
+  do their best to interpret an NNF formula as a CNF formula,
+  introducing definitions only when necessary. The first function,
+  `NnfForm.orToCnf`, interprets a formula as a clause.
+  For example, given the formula :math:`p \lor (q \land \lnot r) \lor \lnot s`
+  and a list of definitions, it adds a definition :math:`d` for :math:`q \land \lnot r` and returns the clause :math:`p \lor d \lor \lnot s`.
+  The function `NnfForm.andToCnf` does the analogous thing for conjunctions,
+  and the function `NnfForm.toCnf` puts it all together.
+
+  .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+    :start-after: -- textbook: toCnf
+    :end-before: -- end textbook: toCnf
+
+  The following example tests it out on `ex1.toCnf`.
+  The comment afterward shows the resulting CNF formula
+  and then reconstructs the definitions to show that the result is equivalent
+  to the original formula.
+
+  .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+    :start-after: -- textbook: ex1.toCnf
+    :end-before: -- end textbook: ex1.toCnf
+
+
+
+..
+  TODO: delete this
+  an efficient procedure to transform any propositional formula
   into conjunctive normal form. The transformation works as follows: one iteratively replaces
   the innermost logical binary operation by a new Boolean variable :math:`t`, called a Tseitin variable,
   and adds clauses that define :math:`t` to be the outcome of the operation.
@@ -121,7 +255,7 @@ Using SAT Solvers
 
   Show some examples, both printing the transformation and sending it.
 
-
+..
   Encoding problems
   -----------------
 

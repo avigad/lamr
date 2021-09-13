@@ -342,7 +342,7 @@ with :math:`\lnot`, :math:`\lor`, and :math:`\bot` alone:
 .. math::
 
     A \land B & \equiv \lnot (\lnot A \lor \lnot B) \\
-    A \to B & \equiv \lnot A \land \lnot B \\
+    A \to B & \equiv \lnot A \lor B \\
     A \liff B & \equiv (A \to B) \land (B \to A) \\
     \top & \equiv \lnot \bot
 
@@ -405,17 +405,23 @@ can be expressed in particularly simple or convenient forms.
 
 .. admonition:: Definition
 
+    An *atomic* formula is a variable or one of the constants :math:`\top` or :math:`\bot`.
+    A *literal* is an atomic formula or a negated atomic formula.
+
+.. admonition:: Definition
+
     The set of propositional formulas in *negation normal form* (NNF) is generated inductively
     as follows:
 
-    - Each variable :math:`p_i` is in negation normal form.
-    - The negation :math:`\lnot p_i` of a propositional variable is in negation normal form.
-    - :math:`\top` and :math:`\bot` are in negation normal form.
+    - Each literal is in negation normal form.
     - If :math:`A` and :math:`B` are in negation normal form, then so are :math:`A \land B` and
       :math:`A \lor B`.
 
 More concisely, the set of formulas in negation normal form is the smallest set of formulas
-containing :math:`\top`, :math:`\bot`, atomic formulas, and negated atomic formulas,
+containing the literals and closed under conjunction and disjunction.
+If we identify :math:`\top` with :math:`\lnot \bot` and :math:`\lnot \top` with :math:`\bot`,
+we can alternatively characterize the formulas in negation normal form as the smallest set
+of formulas containing :math:`\top`, :math:`\bot`, variables, and their negations,
 and closed under conjunction and disjunction.
 
 .. admonition:: Proposition
@@ -427,8 +433,7 @@ and closed under conjunction and disjunction.
     First use the identities :math:`A \liff B \equiv (A \limplies B) \land (B \limplies A)`
     and :math:`A \limplies B \equiv \lnot A \lor B` to get rid of :math:`\liff` and
     :math:`\limplies`. Then use De Morgan's laws together with
-    :math:`\lnot \lnot A \equiv A`, :math:`\lnot \top \equiv \bot`, and
-    :math:`\lnot \top \equiv \bot` to push negations down to the atomic formulas.
+    :math:`\lnot \lnot A \equiv A` to push negations down to the atomic formulas.
 
 More formally, we can prove by induction on propositional formulas :math:`A` that both
 :math:`A` and :math:`\lnot A` are equivalent to formulas in negation normal form.
@@ -443,8 +448,7 @@ in :math:`A`:
 - :math:`\land` with :math:`\lor`.
 
 We will see that *conjunctive normal form* (CNF) and *disjunctive normal form* (DNF) are also
-important representations of propositional formulas. By definition, a *literal*
-is an atomic formula :math:`p_i` or the negation :math:`\lnot p_i` of an atomic formula.
+important representations of propositional formulas.
 A formula is in conjunctive normal form if it can be written as conjunction of disjunctions
 of literals, in other words, if it can be written as a big "and" of "or" expressions:
 
@@ -516,12 +520,14 @@ than :math:`A`.
 We will see that conjunctive normal form is commonly used in automated reasoning.
 Notice that if a disjunction of literals contains a duplicated literal, deleting the
 duplicate results in an equivalent formula.
+We can similarly delete any occurrence of :math:`\bot`.
 A disjunction of literals is called a *clause*. Since the order of the disjuncts
 and repetitions don't matter,
 we generally identify clauses with the corresponding set of literals;
 for example, the clause :math:`p \lor \lnot q \lor r` is associated with the set
 :math:`\{ p, \lnot q, r \}`.
 If a clause contains a pair :math:`p_i` and :math:`\lnot p_i`,
+or if it contains :math:`\top`,
 it is equivalent to :math:`\top`.
 If :math:`\Gamma` is a set of clauses, we think of :math:`\Gamma` as saying that
 all the clauses in :math:`\Gamma` are true.
