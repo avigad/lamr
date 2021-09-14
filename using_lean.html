@@ -212,8 +212,11 @@ substantial library.
 Its language and syntax are similar to that of Lean 3,
 but it is not backward compatible.</p></li>
 </ul>
-<p>In this course, we will use Lean 4, even though it is still in the early development phase
-and not well documented. As we will see, it has a lot of features that make that
+<p>In this course, we will use Lean 4, even though it is still under development.
+It has the rough beginnings of a <a class="reference external" href="https://leanprover.github.io/lean4/doc/">user manual</a>
+and there is a <a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">tutorial</a> on
+the underlying foundation.
+As we will see, Lean has a lot of features that make that
 worthwhile. In particular, Lean 4 is designed to be an ideal language for implementing
 powerful logic-based systems, as evidenced by the fact that most of Lean 4 is implemented
 in Lean 4 itself.</p>
@@ -239,8 +242,10 @@ In Lean, every well-formed expression has a type.</p>
 <span class="k">#check</span> <span class="k">fun</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">x</span> <span class="bp">=</span> <span class="mi">1</span> <span class="k">then</span> <span class="s2">&quot;yes&quot;</span> <span class="k">else</span> <span class="s2">&quot;no&quot;</span>
 </pre></div>
 </div>
-<p>You can find this example in the file <cite>using_lean/examples1.lean</cite> in the <cite>User</cite> folder of the course repository.
-Feel free to edit that file and try examples of your own.
+<p>You can find this example in the file <cite>using_lean/examples1.lean</cite> in the
+<cite>LAMR/Examples</cite> folder of the course repository.
+We recommend copying that entire folder in the <cite>User</cite> folder,
+so you can edit the files and try examples of your own.
 You can always find the original file in the folder <cite>LAMR/Examples</cite>,
 which you should not edit.</p>
 <p>If you hover over the <cite>#check</cite> statements or move your cursor to one

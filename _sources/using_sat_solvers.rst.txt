@@ -76,14 +76,15 @@ Using SAT Solvers
   :numref:`section_normal_forms` shows that, in principle, this does not sacrifice generality,
   because any propositional formula :math:`A` can be transformed to
   an equivalent CNF formula :math:`B`.
-  The problem is that, in general, however, the smallest such :math:`B` may be exponentially longer than :math:`A`,
+  The problem is that, in general, however, the smallest such :math:`B` may be
+  exponentially longer than :math:`A`,
   which makes the transformation impractical.
   (See the exercises at the end of :numref:`Chapter %s<chapter_propositional_logic>`.)
 
   The Tseitin transformation provides an elegant workaround:
   instead of looking for an *equivalent* formula :math:`B`, we look for one
   that is *equisatisfiable*, which is to say, one that is satisfiable if and only if :math:`A` is.
-  For example, suppose that instead of distributing :math:`p` across the conjunction in
+  For example, instead of distributing :math:`p` across the conjunction in
   :math:`p \lor (q \land r)`,
   we can introduce a new definition :math:`d` for :math:`q \land r`.
   We can express the equivalence :math:`d \liff (q \land r)` in conjunctive normal form as
@@ -98,22 +99,23 @@ Using SAT Solvers
 
   The resulting CNF formula implies :math:`p \lor (q \land r)`, but not the other way
   around: :math:`p \lor (q \land r)` does not imply :math:`d \liff (q \land r)`.
-  But the two formulas are equisatisfiable: given any truth assignment to
-  the first,
+  But the resulting formulas is equisatisfiable with the original one:
+  given any truth assignment to the original one,
   we can give :math:`d` the truth value of :math:`q \land r`, and, conversely,
-  for any truth assignment satisfying the second, :math:`d` *has* to have that value.
-  So determining whether or not the second formula satisfiable is tantamount to determining
-  whether the first one is.
+  for any truth assignment satisfying the resulting CNF formula, :math:`d` *has* to have that value.
+  So determining whether or not the resulting CNF formula is satisfiable is tantamount to determining
+  whether the original one is.
   This may seems to be a roundabout translation, but the point is that the number
   of definitions is bounded by the length of the original formula
   and the size of the CNF representation of each definition is bounded by a constant.
-  So the length of the resulting formula is linear in the original length.
+  So the length of the resulting formula is linear in the length of the original one.
 
   The following code, found in the `LAMR` library in the `NnfForm` namespace,
   runs through a formula in
-  negation normal form and produces a list of definitions `def_0`, `def_1`, `def_2`, and so on, each of which represents a conjunction or disjunction of
+  negation normal form and produces a list of definitions `def_0`, `def_1`, `def_2`, and so on,
+  each of which represents a conjunction or disjunction of
   two variables.
-  We assume that none these are the names of variables in the original formula.
+  We assume that none these `def` variables are found in the original formula.
   (A more sophisticated implementation would check the original formula and start the
   numbering high enough to avoid a clash.)
 
@@ -132,9 +134,10 @@ Using SAT Solvers
   the function first recursively creates definitions for the
   component formulas and then adds a new definition for the original formula.
   The auxiliary function `add_def` first checks to see whether
-  the formula to be added is already found in the array;
-  for example, if `p ∧ def_0` is already there in position 7,
-  it returns `def_7` as the definition of the formula and leaves the array
+  the formula to be added is already found in the array.
+  For example, when passed a conjunction `p ∧ def_0`,
+  if that formula is already in the list of definitions in position 7,
+  `add_def` returns `def_7` as the definition of the formula and leaves the array
   unchanged.
 
   To illustrate, we start by putting the formula
@@ -184,7 +187,8 @@ Using SAT Solvers
   introducing definitions only when necessary. The first function,
   `NnfForm.orToCnf`, interprets a formula as a clause.
   For example, given the formula :math:`p \lor (q \land \lnot r) \lor \lnot s`
-  and a list of definitions, it adds a definition :math:`d` for :math:`q \land \lnot r` and returns the clause :math:`p \lor d \lor \lnot s`.
+  and a list of definitions, it adds a definition :math:`d` for :math:`q \land \lnot r` and
+  returns the clause :math:`p \lor d \lor \lnot s`.
   The function `NnfForm.andToCnf` does the analogous thing for conjunctions,
   and the function `NnfForm.toCnf` puts it all together.
 

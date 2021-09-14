@@ -39,8 +39,11 @@ To be more precise, there are currently two versions of Lean:
   Its language and syntax are similar to that of Lean 3,
   but it is not backward compatible.
 
-In this course, we will use Lean 4, even though it is still in the early development phase
-and not well documented. As we will see, it has a lot of features that make that
+In this course, we will use Lean 4, even though it is still under development.
+It has the rough beginnings of a `user manual <https://leanprover.github.io/lean4/doc/>`_
+and there is a `tutorial <https://leanprover.github.io/theorem_proving_in_lean4/>`_ on
+the underlying foundation.
+As we will see, Lean has a lot of features that make that
 worthwhile. In particular, Lean 4 is designed to be an ideal language for implementing
 powerful logic-based systems, as evidenced by the fact that most of Lean 4 is implemented
 in Lean 4 itself.
@@ -62,8 +65,10 @@ In Lean, every well-formed expression has a type.
    :start-after: -- textbook: expressions
    :end-before: -- end textbook: expressions
 
-You can find this example in the file `using_lean/examples1.lean` in the `User` folder of the course repository.
-Feel free to edit that file and try examples of your own.
+You can find this example in the file `using_lean/examples1.lean` in the
+`LAMR/Examples` folder of the course repository.
+We recommend copying that entire folder in the `User` folder,
+so you can edit the files and try examples of your own.
 You can always find the original file in the folder `LAMR/Examples`,
 which you should not edit.
 
