@@ -88,8 +88,8 @@ duplicates removed, assuming that the original two lists had no duplicate elemen
 Semantics
 ---------
 
-The course library defines the type `PropAssignment` to be `String → Bool`.
-If `v` has type `PropAssignment`, you should think of the expression `v s` as
+The course library defines the type `PropAssignment` to be `List (String × Bool)`.
+If `v` has type `PropAssignment`, you should think of the expression `v.eval s` as
 assigning a truth value to the variable named `s`.
 The following function then evaluates the truth value of any propositional
 formula under assignment `v`:
@@ -102,7 +102,7 @@ The example at the end defines `v` to be the assignment that
 assigns the value `true` to the strings `"p"`, `"q"`, and `"r"`
 and false to all the others.
 This is a reasonably convenient way to describe truth assignments manually,
-so the library provides a function `mkPropAssignment` and notation `propassign!{...}` to support that.
+so the library provides a function `PropAssignment.mk` and notation `propassign!{...}` to support that.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: propassign
