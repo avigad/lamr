@@ -488,13 +488,13 @@ the disjunction of two formulas in DNF is again DNF. The following is less obvio
 .. admonition:: Proof
 
     For the first claim, we use the equivalence
-    :math:`A \lor (B \land C) \equiv (A \land B) \lor (A \land C)`.
+    :math:`A \lor (B \land C) \equiv (A \lor B) \land (A \lor C)`.
     By induction on :math:`n`, we have that for every sequence of formulas
     :math:`B_0, \ldots, B_{n-1}` we have
     :math:`A \lor \bigwedge_{i < n} B_i \equiv \bigwedge_{i < n} (A \lor B_i).`
     Then by induction on :math:`n'` we have
-    :math:`\bigwedge_{i' < n'} A_i' \lor \bigwedge_{i < n} B_i \equiv
-    \bigwedge_{i' < n'} \bigwedge_{i < n} (A'_i \lor B_i).`
+    :math:`\bigwedge_{i' < n'} A_{i'} \lor \bigwedge_{i < n} B_i \equiv
+    \bigwedge_{i' < n'} \bigwedge_{i < n} (A_{i'} \lor B_i).`
     Since each :math:`A_{i'}` and each :math:`B_i` is a disjunction of literals,
     this yields the result.
 
