@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
   
@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
@@ -30,11 +32,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -87,7 +88,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
@@ -157,7 +158,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>5. Implementing Propositional Logic</li>
+      <li><span class="section-number">5. </span>Implementing Propositional Logic</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -177,9 +178,9 @@
            <div itemprop="articleBody">
             
   <div class="section" id="implementing-propositional-logic">
-<span id="chapter-implementing-propositional-logic"></span><h1>5. Implementing Propositional Logic<a class="headerlink" href="#implementing-propositional-logic" title="Permalink to this headline">¶</a></h1>
+<span id="chapter-implementing-propositional-logic"></span><h1><span class="section-number">5. </span>Implementing Propositional Logic<a class="headerlink" href="#implementing-propositional-logic" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="propositional-formulas">
-<h2>5.1. Propositional formulas<a class="headerlink" href="#propositional-formulas" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.1. </span>Propositional formulas<a class="headerlink" href="#propositional-formulas" title="Permalink to this headline">¶</a></h2>
 <p>We have seen that the set of propositional formulas can be defined
 inductively, and
 we have seen that Lean makes it easy to specify inductively defined types.
@@ -309,7 +310,7 @@ functions using structural recursion.</p>
 duplicates removed, assuming that the original two lists had no duplicate elements.</p>
 </div>
 <div class="section" id="semantics">
-<span id="implementing-propositional-semantics"></span><h2>5.2. Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h2>
+<span id="implementing-propositional-semantics"></span><h2><span class="section-number">5.2. </span>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h2>
 <p>The course library defines the type <cite>PropAssignment</cite> to be <cite>List (String × Bool)</cite>.
 If <cite>v</cite> has type <cite>PropAssignment</cite>, you should think of the expression <cite>v.eval s</cite> as
 assigning a truth value to the variable named <cite>s</cite>.
@@ -378,7 +379,7 @@ and we can use <cite>List.some</cite> to test whether it is satisfiable.</p>
 </div>
 </div>
 <div class="section" id="normal-forms">
-<span id="section-implementing-propositional-normal-forms"></span><h2>5.3. Normal Forms<a class="headerlink" href="#normal-forms" title="Permalink to this headline">¶</a></h2>
+<span id="section-implementing-propositional-normal-forms"></span><h2><span class="section-number">5.3. </span>Normal Forms<a class="headerlink" href="#normal-forms" title="Permalink to this headline">¶</a></h2>
 <p>The library defines an inductive type of negation-normal form formulas:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">Lit</span>
   <span class="bp">|</span> <span class="n">tr</span>  <span class="o">:</span> <span class="n">Lit</span>
@@ -550,17 +551,17 @@ CNF.</p>
 </div>
 </div>
 <div class="section" id="exercises">
-<h2>5.4. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.4. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li>Write a Lean function that, given any element of <cite>PropForm</cite>, outputs a
-list of all the subformulas.</li>
-<li>Write a Lean function that, given a list of propositional formulas and another
+<li><p>Write a Lean function that, given any element of <cite>PropForm</cite>, outputs a
+list of all the subformulas.</p></li>
+<li><p>Write a Lean function that, given a list of propositional formulas and another
 propositional formula, determines whether the second is a logical consequence
-of the first.</li>
-<li>Write a Lean function that, given a clause, tests whether any literal <cite>Lit.pos p</cite>
+of the first.</p></li>
+<li><p>Write a Lean function that, given a clause, tests whether any literal <cite>Lit.pos p</cite>
 appears together with its negation <cite>Lit.neg p</cite>.
 Write another Lean function that, given a formula in conjunctive normal form,
-deletes all these clauses.</li>
+deletes all these clauses.</p></li>
 </ol>
 </div>
 </div>

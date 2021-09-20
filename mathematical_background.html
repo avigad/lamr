@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
   
@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
@@ -30,11 +32,12 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "{\\to}", "liff": "{\\leftrightarrow}", "proves": "{\\vdash}", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1]}}}</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -87,7 +90,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Mathematical Background</a><ul>
@@ -158,7 +161,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>2. Mathematical Background</li>
+      <li><span class="section-number">2. </span>Mathematical Background</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -178,24 +181,24 @@
            <div itemprop="articleBody">
             
   <span class="target" id="chapter-mathematical-background"></span><div class="section" id="mathematical-background">
-<h1>2. Mathematical Background<a class="headerlink" href="#mathematical-background" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">2. </span>Mathematical Background<a class="headerlink" href="#mathematical-background" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="induction-and-recursion-on-the-natural-numbers">
-<span id="section-induction-and-recursion-on-the-natural-numbers"></span><h2>2.1. Induction and recursion on the natural numbers<a class="headerlink" href="#induction-and-recursion-on-the-natural-numbers" title="Permalink to this headline">¶</a></h2>
+<span id="section-induction-and-recursion-on-the-natural-numbers"></span><h2><span class="section-number">2.1. </span>Induction and recursion on the natural numbers<a class="headerlink" href="#induction-and-recursion-on-the-natural-numbers" title="Permalink to this headline">¶</a></h2>
 <p>In its most basic form, the principle of induction on the natural numbers
 says that if you want to prove that every natural number has some property,
 it suffices to show that zero has the property,
 and that whenever some number <span class="math notranslate nohighlight">\(n\)</span> has the property, so does <span class="math notranslate nohighlight">\(n + 1\)</span>.
 Here is an example.</p>
 <div class="admonition-theorem admonition">
-<p class="first admonition-title">Theorem</p>
-<p class="last">For every natural number <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(\sum_{i \le n} i = n (n + 1) / 2\)</span>.</p>
+<p class="admonition-title">Theorem</p>
+<p>For every natural number <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(\sum_{i \le n} i = n (n + 1) / 2\)</span>.</p>
 </div>
 <div class="admonition-proof admonition">
-<p class="first admonition-title">Proof</p>
+<p class="admonition-title">Proof</p>
 <p>Use induction on <span class="math notranslate nohighlight">\(n\)</span>. In the base case, we have
 <span class="math notranslate nohighlight">\(\sum_{i \le 0} i = 0 = 0 (0 + 1) / 2\)</span>. For the induction step,
 assuming <span class="math notranslate nohighlight">\(\sum_{i \le n} i = n (n + 1) / 2\)</span>, we have</p>
-<div class="last math notranslate nohighlight">
+<div class="math notranslate nohighlight">
 \[\begin{split}\sum_{i \le n + 1} i &amp; = \sum_{i \le n} i + (n + 1) \\
   &amp;= n (n + 1) / 2 + 2 (n + 1) / 2 \\
   &amp;= (n + 1) (n + 2) / 2\end{split}\]</div>
@@ -215,13 +218,13 @@ numbers yields a perfect square. For example, we have
 <span class="math notranslate nohighlight">\(1 + 3 + 5 + 7 + 9 = 25\)</span>.
 Here is a proof of the general fact:</p>
 <div class="admonition-theorem admonition">
-<p class="first admonition-title">Theorem</p>
-<p class="last">For every natural number <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(\sum_{i \le n} (2 i + 1) = (n + 1)^2\)</span>.</p>
+<p class="admonition-title">Theorem</p>
+<p>For every natural number <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(\sum_{i \le n} (2 i + 1) = (n + 1)^2\)</span>.</p>
 </div>
 <div class="admonition-proof admonition">
-<p class="first admonition-title">Proof</p>
+<p class="admonition-title">Proof</p>
 <p>The base case is easy, and assuming the inductive hypothesis, we have</p>
-<div class="last math notranslate nohighlight">
+<div class="math notranslate nohighlight">
 \[\begin{split}\sum_{i \le n + 1} (2 i + 1) &amp; = \sum_{i \le n} (2i + 1) + 2 (n + 1) + 1 \\
   &amp;= (n + 1)^2 + 2n + 3 \\
   &amp;= n^2 + 4n + 4 \\
@@ -242,13 +245,13 @@ There is exactly one function, defined on the natural numbers,
 that meets that description.</p>
 <p>Here is an identity involving the factorial function:</p>
 <div class="admonition-theorem admonition">
-<p class="first admonition-title">Theorem</p>
-<p class="last"><span class="math notranslate nohighlight">\(\sum_{i \le n} i \cdot i! = (n + 1)! - 1\)</span>.</p>
+<p class="admonition-title">Theorem</p>
+<p><span class="math notranslate nohighlight">\(\sum_{i \le n} i \cdot i! = (n + 1)! - 1\)</span>.</p>
 </div>
 <div class="admonition-proof admonition">
-<p class="first admonition-title">Proof</p>
+<p class="admonition-title">Proof</p>
 <p>The base case is easy. Assuming the claim holds for <span class="math notranslate nohighlight">\(n\)</span>, we have</p>
-<div class="last math notranslate nohighlight">
+<div class="math notranslate nohighlight">
 \[\begin{split}\sum_{i \le n+1} i \cdot i! &amp;= \sum_{i \le n} i \cdot i! + (n+1) \cdot (n+1)! \\
   &amp;= (n + 1)! + (n+1) \cdot (n+1)! - 1 \\
   &amp;= (n + 1)! (1 + (n + 1)) - 1 \\
@@ -280,24 +283,24 @@ The exercises below ask you to show that <em>any</em> solution requires
 at least this many moves.</p>
 </div>
 <div class="section" id="complete-induction">
-<span id="section-complete-induction"></span><h2>2.2. Complete induction<a class="headerlink" href="#complete-induction" title="Permalink to this headline">¶</a></h2>
+<span id="section-complete-induction"></span><h2><span class="section-number">2.2. </span>Complete induction<a class="headerlink" href="#complete-induction" title="Permalink to this headline">¶</a></h2>
 <p>As we have described it, the principle of induction is pretty rigid:
 in the inductive step, to show that <span class="math notranslate nohighlight">\(n+1\)</span> has some property,
 we can only use the corresponding property of <span class="math notranslate nohighlight">\(n\)</span>.
 The principle of <em>complete</em> induction is much more flexible.</p>
 <div class="admonition-principle-of-complete-induction admonition">
-<p class="first admonition-title">Principle of complete induction</p>
-<p class="last">To show that every natural number <span class="math notranslate nohighlight">\(n\)</span> has some property,
+<p class="admonition-title">Principle of complete induction</p>
+<p>To show that every natural number <span class="math notranslate nohighlight">\(n\)</span> has some property,
 show that <span class="math notranslate nohighlight">\(n\)</span> has that property whenever all smaller numbers do.</p>
 </div>
 <p>As an exercise, we ask you to prove the principle of complete induction using the ordinary principle of induction. Remember that a natural number greater than or equal to 2 is <em>composite</em> if it can be written as a product of two smaller numbers, and <em>prime</em> otherwise.</p>
 <div class="admonition-theorem admonition">
-<p class="first admonition-title">Theorem</p>
-<p class="last">Every number greater than two can be factored into primes.</p>
+<p class="admonition-title">Theorem</p>
+<p>Every number greater than two can be factored into primes.</p>
 </div>
 <div class="admonition-proof admonition">
-<p class="first admonition-title">Proof</p>
-<p class="last">Let <span class="math notranslate nohighlight">\(n\)</span> be any natural number greater than or equal
+<p class="admonition-title">Proof</p>
+<p>Let <span class="math notranslate nohighlight">\(n\)</span> be any natural number greater than or equal
 to 2. If <span class="math notranslate nohighlight">\(n\)</span> is prime, we are done. Otherwise, write
 <span class="math notranslate nohighlight">\(n = m \cdot k\)</span>, where <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(k\)</span> are smaller than <span class="math notranslate nohighlight">\(n\)</span> (and hence greater than 1).
 By the inductive hypothesis, <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(k\)</span>
@@ -306,8 +309,8 @@ these yields a factorization of <span class="math notranslate nohighlight">\(n\)
 </div>
 <p>Here is another example we will discuss in class:</p>
 <div class="admonition-theorem admonition">
-<p class="first admonition-title">Theorem</p>
-<p class="last">For any <span class="math notranslate nohighlight">\(n \ge 3\)</span>, the sum of the angles in any
+<p class="admonition-title">Theorem</p>
+<p>For any <span class="math notranslate nohighlight">\(n \ge 3\)</span>, the sum of the angles in any
 <span class="math notranslate nohighlight">\(n\)</span>-gon is <span class="math notranslate nohighlight">\(180 (n - 2)\)</span>.</p>
 </div>
 <p>The companion to complete induction on the natural numbers is
@@ -347,11 +350,11 @@ divisor of two nonnegative integers:</p>
 <p>where <span class="math notranslate nohighlight">\(\fn{mod}(x, y)\)</span> is the remainder when dividing <span class="math notranslate nohighlight">\(x\)</span> by <span class="math notranslate nohighlight">\(y\)</span>.</p>
 </div>
 <div class="section" id="generalized-induction-and-recursion">
-<span id="section-generalized-induction-and-recursion"></span><h2>2.3. Generalized induction and recursion<a class="headerlink" href="#generalized-induction-and-recursion" title="Permalink to this headline">¶</a></h2>
+<span id="section-generalized-induction-and-recursion"></span><h2><span class="section-number">2.3. </span>Generalized induction and recursion<a class="headerlink" href="#generalized-induction-and-recursion" title="Permalink to this headline">¶</a></h2>
 <p>The natural numbers are characterized inductively by the following clauses:</p>
 <ul class="simple">
-<li><span class="math notranslate nohighlight">\(0\)</span> is a natural number.</li>
-<li>If <span class="math notranslate nohighlight">\(x\)</span> is a natural number, so is <span class="math notranslate nohighlight">\(\fn{succ}(x)\)</span>.</li>
+<li><p><span class="math notranslate nohighlight">\(0\)</span> is a natural number.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(x\)</span> is a natural number, so is <span class="math notranslate nohighlight">\(\fn{succ}(x)\)</span>.</p></li>
 </ul>
 <p>Here the function <span class="math notranslate nohighlight">\(\fn{succ}(x)\)</span> is known as the <em>successor</em>
 function, namely, the function that, given any number, returns
@@ -380,10 +383,10 @@ often come up in computer science.</p>
 of <span class="math notranslate nohighlight">\(\alpha\)</span>, which we will write as <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>,
 is defined inductively as follows:</p>
 <ul class="simple">
-<li>The element <span class="math notranslate nohighlight">\(\fn{nil}\)</span> is an element of <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>.</li>
-<li>If <span class="math notranslate nohighlight">\(a\)</span> is an element of <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\ell\)</span> is an element
+<li><p>The element <span class="math notranslate nohighlight">\(\fn{nil}\)</span> is an element of <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(a\)</span> is an element of <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\ell\)</span> is an element
 of <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>, then the element <span class="math notranslate nohighlight">\(\fn{cons}(a, \ell)\)</span>
-is an element of <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>.</li>
+is an element of <span class="math notranslate nohighlight">\(\fn{List}(\alpha)\)</span>.</p></li>
 </ul>
 <p>Here <span class="math notranslate nohighlight">\(\fn{nil}\)</span> is intended to describe the empty list, <span class="math notranslate nohighlight">\([]\)</span>, and
 <span class="math notranslate nohighlight">\(\fn{cons}(a, \ell)\)</span> is intended to describe the result of adding
@@ -413,16 +416,16 @@ and with this notation, the two defining clauses read as follows:</p>
 <p>From the definition, we have <span class="math notranslate nohighlight">\([] \append \ell = \ell\)</span> for every <span class="math notranslate nohighlight">\(\ell\)</span>,
 but <span class="math notranslate nohighlight">\(m \append [] = m\)</span> is something we have to prove.</p>
 <div class="admonition-proposition admonition">
-<p class="first admonition-title">Proposition</p>
-<p class="last">For every <span class="math notranslate nohighlight">\(m\)</span>, we have <span class="math notranslate nohighlight">\(m \append [] = m\)</span>.</p>
+<p class="admonition-title">Proposition</p>
+<p>For every <span class="math notranslate nohighlight">\(m\)</span>, we have <span class="math notranslate nohighlight">\(m \append [] = m\)</span>.</p>
 </div>
 <div class="admonition-proof admonition">
-<p class="first admonition-title">Proof</p>
+<p class="admonition-title">Proof</p>
 <p>We use induction on <span class="math notranslate nohighlight">\(m\)</span>. In the base case, we have
 <span class="math notranslate nohighlight">\([] \append [] = []\)</span> from the definition of <span class="math notranslate nohighlight">\(\fn{append}\)</span>.
 For the induction step, suppose we have <span class="math notranslate nohighlight">\(m \append [] = m\)</span>.
 Then we also have</p>
-<div class="last math notranslate nohighlight">
+<div class="math notranslate nohighlight">
 \[\begin{split}(a \mathbin{::} m) \append [] &amp;= a \mathbin{::} (m \append []) \\
     &amp;= a \mathbin{::} m.\end{split}\]</div>
 </div>
@@ -491,9 +494,9 @@ numbers.</p>
 <p>As another example, we consider the type of finite binary trees,
 defined inductively as follows:</p>
 <ul class="simple">
-<li>The element <span class="math notranslate nohighlight">\(\fn{empty}\)</span> is a binary tree.</li>
-<li>If <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are finite binary trees, so is the
-<span class="math notranslate nohighlight">\(\fn{node}(s, t)\)</span>.</li>
+<li><p>The element <span class="math notranslate nohighlight">\(\fn{empty}\)</span> is a binary tree.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are finite binary trees, so is the
+<span class="math notranslate nohighlight">\(\fn{node}(s, t)\)</span>.</p></li>
 </ul>
 <p>In this definition, <span class="math notranslate nohighlight">\(\fn{empty}\)</span> is intended to denote the empty
 tree, and <span class="math notranslate nohighlight">\(\fn{node}(s, t)\)</span> is intended to denote the
@@ -523,7 +526,7 @@ in which case, what we have defined here computes the depth <em>plus one</em>
 for nonempty trees.</p>
 </div>
 <div class="section" id="invariants">
-<span id="section-invariants"></span><h2>2.4. Invariants<a class="headerlink" href="#invariants" title="Permalink to this headline">¶</a></h2>
+<span id="section-invariants"></span><h2><span class="section-number">2.4. </span>Invariants<a class="headerlink" href="#invariants" title="Permalink to this headline">¶</a></h2>
 <p>The <em>mutilated chessboard</em> problems involves an <span class="math notranslate nohighlight">\(8 \times 8\)</span> chessboard with the
 top right and bottom left corners removed.
 Imagine you are given a set of dominoes, each of which can cover exactly two squares.
@@ -549,10 +552,10 @@ either.</p>
 by Douglas Hofstadter. It concerns strings consisting of the letters <cite>M</cite>, <cite>I</cite>, and <cite>U</cite>.
 Starting with the string <cite>MI</cite>, we are allowed to apply any of the following rules:</p>
 <ol class="arabic simple">
-<li>Replace <cite>sI</cite> by <cite>sIU</cite>, that is, add a <cite>U</cite> to the end of any string that ends with <cite>I</cite>.</li>
-<li>Replace <cite>Ms</cite> by <cite>Mss</cite>, that is, double the string after the initial <cite>M</cite>.</li>
-<li>Replace <cite>sIIIt</cite> by <cite>sUt</cite>, that is, replace any three consecutive <cite>Is</cite> with a <cite>U</cite>.</li>
-<li>Replace <cite>sUUt</cite> by <cite>st</cite>, that is, delete any consecutive pair of <cite>Us</cite>.</li>
+<li><p>Replace <cite>sI</cite> by <cite>sIU</cite>, that is, add a <cite>U</cite> to the end of any string that ends with <cite>I</cite>.</p></li>
+<li><p>Replace <cite>Ms</cite> by <cite>Mss</cite>, that is, double the string after the initial <cite>M</cite>.</p></li>
+<li><p>Replace <cite>sIIIt</cite> by <cite>sUt</cite>, that is, replace any three consecutive <cite>Is</cite> with a <cite>U</cite>.</p></li>
+<li><p>Replace <cite>sUUt</cite> by <cite>st</cite>, that is, delete any consecutive pair of <cite>Us</cite>.</p></li>
 </ol>
 <p>The puzzle asks whether it is possible to derive the string <cite>MU</cite>.
 The answer is no: it turns out that a string is derivable if and only if it consists
@@ -565,21 +568,19 @@ is an L-shaped configuration of three squares. Golomb’s theorem says that any
 We’ll prove this together in class.</p>
 </div>
 <div class="section" id="exercises">
-<span id="section-mathematical-background-exercises"></span><h2>2.5. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<span id="section-mathematical-background-exercises"></span><h2><span class="section-number">2.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Prove the formula for the sum of a geometric series:</p>
+<li><p>Prove the formula for the sum of a geometric series:</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\sum_{i &lt; n} a r^i = \frac{a(r^n - 1)}{r - 1}\]</div>
 </div></blockquote>
 </li>
-<li><p class="first">Prove that for every <span class="math notranslate nohighlight">\(n &gt; 4\)</span>, <span class="math notranslate nohighlight">\(n! &gt; 2^n\)</span>.</p>
-</li>
-<li><p class="first">Show that the solution to the towers of Hanoi given in
+<li><p>Prove that for every <span class="math notranslate nohighlight">\(n &gt; 4\)</span>, <span class="math notranslate nohighlight">\(n! &gt; 2^n\)</span>.</p></li>
+<li><p>Show that the solution to the towers of Hanoi given in
 <a class="reference internal" href="#section-induction-and-recursion-on-the-natural-numbers"><span class="std std-numref">Section 2.1</span></a> is optimal: for every <span class="math notranslate nohighlight">\(n\)</span>,
-it takes at least <cite>2^n - 1</cite> moves to move all the disks from one peg to another.</p>
-</li>
-<li><p class="first">Consider the variation on the towers of Hanoi problem in which you can only move
+it takes at least <cite>2^n - 1</cite> moves to move all the disks from one peg to another.</p></li>
+<li><p>Consider the variation on the towers of Hanoi problem in which you can only move
 a disk to an <em>adjacent</em> peg. In other words, you can move a disk from peg 1 to peg 2,
 from peg 2 to peg 1, from peg 2 to peg 3, or from peg 3 to peg 2, but not from
 peg 1 to peg 3 or from peg 3 to peg 1.</p>
@@ -587,26 +588,23 @@ peg 1 to peg 3 or from peg 3 to peg 1.</p>
 <span class="math notranslate nohighlight">\(3^n - 1\)</span> moves. If you are ambitious, show that this is optimal, and that
 it goes through all the <span class="math notranslate nohighlight">\(3^n\)</span> valid positions.</p>
 </li>
-<li><p class="first">Consider the variation on the towers of Hanoi in which pegs can be moved cyclicly:
+<li><p>Consider the variation on the towers of Hanoi in which pegs can be moved cyclicly:
 from peg 1 to peg 2, from peg 2 to peg 3, or from peg 3 to peg 1. Describe a
-recursive procedure to solve this problem.</p>
-</li>
-<li><p class="first">Use the ordinary principle of induction to prove the principle of complete induction.</p>
-</li>
-<li><p class="first">Let <span class="math notranslate nohighlight">\(F_0, F_1, F_2, \ldots\)</span> be the sequence of Fibonacci numbers.</p>
+recursive procedure to solve this problem.</p></li>
+<li><p>Use the ordinary principle of induction to prove the principle of complete induction.</p></li>
+<li><p>Let <span class="math notranslate nohighlight">\(F_0, F_1, F_2, \ldots\)</span> be the sequence of Fibonacci numbers.</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li>Let <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> be the two roots of the equation
+<li><p>Let <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> be the two roots of the equation
 <span class="math notranslate nohighlight">\(x^2 = x + 1\)</span>. Show that for every <span class="math notranslate nohighlight">\(n\)</span>,
-<span class="math notranslate nohighlight">\(F_n = (\alpha^n - \beta^n)/\sqrt{5}\)</span>.</li>
-<li>Show <span class="math notranslate nohighlight">\(\sum_{i &lt; n} F_i = F_{n+1} - 1\)</span>.</li>
-<li>Show <span class="math notranslate nohighlight">\(\sum_{i \le n} F_i^2 = F_n F_{n+1}\)</span>.</li>
+<span class="math notranslate nohighlight">\(F_n = (\alpha^n - \beta^n)/\sqrt{5}\)</span>.</p></li>
+<li><p>Show <span class="math notranslate nohighlight">\(\sum_{i &lt; n} F_i = F_{n+1} - 1\)</span>.</p></li>
+<li><p>Show <span class="math notranslate nohighlight">\(\sum_{i \le n} F_i^2 = F_n F_{n+1}\)</span>.</p></li>
 </ol>
 </div></blockquote>
 </li>
-<li><p class="first">Show that with <cite>n</cite> straight lines we can divide the plane into at most <span class="math notranslate nohighlight">\(n^2 + n + 2\)</span> regions, and that this is sharp.</p>
-</li>
-<li><p class="first">Show that the recursive description of <span class="math notranslate nohighlight">\(\fn{gcd}(x,y)\)</span> presented in
+<li><p>Show that with <cite>n</cite> straight lines we can divide the plane into at most <span class="math notranslate nohighlight">\(n^2 + n + 2\)</span> regions, and that this is sharp.</p></li>
+<li><p>Show that the recursive description of <span class="math notranslate nohighlight">\(\fn{gcd}(x,y)\)</span> presented in
 <a class="reference internal" href="#section-generalized-induction-and-recursion"><span class="std std-numref">Section 2.3</span></a> correctly computes the greatest
 common divisor of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, where we define <span class="math notranslate nohighlight">\(\fn{gcd}(0,0)\)</span>
 equal to 0. You can restrict attention to nonnegative values of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.
@@ -614,38 +612,35 @@ equal to 0. You can restrict attention to nonnegative values of <span class="mat
 we can write <span class="math notranslate nohighlight">\(x = \fn{div}(x, y) \cdot y + \fn{mod}(x, y)\)</span>,
 where <span class="math notranslate nohighlight">\(\fn{div}(x, y)\)</span> is the integer part of <span class="math notranslate nohighlight">\(x\)</span> divided by <span class="math notranslate nohighlight">\(y\)</span>.
 First show that for every <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(\fn{gcd}(x, y) = \fn{gcd}(x + ky, y)\)</span>,
-and use that fact.</p>
-</li>
-<li><p class="first">Use structural induction to prove</p>
+and use that fact.</p></li>
+<li><p>Use structural induction to prove</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\fn{reverse}(\ell \append m) = \fn{reverse}(m) \append \fn{reverse}(\ell).\]</div>
 </div></blockquote>
 </li>
-<li><p class="first">Use structural induction to prove</p>
+<li><p>Use structural induction to prove</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\fn{reverse}(\fn{reverse}(\ell)) = \ell.\]</div>
 </div></blockquote>
 </li>
-<li><p class="first">Prove that for every <span class="math notranslate nohighlight">\(\ell\)</span> we have</p>
+<li><p>Prove that for every <span class="math notranslate nohighlight">\(\ell\)</span> we have</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\fn{reverse}'(\ell) = \fn{reverse}(\ell).\]</div>
 </div></blockquote>
 </li>
-<li><p class="first">Prove that for every <span class="math notranslate nohighlight">\(\ell\)</span> and <span class="math notranslate nohighlight">\(m\)</span> we have</p>
+<li><p>Prove that for every <span class="math notranslate nohighlight">\(\ell\)</span> and <span class="math notranslate nohighlight">\(m\)</span> we have</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\fn{length}(\ell \append m) = \fn{length}(\ell) + \fn{length}(m).\]</div>
 </div></blockquote>
 </li>
-<li><p class="first">How many binary trees of depth <span class="math notranslate nohighlight">\(n\)</span> are there? Prove your answer is correct.</p>
-</li>
-<li><p class="first">Show that a string is derivable in the MU puzzle if and only if it consists
+<li><p>How many binary trees of depth <span class="math notranslate nohighlight">\(n\)</span> are there? Prove your answer is correct.</p></li>
+<li><p>Show that a string is derivable in the MU puzzle if and only if it consists
 of an M followed by any number of Is and Us, as long as the number of Is is
-not divisible by 3.</p>
-</li>
+not divisible by 3.</p></li>
 </ol>
 </div>
 </div>

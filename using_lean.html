@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
   
@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
 
   
@@ -30,11 +32,12 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "{\\to}", "liff": "{\\leftrightarrow}", "proves": "{\\vdash}", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1]}}}</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -87,7 +90,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
@@ -159,7 +162,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>3. Using Lean</li>
+      <li><span class="section-number">3. </span>Using Lean</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -179,9 +182,9 @@
            <div itemprop="articleBody">
             
   <div class="section" id="using-lean">
-<span id="chapter-using-lean"></span><h1>3. Using Lean<a class="headerlink" href="#using-lean" title="Permalink to this headline">¶</a></h1>
+<span id="chapter-using-lean"></span><h1><span class="section-number">3. </span>Using Lean<a class="headerlink" href="#using-lean" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="about-lean">
-<span id="section-about-lean"></span><h2>3.1. About Lean<a class="headerlink" href="#about-lean" title="Permalink to this headline">¶</a></h2>
+<span id="section-about-lean"></span><h2><span class="section-number">3.1. </span>About Lean<a class="headerlink" href="#about-lean" title="Permalink to this headline">¶</a></h2>
 <p><em>Lean</em> is a new programming language and interactive proof assistant being developed
 at Microsoft Research.
 It is currently in an experimental, development stage, which makes it
@@ -200,14 +203,14 @@ and by asking questions on the <a class="reference external" href="https://leanp
 which you are heartily encouraged to join.
 To be more precise, there are currently two versions of Lean:</p>
 <ul class="simple">
-<li>Lean 3 is reasonably stable, and primarily an interactive proof assistant.
-It has a very large mathematical library, known as <a class="reference external" href="https://github.com/leanprover-community/mathlib">mathlib</a>.</li>
-<li>Lean 4 is being designed as a performant programming language, and it is still under
+<li><p>Lean 3 is reasonably stable, and primarily an interactive proof assistant.
+It has a very large mathematical library, known as <a class="reference external" href="https://github.com/leanprover-community/mathlib">mathlib</a>.</p></li>
+<li><p>Lean 4 is being designed as a performant programming language, and it is still under
 development.
 It can also be used as a proof assistant, though it does not yet have a
 substantial library.
 Its language and syntax are similar to that of Lean 3,
-but it is not backward compatible.</li>
+but it is not backward compatible.</p></li>
 </ul>
 <p>In this course, we will use Lean 4, even though it is still under development.
 It has the rough beginnings of a <a class="reference external" href="https://leanprover.github.io/lean4/doc/">user manual</a>
@@ -377,7 +380,7 @@ opens up a world of opportunity.
 It is the key to unlocking the secrets of the universe.</p>
 </div>
 <div class="section" id="using-lean-as-a-functional-programming-language">
-<span id="section-using-lean-as-a-functional-programming-language"></span><h2>3.2. Using Lean as a functional programming language<a class="headerlink" href="#using-lean-as-a-functional-programming-language" title="Permalink to this headline">¶</a></h2>
+<span id="section-using-lean-as-a-functional-programming-language"></span><h2><span class="section-number">3.2. </span>Using Lean as a functional programming language<a class="headerlink" href="#using-lean-as-a-functional-programming-language" title="Permalink to this headline">¶</a></h2>
 <p>There is a preliminary user’s manual for Lean,
 still a work in progress, <a class="reference external" href="https://leanprover.github.io/lean4/doc/">here</a>. The fact that Lean is a functional programming language means
 that instead of presenting a program as a list of instructions,
@@ -566,7 +569,7 @@ a list of Fibonacci values with running time linear in the
 length of the list.</p>
 </div>
 <div class="section" id="inductive-data-types-in-lean">
-<span id="section-inductive-data-types-in-lean"></span><h2>3.3. Inductive data types in Lean<a class="headerlink" href="#inductive-data-types-in-lean" title="Permalink to this headline">¶</a></h2>
+<span id="section-inductive-data-types-in-lean"></span><h2><span class="section-number">3.3. </span>Inductive data types in Lean<a class="headerlink" href="#inductive-data-types-in-lean" title="Permalink to this headline">¶</a></h2>
 <p>One reason that computer scientists and logicians tend to like
 functional programming languages is that they often provide
 good support for defining inductive data types and then
@@ -610,7 +613,7 @@ Note the Lean convention of capitalizing the names of data types.</p>
 it <cite>MyList</cite>, and then try <cite>#print MyList</cite> to see how it compares.</p>
 </div>
 <div class="section" id="using-lean-as-a-proof-assistant">
-<span id="section-using-lean-as-a-proof-assistant"></span><h2>3.4. Using Lean as a proof assistant<a class="headerlink" href="#using-lean-as-a-proof-assistant" title="Permalink to this headline">¶</a></h2>
+<span id="section-using-lean-as-a-proof-assistant"></span><h2><span class="section-number">3.4. </span>Using Lean as a proof assistant<a class="headerlink" href="#using-lean-as-a-proof-assistant" title="Permalink to this headline">¶</a></h2>
 <p>A feature of working with a system like Lean,
 which is based on a formal logical foundation,
 is that you can not only define data types and functions
@@ -738,7 +741,7 @@ wrong when we omit it.</p>
 </div>
 </div>
 <div class="section" id="using-lean-as-an-imperative-programming-language">
-<span id="section-using-lean-as-an-imperative-programming-language"></span><h2>3.5. Using Lean as an imperative programming language<a class="headerlink" href="#using-lean-as-an-imperative-programming-language" title="Permalink to this headline">¶</a></h2>
+<span id="section-using-lean-as-an-imperative-programming-language"></span><h2><span class="section-number">3.5. </span>Using Lean as an imperative programming language<a class="headerlink" href="#using-lean-as-an-imperative-programming-language" title="Permalink to this headline">¶</a></h2>
 <p>The fact that Lean is a functional programming language means that there
 is no global notion of <em>state</em>.
 Functions take values as input and return values as output;
@@ -815,49 +818,40 @@ and the <cite>Array.push</cite> function adds a new element at the end of the ar
 </div>
 </div>
 <div class="section" id="exercises">
-<h2>3.6. Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Using operations on <cite>List</cite>, write a Lean function that for every <span class="math notranslate nohighlight">\(n\)</span> returns
-the list of all the divisors of <span class="math notranslate nohighlight">\(n\)</span> that are less than <span class="math notranslate nohighlight">\(n\)</span>.</p>
-</li>
-<li><p class="first">A natural number <span class="math notranslate nohighlight">\(n\)</span> is <em>perfect</em> if it is equal to the sum of the divisors less
+<li><p>Using operations on <cite>List</cite>, write a Lean function that for every <span class="math notranslate nohighlight">\(n\)</span> returns
+the list of all the divisors of <span class="math notranslate nohighlight">\(n\)</span> that are less than <span class="math notranslate nohighlight">\(n\)</span>.</p></li>
+<li><p>A natural number <span class="math notranslate nohighlight">\(n\)</span> is <em>perfect</em> if it is equal to the sum of the divisors less
 than <span class="math notranslate nohighlight">\(n.\)</span> Write a Lean function (with return type <cite>Bool</cite>) that determines
 whether a number <span class="math notranslate nohighlight">\(n\)</span> is perfect. Use it to find all the perfect numbers less
-than 1,000.</p>
-</li>
-<li><p class="first">Define a recursive function <span class="math notranslate nohighlight">\(\fn{sublists}(\ell)\)</span> that, for every list <span class="math notranslate nohighlight">\(\ell\)</span>,
+than 1,000.</p></li>
+<li><p>Define a recursive function <span class="math notranslate nohighlight">\(\fn{sublists}(\ell)\)</span> that, for every list <span class="math notranslate nohighlight">\(\ell\)</span>,
 returns a list of all the sublists of <span class="math notranslate nohighlight">\(\ell\)</span>. For example, given the list <span class="math notranslate nohighlight">\([1, 2, 3]\)</span>,
 it should compute the list</p>
 <div class="math notranslate nohighlight">
 \[[ [], [1], [2], [3], [1,2], [1,3], [2, 3], [1, 2, 3] ].\]</div>
 <p>The elements need not be listed in that same order.</p>
 </li>
-<li><p class="first">Prove in Lean that the length of <span class="math notranslate nohighlight">\(\fn{sublists}(\ell)\)</span> is
-<span class="math notranslate nohighlight">\(2^{\fn{length}(\ell)}\)</span>.</p>
-</li>
-<li><p class="first">Define a function <span class="math notranslate nohighlight">\(\fn{permutations}(\ell)\)</span> that returns a list of all the permutations
-of <span class="math notranslate nohighlight">\(\ell\)</span>.</p>
-</li>
-<li><p class="first">Prove in Lean that the length of <span class="math notranslate nohighlight">\(\fn{permutations}(\ell)\)</span> is
-<span class="math notranslate nohighlight">\(\fn{factorial}(\fn{length}(\ell))\)</span>.</p>
-</li>
-<li><p class="first">Define in Lean a function that, assuming <span class="math notranslate nohighlight">\(\ell\)</span> is a list of lists representing
+<li><p>Prove in Lean that the length of <span class="math notranslate nohighlight">\(\fn{sublists}(\ell)\)</span> is
+<span class="math notranslate nohighlight">\(2^{\fn{length}(\ell)}\)</span>.</p></li>
+<li><p>Define a function <span class="math notranslate nohighlight">\(\fn{permutations}(\ell)\)</span> that returns a list of all the permutations
+of <span class="math notranslate nohighlight">\(\ell\)</span>.</p></li>
+<li><p>Prove in Lean that the length of <span class="math notranslate nohighlight">\(\fn{permutations}(\ell)\)</span> is
+<span class="math notranslate nohighlight">\(\fn{factorial}(\fn{length}(\ell))\)</span>.</p></li>
+<li><p>Define in Lean a function that, assuming <span class="math notranslate nohighlight">\(\ell\)</span> is a list of lists representing
 an <span class="math notranslate nohighlight">\(n \times n\)</span> array, returns a list of lists representing the transpose of that
-array.</p>
-</li>
-<li><p class="first">Write a program that solves the Tower of Hanoi problem with <span class="math notranslate nohighlight">\(n\)</span> disks
+array.</p></li>
+<li><p>Write a program that solves the Tower of Hanoi problem with <span class="math notranslate nohighlight">\(n\)</span> disks
 on the assumption that disks can only be moved to an <em>adjacent</em> peg.
-(See <a class="reference internal" href="mathematical_background.html#section-mathematical-background-exercises"><span class="std std-numref">Section 2.5</span></a>.)</p>
-</li>
-<li><p class="first">Write a program that solves the Tower of Hanoi problem with <span class="math notranslate nohighlight">\(n\)</span> disks
+(See <a class="reference internal" href="mathematical_background.html#section-mathematical-background-exercises"><span class="std std-numref">Section 2.5</span></a>.)</p></li>
+<li><p>Write a program that solves the Tower of Hanoi problem with <span class="math notranslate nohighlight">\(n\)</span> disks
 on the assumption that disks can only be moved clockwise.
-(See <a class="reference internal" href="mathematical_background.html#section-mathematical-background-exercises"><span class="std std-numref">Section 2.5</span></a>.)</p>
-</li>
-<li><p class="first">Define a Lean data type of binary trees in which every node is numbered
+(See <a class="reference internal" href="mathematical_background.html#section-mathematical-background-exercises"><span class="std std-numref">Section 2.5</span></a>.)</p></li>
+<li><p>Define a Lean data type of binary trees in which every node is numbered
 by a label. Define a Lean function to compute the sum of the nodes in such
 a tree. Also write functions to list the elements in a preorder, postorder,
-and inorder traversal.</p>
-</li>
+and inorder traversal.</p></li>
 </ol>
 </div>
 </div>
