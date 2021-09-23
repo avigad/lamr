@@ -75,13 +75,17 @@ inductive Lit
 
 namespace Lit
 
+declare_syntax_cat varlit
+
+syntax ident : varlit
+syntax "-" ident : varlit
+
 declare_syntax_cat proplit
 
 syntax "lit!{" proplit "}" : term
 syntax "⊤" : proplit
 syntax "⊥" : proplit
-syntax ident : proplit
-syntax "-" ident : proplit
+syntax varlit : proplit
 
 macro_rules
   | `(lit!{ ⊤ })           => `(tr)
@@ -89,19 +93,32 @@ macro_rules
   | `(lit!{ - $x:ident })  => `(neg $(Lean.quote x.getId.toString))
   | `(lit!{ $x:ident })    => `(pos $(Lean.quote x.getId.toString))
 
-private def toString : Lit → String
-  | tr    => "⊤"
-  | fls   => "⊥"
-  | pos s => s
-  | neg s => "-" ++ s
+instance : ToString Lit :=
+  ⟨fun
+    | tr    => "⊤"
+    | fls   => "⊥"
+    | pos s => s
+    | neg s => "-" ++ s ⟩
 
-instance : ToString Lit := ⟨toString⟩
+instance : Repr Lit where
+  reprPrec l _ := s!"lit!\{{toString l}}"
 
 def negate : Lit → Lit
   | tr   => fls
   | fls  => tr
   | pos s => neg s
   | neg s => pos s
+
+def name : Lit → String
+  | tr => "⊤"
+  | fls => "⊥"
+  | pos s => s
+  | neg s => s
+
+def ofDimacs? (s : String) : Option Lit :=
+  if s.isEmpty then none
+  else if s[0] == '-' then neg (s.drop 1)
+  else pos s
 
 end Lit
 
@@ -148,6 +165,9 @@ private def toString : NnfForm → String
 
 instance : ToString NnfForm := ⟨toString⟩
 
+instance : Repr NnfForm where
+  reprPrec f _ := s!"nnf!\{{toString f}}"
+
 def neg : NnfForm → NnfForm
   | lit l    => lit l.negate
   | conj p q => disj (neg p) (neg q)
@@ -173,18 +193,20 @@ declare_syntax_cat clause
 
 syntax "clause!{" clause "}" : term
 
-syntax proplit*  : clause
+syntax proplit* : clause
 
 macro_rules
   | `(clause!{ $[$args]* }) => do
       let args ← args.mapM fun x => `(lit!{ $x })
       `(Clause.mk [ $args,* ])
 
-private def toString (lits : List Lit) : String :=
-  String.intercalate " " (lits.map Lit.toString)
+instance : Repr Clause :=
+  ⟨fun c _ => "clause!{" ++ String.intercalate " " (List.map toString c) ++ "}"⟩
 
 instance : ToString Clause :=
-  ⟨toString⟩
+  ⟨fun
+    | [] => "⊥"
+    | c  => "(" ++ " ∨ ".intercalate (List.map toString c) ++ ")"⟩
 
 end Clause
 
@@ -212,17 +234,22 @@ macro_rules
       let args ← args.mapM fun x => `(clause!{ $x })
       `(CnfForm.mk [ $args,* ])
 
-private def toString (cnf : CnfForm) : String :=
-  String.intercalate ", " (cnf.map Clause.toString)
+instance : Repr CnfForm :=
+  ⟨fun cnf _ => "cnf!{" ++ String.intercalate ", " (List.map (toString ∘ repr) cnf) ++ "}"⟩
 
-instance : ToString CnfForm := ⟨toString⟩
+instance : ToString CnfForm := 
+  ⟨fun
+    | [] => "⊤"
+    | cs => " ∧ ".intercalate (cs.map toString)⟩
 
-instance : Append CnfForm := inferInstanceAs (Append (List Clause))
+instance : Append CnfForm :=
+  inferInstanceAs (Append (List Clause))
 
 def disj (cnf1 cnf2 : CnfForm) : CnfForm :=
-(cnf1.map (fun cls => cnf2.map cls.union)).Union
+  (cnf1.map (fun cls => cnf2.map cls.union)).Union
 
-def conj (cnf1 cnf2 : CnfForm) : CnfForm := cnf1.union cnf2
+def conj (cnf1 cnf2 : CnfForm) : CnfForm :=
+  cnf1.union cnf2
 
 end CnfForm
 
@@ -230,13 +257,54 @@ end CnfForm
 Assignment to propositional variables
 -/
 
-def PropAssignment := String → Bool
+def PropAssignment := List (String × Bool)
 
-def PropAssignment.mk (vars : List String) : PropAssignment :=
-fun s => if s ∈ vars then true else false
+instance : Inhabited PropAssignment :=
+  inferInstanceAs (Inhabited (List _))
 
-syntax "propassign!{" ident,* "}" : term
+def PropAssignment.mk (vars : List (String × Bool)) : PropAssignment :=
+  vars
+
+syntax "propassign!{" varlit,* "}" : term
 macro_rules
-  | `( propassign!{ $[$vars:ident],* }) =>
-    let varnames := vars.map fun i => Lean.quote i.getId.toString
-    `(PropAssignment.mk [$[( $varnames )],*])
+  | `( propassign!{ $[$vars:varlit],* }) => do
+    let vals ← vars.mapM fun
+      | `(varlit| $x:ident) => `(($(Lean.quote x.getId.toString), true))
+      | `(varlit| -$x:ident) => `(($(Lean.quote x.getId.toString), false))
+      | s => panic! s!"unexpected syntax '{s}'"
+    `(PropAssignment.mk [$[$vals],*])
+
+instance : Repr PropAssignment where
+  reprPrec τ _ :=
+    let vars := ", ".intercalate (τ.map fun (x, v) => if v then x else "-" ++ x)
+    s!"propassign!\{{vars}}"
+
+instance : ToString PropAssignment where
+  toString τ :=
+    let mapping := ", ".intercalate <|
+      List.map (fun (x, v) => x ++ " ↦ " ++ if v then "⊤" else "⊥") τ
+    s!"\{{mapping}}"
+
+def PropAssignment.mem (τ : PropAssignment) (x : String) : Bool :=
+  List.any τ (fun (y, _) => x == y) 
+
+def PropAssignment.withLit (τ : PropAssignment) : Lit → PropAssignment
+  | Lit.pos x => (x, true) :: τ
+  | Lit.neg x => (x, false) :: τ
+  | _ => panic! "cannot extend assignment with constant"
+
+def PropAssignment.eval? (τ : PropAssignment) (x : String) : Option Bool := do
+  let τ : List _ := τ
+  for (y, v) in τ do
+    if y == x then return some v
+  return none
+
+def PropAssignment.eval (τ : PropAssignment) (x : String) : Bool :=
+  τ.eval? x |>.getD false
+
+open Lit in
+def PropAssignment.evalLit? (τ : PropAssignment) : Lit → Option Bool
+  | tr => true
+  | fls => false
+  | pos x => τ.eval? x
+  | neg x => τ.eval? x |>.map (!·)

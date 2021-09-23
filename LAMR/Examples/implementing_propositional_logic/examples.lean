@@ -90,7 +90,7 @@ Truth table semantics.
 
 -- textbook: PropForm.eval
 def PropForm.eval (v : PropAssignment) : PropForm → Bool
-  | var s => v s
+  | var s => v.eval s
   | tr => true
   | fls => false
   | neg A => !(eval v A)
@@ -100,13 +100,12 @@ def PropForm.eval (v : PropAssignment) : PropForm → Bool
   | biImpl A B => (!(eval v A) || (eval v B)) && (!(eval v B) || (eval v A))
 
 -- try it out
-#eval let v := fun s => if s ∈ ["p", "q", "r"] then true else false
+#eval let v := PropAssignment.mk [("p", true), ("q", true), ("r", true)]
       propExample.eval v
 -- end textbook: PropForm.eval
 
 
 -- textbook: propassign
-#check PropAssignment.mk ["p", "q", "r"]
 #check propassign!{p, q, r}
 
 #eval propExample.eval propassign!{p, q, r}
@@ -127,8 +126,8 @@ def allSublists : List α → List (List α)
 -- textbook: truthTable
 def truthTable (A : PropForm) : List (List Bool × Bool) :=
   let vars := A.vars
-  let assignments := (allSublists vars).map PropAssignment.mk
-  let evalLine := fun v : PropAssignment => (vars.map v, A.eval v)
+  let assignments := (allSublists vars).map (fun l => PropAssignment.mk (l.map (., true)))
+  let evalLine := fun v : PropAssignment => (vars.map v.eval, A.eval v)
   assignments.map evalLine
 
 #eval truthTable propExample
