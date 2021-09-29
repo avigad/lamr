@@ -361,7 +361,7 @@ Here is another example of a property that can be proved by induction:
 
 From a mathematical point of view, this definition of the reverse function above
 is as good as any other, since it specifies the function we want unambiguously.
-But in :numref:`Chapter %s <chapter_using_lean>` we will see that such a definition can also be interpreted as executable code in a functional programming language such as Lean. In this case, the execution is quadratic in the length of the list (think about why). The following definition is more efficient in that sense:
+But in :numref:`Chapter %s <chapter_using_lean_as_a_programming_language>` we will see that such a definition can also be interpreted as executable code in a functional programming language such as Lean. In this case, the execution is quadratic in the length of the list (think about why). The following definition is more efficient in that sense:
 
 .. math::
 

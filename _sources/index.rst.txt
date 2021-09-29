@@ -13,11 +13,13 @@ Logic and Mechanized Reasoning
 
    introduction
    mathematical_background
-   using_lean
+   using_lean_as_a_programming_language
    propositional_logic
    implementing_propositional_logic
+   using_lean_as_a_proof_assistant
+   decision_procedures_for_propositional_logic
    using_sat_solvers
-   deduction_and_search
+   deduction_for_propositional_logic
    terms_and_formulas
    implementing_terms_and_formulas
    using_smt_solvers

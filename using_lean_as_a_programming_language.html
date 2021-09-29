@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>3. Using Lean &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  <title>3. Lean as a Programming Language &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
   
 
   
@@ -94,26 +94,27 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Using Lean</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Lean as a Programming Language</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#about-lean">3.1. About Lean</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#using-lean-as-a-functional-programming-language">3.2. Using Lean as a functional programming language</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#inductive-data-types-in-lean">3.3. Inductive data types in Lean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-lean-as-a-proof-assistant">3.4. Using Lean as a proof assistant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-lean-as-an-imperative-programming-language">3.5. Using Lean as an imperative programming language</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#exercises">3.6. Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-lean-as-an-imperative-programming-language">3.4. Using Lean as an imperative programming language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">3.5. Exercises</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">6. Using SAT Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_and_search.html">7. Deduction and search</a></li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">8. Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">9. Implementing Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">10. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">11. First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">12. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">13. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">14. Simple Type Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">6. Lean as a Proof Assistant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">7. Decision Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">8. Using SAT Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">9. Deduction for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">13. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">14. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">16. Simple Type Theory</a></li>
 </ul>
 
             
@@ -162,13 +163,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">3. </span>Using Lean</li>
+      <li><span class="section-number">3. </span>Lean as a Programming Language</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/using_lean.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/using_lean_as_a_programming_language.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -181,8 +182,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="using-lean">
-<span id="chapter-using-lean"></span><h1><span class="section-number">3. </span>Using Lean<a class="headerlink" href="#using-lean" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="lean-as-a-programming-language">
+<span id="chapter-using-lean-as-a-programming-language"></span><h1><span class="section-number">3. </span>Lean as a Programming Language<a class="headerlink" href="#lean-as-a-programming-language" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="about-lean">
 <span id="section-about-lean"></span><h2><span class="section-number">3.1. </span>About Lean<a class="headerlink" href="#about-lean" title="Permalink to this headline">¶</a></h2>
 <p><em>Lean</em> is a new programming language and interactive proof assistant being developed
@@ -242,7 +243,7 @@ In Lean, every well-formed expression has a type.</p>
 <span class="k">#check</span> <span class="k">fun</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">x</span> <span class="bp">=</span> <span class="mi">1</span> <span class="k">then</span> <span class="s2">&quot;yes&quot;</span> <span class="k">else</span> <span class="s2">&quot;no&quot;</span>
 </pre></div>
 </div>
-<p>You can find this example in the file <cite>using_lean/examples1.lean</cite> in the
+<p>You can find this example in the file <cite>using_lean_as_a_programming_language/examples1.lean</cite> in the
 <cite>LAMR/Examples</cite> folder of the course repository.
 We recommend copying that entire folder in the <cite>User</cite> folder,
 so you can edit the files and try examples of your own.
@@ -612,136 +613,8 @@ Note the Lean convention of capitalizing the names of data types.</p>
 <p>You should try writing the inductive definition on your own. Call
 it <cite>MyList</cite>, and then try <cite>#print MyList</cite> to see how it compares.</p>
 </div>
-<div class="section" id="using-lean-as-a-proof-assistant">
-<span id="section-using-lean-as-a-proof-assistant"></span><h2><span class="section-number">3.4. </span>Using Lean as a proof assistant<a class="headerlink" href="#using-lean-as-a-proof-assistant" title="Permalink to this headline">¶</a></h2>
-<p>A feature of working with a system like Lean,
-which is based on a formal logical foundation,
-is that you can not only define data types and functions
-but also prove things about them.
-The goal of this section is to give you a flavor of using Lean
-as a proof assistant.
-It isn’t easy: Lean syntax is finicky and its error messages are often
-inscrutable.
-In class, we’ll try to give you some pointers as to how to interact
-with Lean to construct proofs.
-The examples in this section will serve as a basis for discussion.</p>
-<p>Remember that Lean’s core library defines the <cite>List</cite> data type
-and notation for it.
-In the example below, we import the library,
-open the namespace, declare some variables, and try out the notation.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="n">Init</span>
-
-<span class="kn">open</span> <span class="n">List</span>
-
-<span class="kd">variable</span> <span class="o">{</span><span class="n">α</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">}</span>
-<span class="kd">variable</span> <span class="o">(</span><span class="n">as</span> <span class="n">bs</span> <span class="n">cs</span> <span class="o">:</span> <span class="n">List</span> <span class="n">α</span><span class="o">)</span>
-<span class="kd">variable</span> <span class="o">(</span><span class="n">a</span> <span class="n">b</span> <span class="n">c</span> <span class="o">:</span> <span class="n">α</span><span class="o">)</span>
-
-<span class="k">#check</span> <span class="n">a</span> <span class="o">::</span> <span class="n">as</span>
-<span class="k">#check</span> <span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span>
-
-<span class="kd">example</span> <span class="o">:</span> <span class="o">[]</span> <span class="bp">++</span> <span class="n">as</span> <span class="bp">=</span> <span class="n">as</span> <span class="o">:=</span> <span class="n">nil_append</span> <span class="n">as</span>
-
-<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="n">a</span> <span class="o">::</span> <span class="n">as</span><span class="o">)</span> <span class="bp">++</span> <span class="n">bs</span> <span class="bp">=</span> <span class="n">a</span> <span class="o">::</span> <span class="o">(</span><span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span><span class="o">)</span> <span class="o">:=</span> <span class="n">cons_append</span> <span class="n">a</span> <span class="n">as</span> <span class="n">bs</span>
-</pre></div>
-</div>
-<p>The <cite>variable</cite> command does not do anything substantive.
-It tells Lean that when the corresponding identifiers are used
-in definitions and theorems that follow,
-they should be interpreted as arguments to those theorems and proofs,
-with the indicated types.
-The curly brackets around the declaration <cite>α : Type</cite> indicate that that
-argument is meant to be <em>implicit</em>, which is to say,
-users do not have to write it explicitly.
-Rather, Lean is expected to infer it from the context.</p>
-<p>The library proves the theorems <cite>[] ++ as</cite> and
-<cite>(a :: as) ++ bs = a :: (as ++ bs)</cite> under the names <cite>nil_append</cite>
-and <cite>cons_append</cite>, respectively.
-You can see them by writing <cite>#check nil_append</cite> and <cite>#check cons_append</cite>.
-Remember that we took these to be the defining equations for the
-<cite>append</cite> function in <a class="reference internal" href="mathematical_background.html#section-generalized-induction-and-recursion"><span class="std std-numref">Section 2.3</span></a>.
-Although Lean uses a different definition of the append function,
-for illustrative purposes we will treat them as the defining equations
-and base our subsequent proofs on that.</p>
-<p>Lean’s library also proves <cite>as ++ []</cite> under the name <cite>append_nil</cite>,
-but to illustrate how proofs like this go, we will prove it again
-under the name <cite>append_nil’</cite>.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">append_nil&#39;</span> <span class="o">:</span> <span class="n">as</span> <span class="bp">++</span> <span class="o">[]</span> <span class="bp">=</span> <span class="n">as</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="n">induction</span> <span class="n">as</span> <span class="k">with</span>
-  <span class="bp">|</span> <span class="n">nil</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">nil_append</span><span class="o">]</span>
-  <span class="bp">|</span> <span class="n">cons</span> <span class="n">a</span> <span class="n">as</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">cons_append</span><span class="o">,</span> <span class="n">ih</span><span class="o">]</span>
-</pre></div>
-</div>
-<p>In class, we will help you make sense of this.
-The <cite>by</cite> command tell Lean that we are going to write
-a <em>tactic</em> proof.
-In other words, instead of writing the proof as an expression,
-we are going to give Lean a list of instructions
-that tell it how to prove the theorem.
-At the start of the tactic proof, the theorem in question
-is our <em>goal</em>.
-At each step, tactics act on one more more of the remaining goals;
-when no more goals remain, the theorem is proved.</p>
-<p>In this case, there are only two tactics that are needed.
-The <cite>induction</cite> tactic, as the name suggests, sets up a proof
-by induction, and the <cite>rw</cite> tactic <em>rewrites</em> the goal
-using given equations.
-Moving the cursor around in the editor windows shows you the
-goals at the corresponding state of the proof.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">append_assoc&#39;</span> <span class="o">:</span> <span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span> <span class="bp">++</span> <span class="n">cs</span> <span class="bp">=</span> <span class="n">as</span> <span class="bp">++</span> <span class="o">(</span><span class="n">bs</span> <span class="bp">++</span> <span class="n">cs</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="n">induction</span> <span class="n">as</span> <span class="k">with</span>
-  <span class="bp">|</span> <span class="n">nil</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">nil_append</span><span class="o">,</span> <span class="n">nil_append</span><span class="o">]</span>
-  <span class="bp">|</span> <span class="n">cons</span> <span class="n">a</span> <span class="n">as</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">cons_append</span><span class="o">,</span> <span class="n">cons_append</span><span class="o">,</span> <span class="n">ih</span><span class="o">,</span> <span class="bp">←</span><span class="n">cons_append</span><span class="o">]</span>
-</pre></div>
-</div>
-<p>Here is a similar proof of the associativity of the <cite>append</cite> function.
-Note that the left arrow in the expression <cite>←cons_append</cite>
-tell Lean that we want to use the equation from right to left instead of
-from left to right.</p>
-<p>Now let us consider Lean’s definition of the <cite>reverse</cite> function:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">reverse_def</span> <span class="o">:</span> <span class="n">reverse</span> <span class="n">as</span> <span class="bp">=</span> <span class="n">reverseAux</span> <span class="n">as</span> <span class="o">[]</span> <span class="o">:=</span> <span class="n">rfl</span>
-
-<span class="kd">theorem</span> <span class="n">reverseAux_nil</span> <span class="o">:</span> <span class="n">reverseAux</span> <span class="o">[]</span> <span class="n">as</span> <span class="bp">=</span> <span class="n">as</span> <span class="o">:=</span> <span class="n">rfl</span>
-
-<span class="kd">theorem</span> <span class="n">reverseAux_cons</span> <span class="o">:</span> <span class="n">reverseAux</span> <span class="o">(</span><span class="n">a</span> <span class="o">::</span> <span class="n">as</span><span class="o">)</span> <span class="n">bs</span> <span class="bp">=</span> <span class="n">reverseAux</span> <span class="n">as</span> <span class="o">(</span><span class="n">a</span> <span class="o">::</span> <span class="n">bs</span><span class="o">)</span> <span class="o">:=</span> <span class="n">rfl</span>
-</pre></div>
-</div>
-<p>We will use these identities in the proofs that follow.
-Let’s think about what it would take to prove the identity
-<cite>reverse (as ++ bs) = reverse bs ++ reverse as</cite>.
-Since <cite>reverse</cite> is defined in terms of <cite>reverseAux</cite>,
-we should expect to have to prove something about <cite>reverseAux</cite>.
-And since the identity mentions the <cite>append</cite> function,
-it is natural to try to characterize the way that
-<cite>reverseAux</cite> interacts with <cite>append</cite>.
-These are the two identities we need:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">reverseAux_append</span> <span class="o">:</span> <span class="n">reverseAux</span> <span class="o">(</span><span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span><span class="o">)</span> <span class="n">cs</span> <span class="bp">=</span> <span class="n">reverseAux</span> <span class="n">bs</span> <span class="o">(</span><span class="n">reverseAux</span> <span class="n">as</span> <span class="n">cs</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="n">induction</span> <span class="n">as</span> <span class="n">generalizing</span> <span class="n">cs</span> <span class="k">with</span>
-  <span class="bp">|</span> <span class="n">nil</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">nil_append</span><span class="o">,</span> <span class="n">reverseAux_nil</span><span class="o">]</span>
-  <span class="bp">|</span> <span class="n">cons</span> <span class="n">a</span> <span class="n">as</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">cons_append</span><span class="o">,</span> <span class="n">reverseAux_cons</span><span class="o">,</span> <span class="n">reverseAux_cons</span><span class="o">,</span> <span class="n">ih</span><span class="o">]</span>
-
-<span class="kd">theorem</span> <span class="n">reverseAux_append&#39;</span> <span class="o">:</span> <span class="n">reverseAux</span> <span class="n">as</span> <span class="o">(</span><span class="n">bs</span> <span class="bp">++</span> <span class="n">cs</span><span class="o">)</span> <span class="bp">=</span> <span class="n">reverseAux</span> <span class="n">as</span> <span class="n">bs</span> <span class="bp">++</span> <span class="n">cs</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="n">induction</span> <span class="n">as</span> <span class="n">generalizing</span> <span class="n">bs</span> <span class="k">with</span>
-  <span class="bp">|</span> <span class="n">nil</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">reverseAux_nil</span><span class="o">,</span> <span class="n">reverseAux_nil</span><span class="o">]</span>
-  <span class="bp">|</span> <span class="n">cons</span> <span class="n">a</span> <span class="n">as</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">reverseAux_cons</span><span class="o">,</span> <span class="n">reverseAux_cons</span><span class="o">,</span> <span class="bp">←</span><span class="n">cons_append</span><span class="o">,</span> <span class="n">ih</span><span class="o">]</span>
-</pre></div>
-</div>
-<p>Note the <cite>generalizing</cite> clause in the induction. What it means is that
-what we are proving by induction on <cite>as</cite> is that the identity holds
-<em>for every choice of</em> <cite>bs</cite>.
-This means that, when we apply the inductive hypothesis,
-we can apply it to any choice of the parameter <cite>bs</cite>.
-You should try deleting the <cite>generalizing</cite> clause to see what goes
-wrong when we omit it.</p>
-<p>With those facts in hand, we have the identity we are after:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">reverse_append</span> <span class="o">:</span> <span class="n">reverse</span> <span class="o">(</span><span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span><span class="o">)</span> <span class="bp">=</span> <span class="n">reverse</span> <span class="n">bs</span> <span class="bp">++</span> <span class="n">reverse</span> <span class="n">as</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="n">rw</span> <span class="o">[</span><span class="n">reverse_def</span><span class="o">,</span> <span class="n">reverseAux_append</span><span class="o">,</span> <span class="n">reverse_def</span><span class="o">,</span> <span class="bp">←</span><span class="n">reverseAux_append&#39;</span><span class="o">,</span> <span class="n">nil_append</span><span class="o">,</span>
-      <span class="n">reverse_def</span><span class="o">]</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="using-lean-as-an-imperative-programming-language">
-<span id="section-using-lean-as-an-imperative-programming-language"></span><h2><span class="section-number">3.5. </span>Using Lean as an imperative programming language<a class="headerlink" href="#using-lean-as-an-imperative-programming-language" title="Permalink to this headline">¶</a></h2>
+<span id="section-using-lean-as-an-imperative-programming-language"></span><h2><span class="section-number">3.4. </span>Using Lean as an imperative programming language<a class="headerlink" href="#using-lean-as-an-imperative-programming-language" title="Permalink to this headline">¶</a></h2>
 <p>The fact that Lean is a functional programming language means that there
 is no global notion of <em>state</em>.
 Functions take values as input and return values as output;
@@ -818,7 +691,7 @@ and the <cite>Array.push</cite> function adds a new element at the end of the ar
 </div>
 </div>
 <div class="section" id="exercises">
-<h2><span class="section-number">3.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
 <li><p>Using operations on <cite>List</cite>, write a Lean function that for every <span class="math notranslate nohighlight">\(n\)</span> returns
 the list of all the divisors of <span class="math notranslate nohighlight">\(n\)</span> that are less than <span class="math notranslate nohighlight">\(n\)</span>.</p></li>

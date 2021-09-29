@@ -1,0 +1,160 @@
+.. highlight:: lean
+
+.. _chapter_using_lean_as_a_proof_assistant_as_a_proof_assistant:
+
+Lean as a Proof Assistant
+=========================
+
+In :numref:`Chapter %s <chapter_using_lean_as_a_programming_language>`,
+we considered the use of Lean as a programming
+language, and in :numref:`Chapter %s <chapter_implementing_propositional_logic>`
+we saw that you can use Lean to define data types for things like propositional formulas
+and truth assignments, and thereby implement algorithms that act on these objects.
+
+In this chapter, we will show how it is possible to represent propositional formulas directly in
+Lean's underlying foundation. In this sense, we are using Lean's foundation as an *object
+language* rather than a *metalanguage* for logic.
+To clarify the distinction, imagine implementing one programming language, such as Lisp, in
+another programming language, like C++.
+In this scenario, we can characterize Lisp as being the object language, that is, the
+one that is being implemented, and C++ as the metalanguage, the one that is carrying out
+the implementation.
+Defining propositional logic in Lean is similar: we are using one logical system, Lean, to
+implement another one, propositional logic.
+Our goal in this chapter is to clarify the sense in which Lean itself is a logical system,
+which is to say, its language can be used to state mathematical theorems and prove them.
+
+
+.. _section_propositional_logic_in_lean:
+
+Propositional Logic in Lean
+---------------------------
+
+
+.. _section_equational_reasoning_in_lean:
+
+Equational Reasoning in Lean
+----------------------------
+
+
+.. _section_structural_induction_in_lean:
+
+Structural Induction in Lean
+----------------------------
+
+A feature of working with a system like Lean,
+which is based on a formal logical foundation,
+is that you can not only define data types and functions
+but also prove things about them.
+The goal of this section is to give you a flavor of using Lean
+as a proof assistant.
+It isn't easy: Lean syntax is finicky and its error messages are often
+inscrutable.
+In class, we'll try to give you some pointers as to how to interact
+with Lean to construct proofs.
+The examples in this section will serve as a basis for discussion.
+
+Remember that Lean's core library defines the `List` data type
+and notation for it.
+In the example below, we import the library,
+open the namespace, declare some variables, and try out the notation.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
+   :start-after: -- textbook: List
+   :end-before: -- end textbook: List
+
+The `variable` command does not do anything substantive.
+It tells Lean that when the corresponding identifiers are used
+in definitions and theorems that follow,
+they should be interpreted as arguments to those theorems and proofs,
+with the indicated types.
+The curly brackets around the declaration `α : Type` indicate that that
+argument is meant to be *implicit*, which is to say,
+users do not have to write it explicitly.
+Rather, Lean is expected to infer it from the context.
+
+The library proves the theorems `[] ++ as` and
+`(a :: as) ++ bs = a :: (as ++ bs)` under the names `nil_append`
+and `cons_append`, respectively.
+You can see them by writing `#check nil_append` and `#check cons_append`.
+Remember that we took these to be the defining equations for the
+`append` function in :numref:`section_generalized_induction_and_recursion`.
+Although Lean uses a different definition of the append function,
+for illustrative purposes we will treat them as the defining equations
+and base our subsequent proofs on that.
+
+Lean's library also proves `as ++ []` under the name `append_nil`,
+but to illustrate how proofs like this go, we will prove it again
+under the name `append_nil'`.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
+   :start-after: -- textbook: append_nil'
+   :end-before: -- end textbook: append_nil'
+
+In class, we will help you make sense of this.
+The `by` command tell Lean that we are going to write
+a *tactic* proof.
+In other words, instead of writing the proof as an expression,
+we are going to give Lean a list of instructions
+that tell it how to prove the theorem.
+At the start of the tactic proof, the theorem in question
+is our *goal*.
+At each step, tactics act on one more more of the remaining goals;
+when no more goals remain, the theorem is proved.
+
+In this case, there are only two tactics that are needed.
+The `induction` tactic, as the name suggests, sets up a proof
+by induction, and the `rw` tactic *rewrites* the goal
+using given equations.
+Moving the cursor around in the editor windows shows you the
+goals at the corresponding state of the proof.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
+   :start-after: -- textbook: append_assoc'
+   :end-before: -- end textbook: append_assoc'
+
+Here is a similar proof of the associativity of the `append` function.
+Note that the left arrow in the expression `←cons_append`
+tell Lean that we want to use the equation from right to left instead of
+from left to right.
+
+Now let us consider Lean's definition of the `reverse` function:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
+   :start-after: -- textbook: reverse
+   :end-before: -- end textbook: reverse
+
+We will use these identities in the proofs that follow.
+Let's think about what it would take to prove the identity
+`reverse (as ++ bs) = reverse bs ++ reverse as`.
+Since `reverse` is defined in terms of `reverseAux`,
+we should expect to have to prove something about `reverseAux`.
+And since the identity mentions the `append` function,
+it is natural to try to characterize the way that
+`reverseAux` interacts with `append`.
+These are the two identities we need:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
+   :start-after: -- textbook: reverse identities
+   :end-before: -- end textbook: reverse identities
+
+Note the `generalizing` clause in the induction. What it means is that
+what we are proving by induction on `as` is that the identity holds
+*for every choice of* `bs`.
+This means that, when we apply the inductive hypothesis,
+we can apply it to any choice of the parameter `bs`.
+You should try deleting the `generalizing` clause to see what goes
+wrong when we omit it.
+
+With those facts in hand, we have the identity we are after:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
+   :start-after: -- textbook: reverse_append
+   :end-before: -- end textbook: reverse_append
+
+.. TODO:
+   Expand these explanations.
+   Add more exercises.
+   (For example, use extended binary trees and formalize proofs from previous chapter.)
+
+

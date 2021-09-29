@@ -1,7 +1,7 @@
-.. _deduction_and_search:
+.. _chapter_deduction_for_propositional_logic:
 
-Deduction and search
-====================
+Deduction for Propositional Logic
+=================================
 
 ..
   We have seen that there is a simple algorithm for determining whether

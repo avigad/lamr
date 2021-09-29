@@ -1,0 +1,669 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>7. Decision Procedures &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "{\\to}", "liff": "{\\leftrightarrow}", "proves": "{\\vdash}", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1]}}}</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="8. Using SAT Solvers" href="using_sat_solvers.html" />
+    <link rel="prev" title="6. Lean as a Proof Assistant" href="using_lean_as_a_proof_assistant.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">6. Lean as a Proof Assistant</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Decision Procedures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-tseitin-transformation">7.1. The Tseitin transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unit-propagation-and-the-pure-literal-rule">7.2. Unit propagation and the pure literal rule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dpll">7.3. DPLL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#autarkies-and-2-sat">7.4. Autarkies and 2-SAT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cdcl">7.5. CDCL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">8. Using SAT Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">9. Deduction for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">13. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">14. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">16. Simple Type Theory</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Logic and Mechanized Reasoning</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">7. </span>Decision Procedures</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/decision_procedures_for_propositional_logic.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="decision-procedures">
+<span id="chapter-decision-procedures-for-propositional-logic"></span><h1><span class="section-number">7. </span>Decision Procedures<a class="headerlink" href="#decision-procedures" title="Permalink to this headline">¶</a></h1>
+<p>We have seen that it is possible to determine whether or not a propositional formula is valid
+by writing out its entire truth table.
+This seems pretty inefficient; if a formula <span class="math notranslate nohighlight">\(A\)</span> has <span class="math notranslate nohighlight">\(n\)</span> variables,
+the truth table has <span class="math notranslate nohighlight">\(2^n\)</span> lines, and hence checking it requires at least that many lines.
+It is still an open question, however, whether one can do substantially better.
+If <span class="math notranslate nohighlight">\(P \ne NP\)</span>, there is no polynomial algorithm to determine satisfiability (and hence
+validity.)</p>
+<p>Nonetheless, there are procedures that seem to work better in practice.
+In fact, we can generally do <em>much</em> better in practice.
+In the next chapter, we will discuss <em>SAT solvers</em>, which are pieces of software that are
+are remarkably good at determining whether a propositional formula has a satisfying assignment.</p>
+<p>Before 1990, most solvers allowed arbitrary propositional formulas as input.
+Most contemporary SAT solvers, however, are designed to determine the satisfiability of formulas in
+conjunctive normal form.
+<a class="reference internal" href="propositional_logic.html#section-normal-forms"><span class="std std-numref">Section 4.5</span></a> shows that, in principle, this does not sacrifice generality,
+because any propositional formula <span class="math notranslate nohighlight">\(A\)</span> can be transformed to
+an equivalent CNF formula <span class="math notranslate nohighlight">\(B\)</span>.
+The problem is that, in general, however, the smallest such <span class="math notranslate nohighlight">\(B\)</span> may be
+exponentially longer than <span class="math notranslate nohighlight">\(A\)</span>,
+which makes the transformation impractical.
+(See the exercises at the end of <a class="reference internal" href="propositional_logic.html#chapter-propositional-logic"><span class="std std-numref">Chapter 4</span></a>.)
+In the next section, we will show you an efficient method for associating
+a list of clauses to <span class="math notranslate nohighlight">\(A\)</span> with the property that <span class="math notranslate nohighlight">\(A\)</span>
+is satisfiable if and only if the list of clauses is.
+With this transformation, solvers can be used to test the
+satisfiability of any propositional formula.</p>
+<p>It’s easy to get confused. Remember that most formulas are neither
+valid nor unsatisfiable.
+In other words, most formulas are true for some
+assignments and false for others. So testing for validity and
+testing for satisfiability are two different things, and
+it is important to keep the distinction clear.
+But there is an important relationship between the two notions:
+a formula <span class="math notranslate nohighlight">\(A\)</span> is valid if and only if <span class="math notranslate nohighlight">\(\lnot A\)</span>
+is unsatisfiable.
+This provides a recipe for determining the validity of <span class="math notranslate nohighlight">\(A\)</span>,
+namely, use a SAT solver to determine whether <span class="math notranslate nohighlight">\(\lnot A\)</span>
+is satisfiable, and then change a “yes” answer to a “no” and vice-versa.</p>
+<div class="section" id="the-tseitin-transformation">
+<span id="section-the-tseitin-transformation"></span><h2><span class="section-number">7.1. </span>The Tseitin transformation<a class="headerlink" href="#the-tseitin-transformation" title="Permalink to this headline">¶</a></h2>
+<p>We have seen that if <span class="math notranslate nohighlight">\(A\)</span> is a propositional formula, the smallest CNF equivalent
+may be exponentially longer.
+The Tseitin transformation provides an elegant workaround:
+instead of looking for an <em>equivalent</em> formula <span class="math notranslate nohighlight">\(B\)</span>, we look for one
+that is <em>equisatisfiable</em>, which is to say, one that is satisfiable if and only if <span class="math notranslate nohighlight">\(A\)</span> is.
+For example, instead of distributing <span class="math notranslate nohighlight">\(p\)</span> across the conjunction in
+<span class="math notranslate nohighlight">\(p \lor (q \land r)\)</span>,
+we can introduce a new definition <span class="math notranslate nohighlight">\(d\)</span> for <span class="math notranslate nohighlight">\(q \land r\)</span>.
+We can express the equivalence <span class="math notranslate nohighlight">\(d \liff (q \land r)\)</span> in conjunctive normal form as</p>
+<div class="math notranslate nohighlight">
+\[(\lnot d \lor q) \land (\lnot d \lor r) \land (\lnot q \lor \lnot r \lor d).\]</div>
+<p>Assuming that equivalence holds, the original formula <span class="math notranslate nohighlight">\(p \lor (q \land r)\)</span> is
+equivalent to <span class="math notranslate nohighlight">\(p \lor d\)</span>, which we can add to the conjunction above,
+to yield a CNF formula.</p>
+<p>The resulting CNF formula implies <span class="math notranslate nohighlight">\(p \lor (q \land r)\)</span>, but not the other way
+around: <span class="math notranslate nohighlight">\(p \lor (q \land r)\)</span> does not imply <span class="math notranslate nohighlight">\(d \liff (q \land r)\)</span>.
+But the resulting formulas is equisatisfiable with the original one:
+given any truth assignment to the original one,
+we can give <span class="math notranslate nohighlight">\(d\)</span> the truth value of <span class="math notranslate nohighlight">\(q \land r\)</span>, and, conversely,
+for any truth assignment satisfying the resulting CNF formula, <span class="math notranslate nohighlight">\(d\)</span> <em>has</em> to have that value.
+So determining whether or not the resulting CNF formula is satisfiable is tantamount to determining
+whether the original one is.
+This may seems to be a roundabout translation, but the point is that the number
+of definitions is bounded by the length of the original formula
+and the size of the CNF representation of each definition is bounded by a constant.
+So the length of the resulting formula is linear in the length of the original one.</p>
+<p>The following code, found in the <cite>LAMR</cite> library in the <cite>NnfForm</cite> namespace,
+runs through a formula in
+negation normal form and produces a list of definitions <cite>def_0</cite>, <cite>def_1</cite>, <cite>def_2</cite>, and so on,
+each of which represents a conjunction or disjunction of
+two variables.
+We assume that none these <cite>def</cite> variables are found in the original formula.
+(A more sophisticated implementation would check the original formula and start the
+numbering high enough to avoid a clash.)</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">defLit</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">Lit.pos</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;def_{n}&quot;</span>
+
+<span class="kd">def</span> <span class="n">mkDefs</span> <span class="o">:</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">Array</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">Lit</span> <span class="bp">×</span> <span class="n">Array</span> <span class="n">NnfForm</span>
+  <span class="bp">|</span> <span class="n">lit</span> <span class="n">l</span><span class="o">,</span> <span class="n">defs</span>    <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">l</span><span class="o">,</span> <span class="n">defs</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">conj</span> <span class="n">A</span> <span class="n">B</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
+      <span class="k">let</span> <span class="o">⟨</span><span class="n">fA</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">mkDefs</span> <span class="n">A</span> <span class="n">defs</span>
+      <span class="k">let</span> <span class="o">⟨</span><span class="n">fB</span><span class="o">,</span> <span class="n">defs2</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">mkDefs</span> <span class="n">B</span> <span class="n">defs1</span>
+      <span class="n">add_def</span> <span class="n">conj</span> <span class="o">(</span><span class="n">lit</span> <span class="n">fA</span><span class="o">)</span> <span class="o">(</span><span class="n">lit</span> <span class="n">fB</span><span class="o">)</span> <span class="n">defs2</span>
+  <span class="bp">|</span> <span class="n">disj</span> <span class="n">A</span> <span class="n">B</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
+      <span class="k">let</span> <span class="o">⟨</span><span class="n">fA</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">mkDefs</span> <span class="n">A</span> <span class="n">defs</span>
+      <span class="k">let</span> <span class="o">⟨</span><span class="n">fB</span><span class="o">,</span> <span class="n">defs2</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">mkDefs</span> <span class="n">B</span> <span class="n">defs1</span>
+      <span class="n">add_def</span> <span class="n">disj</span> <span class="o">(</span><span class="n">lit</span> <span class="n">fA</span><span class="o">)</span> <span class="o">(</span><span class="n">lit</span> <span class="n">fB</span><span class="o">)</span> <span class="n">defs2</span>
+<span class="n">where</span>
+  <span class="n">add_def</span> <span class="o">(</span><span class="n">op</span> <span class="o">:</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">(</span><span class="n">fA</span> <span class="n">fB</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">(</span><span class="n">defs</span> <span class="o">:</span> <span class="n">Array</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:=</span>
+    <span class="k">match</span> <span class="n">defs.findIdx</span><span class="bp">?</span> <span class="o">((</span><span class="bp">.</span> <span class="bp">==</span> <span class="n">op</span> <span class="n">fA</span> <span class="n">fB</span><span class="o">))</span> <span class="k">with</span>
+    <span class="bp">|</span> <span class="n">some</span> <span class="n">n</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">defLit</span> <span class="n">n</span><span class="o">,</span> <span class="n">defs</span><span class="o">)</span>
+    <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="k">let</span> <span class="n">newdefs</span> <span class="o">:=</span> <span class="n">defs.push</span> <span class="o">(</span><span class="n">op</span> <span class="n">fA</span> <span class="n">fB</span><span class="o">)</span>
+                <span class="o">(</span><span class="n">defLit</span> <span class="o">(</span><span class="n">newdefs.size</span> <span class="bp">-</span> <span class="mi">1</span><span class="o">),</span> <span class="n">newdefs</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>The function takes an NNF formula and a list of definitions,
+and it returns an augmented list of definitions and a literal
+representing the original formula.
+More precisely, the list <cite>defs</cite> is an array of disjunctions and conjunctions
+of variables,
+where the first one corresponds to <cite>def_0</cite>, the next one corresponds to <cite>def_1</cite>,
+and so on.
+In the cases where the original formula is a conjunction or a disjunction,
+the function first recursively creates definitions for the
+component formulas and then adds a new definition for the original formula.
+The auxiliary function <cite>add_def</cite> first checks to see whether
+the formula to be added is already found in the array.
+For example, when passed a conjunction <cite>p ∧ def_0</cite>,
+if that formula is already in the list of definitions in position 7,
+<cite>add_def</cite> returns <cite>def_7</cite> as the definition of the formula and leaves the array
+unchanged.</p>
+<p>To illustrate, we start by putting the formula</p>
+<div class="math notranslate nohighlight">
+\[\lnot (p \land q \liff r) \land (s \limplies p \land t)\]</div>
+<p>in negation normal form.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">ex1</span> <span class="o">:=</span> <span class="n">prop</span><span class="bp">!</span><span class="o">{</span><span class="bp">¬</span> <span class="o">(</span><span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="bp">↔</span> <span class="n">r</span><span class="o">)</span> <span class="bp">∧</span> <span class="o">(</span><span class="n">s</span> <span class="bp">→</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">t</span><span class="o">)}</span><span class="bp">.</span><span class="n">toNnfForm</span>
+
+<span class="k">#eval</span> <span class="n">toString</span> <span class="n">ex1</span>
+</pre></div>
+</div>
+<p>Removing extraneous parentheses, we get</p>
+<div class="math notranslate nohighlight">
+\[((p \land q \land \lnot r) \lor (r \land (\lnot p \lor \lnot q)) \land
+(\lnot s \lor (p \land t)).\]</div>
+<p>In the following, we compute the list of definitions corresponding
+to <cite>ex1</cite>, and then we use a little program to print them out in a more
+pleasant form.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span>  <span class="n">ex1.mkDefs</span> <span class="bp">#</span><span class="o">[]</span>
+
+<span class="kd">def</span> <span class="n">printDefs</span> <span class="o">(</span><span class="n">A</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="o">:=</span> <span class="k">do</span>
+  <span class="k">let</span> <span class="o">⟨</span><span class="n">fm</span><span class="o">,</span> <span class="n">defs</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">A.mkDefs</span> <span class="bp">#</span><span class="o">[]</span>
+  <span class="n">IO.println</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;{fm}, where&quot;</span>
+  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="n">defs.size</span><span class="o">]</span> <span class="k">do</span>
+    <span class="n">IO.println</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;def_{i} := {defs[i]}&quot;</span>
+
+<span class="k">#eval</span> <span class="n">printDefs</span> <span class="n">ex1</span>
+
+<span class="c">/-</span><span class="cm"></span>
+<span class="cm">output:</span>
+
+<span class="cm">def_7, where</span>
+<span class="cm">def_0 := (p ∧ q)</span>
+<span class="cm">def_1 := (def_0 ∧ (¬ r))</span>
+<span class="cm">def_2 := ((¬ p) ∨ (¬ q))</span>
+<span class="cm">def_3 := (r ∧ def_2)</span>
+<span class="cm">def_4 := (def_1 ∨ def_3)</span>
+<span class="cm">def_5 := (p ∧ t)</span>
+<span class="cm">def_6 := ((¬ s) ∨ def_5)</span>
+<span class="cm">def_7 := (def_4 ∧ def_6)</span>
+<span class="cm">-/</span>
+</pre></div>
+</div>
+<p>It isn’t hard to put a definition of the form <span class="math notranslate nohighlight">\((A \liff B)\)</span> into
+conjunctive normal form. The LAMR library defines a function to do that,
+and another one that turns the entire list of definitions returned by
+<cite>mkDefs</cite> into a single CNF formula.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">defToCnf</span> <span class="o">(</span><span class="n">A</span> <span class="n">B</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
+  <span class="o">(</span><span class="n">conj</span> <span class="o">(</span><span class="n">disj</span> <span class="n">A.neg</span> <span class="n">B</span><span class="o">)</span> <span class="o">(</span><span class="n">disj</span> <span class="n">B.neg</span> <span class="n">A</span><span class="o">))</span><span class="bp">.</span><span class="n">toCnfForm</span>
+
+<span class="kd">def</span> <span class="n">defsToCnf</span> <span class="o">(</span><span class="n">defs</span> <span class="o">:</span> <span class="n">Array</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span> <span class="n">aux</span> <span class="n">defs.toList</span> <span class="mi">0</span>
+  <span class="n">where</span> <span class="n">aux</span> <span class="o">:</span> <span class="n">List</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">CnfForm</span>
+  <span class="bp">|</span> <span class="o">[],</span>          <span class="n">n</span> <span class="bp">=&gt;</span> <span class="o">[]</span>
+  <span class="bp">|</span> <span class="n">nnf</span> <span class="o">::</span> <span class="n">nnfs</span><span class="o">,</span> <span class="n">n</span> <span class="bp">=&gt;</span> <span class="n">defToCnf</span> <span class="o">(</span><span class="n">lit</span> <span class="o">(</span><span class="n">defLit</span> <span class="n">n</span><span class="o">))</span> <span class="n">nnf</span> <span class="bp">++</span> <span class="n">aux</span> <span class="n">nnfs</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>If we take the resulting formula and add a conjunct for the
+variable representing the top level, we have an equivalent CNF formula,
+as desired.</p>
+<p>A moment’s reflection shows that we can do better. For example, if
+the formula <span class="math notranslate nohighlight">\(A\)</span> is already in CNF, we don’t have to introduce
+any definitions at all. The following functions from the library
+do their best to interpret an NNF formula as a CNF formula,
+introducing definitions only when necessary. The first function,
+<cite>NnfForm.orToCnf</cite>, interprets a formula as a clause.
+For example, given the formula <span class="math notranslate nohighlight">\(p \lor (q \land \lnot r) \lor \lnot s\)</span>
+and a list of definitions, it adds a definition <span class="math notranslate nohighlight">\(d\)</span> for <span class="math notranslate nohighlight">\(q \land \lnot r\)</span> and
+returns the clause <span class="math notranslate nohighlight">\(p \lor d \lor \lnot s\)</span>.
+The function <cite>NnfForm.andToCnf</cite> does the analogous thing for conjunctions,
+and the function <cite>NnfForm.toCnf</cite> puts it all together.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">orToCnf</span> <span class="o">:</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">Clause</span> <span class="bp">→</span> <span class="n">Array</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">Clause</span> <span class="bp">×</span> <span class="n">Array</span> <span class="n">NnfForm</span>
+  <span class="bp">|</span> <span class="n">lit</span> <span class="n">Lit.tr</span><span class="o">,</span>  <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span>  <span class="bp">=&gt;</span> <span class="o">([</span><span class="n">Lit.tr</span><span class="o">],</span> <span class="n">defs</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">lit</span> <span class="n">Lit.fls</span><span class="o">,</span> <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span>  <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">cls</span><span class="o">,</span> <span class="n">defs</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">lit</span> <span class="n">l</span><span class="o">,</span> <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span>        <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">l</span> <span class="o">::</span> <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">disj</span> <span class="n">A</span> <span class="n">B</span><span class="o">,</span> <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
+      <span class="k">let</span> <span class="o">⟨</span><span class="n">cls1</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">orToCnf</span> <span class="n">A</span> <span class="n">cls</span> <span class="n">defs</span>
+      <span class="k">let</span> <span class="o">⟨</span><span class="n">cls2</span><span class="o">,</span> <span class="n">defs2</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">orToCnf</span> <span class="n">B</span> <span class="n">cls1</span> <span class="n">defs1</span>
+      <span class="o">(</span><span class="n">cls1.union</span> <span class="n">cls2</span><span class="o">,</span> <span class="n">defs2</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">A</span><span class="o">,</span> <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
+      <span class="k">let</span> <span class="o">⟨</span><span class="n">l</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">A.mkDefs</span> <span class="n">defs</span>
+      <span class="o">(</span><span class="n">l</span><span class="o">::</span><span class="n">cls</span><span class="o">,</span> <span class="n">defs1</span><span class="o">)</span>
+
+<span class="kd">def</span> <span class="n">andToCnf</span> <span class="o">:</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">Array</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">CnfForm</span> <span class="bp">×</span> <span class="n">Array</span> <span class="n">NnfForm</span>
+  <span class="bp">|</span> <span class="n">conj</span> <span class="n">A</span> <span class="n">B</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
+    <span class="k">let</span> <span class="o">⟨</span><span class="n">fA</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">andToCnf</span> <span class="n">A</span> <span class="n">defs</span>
+    <span class="k">let</span> <span class="o">⟨</span><span class="n">fB</span><span class="o">,</span> <span class="n">defs2</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">andToCnf</span> <span class="n">B</span> <span class="n">defs1</span>
+    <span class="o">(</span><span class="n">fA.union</span> <span class="n">fB</span><span class="o">,</span> <span class="n">defs2</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">A</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
+    <span class="k">let</span> <span class="o">⟨</span><span class="n">cls</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">orToCnf</span> <span class="n">A</span> <span class="o">[]</span> <span class="n">defs</span>
+    <span class="o">([</span><span class="n">cls</span><span class="o">],</span> <span class="n">defs1</span><span class="o">)</span>
+
+<span class="kd">def</span> <span class="n">toCnf</span> <span class="o">(</span><span class="n">A</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
+  <span class="k">let</span> <span class="o">⟨</span><span class="n">cnf</span><span class="o">,</span> <span class="n">defs</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">andToCnf</span> <span class="n">A</span> <span class="bp">#</span><span class="o">[]</span>
+  <span class="n">cnf.union</span> <span class="o">(</span><span class="n">defsToCnf</span> <span class="n">defs</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>The following example tests it out on <cite>ex1.toCnf</cite>.
+The comment afterward shows the resulting CNF formula
+and then reconstructs the definitions to show that the result is equivalent
+to the original formula.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">toString</span> <span class="n">ex1.toCnf</span>
+
+<span class="c">/-</span><span class="cm"></span>
+<span class="cm">Here is ex1:</span>
+
+<span class="cm">((p ∧ q ∧ ¬ r) ∨ (r ∧ (¬ p ∨ ¬ q)) ∧ (¬ s ∨ (p ∧ t))</span>
+
+<span class="cm">Here is the CNF formula:</span>
+
+<span class="cm">def_3 def_1,</span>
+<span class="cm">def_4 -s,</span>
+<span class="cm">-def_0 p,</span>
+<span class="cm">-def_0 q,</span>
+<span class="cm">-p -q def_0,</span>
+<span class="cm">-def_1 def_0,</span>
+<span class="cm">-def_1 -r,</span>
+<span class="cm">-def_0 r def_1,</span>
+<span class="cm">-def_2 -p -q,</span>
+<span class="cm">p def_2,</span>
+<span class="cm">q def_2,</span>
+<span class="cm">-def_3 r,</span>
+<span class="cm">-def_3 def_2,</span>
+<span class="cm">-r -def_2 def_3,</span>
+<span class="cm">-def_4 p,</span>
+<span class="cm">-def_4 t,</span>
+<span class="cm">-p -t def_4</span>
+
+<span class="cm">Here we check to make sure it works:</span>
+
+<span class="cm">def_0 := p ∧ q</span>
+<span class="cm">def_1 := p ∧ q ∧ ¬ r</span>
+<span class="cm">def_2 := ¬ p ∨ ¬ q</span>
+<span class="cm">def_3 := r ∧ (¬ p ∨ ¬ q)</span>
+<span class="cm">def_4 := p ∧ t</span>
+
+<span class="cm">def_3 def_1 := (p ∧ q ∧ ¬ r) ∨ (p ∧ q ∧ ¬ r)</span>
+<span class="cm">def_4 -s    := ¬ s ∨ (p ∧ t)</span>
+<span class="cm">-/</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="unit-propagation-and-the-pure-literal-rule">
+<span id="section-unit-propagation-and-the-pure-literal-rule"></span><h2><span class="section-number">7.2. </span>Unit propagation and the pure literal rule<a class="headerlink" href="#unit-propagation-and-the-pure-literal-rule" title="Permalink to this headline">¶</a></h2>
+<p>In earlier chapters, we considered only truth assignments that assign a truth value to all propositional
+variables. However, complete search methods for SAT like DPLL use <em>partial assignments</em>, which assign truth
+values to some propositional variables. For a clause <span class="math notranslate nohighlight">\(C\)</span> and partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
+we denote by <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> the reduced clause constructed by removing falsified literals. If
+<span class="math notranslate nohighlight">\(\tau\)</span> satisfies a literal in <span class="math notranslate nohighlight">\(C\)</span> then <span class="math notranslate nohighlight">\(\tval{C}_\tau = \top\)</span>, while if <span class="math notranslate nohighlight">\(\tau\)</span>
+falsifies all literals in <span class="math notranslate nohighlight">\(C\)</span> then <span class="math notranslate nohighlight">\(\tval{C}_\tau = \bot\)</span>. For a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>,
+we denote by <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> the conjunction of <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> with <span class="math notranslate nohighlight">\(C \in \Gamma\)</span>.</p>
+<p>A key SAT-solving technique is <em>unit propagation</em>. Given a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> and a truth assignment
+<span class="math notranslate nohighlight">\(\tau\)</span>, a clause <span class="math notranslate nohighlight">\(C \in \Gamma\)</span> is <em>unit under</em> <span class="math notranslate nohighlight">\(\tau\)</span> if <span class="math notranslate nohighlight">\(\tau\)</span> falsifies all but one literal of
+<span class="math notranslate nohighlight">\(C\)</span> and the remaining literal is unassigned. In other words, <span class="math notranslate nohighlight">\(C\)</span> is unit under <span class="math notranslate nohighlight">\(\tau\)</span> if <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> consists of a single literal. The only way to satisfy
+<span class="math notranslate nohighlight">\(C\)</span> is to assign that literal to true. Unit propagation iteratively extends <span class="math notranslate nohighlight">\(\tau\)</span> by satisfying all unit clauses. This process
+continues until either no new unit clauses are generated by the extended <span class="math notranslate nohighlight">\(\tau\)</span> or until the extended <span class="math notranslate nohighlight">\(\tau\)</span>
+falsifies a clause in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+<p>For example, consider the partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span> with <span class="math notranslate nohighlight">\(\tau(p_1) = \top\)</span> and the following formula:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Gamma_\mathrm{unit} :=  (\lnot p_1 \lor \lnot p_3 \lor p_4) \land
+      (\lnot p_1 \lor \lnot p_2 \lor p_3) \land (\lnot p_1 \lor p_2) \land (p_1 \lor p_3 \lor p_6) \land \\
+  (\lnot p_1 \lor p_4 \lor \lnot p_5) \land (p_1 \lnot p_6) \land (p_4 \lor p_5 \lor p_6) \land (p_5 \lor \lnot p_6)\end{split}\]</div>
+<p>The clause <span class="math notranslate nohighlight">\((\lnot p_1 \lor p_2)\)</span> is unit under <span class="math notranslate nohighlight">\(\tau\)</span> because <span class="math notranslate nohighlight">\(\tval{(\lnot p_1 \lor p_2)}_{\tau} = (p_2)\)</span>.
+Hence unit propagation will extend <span class="math notranslate nohighlight">\(\tau\)</span> by
+assigning <span class="math notranslate nohighlight">\(p_2\)</span> to <span class="math notranslate nohighlight">\(\top\)</span>. Under the extended <span class="math notranslate nohighlight">\(\tau\)</span>, <span class="math notranslate nohighlight">\((\lnot p_1 \lor \lnot p_2 \lor p_3)\)</span>
+is unit, which will further extend  <span class="math notranslate nohighlight">\(\tau\)</span> by assigning <span class="math notranslate nohighlight">\(p_3\)</span> to <span class="math notranslate nohighlight">\(\top\)</span>. Now the
+clause <span class="math notranslate nohighlight">\((\lnot p_1 \lor \lnot p_3 \lor p_4)\)</span> becomes unit and thus assigns <span class="math notranslate nohighlight">\(p_4\)</span> to <span class="math notranslate nohighlight">\(\top\)</span>.
+Ultimately, no unit clauses remain and unit propagation terminates with <span class="math notranslate nohighlight">\(\tau(p_1) = \tau(p_2) = \tau(p_3) = \tau(p_4) = \top\)</span>.</p>
+<p>Another important simplification technique is the <em>pure literal rule</em>. A literal <span class="math notranslate nohighlight">\(l\)</span> is called pure in a formula <span class="math notranslate nohighlight">\(\Gamma\)</span> if no
+clause in <span class="math notranslate nohighlight">\(\Gamma\)</span> contains the literal <span class="math notranslate nohighlight">\(\lnot l\)</span>. The pure literal rule sets pure literals to <span class="math notranslate nohighlight">\(\top\)</span>.</p>
+<p>In contrast to unit propagation, the pure literal rule can reduce the number of satisfying assignments. Consider for
+example for the formula <span class="math notranslate nohighlight">\(\Gamma = (p \lor q) \land (\lnot q \lor r) \land (q \lor \lnot r)\)</span>. The literal <span class="math notranslate nohighlight">\(p\)</span> is pure,
+so the pure literal rule will assign it to <span class="math notranslate nohighlight">\(\tau(p) = \top\)</span>. We leave it to you to check that <span class="math notranslate nohighlight">\(\Gamma\)</span> has
+three satisfying assignments, while <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau}\)</span> has only two satisfying assignments.</p>
+</div>
+<div class="section" id="dpll">
+<h2><span class="section-number">7.3. </span>DPLL<a class="headerlink" href="#dpll" title="Permalink to this headline">¶</a></h2>
+<p>One of the first and most well-known decision procedures for SAT problems is the Davis-Putnam-Logemann-Loveland
+(DPLL) algorithm, which was invented by Davis, Logemann, and Loveland in 1962,
+based on
+earlier work by Davis and Putnam in 1960. DPLL is a complete, backtracking-based search algorithm
+that builds a binary tree of truth assignments. For nearly four decades since its invention, almost all
+complete SAT solvers have been based on DPLL.</p>
+<p>The DPLL procedure is a recursive algorithm that takes a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> and a truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>
+as input and returns a Boolean indicating whether <span class="math notranslate nohighlight">\(\Gamma\)</span> under the assignment <span class="math notranslate nohighlight">\(\tau\)</span> can be satisfied.
+Each recursive call starts by extending <span class="math notranslate nohighlight">\(\tau\)</span> using unit propagation and the pure literal rule.
+Afterwards, it checks whether the formula is satisfiable (<span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau = \top\)</span>) or unsatisfiable (<span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau = \bot\)</span>).
+In either of those cases it returns <span class="math notranslate nohighlight">\(\top\)</span> or <span class="math notranslate nohighlight">\(\bot\)</span>, respectively. Otherwise, it selects an unassigned propositional variable <span class="math notranslate nohighlight">\(p\)</span>
+and recursively calls DPLL with one branch extending <span class="math notranslate nohighlight">\(\tau\)</span> with <span class="math notranslate nohighlight">\(\tau(p) = \top\)</span> and another branch
+extending <span class="math notranslate nohighlight">\(\tau\)</span> with <span class="math notranslate nohighlight">\(\tau(p) = \bot\)</span>. If one of the calls returns <span class="math notranslate nohighlight">\(\top\)</span> it returns <span class="math notranslate nohighlight">\(\top\)</span>, otherwise it
+returns <span class="math notranslate nohighlight">\(\bot\)</span>.</p>
+<p>The effectiveness of DPLL depends strongly on the quality of the propositional variables that are selected for the
+recursive calls. The propositional variable selected for a recursive call is called a <em>decision variable</em>. A simple but
+effective heuristic is to pick the variable that occurs most frequently in the
+shortest clauses. This heuristics is called <em>MOMS</em> (Maximum Occurrence in clauses of Minimum Size). More
+expensive heuristics are based on <em>lookaheads</em>, that is, assigning a variable to a truth value and measuring how much the formula can be simplified as a result.</p>
+<p>Consider the following CNF formula:</p>
+<div class="math notranslate nohighlight">
+\[\Gamma_\mathrm{DPLL} :=  (p_1 \lor p_2 \lor \lnot p_3) \land (\lnot p_1 \lor p_2 \lor p_3) \land (\lnot p_1 \lor \lnot p_2 \lor p_3) \land (p_1 \lor p_3) \land (\lnot p_1 \lor \lnot p_3)\]</div>
+<p>Selecting <span class="math notranslate nohighlight">\(p_3\)</span> as decision variable in the root node, results in a DPLL tree with two leaf nodes. However, when selecting <span class="math notranslate nohighlight">\(p_2\)</span> as decision variable in the root node,
+the DPLL tree consists of four leaf nodes. The figure below shows the DPLL trees with green nodes denoting satisfying assignments, while black nodes denote falsifying assignments.</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="_images/dpll.png"><img alt="dpll example" class="align-center" src="_images/dpll.png" style="height: 150px;" /></a>
+</div></blockquote>
+<p>We have implemented a basic version of the DPLL procedure in Lean.
+We will discuss it in class and soon provide an explanation here.
+In the meanwhile, as a placeholder, we provide a few snippets.</p>
+<p>The following function simplifies a clause given an assignment to a literal:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- Simplifies the CNF assuming `x` is true. `x` must not be a constant. -/</span>
+<span class="kd">def</span> <span class="n">simplify</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
+  <span class="n">assert</span><span class="bp">!</span> <span class="n">x</span> <span class="bp">!=</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="bp">⊥</span><span class="o">}</span> <span class="bp">&amp;&amp;</span> <span class="n">x</span> <span class="bp">!=</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="bp">⊤</span><span class="o">}</span>
+  <span class="k">match</span> <span class="n">φ</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="o">[]</span>      <span class="bp">=&gt;</span> <span class="o">[]</span>
+  <span class="bp">|</span> <span class="n">c</span> <span class="o">::</span> <span class="n">cs</span> <span class="bp">=&gt;</span>
+               <span class="k">let</span> <span class="n">cs&#39;</span> <span class="o">:=</span> <span class="n">simplify</span> <span class="n">x</span> <span class="n">cs</span>
+               <span class="c1">-- Clause becomes satisfied</span>
+               <span class="k">if</span> <span class="n">c.elem</span> <span class="n">x</span> <span class="k">then</span> <span class="n">cs&#39;</span>
+               <span class="c1">-- Some literals in the clause become falsified</span>
+               <span class="k">else</span> <span class="k">if</span> <span class="n">c.elem</span> <span class="n">x.negate</span> <span class="k">then</span> <span class="n">c.eraseAll</span> <span class="n">x.negate</span> <span class="o">::</span> <span class="n">cs&#39;</span>
+               <span class="k">else</span> <span class="n">c</span> <span class="o">::</span> <span class="n">cs&#39;</span>
+
+<span class="k">#eval</span> <span class="n">simplify</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="n">x₁</span><span class="o">}</span> <span class="n">cnf</span><span class="bp">!</span><span class="o">{</span><span class="n">x₁</span> <span class="bp">-</span><span class="n">y₁</span> <span class="n">x₁</span> <span class="bp">-</span><span class="n">x₁</span><span class="o">,</span> <span class="n">x₁</span><span class="o">,</span> <span class="n">y₁</span> <span class="n">y₁</span><span class="o">,</span> <span class="bp">-</span><span class="n">y₁</span> <span class="bp">-</span><span class="n">x₁</span><span class="o">,</span> <span class="bp">-</span><span class="n">x₁</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>The following performs unit propagation:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- Assumes no additions to `α` since last `simplify _ F` call.</span>
+<span class="sd">NB: If branching, call `simplify` first. -/</span>
+<span class="n">partial</span> <span class="kd">def</span> <span class="n">propagateUnits</span> <span class="o">:</span> <span class="n">PropAssignment</span> <span class="bp">→</span> <span class="n">CnfForm</span> <span class="bp">→</span> <span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span>
+  <span class="bp">|</span> <span class="n">τ</span><span class="o">,</span> <span class="o">[]</span> <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="o">[]⟩</span>
+  <span class="bp">|</span> <span class="n">τ</span><span class="o">,</span> <span class="n">φ</span>  <span class="bp">=&gt;</span>
+    <span class="k">if</span> <span class="n">φ.hasEmpty</span> <span class="k">then</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
+    <span class="k">else</span> <span class="k">match</span> <span class="n">φ.findUnit</span> <span class="k">with</span>
+      <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
+      <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">τ.mem</span> <span class="n">x.name</span>
+                  <span class="k">then</span> <span class="n">panic</span><span class="bp">!</span> <span class="s2">&quot;Forgot to simplify -- no literal that has already been assigned should appear in the formula.&quot;</span>
+                  <span class="k">else</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ.withLit</span> <span class="n">x</span><span class="o">)</span> <span class="o">(</span><span class="n">simplify</span> <span class="n">x</span> <span class="n">φ</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>And the following is the main procedure:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">dpllSatAux</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">PropAssignment</span> <span class="bp">→</span> <span class="n">CnfForm</span> <span class="bp">→</span> <span class="n">Option</span> <span class="o">(</span><span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">lvl</span><span class="o">,</span> <span class="n">τ</span><span class="o">,</span> <span class="n">φ</span> <span class="bp">=&gt;</span> <span class="k">match</span> <span class="n">pickSplit</span> <span class="n">φ</span> <span class="k">with</span>
+    <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="n">some</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
+    <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="k">let</span> <span class="n">dpllSatAux</span> <span class="o">:=</span> <span class="n">dpllSatAux</span> <span class="o">(</span><span class="n">lvl</span><span class="bp">+</span><span class="mi">1</span><span class="o">)</span>
+                <span class="k">let</span> <span class="o">(</span><span class="n">τ₂</span><span class="o">,</span> <span class="n">φ₂</span><span class="o">)</span> <span class="o">:=</span> <span class="n">propagateWithNew</span> <span class="n">x</span> <span class="n">τ</span> <span class="n">φ</span>
+                <span class="k">if</span> <span class="n">φ₂.hasEmpty</span> <span class="k">then</span>
+                  <span class="k">let</span> <span class="n">x&#39;</span> <span class="o">:=</span> <span class="n">x.negate</span>
+                  <span class="k">let</span> <span class="o">(</span><span class="n">τ₃</span><span class="o">,</span> <span class="n">φ₃</span><span class="o">)</span> <span class="o">:=</span> <span class="n">propagateWithNew</span> <span class="n">x&#39;</span> <span class="n">τ</span> <span class="n">φ</span>
+                  <span class="k">if</span> <span class="n">φ₃.hasEmpty</span> <span class="k">then</span>
+                    <span class="n">none</span>
+                  <span class="k">else</span> <span class="n">dpllSatAux</span> <span class="n">τ₃</span> <span class="n">φ₃</span>
+                <span class="k">else</span> <span class="o">(</span><span class="n">dpllSatAux</span> <span class="n">τ₂</span> <span class="n">φ₂</span><span class="o">)</span><span class="bp">.</span><span class="n">orElse</span> <span class="o">(</span>
+                  <span class="k">let</span> <span class="n">x&#39;</span> <span class="o">:=</span> <span class="n">x.negate</span>
+                  <span class="k">let</span> <span class="o">(</span><span class="n">τ₄</span><span class="o">,</span> <span class="n">φ₄</span><span class="o">)</span> <span class="o">:=</span> <span class="n">propagateWithNew</span> <span class="n">x&#39;</span> <span class="n">τ</span> <span class="n">φ</span>
+                  <span class="k">if</span> <span class="n">φ₄.hasEmpty</span> <span class="k">then</span>
+                    <span class="n">none</span>
+                  <span class="k">else</span> <span class="n">dpllSatAux</span> <span class="n">τ₄</span> <span class="n">φ₄</span><span class="o">)</span>
+
+<span class="kd">def</span> <span class="n">dpllSat</span> <span class="o">(</span><span class="n">F</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Option</span> <span class="n">PropAssignment</span> <span class="o">:=</span>
+  <span class="k">let</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">propagateUnits</span> <span class="o">[]</span> <span class="n">F</span>
+  <span class="o">(</span><span class="n">dpllSatAux</span> <span class="mi">0</span> <span class="n">τ</span> <span class="n">φ</span><span class="o">)</span><span class="bp">.</span><span class="n">map</span> <span class="o">(</span><span class="k">fun</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">_</span><span class="o">⟩</span> <span class="bp">=&gt;</span> <span class="n">τ</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="autarkies-and-2-sat">
+<span id="section-autarkies-and-2-sat"></span><h2><span class="section-number">7.4. </span>Autarkies and 2-SAT<a class="headerlink" href="#autarkies-and-2-sat" title="Permalink to this headline">¶</a></h2>
+<p>Unit propagation and the pure literal rule form the core of the DPLL algorithm.
+In this section, we present a generalization of the pure literal rule,
+and we illustrate its use by providing an efficient algorithm for a restricted version of SAT.</p>
+<p>The notion of an <em>autarky</em> or <em>autarky assignment</em> is a generalization of
+the notion of a pure literal. An autarky for a set of clauses is an assignment that satisfies all
+the clauses that are touched by the assignment, in other words,
+all the clauses that have at least one literal assigned.
+A satisfying assignment of a set of clauses is one example of an autarky.
+The assignment given by the pure literal rule is another.
+There are often more interesting autarkies that are somewhere in between the two.</p>
+<p>Notice that if <span class="math notranslate nohighlight">\(\tau\)</span> is an autarky for <span class="math notranslate nohighlight">\(\Gamma\)</span>,
+then <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau \subseteq \Gamma\)</span>.
+To see this, suppose <span class="math notranslate nohighlight">\(C\)</span> is any clause in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+If <span class="math notranslate nohighlight">\(C\)</span> is touched by <span class="math notranslate nohighlight">\(\tau\)</span>, then <span class="math notranslate nohighlight">\(\tval{C}_\tau = \top\)</span>,
+and so it is removed from <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>.
+If <span class="math notranslate nohighlight">\(C\)</span> is not touched by <span class="math notranslate nohighlight">\(\tau\)</span>, then <span class="math notranslate nohighlight">\(\tval{C}_\tau = C\)</span>.
+Since every element of <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> is of one of these two forms,
+we have that <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau \subseteq \Gamma\)</span>.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>Let <span class="math notranslate nohighlight">\(\tau\)</span> be an autarky for formula <span class="math notranslate nohighlight">\(\Gamma\)</span>. Then
+<span class="math notranslate nohighlight">\(\Gamma\)</span> and <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> are satisfiability equivalent.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>If <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable, then since <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau \subseteq \Gamma\)</span>,
+we know that <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau \subseteq \Gamma\)</span> is satisfiable as well.
+Conversely, suppose <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> is satisfiable
+and let <span class="math notranslate nohighlight">\(\tau_1\)</span> be an assignment that satisfies <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>.
+We can assume that <span class="math notranslate nohighlight">\(\tau_1\)</span> only assigns values to the variables of
+<span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>, which are distinct from the variables of <span class="math notranslate nohighlight">\(\tau\)</span>.
+Then the assignment <span class="math notranslate nohighlight">\(\tau_2\)</span> which is the union of <span class="math notranslate nohighlight">\(\tau\)</span> and <span class="math notranslate nohighlight">\(\tau_1\)</span>
+satisfies <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+</div>
+<p>We now turn to a restricted version of SAT.
+A CNF formula is called <span class="math notranslate nohighlight">\(k\)</span>-SAT if the length of all clauses is at most <span class="math notranslate nohighlight">\(k\)</span>.
+2-SAT formulas can be solved in polynomial time, while <span class="math notranslate nohighlight">\(k\)</span>-SAT is NP-complete
+for <span class="math notranslate nohighlight">\(k \geq 3\)</span>. A simple, efficient
+decision procedure for 2-SAT uses only unit propagation and autarky reasoning. The decision procedure is based
+on the following observation. Given a 2-SAT formula <span class="math notranslate nohighlight">\(\Gamma\)</span> that contains a propositional
+variable <span class="math notranslate nohighlight">\(p\)</span>, unit propagation on <span class="math notranslate nohighlight">\(\Gamma\)</span> using <span class="math notranslate nohighlight">\(\tau(p) = \top\)</span> has two possible
+outcomes: (1) it results in a conflict, meaning that all satisfying assignments of <span class="math notranslate nohighlight">\(\Gamma\)</span>
+have to assign <span class="math notranslate nohighlight">\(p\)</span> to <span class="math notranslate nohighlight">\(\bot\)</span>, or (2) unit propagation does not result in a conflict, in which case the
+extended assignment after unit propagation is an autarky. To understand the latter case, note that
+assigning a literal in any clause of length two either satisfies the clause (if the literal is true) or
+reduces it to a unit clause (if the literal is false). So if there isn’t a conflict, then it is impossible
+that unit propagation will produce a clause that is touched but not satisfied.</p>
+<p>The decision procedure works as follows. Given a 2-SAT formula <span class="math notranslate nohighlight">\(\Gamma\)</span>, we pick
+a propositional variable <span class="math notranslate nohighlight">\(p\)</span> occurring in <span class="math notranslate nohighlight">\(\Gamma\)</span> and compute the result
+of unit propagation on <span class="math notranslate nohighlight">\(\Gamma\)</span> using <span class="math notranslate nohighlight">\(\tau(p) = \top\)</span>. If unit propagation
+does not result in a conflict, let <span class="math notranslate nohighlight">\(\tau'\)</span> be the extended assignment and we continue
+with <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau'}\)</span>. Otherwise let <span class="math notranslate nohighlight">\(\tau''(p) = \bot\)</span> and we continue with
+<span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau''}\)</span>. This process is repeated until the formula is empty,
+which indicates that the original formula is satisfiable,
+or contains the empty clause,
+which indicates that the original clause is unsatisfiable.</p>
+</div>
+<div class="section" id="cdcl">
+<span id="section-cdcl"></span><h2><span class="section-number">7.5. </span>CDCL<a class="headerlink" href="#cdcl" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="using_sat_solvers.html" class="btn btn-neutral float-right" title="8. Using SAT Solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="using_lean_as_a_proof_assistant.html" class="btn btn-neutral float-left" title="6. Lean as a Proof Assistant" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Jeremy Avigad, Seul Baek, Marijn J. H. Heule, Wojciech Nawrocki, and Emre Yolcu.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

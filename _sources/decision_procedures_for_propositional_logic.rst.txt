@@ -1,0 +1,361 @@
+.. highlight:: lean
+
+.. _chapter_decision_procedures_for_propositional_logic:
+
+Decision Procedures
+===================
+
+We have seen that it is possible to determine whether or not a propositional formula is valid
+by writing out its entire truth table.
+This seems pretty inefficient; if a formula :math:`A` has :math:`n` variables,
+the truth table has :math:`2^n` lines, and hence checking it requires at least that many lines.
+It is still an open question, however, whether one can do substantially better.
+If :math:`P \ne NP`, there is no polynomial algorithm to determine satisfiability (and hence
+validity.)
+
+Nonetheless, there are procedures that seem to work better in practice.
+In fact, we can generally do *much* better in practice.
+In the next chapter, we will discuss *SAT solvers*, which are pieces of software that are
+are remarkably good at determining whether a propositional formula has a satisfying assignment.
+
+Before 1990, most solvers allowed arbitrary propositional formulas as input.
+Most contemporary SAT solvers, however, are designed to determine the satisfiability of formulas in
+conjunctive normal form.
+:numref:`section_normal_forms` shows that, in principle, this does not sacrifice generality,
+because any propositional formula :math:`A` can be transformed to
+an equivalent CNF formula :math:`B`.
+The problem is that, in general, however, the smallest such :math:`B` may be
+exponentially longer than :math:`A`,
+which makes the transformation impractical.
+(See the exercises at the end of :numref:`Chapter %s<chapter_propositional_logic>`.)
+In the next section, we will show you an efficient method for associating
+a list of clauses to :math:`A` with the property that :math:`A`
+is satisfiable if and only if the list of clauses is.
+With this transformation, solvers can be used to test the
+satisfiability of any propositional formula.
+
+It's easy to get confused. Remember that most formulas are neither
+valid nor unsatisfiable.
+In other words, most formulas are true for some
+assignments and false for others. So testing for validity and
+testing for satisfiability are two different things, and
+it is important to keep the distinction clear.
+But there is an important relationship between the two notions:
+a formula :math:`A` is valid if and only if :math:`\lnot A`
+is unsatisfiable.
+This provides a recipe for determining the validity of :math:`A`,
+namely, use a SAT solver to determine whether :math:`\lnot A`
+is satisfiable, and then change a "yes" answer to a "no" and vice-versa.
+
+
+.. _section_the_tseitin_transformation:
+
+The Tseitin transformation
+--------------------------
+
+We have seen that if :math:`A` is a propositional formula, the smallest CNF equivalent
+may be exponentially longer.
+The Tseitin transformation provides an elegant workaround:
+instead of looking for an *equivalent* formula :math:`B`, we look for one
+that is *equisatisfiable*, which is to say, one that is satisfiable if and only if :math:`A` is.
+For example, instead of distributing :math:`p` across the conjunction in
+:math:`p \lor (q \land r)`,
+we can introduce a new definition :math:`d` for :math:`q \land r`.
+We can express the equivalence :math:`d \liff (q \land r)` in conjunctive normal form as
+
+.. math::
+
+    (\lnot d \lor q) \land (\lnot d \lor r) \land (\lnot q \lor \lnot r \lor d).
+
+Assuming that equivalence holds, the original formula :math:`p \lor (q \land r)` is
+equivalent to :math:`p \lor d`, which we can add to the conjunction above,
+to yield a CNF formula.
+
+The resulting CNF formula implies :math:`p \lor (q \land r)`, but not the other way
+around: :math:`p \lor (q \land r)` does not imply :math:`d \liff (q \land r)`.
+But the resulting formulas is equisatisfiable with the original one:
+given any truth assignment to the original one,
+we can give :math:`d` the truth value of :math:`q \land r`, and, conversely,
+for any truth assignment satisfying the resulting CNF formula, :math:`d` *has* to have that value.
+So determining whether or not the resulting CNF formula is satisfiable is tantamount to determining
+whether the original one is.
+This may seems to be a roundabout translation, but the point is that the number
+of definitions is bounded by the length of the original formula
+and the size of the CNF representation of each definition is bounded by a constant.
+So the length of the resulting formula is linear in the length of the original one.
+
+The following code, found in the `LAMR` library in the `NnfForm` namespace,
+runs through a formula in
+negation normal form and produces a list of definitions `def_0`, `def_1`, `def_2`, and so on,
+each of which represents a conjunction or disjunction of
+two variables.
+We assume that none these `def` variables are found in the original formula.
+(A more sophisticated implementation would check the original formula and start the
+numbering high enough to avoid a clash.)
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+  :start-after: -- textbook: mkDefs
+  :end-before: -- end textbook: mkDefs
+
+The function takes an NNF formula and a list of definitions,
+and it returns an augmented list of definitions and a literal
+representing the original formula.
+More precisely, the list `defs` is an array of disjunctions and conjunctions
+of variables,
+where the first one corresponds to `def_0`, the next one corresponds to `def_1`,
+and so on.
+In the cases where the original formula is a conjunction or a disjunction,
+the function first recursively creates definitions for the
+component formulas and then adds a new definition for the original formula.
+The auxiliary function `add_def` first checks to see whether
+the formula to be added is already found in the array.
+For example, when passed a conjunction `p ∧ def_0`,
+if that formula is already in the list of definitions in position 7,
+`add_def` returns `def_7` as the definition of the formula and leaves the array
+unchanged.
+
+To illustrate, we start by putting the formula
+
+.. math::
+
+  \lnot (p \land q \liff r) \land (s \limplies p \land t)
+
+in negation normal form.
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+  :start-after: -- textbook: ex1
+  :end-before: -- end textbook: ex1
+
+Removing extraneous parentheses, we get
+
+.. math::
+
+    ((p \land q \land \lnot r) \lor (r \land (\lnot p \lor \lnot q)) \land
+    (\lnot s \lor (p \land t)).
+
+In the following, we compute the list of definitions corresponding
+to `ex1`, and then we use a little program to print them out in a more
+pleasant form.
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+  :start-after: -- textbook: ex1 defs
+  :end-before: -- end textbook: ex1 defs
+
+It isn't hard to put a definition of the form :math:`(A \liff B)` into
+conjunctive normal form. The LAMR library defines a function to do that,
+and another one that turns the entire list of definitions returned by
+`mkDefs` into a single CNF formula.
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+  :start-after: -- textbook: defToCnf
+  :end-before: -- end textbook: defToCnf
+
+If we take the resulting formula and add a conjunct for the
+variable representing the top level, we have an equivalent CNF formula,
+as desired.
+
+A moment's reflection shows that we can do better. For example, if
+the formula :math:`A` is already in CNF, we don't have to introduce
+any definitions at all. The following functions from the library
+do their best to interpret an NNF formula as a CNF formula,
+introducing definitions only when necessary. The first function,
+`NnfForm.orToCnf`, interprets a formula as a clause.
+For example, given the formula :math:`p \lor (q \land \lnot r) \lor \lnot s`
+and a list of definitions, it adds a definition :math:`d` for :math:`q \land \lnot r` and
+returns the clause :math:`p \lor d \lor \lnot s`.
+The function `NnfForm.andToCnf` does the analogous thing for conjunctions,
+and the function `NnfForm.toCnf` puts it all together.
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+  :start-after: -- textbook: toCnf
+  :end-before: -- end textbook: toCnf
+
+The following example tests it out on `ex1.toCnf`.
+The comment afterward shows the resulting CNF formula
+and then reconstructs the definitions to show that the result is equivalent
+to the original formula.
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
+  :start-after: -- textbook: ex1.toCnf
+  :end-before: -- end textbook: ex1.toCnf
+
+
+.. _section_unit_propagation_and_the_pure_literal_rule:
+
+Unit propagation and the pure literal rule
+------------------------------------------
+
+In earlier chapters, we considered only truth assignments that assign a truth value to all propositional
+variables. However, complete search methods for SAT like DPLL use *partial assignments*, which assign truth
+values to some propositional variables. For a clause :math:`C` and partial truth assignment :math:`\tau`,
+we denote by :math:`\tval{C}_\tau` the reduced clause constructed by removing falsified literals. If
+:math:`\tau` satisfies a literal in :math:`C` then :math:`\tval{C}_\tau = \top`, while if :math:`\tau`
+falsifies all literals in :math:`C` then :math:`\tval{C}_\tau = \bot`. For a CNF formula :math:`\Gamma`,
+we denote by :math:`\tval{\Gamma}_\tau` the conjunction of :math:`\tval{C}_\tau` with :math:`C \in \Gamma`.
+
+A key SAT-solving technique is *unit propagation*. Given a CNF formula :math:`\Gamma` and a truth assignment
+:math:`\tau`, a clause :math:`C \in \Gamma` is *unit under* :math:`\tau` if :math:`\tau` falsifies all but one literal of
+:math:`C` and the remaining literal is unassigned. In other words, :math:`C` is unit under :math:`\tau` if :math:`\tval{C}_\tau` consists of a single literal. The only way to satisfy
+:math:`C` is to assign that literal to true. Unit propagation iteratively extends :math:`\tau` by satisfying all unit clauses. This process
+continues until either no new unit clauses are generated by the extended :math:`\tau` or until the extended :math:`\tau`
+falsifies a clause in :math:`\Gamma`.
+
+For example, consider the partial truth assignment :math:`\tau` with :math:`\tau(p_1) = \top` and the following formula:
+
+.. math::
+
+  \Gamma_\mathrm{unit} :=  (\lnot p_1 \lor \lnot p_3 \lor p_4) \land
+        (\lnot p_1 \lor \lnot p_2 \lor p_3) \land (\lnot p_1 \lor p_2) \land (p_1 \lor p_3 \lor p_6) \land \\
+    (\lnot p_1 \lor p_4 \lor \lnot p_5) \land (p_1 \lnot p_6) \land (p_4 \lor p_5 \lor p_6) \land (p_5 \lor \lnot p_6)
+
+The clause :math:`(\lnot p_1 \lor p_2)` is unit under :math:`\tau` because :math:`\tval{(\lnot p_1 \lor p_2)}_{\tau} = (p_2)`.
+Hence unit propagation will extend :math:`\tau` by
+assigning :math:`p_2` to :math:`\top`. Under the extended :math:`\tau`, :math:`(\lnot p_1 \lor \lnot p_2 \lor p_3)`
+is unit, which will further extend  :math:`\tau` by assigning :math:`p_3` to :math:`\top`. Now the
+clause :math:`(\lnot p_1 \lor \lnot p_3 \lor p_4)` becomes unit and thus assigns :math:`p_4` to :math:`\top`.
+Ultimately, no unit clauses remain and unit propagation terminates with :math:`\tau(p_1) = \tau(p_2) = \tau(p_3) = \tau(p_4) = \top`.
+
+Another important simplification technique is the *pure literal rule*. A literal :math:`l` is called pure in a formula :math:`\Gamma` if no
+clause in :math:`\Gamma` contains the literal :math:`\lnot l`. The pure literal rule sets pure literals to :math:`\top`.
+
+In contrast to unit propagation, the pure literal rule can reduce the number of satisfying assignments. Consider for
+example for the formula :math:`\Gamma = (p \lor q) \land (\lnot q \lor r) \land (q \lor \lnot r)`. The literal :math:`p` is pure,
+so the pure literal rule will assign it to :math:`\tau(p) = \top`. We leave it to you to check that :math:`\Gamma` has
+three satisfying assignments, while :math:`\tval{\Gamma}_{\tau}` has only two satisfying assignments.
+
+
+DPLL
+--------------
+
+One of the first and most well-known decision procedures for SAT problems is the Davis-Putnam-Logemann-Loveland
+(DPLL) algorithm, which was invented by Davis, Logemann, and Loveland in 1962,
+based on
+earlier work by Davis and Putnam in 1960. DPLL is a complete, backtracking-based search algorithm
+that builds a binary tree of truth assignments. For nearly four decades since its invention, almost all
+complete SAT solvers have been based on DPLL.
+
+The DPLL procedure is a recursive algorithm that takes a CNF formula :math:`\Gamma` and a truth assignment :math:`\tau`
+as input and returns a Boolean indicating whether :math:`\Gamma` under the assignment :math:`\tau` can be satisfied.
+Each recursive call starts by extending :math:`\tau` using unit propagation and the pure literal rule.
+Afterwards, it checks whether the formula is satisfiable (:math:`\tval{\Gamma}_\tau = \top`) or unsatisfiable (:math:`\tval{\Gamma}_\tau = \bot`).
+In either of those cases it returns :math:`\top` or :math:`\bot`, respectively. Otherwise, it selects an unassigned propositional variable :math:`p`
+and recursively calls DPLL with one branch extending :math:`\tau` with :math:`\tau(p) = \top` and another branch
+extending :math:`\tau` with :math:`\tau(p) = \bot`. If one of the calls returns :math:`\top` it returns :math:`\top`, otherwise it
+returns :math:`\bot`.
+
+The effectiveness of DPLL depends strongly on the quality of the propositional variables that are selected for the
+recursive calls. The propositional variable selected for a recursive call is called a *decision variable*. A simple but
+effective heuristic is to pick the variable that occurs most frequently in the
+shortest clauses. This heuristics is called *MOMS* (Maximum Occurrence in clauses of Minimum Size). More
+expensive heuristics are based on *lookaheads*, that is, assigning a variable to a truth value and measuring how much the formula can be simplified as a result.
+
+Consider the following CNF formula:
+
+.. math::
+
+  \Gamma_\mathrm{DPLL} :=  (p_1 \lor p_2 \lor \lnot p_3) \land (\lnot p_1 \lor p_2 \lor p_3) \land (\lnot p_1 \lor \lnot p_2 \lor p_3) \land (p_1 \lor p_3) \land (\lnot p_1 \lor \lnot p_3)
+
+Selecting :math:`p_3` as decision variable in the root node, results in a DPLL tree with two leaf nodes. However, when selecting :math:`p_2` as decision variable in the root node,
+the DPLL tree consists of four leaf nodes. The figure below shows the DPLL trees with green nodes denoting satisfying assignments, while black nodes denote falsifying assignments.
+
+  .. image:: ../figures/dpll.*
+   :height: 150 px
+   :alt: dpll example
+   :align: center
+
+We have implemented a basic version of the DPLL procedure in Lean.
+We will discuss it in class and soon provide an explanation here.
+In the meanwhile, as a placeholder, we provide a few snippets.
+
+The following function simplifies a clause given an assignment to a literal:
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
+  :start-after: -- textbook: simplify
+  :end-before: -- end textbook: simplify
+
+The following performs unit propagation:
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
+  :start-after: -- textbook: propagateUnits
+  :end-before: -- end textbook: propagateUnits
+
+And the following is the main procedure:
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
+  :start-after: -- textbook: dpllSat
+  :end-before: -- end textbook: dpllSat
+
+.. _section_autarkies_and_2_sat:
+
+Autarkies and 2-SAT
+-------------------
+
+Unit propagation and the pure literal rule form the core of the DPLL algorithm.
+In this section, we present a generalization of the pure literal rule,
+and we illustrate its use by providing an efficient algorithm for a restricted version of SAT.
+
+The notion of an *autarky* or *autarky assignment* is a generalization of
+the notion of a pure literal. An autarky for a set of clauses is an assignment that satisfies all
+the clauses that are touched by the assignment, in other words,
+all the clauses that have at least one literal assigned.
+A satisfying assignment of a set of clauses is one example of an autarky.
+The assignment given by the pure literal rule is another.
+There are often more interesting autarkies that are somewhere in between the two.
+
+Notice that if :math:`\tau` is an autarky for :math:`\Gamma`,
+then :math:`\tval{\Gamma}_\tau \subseteq \Gamma`.
+To see this, suppose :math:`C` is any clause in :math:`\Gamma`.
+If :math:`C` is touched by :math:`\tau`, then :math:`\tval{C}_\tau = \top`,
+and so it is removed from :math:`\tval{\Gamma}_\tau`.
+If :math:`C` is not touched by :math:`\tau`, then :math:`\tval{C}_\tau = C`.
+Since every element of :math:`\tval{\Gamma}_\tau` is of one of these two forms,
+we have that :math:`\tval{\Gamma}_\tau \subseteq \Gamma`.
+
+.. admonition:: Theorem
+
+    Let :math:`\tau` be an autarky for formula :math:`\Gamma`. Then
+    :math:`\Gamma` and :math:`\tval{\Gamma}_\tau` are satisfiability equivalent.
+
+.. admonition:: Proof
+
+    If :math:`\Gamma` is satisfiable, then since :math:`\tval{\Gamma}_\tau \subseteq \Gamma`,
+    we know that :math:`\tval{\Gamma}_\tau \subseteq \Gamma` is satisfiable as well.
+    Conversely, suppose :math:`\tval{\Gamma}_\tau` is satisfiable
+    and let :math:`\tau_1` be an assignment that satisfies :math:`\tval{\Gamma}_\tau`.
+    We can assume that :math:`\tau_1` only assigns values to the variables of
+    :math:`\tval{\Gamma}_\tau`, which are distinct from the variables of :math:`\tau`.
+    Then the assignment :math:`\tau_2` which is the union of :math:`\tau` and :math:`\tau_1`
+    satisfies :math:`\Gamma`.
+
+We now turn to a restricted version of SAT.
+A CNF formula is called :math:`k`-SAT if the length of all clauses is at most :math:`k`.
+2-SAT formulas can be solved in polynomial time, while :math:`k`-SAT is NP-complete
+for :math:`k \geq 3`. A simple, efficient
+decision procedure for 2-SAT uses only unit propagation and autarky reasoning. The decision procedure is based
+on the following observation. Given a 2-SAT formula :math:`\Gamma` that contains a propositional
+variable :math:`p`, unit propagation on :math:`\Gamma` using :math:`\tau(p) = \top` has two possible
+outcomes: (1) it results in a conflict, meaning that all satisfying assignments of :math:`\Gamma`
+have to assign :math:`p` to :math:`\bot`, or (2) unit propagation does not result in a conflict, in which case the
+extended assignment after unit propagation is an autarky. To understand the latter case, note that
+assigning a literal in any clause of length two either satisfies the clause (if the literal is true) or
+reduces it to a unit clause (if the literal is false). So if there isn't a conflict, then it is impossible
+that unit propagation will produce a clause that is touched but not satisfied.
+
+The decision procedure works as follows. Given a 2-SAT formula :math:`\Gamma`, we pick
+a propositional variable :math:`p` occurring in :math:`\Gamma` and compute the result
+of unit propagation on :math:`\Gamma` using :math:`\tau(p) = \top`. If unit propagation
+does not result in a conflict, let :math:`\tau'` be the extended assignment and we continue
+with :math:`\tval{\Gamma}_{\tau'}`. Otherwise let :math:`\tau''(p) = \bot` and we continue with
+:math:`\tval{\Gamma}_{\tau''}`. This process is repeated until the formula is empty,
+which indicates that the original formula is satisfiable,
+or contains the empty clause,
+which indicates that the original clause is unsatisfiable.
+
+
+.. _section_cdcl:
+
+CDCL
+----
+
+
+
