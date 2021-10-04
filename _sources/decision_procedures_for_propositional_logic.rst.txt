@@ -319,7 +319,7 @@ we have that :math:`\tval{\Gamma}_\tau \subseteq \Gamma`.
 .. admonition:: Proof
 
     If :math:`\Gamma` is satisfiable, then since :math:`\tval{\Gamma}_\tau \subseteq \Gamma`,
-    we know that :math:`\tval{\Gamma}_\tau \subseteq \Gamma` is satisfiable as well.
+    we know that :math:`\tval{\Gamma}_\tau` is satisfiable as well.
     Conversely, suppose :math:`\tval{\Gamma}_\tau` is satisfiable
     and let :math:`\tau_1` be an assignment that satisfies :math:`\tval{\Gamma}_\tau`.
     We can assume that :math:`\tau_1` only assigns values to the variables of
