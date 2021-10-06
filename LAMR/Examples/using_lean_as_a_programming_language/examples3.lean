@@ -4,9 +4,18 @@ import Init
 inductive BinTree
   | empty : BinTree
   | node  : BinTree → BinTree → BinTree
+  deriving Repr, DecidableEq, Inhabited
 
 open BinTree
 -- end textbook: BinTree
+
+-- textbook: deriving
+#eval node empty (node empty empty)
+
+#eval empty == node empty empty  -- evaluates to false
+
+#eval (arbitrary : BinTree)  -- BinTree.empty
+-- end textbook: deriving
 
 -- textbook: recursion on BinTree
 def size : BinTree → Nat

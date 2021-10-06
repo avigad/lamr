@@ -31,15 +31,22 @@ If you open the file `User/Examples/hello_world.lean`, you should see output in 
 window. Also, hovering over the `#eval` commands with the blue squiggly lines underneath should
 show you the output of those commands.
 
-4. The folder `User/Examples` contains a copy all the examples from the textbook. Feel free to
-edit these files and experiment. You can also create new files to your heart's content.
-You should not change anything in the `Mathlib` or `LAMR` directories; we recommend keeping all
-your own files in the `User` folder. There is an original copy of the `Examples` folder in the
-`LAMR` directory, so you can copy these to `User/Examples` if you wish to restore the original
-files.
+4. The `User` folder is a good place to put all your files.
+The folder `LAMR/Examples` contains all the examples in the textbook.
+We recommend copying the
+`LAMR/Examples` folder to the `User` folder so that you can edit those files
+and experiment with them to your heart's content.
+You should not edit anything in the `Mathlib` or `LAMR` folders, so `LAMR/Examples`
+will always contain the original copies.
 
 5. When you are done, choose `Stop workspace` from the menu on the left. The workspace should also
 stop automatically 30 minutes after the last interaction or 3 minutes after closing the tab.
+
+If you have a local version of VS Code installed on your computer, you can even use that to work
+inside the virtual machine.
+From the menu icon with three lines at the left-hand side of the browser window for the virtual
+machine,
+click "open in VS Code" and follow the instructions.
 
 Every time you return to the link in Step 2, Gitpod will start a fresh workspace. To restart a
 previous workspace, go to [https://gitpod.io/workspaces/](https://gitpod.io/workspaces/).
@@ -50,11 +57,6 @@ With this method, you can save files on a virtual machine and start and stop it 
 There isn't an easy way to transfer files from the virtual machine to your own computer,
 but you can simply copy text from the editor in the browser and paste it anywhere you want.
 
-We will update the repository, including the examples folder, as the course proceeds. To update the
-copy of the repository on an existing virtual machine, type `git pull --no-rebase`
-in the terminal window. You will then have to manually copy new files from the `LAMR/Examples`
-folder to the `User/Examples` folder. Alternatively, you can simply follow the instructions
-above to start a new workspace.
 
 
 ## Option 2: Use Gitpod and a forked repository
@@ -94,9 +96,33 @@ Also, copy the examples folder from the `LAMR` folder to the `User` folder.
 From there, you should be able to use Lean and experiment with the example files as described in
 Option 1.
 
-To use CaDiCaL, Z3, and Vampire, you will have to add them to manually to the folder `LAMR/bin`.
-There are instructions on how to obtain CaDiCaL [here](https://github.com/arminbiere/cadical).
-We will later provide instructions for obtaining Z3 and Vampire.
+## To update
+
+We will update the repository, including the examples folder, as the course proceeds.
+When you use Gitpod to start a new virtual machine, it will use the current version of the repository.
+
+If you are using on old virtual machine or a local version of the repository, however,
+you can update it by typing the following commands from inside the repository folder:
+```
+  git pull
+  leanpkg build
+
+```
+You will then have to manually copy new files from the `LAMR/Examples`
+folder to the `User/Examples` folder.
+
+If you have forked the repository on Github, you can update the fork by clicking the "fetch upstream"
+button.
+
+## To use automated reasoning tools
+
+There is a Linux CaDiCaL binary in the `LAMR/bin` folder in the repository. If you are running the repository
+from Gitpod or from a computer using Linux, the instructions in the textbook should work right out of the box.
+If you are using OS/X or Windows, however, you will have to build CaDiCaL on your own.
+You can find instructions on how to obtain CaDiCaL [here](https://github.com/arminbiere/cadical).
+It is straightforward on OS/X. We are still working out instructions for how to do it on Windows with WSL.
+
+We will later provide instructions as to how to use Z3 and Vampire.
 
 
 

@@ -54,14 +54,21 @@ where
     | none   => let newdefs := defs.push (op fA fB)
                 (defLit (newdefs.size - 1), newdefs)
 
--- turns "A iff B" into a CnfForm
-def defToCnf (A B : NnfForm) : CnfForm :=
+def iffToCnf (A B : NnfForm) : CnfForm :=
   (conj (disj A.neg B) (disj B.neg A)).toCnfForm
 
 def defsToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
   where aux : List NnfForm → Nat → CnfForm
   | [],          n => []
-  | nnf :: nnfs, n => defToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
+  | nnf :: nnfs, n => iffToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
+
+def implToCnf (A B : NnfForm) : CnfForm :=
+  (disj A.neg B).toCnfForm
+
+def defsImplToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
+  where aux : List NnfForm → Nat → CnfForm
+  | [],          n => []
+  | nnf :: nnfs, n => implToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
 
 def orToCnf : NnfForm → Clause → Array NnfForm → Clause × Array NnfForm
   | lit Lit.tr,  cls, defs  => ([Lit.tr], defs)
@@ -86,6 +93,6 @@ def andToCnf : NnfForm → Array NnfForm → CnfForm × Array NnfForm
 
 def toCnf (A : NnfForm) : CnfForm :=
   let ⟨cnf, defs⟩ := andToCnf A #[]
-  cnf.union (defsToCnf defs)
+  cnf.union (defsImplToCnf defs)
 
 end NnfForm

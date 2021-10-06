@@ -65,16 +65,19 @@ protected def Clause.toDimacs (h : SNH) : Clause → String
 | [l] => l.toDimacs h ++ " 0"
 | l0 :: l1 :: ls => l0.toDimacs h ++ " " ++ Clause.toDimacs h (l1 :: ls)
 
-protected def CnfForm.toDimacsCore (h : SNH) : CnfForm → String
-| [] => ""
-| [c] => c.toDimacs h
-| c0 :: c1 :: cs => c0.toDimacs h ++ "\n" ++ CnfForm.toDimacsCore h (c1 :: cs)
+protected def CnfForm.toDimacsCore (h : SNH) (acc : String) : CnfForm → String
+| [] => acc
+| [c] => acc ++ c.toDimacs h
+| c0 :: c1 :: cs => CnfForm.toDimacsCore h (acc ++ c0.toDimacs h ++ "\n") (c1 :: cs)
 
 protected def CnfForm.toDimacs (c : CnfForm) : SNH × NSH × String :=
 let (sn, ns) := addCnfForm c
-(sn, ns, "p cnf " ++ toString sn.size ++ " " ++ toString c.length ++ "\n" ++ c.toDimacsCore sn)
+let emptyStr := ""
+(sn, ns, s!"p cnf {sn.size} {c.length}\n{c.toDimacsCore sn emptyStr}")
 
-def runCadical : IO.Process.SpawnArgs := {cmd := "LAMR/bin/cadical", args := #["LAMR/bin/temp.cnf", "LAMR/bin/temp.drat"]}
+def runCadical : IO.Process.SpawnArgs := {
+  cmd := "LAMR/bin/cadical"
+  args := #["LAMR/bin/temp.cnf", "LAMR/bin/temp.drat"] }
 
 -- Same as IO.Process.run, but does not require exitcode = 0
 def run' (args : IO.Process.SpawnArgs) : IO String := do
@@ -84,6 +87,7 @@ def run' (args : IO.Process.SpawnArgs) : IO String := do
 inductive SatResult
 | Sat : List Lit → SatResult
 | Unsat : CnfForm → SatResult
+deriving Inhabited, Repr, DecidableEq
 open SatResult
 
 def String.toLit (h : NSH) : String → Option Lit
@@ -190,16 +194,15 @@ private def parseSatOutputAux (h : NSH) : List String → Except String (Option 
 
 def parseSatOutput (h : NSH) (ss : List String) : IO SatResult :=
   match parseSatOutputAux h ss with
-  | Except.error e => throwThe IO.Error e
+  | Except.error e =>
+    throw <| IO.userError <| s!"{e}; CaDiCaL output:\n" ++ "\n".intercalate ss
   | Except.ok (some lits) => SatResult.Sat lits
   | Except.ok none => do
-    let bs ← IO.FS.readBinFile "LAMR/bin/temp.drat"
-    match DRAT.decodeDrat bs with
-    | Except.error e =>
-      throwThe IO.Error s!"failed decoding DRAT proof:\n{e}"
-    | Except.ok pf =>
-      -- TODO convert DRAT ints to `Lit`s via NSH
-      SatResult.Unsat []
+    -- TODO(WN): convert DRAT ints to `Lit`s via NSH;
+    -- also the DRAT decoder is slow and buggy
+    return SatResult.Unsat []
+    -- let bs ← IO.FS.readBinFile "LAMR/bin/temp.drat"
+    -- match DRAT.decodeDrat bs with
 
 def callCadical (cnf : CnfForm) : IO (String × SatResult) := do
   let (sn, ns, cnfs) ← CnfForm.toDimacs cnf

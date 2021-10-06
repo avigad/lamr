@@ -71,15 +71,27 @@ namespace hidden
 
 open NnfForm
 
--- textbook: defToCnf
-def defToCnf (A B : NnfForm) : CnfForm :=
+-- This shows how to turn an if-and-only-if into a CNF formula.
+
+def iffToCnf (A B : NnfForm) : CnfForm :=
   (conj (disj A.neg B) (disj B.neg A)).toCnfForm
 
 def defsToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
   where aux : List NnfForm → Nat → CnfForm
   | [],          n => []
-  | nnf :: nnfs, n => defToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
--- end textbook: defToCnf
+  | nnf :: nnfs, n => iffToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
+
+-- With the Plaisted-Greenbaum optimization, we only need implications.
+
+-- textbook: implToCnf
+def implToCnf (A B : NnfForm) : CnfForm :=
+  (disj A.neg B).toCnfForm
+
+def defsImplToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
+  where aux : List NnfForm → Nat → CnfForm
+  | [],          n => []
+  | nnf :: nnfs, n => implToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
+-- end textbook: implToCnf
 
 -- textbook: toCnf
 def orToCnf : NnfForm → Clause → Array NnfForm → Clause × Array NnfForm
@@ -105,7 +117,7 @@ def andToCnf : NnfForm → Array NnfForm → CnfForm × Array NnfForm
 
 def toCnf (A : NnfForm) : CnfForm :=
   let ⟨cnf, defs⟩ := andToCnf A #[]
-  cnf.union (defsToCnf defs)
+  cnf.union (defsImplToCnf defs)
 -- end textbook: toCnf
 
 end hidden
@@ -124,19 +136,14 @@ def_3 def_1,
 def_4 -s,
 -def_0 p,
 -def_0 q,
--p -q def_0,
 -def_1 def_0,
 -def_1 -r,
--def_0 r def_1,
 -def_2 -p -q,
-p def_2,
-q def_2,
 -def_3 r,
 -def_3 def_2,
 -r -def_2 def_3,
 -def_4 p,
 -def_4 t,
--p -t def_4
 
 Here we check to make sure it works:
 
@@ -148,5 +155,7 @@ def_4 := p ∧ t
 
 def_3 def_1 := (p ∧ q ∧ ¬ r) ∨ (p ∧ q ∧ ¬ r)
 def_4 -s    := ¬ s ∨ (p ∧ t)
+
+Each ':=' is really an implication.
 -/
 -- end textbook: ex1.toCnf
