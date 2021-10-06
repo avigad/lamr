@@ -583,6 +583,7 @@ binary trees that we defined in mathematical terms in
 <span class="kd">inductive</span> <span class="n">BinTree</span>
   <span class="bp">|</span> <span class="n">empty</span> <span class="o">:</span> <span class="n">BinTree</span>
   <span class="bp">|</span> <span class="n">node</span>  <span class="o">:</span> <span class="n">BinTree</span> <span class="bp">→</span> <span class="n">BinTree</span> <span class="bp">→</span> <span class="n">BinTree</span>
+  <span class="n">deriving</span> <span class="n">Repr</span><span class="o">,</span> <span class="n">DecidableEq</span><span class="o">,</span> <span class="n">Inhabited</span>
 
 <span class="kn">open</span> <span class="n">BinTree</span>
 </pre></div>
@@ -591,6 +592,23 @@ binary trees that we defined in mathematical terms in
 The command <cite>open BinTree</cite> allows us to write <cite>empty</cite> and <cite>node</cite> instead of
 <cite>BinTree.empty</cite> and <cite>BinTree.node</cite>.
 Note the Lean convention of capitalizing the names of data types.</p>
+<p>The last line of the definition, the one that begins with the word <code class="docutils literal notranslate"><span class="pre">deriving</span></code>,
+is boilerplate.
+It tells Lean to automatically generate a few additional functions that are
+useful. The directive <code class="docutils literal notranslate"><span class="pre">deriving</span> <span class="pre">Repr</span></code> tells Lean to define an internal function
+that can be used to represent any <code class="docutils literal notranslate"><span class="pre">BinTree</span></code> as a string.
+This is the string that is printed out by any <code class="docutils literal notranslate"><span class="pre">#eval</span></code> command whose argument
+evaluates to a <code class="docutils literal notranslate"><span class="pre">BinTree</span></code>.
+Adding <code class="docutils literal notranslate"><span class="pre">DecidableEq</span></code> defines a function that tests whether two <code class="docutils literal notranslate"><span class="pre">BinTrees</span></code> are equal,
+and adding <code class="docutils literal notranslate"><span class="pre">Inhabited</span></code> defines an arbitrary value of the data type to serve as
+a default value for function that need one. The following illustrates their use.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">node</span> <span class="n">empty</span> <span class="o">(</span><span class="n">node</span> <span class="n">empty</span> <span class="n">empty</span><span class="o">)</span>
+
+<span class="k">#eval</span> <span class="n">empty</span> <span class="bp">==</span> <span class="n">node</span> <span class="n">empty</span> <span class="n">empty</span>  <span class="c1">-- evaluates to false</span>
+
+<span class="k">#eval</span> <span class="o">(</span><span class="n">arbitrary</span> <span class="o">:</span> <span class="n">BinTree</span><span class="o">)</span>  <span class="c1">-- BinTree.empty</span>
+</pre></div>
+</div>
 <p>We can now define the functions <cite>size</cite> and <cite>depth</cite> by structural recursion:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">size</span> <span class="o">:</span> <span class="n">BinTree</span> <span class="bp">→</span> <span class="n">Nat</span>
   <span class="bp">|</span> <span class="n">empty</span>    <span class="bp">=&gt;</span> <span class="mi">0</span>

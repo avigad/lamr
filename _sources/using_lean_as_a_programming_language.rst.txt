@@ -380,6 +380,21 @@ The command `open BinTree` allows us to write `empty` and `node` instead of
 `BinTree.empty` and `BinTree.node`.
 Note the Lean convention of capitalizing the names of data types.
 
+The last line of the definition, the one that begins with the word ``deriving``,
+is boilerplate.
+It tells Lean to automatically generate a few additional functions that are
+useful. The directive ``deriving Repr`` tells Lean to define an internal function
+that can be used to represent any ``BinTree`` as a string.
+This is the string that is printed out by any ``#eval`` command whose argument
+evaluates to a ``BinTree``.
+Adding ``DecidableEq`` defines a function that tests whether two ``BinTrees`` are equal,
+and adding ``Inhabited`` defines an arbitrary value of the data type to serve as
+a default value for function that need one. The following illustrates their use.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_programming_language/examples3.lean
+   :start-after: -- textbook: deriving
+   :end-before: -- end textbook: deriving
+
 We can now define the functions `size` and `depth` by structural recursion:
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_programming_language/examples3.lean

@@ -79,7 +79,7 @@ we can give :math:`d` the truth value of :math:`q \land r`, and, conversely,
 for any truth assignment satisfying the resulting CNF formula, :math:`d` *has* to have that value.
 So determining whether or not the resulting CNF formula is satisfiable is tantamount to determining
 whether the original one is.
-This may seems to be a roundabout translation, but the point is that the number
+This may seem to be a roundabout translation, but the point is that the number
 of definitions is bounded by the length of the original formula
 and the size of the CNF representation of each definition is bounded by a constant.
 So the length of the resulting formula is linear in the length of the original one.
@@ -141,17 +141,43 @@ pleasant form.
   :start-after: -- textbook: ex1 defs
   :end-before: -- end textbook: ex1 defs
 
-It isn't hard to put a definition of the form :math:`(A \liff B)` into
+We can obtain an equisatisfiable version of the formula by putting
+all the definitions into conjunctive normal form, collecting them all
+together, and adding one more conjunct with the variable ``d`` corresponding
+to the definition of the top level formula. There is a constant bound
+on the size of each CNF definition, which corresponds to a single conjunction
+or disjunction. (This would still be true if we added other binary connectives,
+like a bi-implication.) Since the number of definitions is linear in the
+size of the original formula, the size of the equisatisfiable CNF formula
+is linear in the original one.
+
+There is an important optimization of the Tseitin transformation due to
+Plaisted and Greenbaum, who observed that for equisatisfiability,
+only one direction of the implication is needed for each subformula.
+If we start with a formula in negation normal form,
+each subformula occurs *positively*, which means that switching its truth
+value from negative to positive can only change the truth value of the entire
+formula in the same direction. In that case, only the forward direction
+of the implication is needed. For example, the formula :math:`(p \land q) \lor r`
+is equisatisfiable with :math:`(d \lor r) \land (d \to p \land q)`, which
+can be expressed in CNF as :math:`(d \lor r) \land (\lnot d \lor p) \land (\lnot d \lor q)`.
+To see that they are equisatisfiable, notice that any satisfying assignment to
+:math:`(p \land q) \lor r` can be extended to a satisfying assignment of
+:math:`(d \lor r) \land (d \limplies p \land q)` by giving :math:`d` the same truth assignment
+as :math:`p \land q`, and, conversely, :math:`(d \lor r) \land (d \limplies p \land q)`
+entails :math:`(p \land q) \lor r`.
+
+It isn't hard to put a implication of the form :math:`(A \limplies B)` into
 conjunctive normal form. The LAMR library defines a function to do that,
 and another one that turns the entire list of definitions returned by
 `mkDefs` into a single CNF formula.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
-  :start-after: -- textbook: defToCnf
-  :end-before: -- end textbook: defToCnf
+  :start-after: -- textbook: implToCnf
+  :end-before: -- end textbook: implToCnf
 
 If we take the resulting formula and add a conjunct for the
-variable representing the top level, we have an equivalent CNF formula,
+variable representing the top level, we have an equisatisfiable CNF formula,
 as desired.
 
 A moment's reflection shows that we can do better. For example, if
@@ -179,6 +205,12 @@ to the original formula.
   :start-after: -- textbook: ex1.toCnf
   :end-before: -- end textbook: ex1.toCnf
 
+There is one additional optimization that we have not implemented in the library:
+we can be more efficient with iterated conjunctions and disjunctions.
+For example, you can check that :math:`d \limplies \ell_1 \land \cdots \land \ell_n`
+can be represented by the conjunction of the clauses :math:`\lnot d \lor \ell_1` to
+:math:`\lnot d \lor \ell_n`, and :math:`d \limplies \ell_1 \lor \cdots \lor \ell_n`
+can be represented by the single clause :math:`\lnot d \lor \ell_1 \lor \cdots \lor \ell_n`.
 
 .. _section_unit_propagation_and_the_pure_literal_rule:
 

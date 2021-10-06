@@ -246,7 +246,7 @@ we can give <span class="math notranslate nohighlight">\(d\)</span> the truth va
 for any truth assignment satisfying the resulting CNF formula, <span class="math notranslate nohighlight">\(d\)</span> <em>has</em> to have that value.
 So determining whether or not the resulting CNF formula is satisfiable is tantamount to determining
 whether the original one is.
-This may seems to be a roundabout translation, but the point is that the number
+This may seem to be a roundabout translation, but the point is that the number
 of definitions is bounded by the length of the original formula
 and the size of the CNF representation of each definition is bounded by a constant.
 So the length of the resulting formula is linear in the length of the original one.</p>
@@ -335,21 +335,45 @@ pleasant form.</p>
 <span class="cm">-/</span>
 </pre></div>
 </div>
-<p>It isn’t hard to put a definition of the form <span class="math notranslate nohighlight">\((A \liff B)\)</span> into
+<p>We can obtain an equisatisfiable version of the formula by putting
+all the definitions into conjunctive normal form, collecting them all
+together, and adding one more conjunct with the variable <code class="docutils literal notranslate"><span class="pre">d</span></code> corresponding
+to the definition of the top level formula. There is a constant bound
+on the size of each CNF definition, which corresponds to a single conjunction
+or disjunction. (This would still be true if we added other binary connectives,
+like a bi-implication.) Since the number of definitions is linear in the
+size of the original formula, the size of the equisatisfiable CNF formula
+is linear in the original one.</p>
+<p>There is an important optimization of the Tseitin transformation due to
+Plaisted and Greenbaum, who observed that for equisatisfiability,
+only one direction of the implication is needed for each subformula.
+If we start with a formula in negation normal form,
+each subformula occurs <em>positively</em>, which means that switching its truth
+value from negative to positive can only change the truth value of the entire
+formula in the same direction. In that case, only the forward direction
+of the implication is needed. For example, the formula <span class="math notranslate nohighlight">\((p \land q) \lor r\)</span>
+is equisatisfiable with <span class="math notranslate nohighlight">\((d \lor r) \land (d \to p \land q)\)</span>, which
+can be expressed in CNF as <span class="math notranslate nohighlight">\((d \lor r) \land (\lnot d \lor p) \land (\lnot d \lor q)\)</span>.
+To see that they are equisatisfiable, notice that any satisfying assignment to
+<span class="math notranslate nohighlight">\((p \land q) \lor r\)</span> can be extended to a satisfying assignment of
+<span class="math notranslate nohighlight">\((d \lor r) \land (d \limplies p \land q)\)</span> by giving <span class="math notranslate nohighlight">\(d\)</span> the same truth assignment
+as <span class="math notranslate nohighlight">\(p \land q\)</span>, and, conversely, <span class="math notranslate nohighlight">\((d \lor r) \land (d \limplies p \land q)\)</span>
+entails <span class="math notranslate nohighlight">\((p \land q) \lor r\)</span>.</p>
+<p>It isn’t hard to put a implication of the form <span class="math notranslate nohighlight">\((A \limplies B)\)</span> into
 conjunctive normal form. The LAMR library defines a function to do that,
 and another one that turns the entire list of definitions returned by
 <cite>mkDefs</cite> into a single CNF formula.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">defToCnf</span> <span class="o">(</span><span class="n">A</span> <span class="n">B</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
-  <span class="o">(</span><span class="n">conj</span> <span class="o">(</span><span class="n">disj</span> <span class="n">A.neg</span> <span class="n">B</span><span class="o">)</span> <span class="o">(</span><span class="n">disj</span> <span class="n">B.neg</span> <span class="n">A</span><span class="o">))</span><span class="bp">.</span><span class="n">toCnfForm</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">implToCnf</span> <span class="o">(</span><span class="n">A</span> <span class="n">B</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
+  <span class="o">(</span><span class="n">disj</span> <span class="n">A.neg</span> <span class="n">B</span><span class="o">)</span><span class="bp">.</span><span class="n">toCnfForm</span>
 
-<span class="kd">def</span> <span class="n">defsToCnf</span> <span class="o">(</span><span class="n">defs</span> <span class="o">:</span> <span class="n">Array</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span> <span class="n">aux</span> <span class="n">defs.toList</span> <span class="mi">0</span>
+<span class="kd">def</span> <span class="n">defsImplToCnf</span> <span class="o">(</span><span class="n">defs</span> <span class="o">:</span> <span class="n">Array</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span> <span class="n">aux</span> <span class="n">defs.toList</span> <span class="mi">0</span>
   <span class="n">where</span> <span class="n">aux</span> <span class="o">:</span> <span class="n">List</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">CnfForm</span>
   <span class="bp">|</span> <span class="o">[],</span>          <span class="n">n</span> <span class="bp">=&gt;</span> <span class="o">[]</span>
-  <span class="bp">|</span> <span class="n">nnf</span> <span class="o">::</span> <span class="n">nnfs</span><span class="o">,</span> <span class="n">n</span> <span class="bp">=&gt;</span> <span class="n">defToCnf</span> <span class="o">(</span><span class="n">lit</span> <span class="o">(</span><span class="n">defLit</span> <span class="n">n</span><span class="o">))</span> <span class="n">nnf</span> <span class="bp">++</span> <span class="n">aux</span> <span class="n">nnfs</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">nnf</span> <span class="o">::</span> <span class="n">nnfs</span><span class="o">,</span> <span class="n">n</span> <span class="bp">=&gt;</span> <span class="n">implToCnf</span> <span class="o">(</span><span class="n">lit</span> <span class="o">(</span><span class="n">defLit</span> <span class="n">n</span><span class="o">))</span> <span class="n">nnf</span> <span class="bp">++</span> <span class="n">aux</span> <span class="n">nnfs</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>If we take the resulting formula and add a conjunct for the
-variable representing the top level, we have an equivalent CNF formula,
+variable representing the top level, we have an equisatisfiable CNF formula,
 as desired.</p>
 <p>A moment’s reflection shows that we can do better. For example, if
 the formula <span class="math notranslate nohighlight">\(A\)</span> is already in CNF, we don’t have to introduce
@@ -385,7 +409,7 @@ and the function <cite>NnfForm.toCnf</cite> puts it all together.</p>
 
 <span class="kd">def</span> <span class="n">toCnf</span> <span class="o">(</span><span class="n">A</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
   <span class="k">let</span> <span class="o">⟨</span><span class="n">cnf</span><span class="o">,</span> <span class="n">defs</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">andToCnf</span> <span class="n">A</span> <span class="bp">#</span><span class="o">[]</span>
-  <span class="n">cnf.union</span> <span class="o">(</span><span class="n">defsToCnf</span> <span class="n">defs</span><span class="o">)</span>
+  <span class="n">cnf.union</span> <span class="o">(</span><span class="n">defsImplToCnf</span> <span class="n">defs</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>The following example tests it out on <cite>ex1.toCnf</cite>.
@@ -405,19 +429,14 @@ to the original formula.</p>
 <span class="cm">def_4 -s,</span>
 <span class="cm">-def_0 p,</span>
 <span class="cm">-def_0 q,</span>
-<span class="cm">-p -q def_0,</span>
 <span class="cm">-def_1 def_0,</span>
 <span class="cm">-def_1 -r,</span>
-<span class="cm">-def_0 r def_1,</span>
 <span class="cm">-def_2 -p -q,</span>
-<span class="cm">p def_2,</span>
-<span class="cm">q def_2,</span>
 <span class="cm">-def_3 r,</span>
 <span class="cm">-def_3 def_2,</span>
 <span class="cm">-r -def_2 def_3,</span>
 <span class="cm">-def_4 p,</span>
 <span class="cm">-def_4 t,</span>
-<span class="cm">-p -t def_4</span>
 
 <span class="cm">Here we check to make sure it works:</span>
 
@@ -429,9 +448,17 @@ to the original formula.</p>
 
 <span class="cm">def_3 def_1 := (p ∧ q ∧ ¬ r) ∨ (p ∧ q ∧ ¬ r)</span>
 <span class="cm">def_4 -s    := ¬ s ∨ (p ∧ t)</span>
+
+<span class="cm">Each &#39;:=&#39; is really an implication.</span>
 <span class="cm">-/</span>
 </pre></div>
 </div>
+<p>There is one additional optimization that we have not implemented in the library:
+we can be more efficient with iterated conjunctions and disjunctions.
+For example, you can check that <span class="math notranslate nohighlight">\(d \limplies \ell_1 \land \cdots \land \ell_n\)</span>
+can be represented by the conjunction of the clauses <span class="math notranslate nohighlight">\(\lnot d \lor \ell_1\)</span> to
+<span class="math notranslate nohighlight">\(\lnot d \lor \ell_n\)</span>, and <span class="math notranslate nohighlight">\(d \limplies \ell_1 \lor \cdots \lor \ell_n\)</span>
+can be represented by the single clause <span class="math notranslate nohighlight">\(\lnot d \lor \ell_1 \lor \cdots \lor \ell_n\)</span>.</p>
 </div>
 <div class="section" id="unit-propagation-and-the-pure-literal-rule">
 <span id="section-unit-propagation-and-the-pure-literal-rule"></span><h2><span class="section-number">7.2. </span>Unit propagation and the pure literal rule<a class="headerlink" href="#unit-propagation-and-the-pure-literal-rule" title="Permalink to this headline">¶</a></h2>
