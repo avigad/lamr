@@ -145,7 +145,7 @@ a recursive definition:
     (\lnot C) [B/p] & = \lnot (C[B /p]) \\
     (C \star D) [B / p] & = C[B / p] \star D[B / p]
 
-.. _semantics_propositional_logic:
+.. _section_semantics_propositional_logic:
 
 Semantics
 ---------

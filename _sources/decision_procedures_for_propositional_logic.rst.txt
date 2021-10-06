@@ -219,11 +219,43 @@ Unit propagation and the pure literal rule
 
 In earlier chapters, we considered only truth assignments that assign a truth value to all propositional
 variables. However, complete search methods for SAT like DPLL use *partial assignments*, which assign truth
-values to some propositional variables. For a clause :math:`C` and partial truth assignment :math:`\tau`,
+values to some subset of the variables. For a clause :math:`C` and partial truth assignment :math:`\tau`,
 we denote by :math:`\tval{C}_\tau` the reduced clause constructed by removing falsified literals. If
-:math:`\tau` satisfies a literal in :math:`C` then :math:`\tval{C}_\tau = \top`, while if :math:`\tau`
-falsifies all literals in :math:`C` then :math:`\tval{C}_\tau = \bot`. For a CNF formula :math:`\Gamma`,
-we denote by :math:`\tval{\Gamma}_\tau` the conjunction of :math:`\tval{C}_\tau` with :math:`C \in \Gamma`.
+:math:`\tau` satisfies a literal in :math:`C`, we interpret :math:`\tval{C}_\tau` as the
+singleton clause consisting of :math:`\top`,
+while if :math:`\tau` falsifies all literals in :math:`C`, then :math:`\tval{C}_\tau` is the empty clause, which we take to represent :math:`\bot`. For a CNF formula :math:`\Gamma`,
+we denote by :math:`\tval{\Gamma}_\tau` the conjunction of :math:`\tval{C}_\tau` with :math:`C \in \Gamma`,
+where we throw away the clauses :math:`C` such that :math:`\tval{C}_\tau` is :math:`\top`.
+Remember that if :math:`\tval{\Gamma}_\tau` is an empty conjunction,
+we interpret it as being true. In other words, we identify the empty conjunction with :math:`\top`.
+On the other hand, if :math:`\tval{\Gamma}_\tau` contains an empty clause, then :math:`\tval{\Gamma}`
+is equivalent to :math:`\bot`.
+
+Notice that we are reusing the notation :math:`\tval{A}_\tau` that we introduced
+in :numref:`section_semantics_propositional_logic` to describe the evaluation of a formula :math:`A` under a truth assignment :math:`\tau`.
+This is an abuse of notation, because in that section we were interpreting :math:`\tval{A}_\tau`
+as a *truth value*, whereas now we are taking :math:`\tval{C}_\tau` to be a *clause*
+and we are taking :math:`\tval{\Gamma}_\tau` to be *CNF formula*.
+But the abuse is harmless, and, indeed, quite helpful.
+Notice that if :math:`\tau` is a partial truth assignment that assigns values to
+all the variables in a clause :math:`C`, then :math:`\tval{C}_\tau` evaluates to either the empty
+clause or :math:`\top`,
+and if :math:`\tau` is a partial truth assignment that assigns values to
+all the variables in a CNF formula :math:`\Gamma`,
+then :math:`\tval{\Gamma}_\tau` evaluates to either the empty CNF formula, :math:`\top`,
+or the singleton conjunction of the empty clause, which is our CNF representation of :math:`\bot`.
+In that sense, the notation we are using in this chapter is a generalization of the
+notation we used to describe the semantics of propositional logic.
+
+Remember also that if :math:`\tau` is a truth assignment in the sense of :numref:`section_semantics_propositional_logic`,
+the semantic evaluation :math:`\tval{A}_\tau` only depends on the values of :math:`\tau`
+that are assigned to variables that occur in :math:`\tval{A}`.
+In this chapter, when we say "truth assignment," we will generally mean "partial truth assignment,"
+and the analogous fact holds: the values of :math:`\tval{C}_\tau` and :math:`\tval{\Gamma}_\tau`
+depend only on the variables found in :math:`C` and :math:`\Gamma`, respectively.
+In particular, if :math:`\tau` is a satisfying assignment for :math:`C`,
+we can assume without loss of generality that :math:`\tau` assigns values only to the variables
+that occur in :math:`C`, and similarly for :math:`\Gamma`.
 
 A key SAT-solving technique is *unit propagation*. Given a CNF formula :math:`\Gamma` and a truth assignment
 :math:`\tau`, a clause :math:`C \in \Gamma` is *unit under* :math:`\tau` if :math:`\tau` falsifies all but one literal of

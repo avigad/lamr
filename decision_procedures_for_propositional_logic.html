@@ -464,11 +464,41 @@ can be represented by the single clause <span class="math notranslate nohighligh
 <span id="section-unit-propagation-and-the-pure-literal-rule"></span><h2><span class="section-number">7.2. </span>Unit propagation and the pure literal rule<a class="headerlink" href="#unit-propagation-and-the-pure-literal-rule" title="Permalink to this headline">¶</a></h2>
 <p>In earlier chapters, we considered only truth assignments that assign a truth value to all propositional
 variables. However, complete search methods for SAT like DPLL use <em>partial assignments</em>, which assign truth
-values to some propositional variables. For a clause <span class="math notranslate nohighlight">\(C\)</span> and partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
+values to some subset of the variables. For a clause <span class="math notranslate nohighlight">\(C\)</span> and partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
 we denote by <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> the reduced clause constructed by removing falsified literals. If
-<span class="math notranslate nohighlight">\(\tau\)</span> satisfies a literal in <span class="math notranslate nohighlight">\(C\)</span> then <span class="math notranslate nohighlight">\(\tval{C}_\tau = \top\)</span>, while if <span class="math notranslate nohighlight">\(\tau\)</span>
-falsifies all literals in <span class="math notranslate nohighlight">\(C\)</span> then <span class="math notranslate nohighlight">\(\tval{C}_\tau = \bot\)</span>. For a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>,
-we denote by <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> the conjunction of <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> with <span class="math notranslate nohighlight">\(C \in \Gamma\)</span>.</p>
+<span class="math notranslate nohighlight">\(\tau\)</span> satisfies a literal in <span class="math notranslate nohighlight">\(C\)</span>, we interpret <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> as the
+singleton clause consisting of <span class="math notranslate nohighlight">\(\top\)</span>,
+while if <span class="math notranslate nohighlight">\(\tau\)</span> falsifies all literals in <span class="math notranslate nohighlight">\(C\)</span>, then <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> is the empty clause, which we take to represent <span class="math notranslate nohighlight">\(\bot\)</span>. For a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>,
+we denote by <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> the conjunction of <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> with <span class="math notranslate nohighlight">\(C \in \Gamma\)</span>,
+where we throw away the clauses <span class="math notranslate nohighlight">\(C\)</span> such that <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> is <span class="math notranslate nohighlight">\(\top\)</span>.
+Remember that if <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> is an empty conjunction,
+we interpret it as being true. In other words, we identify the empty conjunction with <span class="math notranslate nohighlight">\(\top\)</span>.
+On the other hand, if <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> contains an empty clause, then <span class="math notranslate nohighlight">\(\tval{\Gamma}\)</span>
+is equivalent to <span class="math notranslate nohighlight">\(\bot\)</span>.</p>
+<p>Notice that we are reusing the notation <span class="math notranslate nohighlight">\(\tval{A}_\tau\)</span> that we introduced
+in <a class="reference internal" href="propositional_logic.html#section-semantics-propositional-logic"><span class="std std-numref">Section 4.2</span></a> to describe the evaluation of a formula <span class="math notranslate nohighlight">\(A\)</span> under a truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>.
+This is an abuse of notation, because in that section we were interpreting <span class="math notranslate nohighlight">\(\tval{A}_\tau\)</span>
+as a <em>truth value</em>, whereas now we are taking <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> to be a <em>clause</em>
+and we are taking <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> to be <em>CNF formula</em>.
+But the abuse is harmless, and, indeed, quite helpful.
+Notice that if <span class="math notranslate nohighlight">\(\tau\)</span> is a partial truth assignment that assigns values to
+all the variables in a clause <span class="math notranslate nohighlight">\(C\)</span>, then <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> evaluates to either the empty
+clause or <span class="math notranslate nohighlight">\(\top\)</span>,
+and if <span class="math notranslate nohighlight">\(\tau\)</span> is a partial truth assignment that assigns values to
+all the variables in a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>,
+then <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> evaluates to either the empty CNF formula, <span class="math notranslate nohighlight">\(\top\)</span>,
+or the singleton conjunction of the empty clause, which is our CNF representation of <span class="math notranslate nohighlight">\(\bot\)</span>.
+In that sense, the notation we are using in this chapter is a generalization of the
+notation we used to describe the semantics of propositional logic.</p>
+<p>Remember also that if <span class="math notranslate nohighlight">\(\tau\)</span> is a truth assignment in the sense of <a class="reference internal" href="propositional_logic.html#section-semantics-propositional-logic"><span class="std std-numref">Section 4.2</span></a>,
+the semantic evaluation <span class="math notranslate nohighlight">\(\tval{A}_\tau\)</span> only depends on the values of <span class="math notranslate nohighlight">\(\tau\)</span>
+that are assigned to variables that occur in <span class="math notranslate nohighlight">\(\tval{A}\)</span>.
+In this chapter, when we say “truth assignment,” we will generally mean “partial truth assignment,”
+and the analogous fact holds: the values of <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> and <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>
+depend only on the variables found in <span class="math notranslate nohighlight">\(C\)</span> and <span class="math notranslate nohighlight">\(\Gamma\)</span>, respectively.
+In particular, if <span class="math notranslate nohighlight">\(\tau\)</span> is a satisfying assignment for <span class="math notranslate nohighlight">\(C\)</span>,
+we can assume without loss of generality that <span class="math notranslate nohighlight">\(\tau\)</span> assigns values only to the variables
+that occur in <span class="math notranslate nohighlight">\(C\)</span>, and similarly for <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
 <p>A key SAT-solving technique is <em>unit propagation</em>. Given a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> and a truth assignment
 <span class="math notranslate nohighlight">\(\tau\)</span>, a clause <span class="math notranslate nohighlight">\(C \in \Gamma\)</span> is <em>unit under</em> <span class="math notranslate nohighlight">\(\tau\)</span> if <span class="math notranslate nohighlight">\(\tau\)</span> falsifies all but one literal of
 <span class="math notranslate nohighlight">\(C\)</span> and the remaining literal is unassigned. In other words, <span class="math notranslate nohighlight">\(C\)</span> is unit under <span class="math notranslate nohighlight">\(\tau\)</span> if <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> consists of a single literal. The only way to satisfy
