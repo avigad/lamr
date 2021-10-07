@@ -563,51 +563,55 @@ In the meanwhile, as a placeholder, we provide a few snippets.</p>
   <span class="bp">|</span> <span class="o">[]</span>      <span class="bp">=&gt;</span> <span class="o">[]</span>
   <span class="bp">|</span> <span class="n">c</span> <span class="o">::</span> <span class="n">cs</span> <span class="bp">=&gt;</span>
                <span class="k">let</span> <span class="n">cs&#39;</span> <span class="o">:=</span> <span class="n">simplify</span> <span class="n">x</span> <span class="n">cs</span>
-               <span class="c1">-- Clause becomes satisfied</span>
+               <span class="c1">-- If clause became satisfied, erase it from the CNF</span>
                <span class="k">if</span> <span class="n">c.elem</span> <span class="n">x</span> <span class="k">then</span> <span class="n">cs&#39;</span>
-               <span class="c1">-- Some literals in the clause become falsified</span>
-               <span class="k">else</span> <span class="k">if</span> <span class="n">c.elem</span> <span class="n">x.negate</span> <span class="k">then</span> <span class="n">c.eraseAll</span> <span class="n">x.negate</span> <span class="o">::</span> <span class="n">cs&#39;</span>
-               <span class="k">else</span> <span class="n">c</span> <span class="o">::</span> <span class="n">cs&#39;</span>
+               <span class="c1">-- Otherwise erase any falsified literals</span>
+               <span class="k">else</span> <span class="n">c.eraseAll</span> <span class="n">x.negate</span> <span class="o">::</span> <span class="n">cs&#39;</span>
 
-<span class="k">#eval</span> <span class="n">simplify</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="n">x₁</span><span class="o">}</span> <span class="n">cnf</span><span class="bp">!</span><span class="o">{</span><span class="n">x₁</span> <span class="bp">-</span><span class="n">y₁</span> <span class="n">x₁</span> <span class="bp">-</span><span class="n">x₁</span><span class="o">,</span> <span class="n">x₁</span><span class="o">,</span> <span class="n">y₁</span> <span class="n">y₁</span><span class="o">,</span> <span class="bp">-</span><span class="n">y₁</span> <span class="bp">-</span><span class="n">x₁</span><span class="o">,</span> <span class="bp">-</span><span class="n">x₁</span><span class="o">}</span>
+<span class="k">#eval</span> <span class="n">toString</span> <span class="bp">&lt;|</span> <span class="n">simplify</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span><span class="o">}</span> <span class="n">cnf</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span> <span class="bp">-</span><span class="n">q</span> <span class="n">p</span> <span class="bp">-</span><span class="n">p</span><span class="o">,</span> <span class="n">p</span><span class="o">,</span> <span class="n">q</span> <span class="n">q</span><span class="o">,</span> <span class="bp">-</span><span class="n">q</span> <span class="bp">-</span><span class="n">p</span><span class="o">,</span> <span class="bp">-</span><span class="n">p</span><span class="o">}</span>
 </pre></div>
 </div>
 <p>The following performs unit propagation:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- Assumes no additions to `α` since last `simplify _ F` call.</span>
-<span class="sd">NB: If branching, call `simplify` first. -/</span>
-<span class="n">partial</span> <span class="kd">def</span> <span class="n">propagateUnits</span> <span class="o">:</span> <span class="n">PropAssignment</span> <span class="bp">→</span> <span class="n">CnfForm</span> <span class="bp">→</span> <span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span>
-  <span class="bp">|</span> <span class="n">τ</span><span class="o">,</span> <span class="o">[]</span> <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="o">[]⟩</span>
-  <span class="bp">|</span> <span class="n">τ</span><span class="o">,</span> <span class="n">φ</span>  <span class="bp">=&gt;</span>
-    <span class="k">if</span> <span class="n">φ.hasEmpty</span> <span class="k">then</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
-    <span class="k">else</span> <span class="k">match</span> <span class="n">φ.findUnit</span> <span class="k">with</span>
-      <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
-      <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">τ.mem</span> <span class="n">x.name</span>
-                  <span class="k">then</span> <span class="n">panic</span><span class="bp">!</span> <span class="s2">&quot;Forgot to simplify -- no literal that has already been assigned should appear in the formula.&quot;</span>
-                  <span class="k">else</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ.withLit</span> <span class="n">x</span><span class="o">)</span> <span class="o">(</span><span class="n">simplify</span> <span class="n">x</span> <span class="n">φ</span><span class="o">)</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- Performs a round of unit propagation on `φ` under the assignment `τ`.</span>
+<span class="sd">Returns an updated assignment and a simplified formula.</span>
+
+<span class="sd">Assumes no additions to `τ` since last `simplify _ φ` call.</span>
+<span class="sd">NB: If branching in DPLL, call `simplify` first. -/</span>
+<span class="n">partial</span> <span class="kd">def</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span> <span class="o">:=</span>
+  <span class="c1">-- If `φ` is unsat, we&#39;re done.</span>
+  <span class="k">if</span> <span class="n">φ.hasEmpty</span> <span class="k">then</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
+  <span class="k">else</span> <span class="k">match</span> <span class="n">φ.findUnit</span> <span class="k">with</span>
+    <span class="c1">-- If there are no unit clauses, we&#39;re done.</span>
+    <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
+    <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span>
+      <span class="c1">-- If there is a unit clause `x`, simplify the formula</span>
+      <span class="c1">-- assuming `x` is true and continue propagating.</span>
+      <span class="k">let</span> <span class="n">φ&#39;</span> <span class="o">:=</span> <span class="n">simplify</span> <span class="n">x</span> <span class="n">φ</span>
+      <span class="k">if</span> <span class="n">τ.mem</span> <span class="n">x.name</span>
+      <span class="k">then</span> <span class="n">panic</span><span class="bp">!</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;Forgot to simplify -- &#39;{x}&#39; has already been assigned and should not appear in the formula.&quot;</span>
+      <span class="k">else</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ.withLit</span> <span class="n">x</span><span class="o">)</span> <span class="n">φ&#39;</span>
 </pre></div>
 </div>
 <p>And the following is the main procedure:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">dpllSatAux</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">PropAssignment</span> <span class="bp">→</span> <span class="n">CnfForm</span> <span class="bp">→</span> <span class="n">Option</span> <span class="o">(</span><span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span><span class="o">)</span>
-  <span class="bp">|</span> <span class="n">lvl</span><span class="o">,</span> <span class="n">τ</span><span class="o">,</span> <span class="n">φ</span> <span class="bp">=&gt;</span> <span class="k">match</span> <span class="n">pickSplit</span> <span class="n">φ</span> <span class="k">with</span>
-    <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="n">some</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
-    <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="k">let</span> <span class="n">dpllSatAux</span> <span class="o">:=</span> <span class="n">dpllSatAux</span> <span class="o">(</span><span class="n">lvl</span><span class="bp">+</span><span class="mi">1</span><span class="o">)</span>
-                <span class="k">let</span> <span class="o">(</span><span class="n">τ₂</span><span class="o">,</span> <span class="n">φ₂</span><span class="o">)</span> <span class="o">:=</span> <span class="n">propagateWithNew</span> <span class="n">x</span> <span class="n">τ</span> <span class="n">φ</span>
-                <span class="k">if</span> <span class="n">φ₂.hasEmpty</span> <span class="k">then</span>
-                  <span class="k">let</span> <span class="n">x&#39;</span> <span class="o">:=</span> <span class="n">x.negate</span>
-                  <span class="k">let</span> <span class="o">(</span><span class="n">τ₃</span><span class="o">,</span> <span class="n">φ₃</span><span class="o">)</span> <span class="o">:=</span> <span class="n">propagateWithNew</span> <span class="n">x&#39;</span> <span class="n">τ</span> <span class="n">φ</span>
-                  <span class="k">if</span> <span class="n">φ₃.hasEmpty</span> <span class="k">then</span>
-                    <span class="n">none</span>
-                  <span class="k">else</span> <span class="n">dpllSatAux</span> <span class="n">τ₃</span> <span class="n">φ₃</span>
-                <span class="k">else</span> <span class="o">(</span><span class="n">dpllSatAux</span> <span class="n">τ₂</span> <span class="n">φ₂</span><span class="o">)</span><span class="bp">.</span><span class="n">orElse</span> <span class="o">(</span>
-                  <span class="k">let</span> <span class="n">x&#39;</span> <span class="o">:=</span> <span class="n">x.negate</span>
-                  <span class="k">let</span> <span class="o">(</span><span class="n">τ₄</span><span class="o">,</span> <span class="n">φ₄</span><span class="o">)</span> <span class="o">:=</span> <span class="n">propagateWithNew</span> <span class="n">x&#39;</span> <span class="n">τ</span> <span class="n">φ</span>
-                  <span class="k">if</span> <span class="n">φ₄.hasEmpty</span> <span class="k">then</span>
-                    <span class="n">none</span>
-                  <span class="k">else</span> <span class="n">dpllSatAux</span> <span class="n">τ₄</span> <span class="n">φ₄</span><span class="o">)</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">dpllSatAux</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Option</span> <span class="o">(</span><span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:=</span>
+  <span class="k">if</span> <span class="n">φ.hasEmpty</span> <span class="k">then</span> <span class="n">none</span>
+  <span class="k">else</span> <span class="k">match</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="n">φ</span> <span class="k">with</span>
+  <span class="c1">-- No variables left to split on, we found a solution.</span>
+  <span class="bp">|</span> <span class="n">none</span> <span class="bp">=&gt;</span> <span class="n">some</span> <span class="o">(</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">)</span>
+  <span class="c1">-- Split on `x`.</span>
+  <span class="c1">-- `&lt;|&gt;` is the &quot;or else&quot; operator which tries one action, and if that failed tries the other.</span>
+  <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="n">goWithNew</span> <span class="n">x</span> <span class="n">τ</span> <span class="n">φ</span> <span class="bp">&lt;|&gt;</span> <span class="n">goWithNew</span> <span class="o">(</span><span class="bp">-</span><span class="n">x</span><span class="o">)</span> <span class="n">τ</span> <span class="n">φ</span>
 
-<span class="kd">def</span> <span class="n">dpllSat</span> <span class="o">(</span><span class="n">F</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Option</span> <span class="n">PropAssignment</span> <span class="o">:=</span>
-  <span class="k">let</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">propagateUnits</span> <span class="o">[]</span> <span class="n">F</span>
-  <span class="o">(</span><span class="n">dpllSatAux</span> <span class="mi">0</span> <span class="n">τ</span> <span class="n">φ</span><span class="o">)</span><span class="bp">.</span><span class="n">map</span> <span class="o">(</span><span class="k">fun</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">_</span><span class="o">⟩</span> <span class="bp">=&gt;</span> <span class="n">τ</span><span class="o">)</span>
+<span class="n">where</span>
+  <span class="sd">/-- Assigns `x` to true and continues out DPLL. -/</span>
+  <span class="n">goWithNew</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Option</span> <span class="o">(</span><span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:=</span>
+    <span class="k">let</span> <span class="o">(</span><span class="n">τ&#39;</span><span class="o">,</span> <span class="n">φ&#39;</span><span class="o">)</span> <span class="o">:=</span> <span class="n">propagateWithNew</span> <span class="n">x</span> <span class="n">τ</span> <span class="n">φ</span>
+    <span class="n">dpllSatAux</span> <span class="n">τ&#39;</span> <span class="n">φ&#39;</span>
+
+<span class="sd">/-- Solve `φ` using DPLL. Return a satisfying assignment if found, otherwise `none`. -/</span>
+<span class="kd">def</span> <span class="n">dpllSat</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Option</span> <span class="n">PropAssignment</span> <span class="o">:=</span>
+  <span class="k">let</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">propagateUnits</span> <span class="o">[]</span> <span class="n">φ</span>
+  <span class="o">(</span><span class="n">dpllSatAux</span> <span class="n">τ</span> <span class="n">φ</span><span class="o">)</span><span class="bp">.</span><span class="n">map</span> <span class="k">fun</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">_</span><span class="o">⟩</span> <span class="bp">=&gt;</span> <span class="n">τ</span>
 </pre></div>
 </div>
 </div>
