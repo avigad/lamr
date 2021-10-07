@@ -24,13 +24,12 @@ def simplify (x : Lit) (φ : CnfForm) : CnfForm :=
   | []      => []
   | c :: cs =>
                let cs' := simplify x cs
-               -- Clause becomes satisfied
+               -- If clause became satisfied, erase it from the CNF
                if c.elem x then cs'
-               -- Some literals in the clause become falsified
-               else if c.elem x.negate then c.eraseAll x.negate :: cs'
-               else c :: cs'
+               -- Otherwise erase any falsified literals
+               else c.eraseAll x.negate :: cs'
 
-#eval simplify lit!{x₁} cnf!{x₁ -y₁ x₁ -x₁, x₁, y₁ y₁, -y₁ -x₁, -x₁}
+#eval toString <| simplify lit!{p} cnf!{p -q p -p, p, q q, -q -p, -p}
 -- end textbook: simplify
 
 /-- Returns `true` iff the CNF contains an empty clause. -/
@@ -46,81 +45,101 @@ def CnfForm.findUnit : CnfForm → Option Lit
   | c :: cs   => findUnit cs
 
 -- textbook: propagateUnits
-/-- Assumes no additions to `α` since last `simplify _ F` call.
-NB: If branching, call `simplify` first. -/
-partial def propagateUnits : PropAssignment → CnfForm → PropAssignment × CnfForm
-  | τ, [] => ⟨τ, []⟩
-  | τ, φ  =>
-    if φ.hasEmpty then ⟨τ, φ⟩
-    else match φ.findUnit with
-      | none   => ⟨τ, φ⟩
-      | some x => if τ.mem x.name
-                  then panic! "Forgot to simplify -- no literal that has already been assigned should appear in the formula."
-                  else propagateUnits (τ.withLit x) (simplify x φ)
+/-- Performs a round of unit propagation on `φ` under the assignment `τ`.
+Returns an updated assignment and a simplified formula.
+
+Assumes no additions to `τ` since last `simplify _ φ` call.
+NB: If branching in DPLL, call `simplify` first. -/
+partial def propagateUnits (τ : PropAssignment) (φ : CnfForm) : PropAssignment × CnfForm :=
+  -- If `φ` is unsat, we're done.
+  if φ.hasEmpty then ⟨τ, φ⟩
+  else match φ.findUnit with
+    -- If there are no unit clauses, we're done.
+    | none   => ⟨τ, φ⟩
+    | some x =>
+      -- If there is a unit clause `x`, simplify the formula
+      -- assuming `x` is true and continue propagating.
+      let φ' := simplify x φ
+      if τ.mem x.name
+      then panic! s!"Forgot to simplify -- '{x}' has already been assigned and should not appear in the formula."
+      else propagateUnits (τ.withLit x) φ'
 -- end textbook: propagateUnits
 
-def propagateWithNew : Lit → PropAssignment → CnfForm → PropAssignment × CnfForm
-  | x, τ, φ => let φ := simplify x φ
-               propagateUnits (τ.withLit x) φ
+/-- Assign (previously unassigned) `x` to true and peform unit propagation. -/
+def propagateWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) : PropAssignment × CnfForm :=
+  propagateUnits (τ.withLit x) (simplify x φ)
 
-#eval toString $ propagateUnits [] cnf!{x₁, y₁, y₁ -y₁}
-#eval toString $ propagateUnits [] cnf!{x₁, y₁, -y₁ -y₁}
+#eval toString <| propagateUnits [] cnf!{p, q, q -q}
+#eval toString <| propagateUnits [] cnf!{p, q, -q -q}
+#eval toString <| propagateUnits [] cnf!{p q, p -q}
 
 /-- Picks which literal to split on. The parity (whether it's negated) returned should
 be tried first, and then the opposite. -/
 -- TODO which heuristics could be used here?
-def pickSplit : CnfForm → Option Lit
+def pickSplit? : CnfForm → Option Lit
   | []      => none
   | c :: cs => match c with
     | x :: xs => x
-    | _       => pickSplit cs
+    | _       => pickSplit? cs
 
 -- textbook: dpllSat
-partial def dpllSatAux : Nat → PropAssignment → CnfForm → Option (PropAssignment × CnfForm)
-  | lvl, τ, φ => match pickSplit φ with
-    | none   => some ⟨τ, φ⟩
-    | some x => let dpllSatAux := dpllSatAux (lvl+1)
-                let (τ₂, φ₂) := propagateWithNew x τ φ
-                if φ₂.hasEmpty then
-                  let x' := x.negate
-                  let (τ₃, φ₃) := propagateWithNew x' τ φ
-                  if φ₃.hasEmpty then
-                    none
-                  else dpllSatAux τ₃ φ₃
-                else (dpllSatAux τ₂ φ₂).orElse (
-                  let x' := x.negate
-                  let (τ₄, φ₄) := propagateWithNew x' τ φ
-                  if φ₄.hasEmpty then
-                    none
-                  else dpllSatAux τ₄ φ₄)
+partial def dpllSatAux (τ : PropAssignment) (φ : CnfForm) : Option (PropAssignment × CnfForm) :=
+  if φ.hasEmpty then none
+  else match pickSplit? φ with
+  -- No variables left to split on, we found a solution.
+  | none => some (τ, φ)
+  -- Split on `x`.
+  -- `<|>` is the "or else" operator which tries one action, and if that failed tries the other.
+  | some x => goWithNew x τ φ <|> goWithNew (-x) τ φ
 
-def dpllSat (F : CnfForm) : Option PropAssignment :=
-  let ⟨τ, φ⟩ := propagateUnits [] F
-  (dpllSatAux 0 τ φ).map (fun ⟨τ, _⟩ => τ)
+where
+  /-- Assigns `x` to true and continues out DPLL. -/
+  goWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) : Option (PropAssignment × CnfForm) :=
+    let (τ', φ') := propagateWithNew x τ φ
+    dpllSatAux τ' φ'
+
+/-- Solve `φ` using DPLL. Return a satisfying assignment if found, otherwise `none`. -/
+def dpllSat (φ : CnfForm) : Option PropAssignment :=
+  let ⟨τ, φ⟩ := propagateUnits [] φ
+  (dpllSatAux τ φ).map fun ⟨τ, _⟩ => τ
 -- end textbook: dpllSat
 
-def ϕ := cnf!{x₁ x₂ -x₃, -x₁ x₂ x₃, -x₁ -x₂ x₃, x₁ x₃, -x₁ -x₃}
-#eval (dpllSat ϕ).get! |>.evalCnf ϕ
+namespace hidden
+
+-- Solve a formula.
+
+def ϕ := cnf!{p q -r, -p q r, -p -q r, p r, -p -r}
+def τ := dpllSat ϕ |>.get!
+#eval τ
+#eval τ.evalCnf ϕ
+
+-- Find no assignment for unsat formulas.
+
+#eval dpllSat cnf!{p q, -q, -p}
+#eval dpllSat cnf!{-p q, -q p, p q, -p -q}
+
+end hidden
 
 theorem dpllSatYesSpec : ∀ ϕ, ∀ τ, dpllSat ϕ = some τ ↔ τ.evalCnf ϕ = true := by
-  admit
+  admit -- TODO
 theorem dpllSatNoSpec : ∀ ϕ, dpllSat ϕ = none ↔ ∀ (τ : PropAssignment), τ.evalCnf ϕ = false := by
-  admit
+  admit -- TODO
 
 def String.splitOn' (s : String) (sep : String) : List String :=
-  (s.splitOn sep).filter (fun c => !c.isEmpty)
+  (s.splitOn sep).filter fun c => !c.isEmpty
 
+/-- Parse a DIMACS CNF file. -/
 def readDimacs (fname : String) : IO CnfForm := do
   let lns ← IO.FS.lines fname
   let lns := lns.filter (fun ln => ln ≠ "" ∧ ln.front ≠ 'c')
   let header := (lns.get! 0).splitOn' " "
   let ["p", "cnf", n, m] ← header
-    | throw $ IO.userError "Invalid DIMACS header."
+    | throw <| IO.userError "Invalid DIMACS header."
   let (some nVars, some nClauses) ← (n.toNat?, m.toNat?)
-    | throw $ IO.userError "Invalid var/clause count in header."
+    | throw <| IO.userError "Invalid var/clause count in header."
 
   let lns := lns.extract 1 lns.size
-  if lns.size ≠ nClauses then throw $ IO.userError "Inconsistent clause count." else pure ()
+  if lns.size ≠ nClauses then throw <| IO.userError "Inconsistent clause count." else pure ()
 
   let mut cnf : CnfForm := []
   for ln in lns do
@@ -128,7 +147,7 @@ def readDimacs (fname : String) : IO CnfForm := do
     let vars := vars.take (vars.length - 1) -- drop "0"
     let vars := vars.map Lit.ofDimacs?
     if vars.any (·.isNone) then
-      throw $ IO.userError s!"cannot parse line '{ln}'"
+      throw <| IO.userError s!"cannot parse line '{ln}'"
     cnf := (vars.map Option.get!) :: cnf
 
   return cnf
@@ -137,15 +156,14 @@ def main (args : List String) : IO UInt32 :=
   match args with
   | fname :: _ => do
     let cnf ← readDimacs fname
-    --IO.println $ "c Formula:\nc " ++ toString cnf;
-    let result := match dpllSat cnf with
-      | none   => "s UNSATISFIABLE"
-      | some τ => "c " ++ toString τ ++
-                  "\ns SATISFIABLE\nv " ++
-                  " ".intercalate (τ.map fun (x, v) => if v then x else "-" ++ x) ++
-                  " 0"
-    IO.println result
-    pure 0
+    --IO.println <| "c Formula:\nc " ++ toString cnf
+    match dpllSat cnf with
+      | none   => IO.println "s UNSATISFIABLE"
+                  return 20
+      | some τ => IO.println s!"c {τ}"
+                  IO.println "s SATISFIABLE"
+                  IO.println <| "v " ++ " ".intercalate (τ.map fun (x, v) => if v then x else "-" ++ x) ++ " 0"
+                  return 10
   | _ => do
-    IO.println ("Usage: " ++ "dpll" ++ " <problem.cnf>")
-    pure 1
+    IO.println ("Usage: dpll <problem.cnf>")
+    return 1
