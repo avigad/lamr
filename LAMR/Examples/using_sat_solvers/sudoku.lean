@@ -8,7 +8,7 @@ inductive SudokuTile
 open SudokuTile in
 instance : ToString SudokuTile :=
   ⟨fun
-    | val n => toString n
+    | val n => toString (n+1)
     | empty => " "⟩
 
 structure Sudoku where
@@ -120,17 +120,36 @@ def decodeSolution (dim : Nat) (τ : List Lit) : Except String Sudoku := do
       s := { s with rows := s.rows.take i ++ [row] ++ s.rows.drop (i+1) }
   return s
 
+def units := [[(mkLit 0 1 3)],
+              [(mkLit 0 3 2)],
+              [(mkLit 1 6 6)],
+              [(mkLit 1 7 8)],
+              [(mkLit 2 3 5)],
+              [(mkLit 3 3 0)],
+              [(mkLit 3 4 3)],
+              [(mkLit 3 6 4)],
+              [(mkLit 4 0 8)],
+              [(mkLit 4 7 0)],
+              [(mkLit 5 0 1)],
+              [(mkLit 5 8 5)],
+              [(mkLit 6 4 6)],
+              [(mkLit 6 5 1)],
+              [(mkLit 7 1 4)],
+              [(mkLit 7 6 7)],
+              [(mkLit 8 4 8)]]
+
 -- Solve a 3-Sudoku.
--- #eval (do
---   let dim := 3
---   let cnf := empty dim |>.cnfEncode
---   let (out, result) ← callCadical cnf
---   match result with
---   | SatResult.Unsat _ => IO.println "Sudoku unsat."
---   | SatResult.Sat τ  =>
---     match decodeSolution dim τ with
---     | Except.error e => throwThe IO.Error e
---     | Except.ok s => IO.println (toString s)
---   : IO Unit)
+#eval (do
+  let dim := 3
+  let cnf := empty dim |>.cnfEncode
+  let cnf2 := cnf.union units
+  let (out, result) ← callCadical cnf2
+  match result with
+    | SatResult.Unsat _ => IO.println "Sudoku unsat."
+    | SatResult.Sat τ  =>
+         match decodeSolution dim τ with
+    | Except.error e => throwThe IO.Error e
+    | Except.ok s => IO.println (toString s)
+  : IO Unit)
 
 end Sudoku

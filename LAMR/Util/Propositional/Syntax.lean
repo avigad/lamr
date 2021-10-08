@@ -260,6 +260,7 @@ end CnfForm
 Assignment to propositional variables
 -/
 
+/-- A partial truth assignment. -/
 def PropAssignment := List (String × Bool)
 
 instance : Inhabited PropAssignment :=
@@ -296,12 +297,14 @@ def PropAssignment.withLit (τ : PropAssignment) : Lit → PropAssignment
   | Lit.neg x => (x, false) :: τ
   | _ => panic! "cannot extend assignment with constant"
 
+/-- Return the truth value of `x` at `τ` if assigned, otherwise `none`. -/
 def PropAssignment.eval? (τ : PropAssignment) (x : String) : Option Bool := do
   let τ : List _ := τ
   for (y, v) in τ do
     if y == x then return some v
   return none
 
+/-- Evaluate the total assignment extending `τ` with `⊥` for unassigned variables at `x`. -/
 def PropAssignment.eval (τ : PropAssignment) (x : String) : Bool :=
   τ.eval? x |>.getD false
 
@@ -311,3 +314,10 @@ def PropAssignment.evalLit? (τ : PropAssignment) : Lit → Option Bool
   | fls => false
   | pos x => τ.eval? x
   | neg x => τ.eval? x |>.map (!·)
+
+open Lit in
+def PropAssignment.evalLit (τ : PropAssignment) : Lit → Bool
+  | tr => true
+  | fls => false
+  | pos x => τ.eval x
+  | neg x => !(τ.eval x)
