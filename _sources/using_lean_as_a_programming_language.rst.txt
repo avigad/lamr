@@ -2,8 +2,8 @@
 
 .. _chapter_using_lean_as_a_programming_language:
 
-Lean as a Programming Language
-==============================
+Using Lean as a Programming Language
+====================================
 
 .. _section_about_lean:
 

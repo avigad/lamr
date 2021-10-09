@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>9. Deduction for Propositional Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  <title>8. Deduction for Propositional Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
   
 
   
@@ -36,14 +36,16 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "{\\to}", "liff": "{\\leftrightarrow}", "proves": "{\\vdash}", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1]}}}</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="10. Terms and Formulas" href="terms_and_formulas.html" />
-    <link rel="prev" title="8. Using SAT Solvers" href="using_sat_solvers.html" /> 
+    <link rel="next" title="9. Using Lean as a Proof Assistant" href="using_lean_as_a_proof_assistant.html" />
+    <link rel="prev" title="7. Using SAT Solvers" href="using_sat_solvers.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,13 +94,20 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Using Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">6. Lean as a Proof Assistant</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">7. Decision Procedures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">8. Using SAT Solvers</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">9. Deduction for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Deduction for Propositional Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#axiomatic-systems">8.1. Axiomatic systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-sequent-calculus">8.2. A sequent calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resolution">8.3. Resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#natural-deduction">8.4. Natural deduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compactness">8.5. Compactness</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
@@ -154,7 +163,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">9. </span>Deduction for Propositional Logic</li>
+      <li><span class="section-number">8. </span>Deduction for Propositional Logic</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -174,7 +183,356 @@
            <div itemprop="articleBody">
             
   <div class="section" id="deduction-for-propositional-logic">
-<span id="chapter-deduction-for-propositional-logic"></span><h1><span class="section-number">9. </span>Deduction for Propositional Logic<a class="headerlink" href="#deduction-for-propositional-logic" title="Permalink to this headline">¶</a></h1>
+<span id="chapter-deduction-for-propositional-logic"></span><h1><span class="section-number">8. </span>Deduction for Propositional Logic<a class="headerlink" href="#deduction-for-propositional-logic" title="Permalink to this headline">¶</a></h1>
+<p>In the study of computational complexity, a <em>language</em> is a set of strings
+over some alphabet. For example, we can consider the language <span class="math notranslate nohighlight">\(\fn{PROP}\)</span> consisting of all
+propositional formulas, the language <span class="math notranslate nohighlight">\(\fn{SAT}\)</span> consisting of all satisfiable formulas,
+and the language <span class="math notranslate nohighlight">\(\fn{TAUT}\)</span> consisting of all tautologies.
+We have seen that <span class="math notranslate nohighlight">\(\fn{SAT}\)</span> and <span class="math notranslate nohighlight">\(\fn{TAUT}\)</span> are both <em>decidable</em>,
+which is to say, there is are algorithms to decide membership in those sets.
+The P=NP question is precisely the question
+as to whether there a polynomial time algorithm for <span class="math notranslate nohighlight">\(\fn{SAT}\)</span>, or, equivalently,
+for <span class="math notranslate nohighlight">\(\fn{TAUT}\)</span>.</p>
+<p>Still speaking in broad terms, a <em>proof system</em> for a language is a relation <span class="math notranslate nohighlight">\(P(d, x)\)</span>
+between strings with the property for any <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(x\)</span> is in the language
+if and only if there is a <span class="math notranslate nohighlight">\(d\)</span> such that <span class="math notranslate nohighlight">\(P(d, x)\)</span> holds.
+In this case, we say that <span class="math notranslate nohighlight">\(d\)</span> is a <em>proof of membership</em> for <span class="math notranslate nohighlight">\(x\)</span>.
+We typically require that checking a proof is easy, say, by requiring that <span class="math notranslate nohighlight">\(P(d, x)\)</span>
+runs in polynomial time.
+This if often easy to do by putting a lot of information into <span class="math notranslate nohighlight">\(d\)</span>.
+NP is the class of languages that have a polynomial time proof system with the additional property
+that for every <span class="math notranslate nohighlight">\(x\)</span> in the language, there is a proof of membership <span class="math notranslate nohighlight">\(d\)</span> whose
+length is polynomially bounded in the length of <span class="math notranslate nohighlight">\(x\)</span>.
+The language <span class="math notranslate nohighlight">\(\fn{SAT}\)</span> is in NP because there are short proofs of satisfiability,
+namely, the satisfying assignments.</p>
+<p>When it comes to propositional logic, when we talk about proof systems,
+we generally mean a proof system for <span class="math notranslate nohighlight">\(\fn{TAUT}\)</span>.
+In other words, a proof system for propositional logic is supposed to show that a formula is valid.
+It can therefore also be used to establish unsatisfiability, since a formula
+<span class="math notranslate nohighlight">\(A\)</span> is unsatisfiable if and only if <span class="math notranslate nohighlight">\(\lnot A\)</span> is valid.</p>
+<p>Assuming we have a particular proof system in mind, we write <span class="math notranslate nohighlight">\(\proves A\)</span> to mean
+that there is a proof of <span class="math notranslate nohighlight">\(A\)</span>.
+Remember that we use <span class="math notranslate nohighlight">\(\models A\)</span> to mean that <span class="math notranslate nohighlight">\(A\)</span> is valid.
+The property that <span class="math notranslate nohighlight">\(\proves A\)</span> implies <span class="math notranslate nohighlight">\(\models A\)</span> is known as <em>soundness</em>,
+and the property that <span class="math notranslate nohighlight">\(\models A\)</span> implies <span class="math notranslate nohighlight">\(\proves A\)</span> is known as <em>completeness</em>.
+We want a proof system for propositional logic to be sound and complete.</p>
+<p>Given that the set of tautologies in propositional logic is decidable, why do we need a
+proof system?
+The complexity of the decision procedures provides one answer:
+as far as we know, deciding whether or not something is a tautology takes exponential time
+in the worst case.
+From a theoretical standpoint, it is not clear whether proof systems can do substantially better;
+the question as to whether there is a polynomial time polynomially-bounded proof system
+for propositional logic is equivalent to the question as to whether NP = coNP,
+which is an open question.
+But, in practice, checking a proof is usually much more efficient than determining that
+something is a tautology from scratch.</p>
+<p>Another concern is reliability. Fast decision procedures for propositional logic are highly
+optimized and sometimes buggy.
+Most modern SAT solvers can be asked to output a proof to justify the claim that the input
+is unsatisfiable.
+Checking the output with an independent checker adds confidence that the claim is correct.</p>
+<p>Yet another reason to be interested in formal notions of proof is that they provide more
+faithful models of informal proof, the process by which mathematicians establish that
+mathematical claims are true.
+Finally, when we turn to first-order logic, we will see that there is no decision procedure
+for validity.
+In fact, even fairly restricted versions of the question can be undecidable.
+In cases like that, the best we can do is search for proofs and counterexamples,
+with no guarantee that either will succeed in finite time.
+In other words, proof systems for first-order logic are essential.</p>
+<p>The notation <span class="math notranslate nohighlight">\(\Gamma \proves A\)</span> is used to express that <span class="math notranslate nohighlight">\(A\)</span>
+is provable from a set of hypotheses <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+The notation <span class="math notranslate nohighlight">\(\proves A\)</span> therefore abbreviates <span class="math notranslate nohighlight">\(\emptyset \proves A\)</span>.
+In this more general setting, soundness says that if <span class="math notranslate nohighlight">\(\Gamma \proves A\)</span>,
+then <span class="math notranslate nohighlight">\(\Gamma \models A\)</span>,
+and completeness says that if <span class="math notranslate nohighlight">\(\Gamma \models A\)</span>, then <span class="math notranslate nohighlight">\(\Gamma \proves A\)</span>.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> is the finite set <span class="math notranslate nohighlight">\(\{ B_1, \ldots, B_n \}\)</span>,
+then <span class="math notranslate nohighlight">\(\Gamma \models A\)</span> is equivalent to <span class="math notranslate nohighlight">\(\models B_1 \land \cdots \land B_n \limplies A\)</span>.
+So, for many purposes, we can focus on provability and validity without hypotheses.
+If the set <span class="math notranslate nohighlight">\(\Gamma\)</span> is infinite, however, we cannot express <span class="math notranslate nohighlight">\(\Gamma \models A\)</span>
+in those terms.
+For most of this chapter, we will not worry about infinite sets of hypotheses,
+since mechanized reasoning generally has to work with finite representations.
+But we will discuss the case where <span class="math notranslate nohighlight">\(\Gamma\)</span> is infinite in <a class="reference internal" href="#section-compactness"><span class="std std-numref">Section 8.5</span></a>.</p>
+<p>When it comes to talking about formal proofs, the words <em>proof</em>, <em>deduction</em>,
+and <em>derivation</em> are often used interchangeably.
+The last two are sometimes useful to distinguish formal derivations from
+ordinary (informal) mathematical proofs.</p>
+<div class="section" id="axiomatic-systems">
+<h2><span class="section-number">8.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Permalink to this headline">¶</a></h2>
+<p>Historically, one way of describing a proof system for propositional logic is to give a list
+of axioms, like this one:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(A \limplies (B \limplies A)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((A \limplies (B \limplies C)) \limplies ((A \limplies B) \limplies (A \limplies C))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \limplies (B \limplies A \land B)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \land B \limplies A\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \land B \limplies B\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A \limplies A \lor B\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(B \limplies A \lor B\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\((A \limplies C) \limplies ((B \limplies C) \limplies (A \lor B \limplies C))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot \lnot A \limplies A\)</span>.</p></li>
+</ol>
+<p>These are really axiom <em>schemas</em>, which is to say, we have an axiom for every choice of
+<span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(C\)</span>. The only rule of inference in the system is <em>modus ponens</em>,
+which is the rule “from <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(A \limplies B\)</span> conclude <span class="math notranslate nohighlight">\(B\)</span>.”
+A <em>proof</em> of a formula <span class="math notranslate nohighlight">\(A\)</span> from hypotheses
+<span class="math notranslate nohighlight">\(\Gamma\)</span> is a sequence of formula <span class="math notranslate nohighlight">\(C_1, \ldots, C_m\)</span> such that every <span class="math notranslate nohighlight">\(C_i\)</span>
+is either:</p>
+<ul class="simple">
+<li><p>an axiom,</p></li>
+<li><p>a hypothesis, or</p></li>
+<li><p>consequence of two earlier formulas <span class="math notranslate nohighlight">\(C_j\)</span> and <span class="math notranslate nohighlight">\(C_k\)</span> using modus ponens.</p></li>
+</ul>
+<p>This proof system is sound and complete.
+Proving soundness is straightforward: you only need to check that each axiom is valid
+and that modus ponens preserves truth.
+This enables us to show, by induction, that each line of a proof <span class="math notranslate nohighlight">\(C_1, \ldots, C_m\)</span>
+if <span class="math notranslate nohighlight">\(A\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> is true under an assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
+assuming every formula in <span class="math notranslate nohighlight">\(\Gamma\)</span> is.
+Proving completeness requires more work.
+But axiomatic systems are no longer of much practical interest:
+they do not provide convenient means of modeling informal proofs,
+and they are not useful for automated reasoning or search.
+We will therefore set them aside and focus our attention on other types of proof systems.</p>
+</div>
+<div class="section" id="a-sequent-calculus">
+<h2><span class="section-number">8.2. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this headline">¶</a></h2>
+<p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a finite set of propositional formula in negation normal form.
+The next calculus we will consider is designed to prove that the disjunction of the formulas
+in <span class="math notranslate nohighlight">\(\Gamma\)</span> is valid, which is to say, for every truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
+at least one of the formula in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true. If <span class="math notranslate nohighlight">\(A\)</span> is a formula,
+we write <span class="math notranslate nohighlight">\(\Gamma, A\)</span> instead of <span class="math notranslate nohighlight">\(\Gamma \cup \{ A \}\)</span>.
+The rules are as follows:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{prooftree}
+\AXC{$\Gamma, P, \lnot P$}
+\end{prooftree}\]
+
+\[\begin{prooftree}
+\AXC{$\Gamma, A$}
+\AXC{$\Gamma, B$}
+\BIC{$\Gamma, A \land B$}
+\end{prooftree}\]
+
+\[\begin{prooftree}
+\AXC{$\Gamma, A, B$}
+\UIC{$\Gamma, A \lor B$}
+\end{prooftree}
+\]</div></div></blockquote>
+<p>The first rule says that either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true,
+or <span class="math notranslate nohighlight">\(P\)</span> is true, or <span class="math notranslate nohighlight">\(\lnot P\)</span> is true. The second rule says that
+if either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true or <span class="math notranslate nohighlight">\(A\)</span> is true, and
+either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true or <span class="math notranslate nohighlight">\(B\)</span> is true, then
+either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true or <span class="math notranslate nohighlight">\(A \land B\)</span> is true.
+The third rule says that if either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true or <span class="math notranslate nohighlight">\(A\)</span> is true
+or <span class="math notranslate nohighlight">\(B\)</span> is true, then either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true or <span class="math notranslate nohighlight">\(A \lor B\)</span> is true.
+If we take these to be statements about truth values relative to some truth assignment
+<span class="math notranslate nohighlight">\(\tau\)</span>,
+these rules are clearly sound with respect to the semantics.</p>
+<p>The set <span class="math notranslate nohighlight">\(\Gamma\)</span> is called a <em>sequent</em>. (More specifically, it is called
+as <em>one-sided</em> sequent; we’ll see two-sides sequents below.)
+A system of rules like this is therefore called a sequent calculus.
+As with axiomatic systems, we can think of a proof as a sequence of lines,
+but it is also common to represent proofs diagrammatically,
+as trees whose nodes are labeled by sequents. The following example provides
+a proof of the NNF equivalent of
+<span class="math notranslate nohighlight">\(A \land (B \lor C) \limplies (A \land B) \lor (A \land C)\)</span>.</p>
+<img alt="sequentproof" class="align-center" src="_images/sequentproof.png" />
+<p>It is probably easiest to read this from the bottom up.</p>
+<p>Remember that saying that a sequent <span class="math notranslate nohighlight">\(\Gamma\)</span> is <em>valid</em> in our semantics means that
+for every truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>, we have <span class="math notranslate nohighlight">\(\tval{A}_\tau = \top\)</span> for some
+<span class="math notranslate nohighlight">\(A\)</span> in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>The sequent calculus presented above is sound and complete. In other words,
+a sequent <span class="math notranslate nohighlight">\(\Gamma\)</span> is provable if and only if it is valid.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>The soundness direction is easy. Suppose there is a proof of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+Let <span class="math notranslate nohighlight">\(\tau\)</span> be any truth assignment.
+We have already noted that each rule is sound, which is to say, if the premise or premises
+are true under an assignment, then so is the conclusion.
+By induction, we have that every sequent in the proof is true under assignment <span class="math notranslate nohighlight">\(\tau\)</span>.</p>
+<p>Proving completeness is usually trickier. In this case, we can use
+the fact that the rules of the calculus are bidirectional:
+any truth assignment that refutes the conclusion of a rule has to refute one of the premises.
+We can also use the fact that reading each rule backward decreases the number of binary
+connectives.</p>
+<p>We prove the following by induction on the number of binary connectives: for every
+sequent <span class="math notranslate nohighlight">\(\Gamma\)</span>, either <span class="math notranslate nohighlight">\(\Gamma\)</span> is provable, or there is a truth
+assignment that makes every formula in <span class="math notranslate nohighlight">\(\Gamma\)</span> false.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> has no binary connectives, then it is a set of literals.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a complementary pair of literals <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(\lnot P\)</span>,
+it is an axiom, and otherwise there is an assignment that makes it false.
+For the inductive step, <span class="math notranslate nohighlight">\(\Gamma\)</span> must have a <span class="math notranslate nohighlight">\(\land\)</span> or a <span class="math notranslate nohighlight">\(\lor\)</span>.
+Applying the corresponding rule, we have either the premises are valid or there is a
+counterexample to one of them. In the first case, <span class="math notranslate nohighlight">\(\Gamma\)</span> is valid, and in the
+second case, there is a counterexample to the conclusion.</p>
+</div>
+<p>Notice that this gives us yet another decision procedure for propositional logic:
+start with a sequent <span class="math notranslate nohighlight">\(\Gamma\)</span> (which can consist of a single formula, if you want),
+and apply the rules backward. If you reach an axiom on each leaf, you have a proof.
+If one branch fails to terminate with an axiom, reading off a counterexample to the leaf yields
+a counterexample to <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+This is an important idea in automated reasoning, namely, it is desirable to search for a proof in
+such a way that failure implies the existence of a counterexample.</p>
+<p>The sequent calculus is closely related to <em>tableau</em> proof systems that are also commonly
+used in automated reasoning.
+In the sequent proof above, there is a lot of needless repetition of formulas; tableau representations
+do a better job of recording only what changes as we go up the tree.
+Another difference is that tableau proof systems usually don’t require that the formulas are in
+negation normal form. Rather, the rules of a tableau system correspond to the sequent rules
+for the negation-normal-form equivalents. Since <span class="math notranslate nohighlight">\(A \limplies B\)</span> is equivalent to
+<span class="math notranslate nohighlight">\(\lnot A \lor B\)</span>,
+this requires changing <span class="math notranslate nohighlight">\(A\)</span> to <span class="math notranslate nohighlight">\(\lnot A\)</span> as we move up the tree. To avoid introducing
+new connectives, tableau systems often annotate formulas with emph{polarities},
+so that <span class="math notranslate nohighlight">\(A^+\)</span> represents <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(A^-\)</span> represents <span class="math notranslate nohighlight">\(\lnot A\)</span>.
+The most jarring difference between sequent calculi and tableau systems is that the latter
+are often described in terms of search for a satisfying assignment rather than searching for a proof.
+For example, the rule in the sequent calculus that says</p>
+<blockquote>
+<div><p>to find a proof of <span class="math notranslate nohighlight">\(A \land B\)</span>, split and find a proof of <span class="math notranslate nohighlight">\(A\)</span> and a proof of <span class="math notranslate nohighlight">\(B\)</span></p>
+</div></blockquote>
+<p>becomes</p>
+<blockquote>
+<div><p>to find a satisfying assignment to <span class="math notranslate nohighlight">\(A \lor B\)</span>, split and find a satisfying assignment
+to <span class="math notranslate nohighlight">\(A\)</span> or a satisfying assignment to <span class="math notranslate nohighlight">\(B\)</span>.</p>
+</div></blockquote>
+<p>The automated reasoning community is split between people who like to think in terms
+of searching for proofs and people who like to think in terms of searching for models.
+It is therefore important to learn how to speak both languages,
+and to be able to translate between them on the fly.</p>
+</div>
+<div class="section" id="resolution">
+<span id="section-resolution"></span><h2><span class="section-number">8.3. </span>Resolution<a class="headerlink" href="#resolution" title="Permalink to this headline">¶</a></h2>
+<p>Given that the sequent calculus implicitly corresponds to a decision procedure for
+propositional logic, it is natural to ask whether there is a proof system that corresponds
+more closely to DPLL, the decision procedure that was the focus of
+<a class="reference internal" href="decision_procedures_for_propositional_logic.html#chapter-decision-procedures-for-propositional-logic"><span class="std std-numref">Chapter 6</span></a>.
+We now describe such a system.</p>
+<p>A <em>resolution</em> proof is designed to <em>refute</em> a CNF formula, that is, to prove that
+it is unsatisfiable.
+Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a CNF formula, represented as a set of clauses.
+As in <a class="reference internal" href="decision_procedures_for_propositional_logic.html#section-dpll"><span class="std std-numref">Section 6.3</span></a>, we can assume that none of the clauses contain repeated
+literals or a complementary pair, and we can think of each clause as a set of literals.
+If <span class="math notranslate nohighlight">\(C\)</span> is a clause and <span class="math notranslate nohighlight">\(\ell\)</span> is a literal, we write <span class="math notranslate nohighlight">\(C, \ell\)</span> for
+<span class="math notranslate nohighlight">\(C \lor \ell\)</span>. The <em>resolution rule</em> derives a new clause from an old one:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{prooftree}
+\AXC{$C, P$}
+\AXC{$C, \lnot P$}
+\BIC{$C$}
+\end{prooftree}\]</div></div></blockquote>
+<p>The rule says that if either <span class="math notranslate nohighlight">\(C\)</span> or <span class="math notranslate nohighlight">\(P\)</span> is true, and either <span class="math notranslate nohighlight">\(C\)</span> or <span class="math notranslate nohighlight">\(\lnot P\)</span>
+is true, then <span class="math notranslate nohighlight">\(C\)</span> has to be true. A <em>resolution proof</em> of a clause <span class="math notranslate nohighlight">\(C\)</span> from
+a set of clauses <span class="math notranslate nohighlight">\(\Gamma\)</span> is a sequence of steps (or a labelled tree) that obtains <span class="math notranslate nohighlight">\(C\)</span>
+from <span class="math notranslate nohighlight">\(\Gamma\)</span> using instances of the resolution rule. A <em>resolution refutation</em> of <span class="math notranslate nohighlight">\(\Gamma\)</span>
+is a resolution proof of the empty clause from <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>A CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> has a resolution refutation if and only if it is unsatisfiable.</p>
+</div>
+<p>Resolution can therefore be understood as a proof system for propositional logic in the following way:
+given any formula <span class="math notranslate nohighlight">\(A\)</span>, put <span class="math notranslate nohighlight">\(\lnot A\)</span> in CNF, and look for a resolution refutation.
+Such a refutation is a proof of <span class="math notranslate nohighlight">\(A\)</span>. The theorem above says that this system is sound
+and complete: <span class="math notranslate nohighlight">\(A\)</span> is valid if and only if <span class="math notranslate nohighlight">\(\lnot A\)</span> is unsatisfiable, which
+happens if and only if there is a refutation of <span class="math notranslate nohighlight">\(\lnot A\)</span>.</p>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>Soundness follows straightforwardly from the fact that the resolution rule preserves
+truth under any truth assignment, while the empty clause is unsatisfiable.</p>
+<p>To prove completeness, we use induction on the number of propositional variables
+to show that if <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable, there is a resolution refutation
+of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+If there are no variables, the fact that <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable means that
+it must be the set consisting of the empty clause, and we are done.</p>
+<p>In the induction step, let <span class="math notranslate nohighlight">\(P\)</span> be any variable that occurs in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable, then so are <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \top]}\)</span>
+and <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \bot]}\)</span>. By the inductive hypothesis,
+both of these are refutable.</p>
+<p>Remember the relationship between <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \top]}\)</span> and <span class="math notranslate nohighlight">\(\Gamma\)</span>:
+in the former, we remove all the clauses that include <span class="math notranslate nohighlight">\(P\)</span> and delete <span class="math notranslate nohighlight">\(\lnot P\)</span>
+from the remaining clauses.
+So a resolution refutation of the empty clause from <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \top]}\)</span>
+uses only the clauses of <span class="math notranslate nohighlight">\(\tval{\Gamma}\)</span> that don’t contain <span class="math notranslate nohighlight">\(P\)</span>,
+possibly with <span class="math notranslate nohighlight">\(\lnot P\)</span> removed.
+Restoring <span class="math notranslate nohighlight">\(\lnot P\)</span> to all the initial clauses yields either a proof of the
+empty clause or a proof of <span class="math notranslate nohighlight">\(\lnot P\)</span>.</p>
+<p>In the first case, we have a proof of the empty clause from <span class="math notranslate nohighlight">\(\Gamma\)</span>, and we are done.
+Otherwise, applying the inductive hypotheses to <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[\lnot P \mapsto \bot]}\)</span>
+and repeating the previous argument,
+we obtain either a proof of the empty clause or a proof of <span class="math notranslate nohighlight">\(P\)</span>.
+Once again, in the first case, we are done. Otherwise, we apply the resolution rule to the
+proof of <span class="math notranslate nohighlight">\(P\)</span> and the proof of <span class="math notranslate nohighlight">\(\lnot P\)</span>, and we have a proof of the empty clause.</p>
+</div>
+<p>We can once again view the completeness proof as a decision procedure in disguise.
+In fact, the strategy of picking a variable and trying to refute
+<span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \top]}\)</span> and <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \bot]}\)</span>
+simultaneously is exactly the splitting rule of DPLL,
+formulated in terms of demonstrating unsatisfiability rather than searching for a satisfying
+assignment. We can formulate the theorem above in more constructive terms as follows:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>For any CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>, either <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable or there is a
+resolution refutation.</p>
+</div>
+<p>Remember that at any point in the DPLL search, we have a partial assignment <span class="math notranslate nohighlight">\(\tau\)</span>
+that we are trying to extend to a satisfying assignment to <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>.
+If we fail, we then have to give up on <span class="math notranslate nohighlight">\(\tau\)</span>, backtrack, and try another path.
+To extract either a satisfying assignment or a resolution proof from the result,
+it suffices to show the following constructively:</p>
+<blockquote>
+<div><p>For any partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
+either <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> is satisfiable
+or there is a resolution proof of a clause <span class="math notranslate nohighlight">\(C\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{C}_\tau = \bot\)</span>.</p>
+</div></blockquote>
+<p>This yields the desired conclusion when <span class="math notranslate nohighlight">\(\tau\)</span> is the empty assignment,
+since the only clause that evaluates to <span class="math notranslate nohighlight">\(\bot\)</span> under the empty assignment is the empty clause.</p>
+<p>We will sketch an explanation of how to read off the information above from the DPLL search,
+and we will leave it as an exercise for you to fill in the details.
+Remember that there are three steps that are interleaved in DPLL:</p>
+<ol class="arabic simple">
+<li><p>splitting on a variable <span class="math notranslate nohighlight">\(p\)</span></p></li>
+<li><p>unit propagation</p></li>
+<li><p>removing pure literals</p></li>
+</ol>
+<p>Unit propagation can be viewed as a special case of the splitting rule:
+If a CNF formula contains a unit clause with literal <span class="math notranslate nohighlight">\(\ell\)</span>,
+then splitting on <span class="math notranslate nohighlight">\(\ell\)</span> fails immediately on one branch,
+and the other branch corresponds to the result of applying unit propagation.
+Reasoning about the pure literal rule is more subtle. Suppose <span class="math notranslate nohighlight">\(\ell\)</span> is pure in
+<span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>, and consider the DPLL search
+starting from <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau[\ell \mapsto \top]}\)</span>,
+which is a subset of <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>. If DPLL finds a satisfying assignment
+to <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau[\ell \mapsto \top]}\)</span>, it can be extended to a satisfying
+assignment to <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> by mapping <span class="math notranslate nohighlight">\(\ell\)</span> to <span class="math notranslate nohighlight">\(\top\)</span>.
+On the other hand, for any clause <span class="math notranslate nohighlight">\(C\)</span> such that <span class="math notranslate nohighlight">\(\tval{C}_{\tau[\ell \mapsto \top]} = \bot\)</span>,
+we have <span class="math notranslate nohighlight">\(\tval{C}_\tau = \bot\)</span>, because <span class="math notranslate nohighlight">\(\ell\)</span> is pure in all the clauses of
+<span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>.</p>
+<p>So we only have to deal with the splitting rule. A satisfying assignment for either branch
+results in a satisfying assignment for <span class="math notranslate nohighlight">\(\Gamma\)</span>, we only only have to prove the following:</p>
+<blockquote>
+<div><p>If there are a resolution proof of a clause <span class="math notranslate nohighlight">\(C\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{C}_{\tau[P \mapsto \top]} = \bot\)</span>
+and a resolution proof of a clause <span class="math notranslate nohighlight">\(D\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{D}_{\tau[P \mapsto \bot]} = \bot\)</span>,
+then there is a resolution proof of a clause <span class="math notranslate nohighlight">\(E\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{E}_\tau = \bot\)</span>.</p>
+</div></blockquote>
+<p>We leave the proof of this fact to you.</p>
+</div>
+<div class="section" id="natural-deduction">
+<span id="section-natural-deduction"></span><h2><span class="section-number">8.4. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="compactness">
+<span id="section-compactness"></span><h2><span class="section-number">8.5. </span>Compactness<a class="headerlink" href="#compactness" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
 
@@ -183,8 +541,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="terms_and_formulas.html" class="btn btn-neutral float-right" title="10. Terms and Formulas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="using_sat_solvers.html" class="btn btn-neutral float-left" title="8. Using SAT Solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="using_lean_as_a_proof_assistant.html" class="btn btn-neutral float-right" title="9. Using Lean as a Proof Assistant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="using_sat_solvers.html" class="btn btn-neutral float-left" title="7. Using SAT Solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

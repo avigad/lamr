@@ -287,6 +287,7 @@ example for the formula :math:`\Gamma = (p \lor q) \land (\lnot q \lor r) \land 
 so the pure literal rule will assign it to :math:`\tau(p) = \top`. We leave it to you to check that :math:`\Gamma` has
 three satisfying assignments, while :math:`\tval{\Gamma}_{\tau}` has only two satisfying assignments.
 
+.. _section_dpll:
 
 DPLL
 --------------

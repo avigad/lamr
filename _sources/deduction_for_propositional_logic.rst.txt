@@ -3,61 +3,422 @@
 Deduction for Propositional Logic
 =================================
 
+In the study of computational complexity, a *language* is a set of strings
+over some alphabet. For example, we can consider the language :math:`\fn{PROP}` consisting of all
+propositional formulas, the language :math:`\fn{SAT}` consisting of all satisfiable formulas,
+and the language :math:`\fn{TAUT}` consisting of all tautologies.
+We have seen that :math:`\fn{SAT}` and :math:`\fn{TAUT}` are both *decidable*,
+which is to say, there is are algorithms to decide membership in those sets.
+The P=NP question is precisely the question
+as to whether there a polynomial time algorithm for :math:`\fn{SAT}`, or, equivalently,
+for :math:`\fn{TAUT}`.
+
+Still speaking in broad terms, a *proof system* for a language is a relation :math:`P(d, x)`
+between strings with the property for any :math:`x`, :math:`x` is in the language
+if and only if there is a :math:`d` such that :math:`P(d, x)` holds.
+In this case, we say that :math:`d` is a *proof of membership* for :math:`x`.
+We typically require that checking a proof is easy, say, by requiring that :math:`P(d, x)`
+runs in polynomial time.
+This if often easy to do by putting a lot of information into :math:`d`.
+NP is the class of languages that have a polynomial time proof system with the additional property
+that for every :math:`x` in the language, there is a proof of membership :math:`d` whose
+length is polynomially bounded in the length of :math:`x`.
+The language :math:`\fn{SAT}` is in NP because there are short proofs of satisfiability,
+namely, the satisfying assignments.
+
+When it comes to propositional logic, when we talk about proof systems,
+we generally mean a proof system for :math:`\fn{TAUT}`.
+In other words, a proof system for propositional logic is supposed to show that a formula is valid.
+It can therefore also be used to establish unsatisfiability, since a formula
+:math:`A` is unsatisfiable if and only if :math:`\lnot A` is valid.
+
+Assuming we have a particular proof system in mind, we write :math:`\proves A` to mean
+that there is a proof of :math:`A`.
+Remember that we use :math:`\models A` to mean that :math:`A` is valid.
+The property that :math:`\proves A` implies :math:`\models A` is known as *soundness*,
+and the property that :math:`\models A` implies :math:`\proves A` is known as *completeness*.
+We want a proof system for propositional logic to be sound and complete.
+
+Given that the set of tautologies in propositional logic is decidable, why do we need a
+proof system?
+The complexity of the decision procedures provides one answer:
+as far as we know, deciding whether or not something is a tautology takes exponential time
+in the worst case.
+From a theoretical standpoint, it is not clear whether proof systems can do substantially better;
+the question as to whether there is a polynomial time polynomially-bounded proof system
+for propositional logic is equivalent to the question as to whether NP = coNP,
+which is an open question.
+But, in practice, checking a proof is usually much more efficient than determining that
+something is a tautology from scratch.
+
+Another concern is reliability. Fast decision procedures for propositional logic are highly
+optimized and sometimes buggy.
+Most modern SAT solvers can be asked to output a proof to justify the claim that the input
+is unsatisfiable.
+Checking the output with an independent checker adds confidence that the claim is correct.
+
+Yet another reason to be interested in formal notions of proof is that they provide more
+faithful models of informal proof, the process by which mathematicians establish that
+mathematical claims are true.
+Finally, when we turn to first-order logic, we will see that there is no decision procedure
+for validity.
+In fact, even fairly restricted versions of the question can be undecidable.
+In cases like that, the best we can do is search for proofs and counterexamples,
+with no guarantee that either will succeed in finite time.
+In other words, proof systems for first-order logic are essential.
+
+The notation :math:`\Gamma \proves A` is used to express that :math:`A`
+is provable from a set of hypotheses :math:`\Gamma`.
+The notation :math:`\proves A` therefore abbreviates :math:`\emptyset \proves A`.
+In this more general setting, soundness says that if :math:`\Gamma \proves A`,
+then :math:`\Gamma \models A`,
+and completeness says that if :math:`\Gamma \models A`, then :math:`\Gamma \proves A`.
+If :math:`\Gamma` is the finite set :math:`\{ B_1, \ldots, B_n \}`,
+then :math:`\Gamma \models A` is equivalent to :math:`\models B_1 \land \cdots \land B_n \limplies A`.
+So, for many purposes, we can focus on provability and validity without hypotheses.
+If the set :math:`\Gamma` is infinite, however, we cannot express :math:`\Gamma \models A`
+in those terms.
+For most of this chapter, we will not worry about infinite sets of hypotheses,
+since mechanized reasoning generally has to work with finite representations.
+But we will discuss the case where :math:`\Gamma` is infinite in :numref:`section_compactness`.
+
+When it comes to talking about formal proofs, the words *proof*, *deduction*,
+and *derivation* are often used interchangeably.
+The last two are sometimes useful to distinguish formal derivations from
+ordinary (informal) mathematical proofs.
+
+
+Axiomatic systems
+-----------------
+
+Historically, one way of describing a proof system for propositional logic is to give a list
+of axioms, like this one:
+
+#. :math:`A \limplies (B \limplies A)`
+#. :math:`(A \limplies (B \limplies C)) \limplies ((A \limplies B) \limplies (A \limplies C))`
+#. :math:`A \limplies (B \limplies A \land B)`
+#. :math:`A \land B \limplies A`
+#. :math:`A \land B \limplies B`
+#. :math:`A \limplies A \lor B`
+#. :math:`B \limplies A \lor B`
+#. :math:`(A \limplies C) \limplies ((B \limplies C) \limplies (A \lor B \limplies C))`
+#. :math:`\lnot \lnot A \limplies A`.
+
+These are really axiom *schemas*, which is to say, we have an axiom for every choice of
+:math:`A`, :math:`B`, and :math:`C`. The only rule of inference in the system is *modus ponens*,
+which is the rule "from :math:`A` and :math:`A \limplies B` conclude :math:`B`."
+A *proof* of a formula :math:`A` from hypotheses
+:math:`\Gamma` is a sequence of formula :math:`C_1, \ldots, C_m` such that every :math:`C_i`
+is either:
+
+- an axiom,
+- a hypothesis, or
+- consequence of two earlier formulas :math:`C_j` and :math:`C_k` using modus ponens.
+
+This proof system is sound and complete.
+Proving soundness is straightforward: you only need to check that each axiom is valid
+and that modus ponens preserves truth.
+This enables us to show, by induction, that each line of a proof :math:`C_1, \ldots, C_m`
+if :math:`A` from :math:`\Gamma` is true under an assignment :math:`\tau`,
+assuming every formula in :math:`\Gamma` is.
+Proving completeness requires more work.
+But axiomatic systems are no longer of much practical interest:
+they do not provide convenient means of modeling informal proofs,
+and they are not useful for automated reasoning or search.
+We will therefore set them aside and focus our attention on other types of proof systems.
+
+A sequent calculus
+------------------
+
+Let :math:`\Gamma` be a finite set of propositional formula in negation normal form.
+The next calculus we will consider is designed to prove that the disjunction of the formulas
+in :math:`\Gamma` is valid, which is to say, for every truth assignment :math:`\tau`,
+at least one of the formula in :math:`\Gamma` is true. If :math:`A` is a formula,
+we write :math:`\Gamma, A` instead of :math:`\Gamma \cup \{ A \}`.
+The rules are as follows:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$\Gamma, P, \lnot P$}
+      \end{prooftree}\]
+
+      \[\begin{prooftree}
+      \AXC{$\Gamma, A$}
+      \AXC{$\Gamma, B$}
+      \BIC{$\Gamma, A \land B$}
+      \end{prooftree}\]
+
+      \[\begin{prooftree}
+      \AXC{$\Gamma, A, B$}
+      \UIC{$\Gamma, A \lor B$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AXC{$\Gamma, P, \lnot P$}
+      \DP
+      \ \\
+      \AXC{$\Gamma, A$}
+      \AXC{$\Gamma, B$}
+      \BIC{$\Gamma, A \land B$}
+      \DP
+      \ \\
+      \AXC{$\Gamma, A, B$}
+      \UIC{$\Gamma, A \lor B$}
+      \DP
+      \end{center}
+
+The first rule says that either something in :math:`\Gamma` is true,
+or :math:`P` is true, or :math:`\lnot P` is true. The second rule says that
+if either something in :math:`\Gamma` is true or :math:`A` is true, and
+either something in :math:`\Gamma` is true or :math:`B` is true, then
+either something in :math:`\Gamma` is true or :math:`A \land B` is true.
+The third rule says that if either something in :math:`\Gamma` is true or :math:`A` is true
+or :math:`B` is true, then either something in :math:`\Gamma` is true or :math:`A \lor B` is true.
+If we take these to be statements about truth values relative to some truth assignment
+:math:`\tau`,
+these rules are clearly sound with respect to the semantics.
+
+The set :math:`\Gamma` is called a *sequent*. (More specifically, it is called
+as *one-sided* sequent; we'll see two-sides sequents below.)
+A system of rules like this is therefore called a sequent calculus.
+As with axiomatic systems, we can think of a proof as a sequence of lines,
+but it is also common to represent proofs diagrammatically,
+as trees whose nodes are labeled by sequents. The following example provides
+a proof of the NNF equivalent of
+:math:`A \land (B \lor C) \limplies (A \land B) \lor (A \land C)`.
+
+.. image:: ../figures/sequentproof.*
+   :alt: sequentproof
+   :align: center
+
+It is probably easiest to read this from the bottom up.
+
+Remember that saying that a sequent :math:`\Gamma` is *valid* in our semantics means that
+for every truth assignment :math:`\tau`, we have :math:`\tval{A}_\tau = \top` for some
+:math:`A` in :math:`\Gamma`.
+
+.. admonition:: Theorem
+
+    The sequent calculus presented above is sound and complete. In other words,
+    a sequent :math:`\Gamma` is provable if and only if it is valid.
+
+.. admonition:: Proof
+
+    The soundness direction is easy. Suppose there is a proof of :math:`\Gamma`.
+    Let :math:`\tau` be any truth assignment.
+    We have already noted that each rule is sound, which is to say, if the premise or premises
+    are true under an assignment, then so is the conclusion.
+    By induction, we have that every sequent in the proof is true under assignment :math:`\tau`.
+
+    Proving completeness is usually trickier. In this case, we can use
+    the fact that the rules of the calculus are bidirectional:
+    any truth assignment that refutes the conclusion of a rule has to refute one of the premises.
+    We can also use the fact that reading each rule backward decreases the number of binary
+    connectives.
+
+    We prove the following by induction on the number of binary connectives: for every
+    sequent :math:`\Gamma`, either :math:`\Gamma` is provable, or there is a truth
+    assignment that makes every formula in :math:`\Gamma` false.
+    If :math:`\Gamma` has no binary connectives, then it is a set of literals.
+    If :math:`\Gamma` contains a complementary pair of literals :math:`P` and :math:`\lnot P`,
+    it is an axiom, and otherwise there is an assignment that makes it false.
+    For the inductive step, :math:`\Gamma` must have a :math:`\land` or a :math:`\lor`.
+    Applying the corresponding rule, we have either the premises are valid or there is a
+    counterexample to one of them. In the first case, :math:`\Gamma` is valid, and in the
+    second case, there is a counterexample to the conclusion.
+
+Notice that this gives us yet another decision procedure for propositional logic:
+start with a sequent :math:`\Gamma` (which can consist of a single formula, if you want),
+and apply the rules backward. If you reach an axiom on each leaf, you have a proof.
+If one branch fails to terminate with an axiom, reading off a counterexample to the leaf yields
+a counterexample to :math:`\Gamma`.
+This is an important idea in automated reasoning, namely, it is desirable to search for a proof in
+such a way that failure implies the existence of a counterexample.
+
+The sequent calculus is closely related to *tableau* proof systems that are also commonly
+used in automated reasoning.
+In the sequent proof above, there is a lot of needless repetition of formulas; tableau representations
+do a better job of recording only what changes as we go up the tree.
+Another difference is that tableau proof systems usually don't require that the formulas are in
+negation normal form. Rather, the rules of a tableau system correspond to the sequent rules
+for the negation-normal-form equivalents. Since :math:`A \limplies B` is equivalent to
+:math:`\lnot A \lor B`,
+this requires changing :math:`A` to :math:`\lnot A` as we move up the tree. To avoid introducing
+new connectives, tableau systems often annotate formulas with \emph{polarities},
+so that :math:`A^+` represents :math:`A` and :math:`A^-` represents :math:`\lnot A`.
+The most jarring difference between sequent calculi and tableau systems is that the latter
+are often described in terms of search for a satisfying assignment rather than searching for a proof.
+For example, the rule in the sequent calculus that says
+
+  to find a proof of :math:`A \land B`, split and find a proof of :math:`A` and a proof of :math:`B`
+
+becomes
+
+  to find a satisfying assignment to :math:`A \lor B`, split and find a satisfying assignment
+  to :math:`A` or a satisfying assignment to :math:`B`.
+
+The automated reasoning community is split between people who like to think in terms
+of searching for proofs and people who like to think in terms of searching for models.
+It is therefore important to learn how to speak both languages,
+and to be able to translate between them on the fly.
+
+.. _section_resolution:
+
+
+Resolution
+----------
+
+Given that the sequent calculus implicitly corresponds to a decision procedure for
+propositional logic, it is natural to ask whether there is a proof system that corresponds
+more closely to DPLL, the decision procedure that was the focus of
+:numref:`Chapter %s <chapter_decision_procedures_for_propositional_logic>`.
+We now describe such a system.
+
+A *resolution* proof is designed to *refute* a CNF formula, that is, to prove that
+it is unsatisfiable.
+Let :math:`\Gamma` be a CNF formula, represented as a set of clauses.
+As in :numref:`section_dpll`, we can assume that none of the clauses contain repeated
+literals or a complementary pair, and we can think of each clause as a set of literals.
+If :math:`C` is a clause and :math:`\ell` is a literal, we write :math:`C, \ell` for
+:math:`C \lor \ell`. The *resolution rule* derives a new clause from an old one:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$C, P$}
+      \AXC{$C, \lnot P$}
+      \BIC{$C$}
+      \end{prooftree}\]</div>
+
+  .. raw:: latex
+
+      \begin{prooftree}
+      \AXC{$C, P$}
+      \AXC{$C, \lnot P$}
+      \BIC{$C$}
+      \end{prooftree}
+
+The rule says that if either :math:`C` or :math:`P` is true, and either :math:`C` or :math:`\lnot P`
+is true, then :math:`C` has to be true. A *resolution proof* of a clause :math:`C` from
+a set of clauses :math:`\Gamma` is a sequence of steps (or a labelled tree) that obtains :math:`C`
+from :math:`\Gamma` using instances of the resolution rule. A *resolution refutation* of :math:`\Gamma`
+is a resolution proof of the empty clause from :math:`\Gamma`.
+
+.. admonition:: Theorem
+
+    A CNF formula :math:`\Gamma` has a resolution refutation if and only if it is unsatisfiable.
+
+Resolution can therefore be understood as a proof system for propositional logic in the following way:
+given any formula :math:`A`, put :math:`\lnot A` in CNF, and look for a resolution refutation.
+Such a refutation is a proof of :math:`A`. The theorem above says that this system is sound
+and complete: :math:`A` is valid if and only if :math:`\lnot A` is unsatisfiable, which
+happens if and only if there is a refutation of :math:`\lnot A`.
+
+.. admonition:: Proof
+
+  Soundness follows straightforwardly from the fact that the resolution rule preserves
+  truth under any truth assignment, while the empty clause is unsatisfiable.
+
+  To prove completeness, we use induction on the number of propositional variables
+  to show that if :math:`\Gamma` is unsatisfiable, there is a resolution refutation
+  of :math:`\Gamma`.
+  If there are no variables, the fact that :math:`\Gamma` is unsatisfiable means that
+  it must be the set consisting of the empty clause, and we are done.
+
+  In the induction step, let :math:`P` be any variable that occurs in :math:`\Gamma`.
+  If :math:`\Gamma` is unsatisfiable, then so are :math:`\tval{\Gamma}_{[P \mapsto \top]}`
+  and :math:`\tval{\Gamma}_{[P \mapsto \bot]}`. By the inductive hypothesis,
+  both of these are refutable.
+
+  Remember the relationship between :math:`\tval{\Gamma}_{[P \mapsto \top]}` and :math:`\Gamma`:
+  in the former, we remove all the clauses that include :math:`P` and delete :math:`\lnot P`
+  from the remaining clauses.
+  So a resolution refutation of the empty clause from :math:`\tval{\Gamma}_{[P \mapsto \top]}`
+  uses only the clauses of :math:`\tval{\Gamma}` that don't contain :math:`P`,
+  possibly with :math:`\lnot P` removed.
+  Restoring :math:`\lnot P` to all the initial clauses yields either a proof of the
+  empty clause or a proof of :math:`\lnot P`.
+
+  In the first case, we have a proof of the empty clause from :math:`\Gamma`, and we are done.
+  Otherwise, applying the inductive hypotheses to :math:`\tval{\Gamma}_{[\lnot P \mapsto \bot]}`
+  and repeating the previous argument,
+  we obtain either a proof of the empty clause or a proof of :math:`P`.
+  Once again, in the first case, we are done. Otherwise, we apply the resolution rule to the
+  proof of :math:`P` and the proof of :math:`\lnot P`, and we have a proof of the empty clause.
+
+We can once again view the completeness proof as a decision procedure in disguise.
+In fact, the strategy of picking a variable and trying to refute
+:math:`\tval{\Gamma}_{[P \mapsto \top]}` and :math:`\tval{\Gamma}_{[P \mapsto \bot]}`
+simultaneously is exactly the splitting rule of DPLL,
+formulated in terms of demonstrating unsatisfiability rather than searching for a satisfying
+assignment. We can formulate the theorem above in more constructive terms as follows:
+
+.. admonition:: Theorem
+
+    For any CNF formula :math:`\Gamma`, either :math:`\Gamma` is satisfiable or there is a
+    resolution refutation.
+
+Remember that at any point in the DPLL search, we have a partial assignment :math:`\tau`
+that we are trying to extend to a satisfying assignment to :math:`\tval{\Gamma}_\tau`.
+If we fail, we then have to give up on :math:`\tau`, backtrack, and try another path.
+To extract either a satisfying assignment or a resolution proof from the result,
+it suffices to show the following constructively:
+
+  For any partial truth assignment :math:`\tau`,
+  either :math:`\tval{\Gamma}_\tau` is satisfiable
+  or there is a resolution proof of a clause :math:`C` from :math:`\Gamma` such that
+  :math:`\tval{C}_\tau = \bot`.
+
+This yields the desired conclusion when :math:`\tau` is the empty assignment,
+since the only clause that evaluates to :math:`\bot` under the empty assignment is the empty clause.
+
+We will sketch an explanation of how to read off the information above from the DPLL search,
+and we will leave it as an exercise for you to fill in the details.
+Remember that there are three steps that are interleaved in DPLL:
+
+#. splitting on a variable :math:`p`
+#. unit propagation
+#. removing pure literals
+
+Unit propagation can be viewed as a special case of the splitting rule:
+If a CNF formula contains a unit clause with literal :math:`\ell`,
+then splitting on :math:`\ell` fails immediately on one branch,
+and the other branch corresponds to the result of applying unit propagation.
+Reasoning about the pure literal rule is more subtle. Suppose :math:`\ell` is pure in
+:math:`\tval{\Gamma}_\tau`, and consider the DPLL search
+starting from :math:`\tval{\Gamma}_{\tau[\ell \mapsto \top]}`,
+which is a subset of :math:`\tval{\Gamma}_\tau`. If DPLL finds a satisfying assignment
+to :math:`\tval{\Gamma}_{\tau[\ell \mapsto \top]}`, it can be extended to a satisfying
+assignment to :math:`\tval{\Gamma}_\tau` by mapping :math:`\ell` to :math:`\top`.
+On the other hand, for any clause :math:`C` such that :math:`\tval{C}_{\tau[\ell \mapsto \top]} = \bot`,
+we have :math:`\tval{C}_\tau = \bot`, because :math:`\ell` is pure in all the clauses of
+:math:`\tval{\Gamma}_\tau`.
+
+So we only have to deal with the splitting rule. A satisfying assignment for either branch
+results in a satisfying assignment for :math:`\Gamma`, we only only have to prove the following:
+
+  If there are a resolution proof of a clause :math:`C` from :math:`\Gamma` such that
+  :math:`\tval{C}_{\tau[P \mapsto \top]} = \bot`
+  and a resolution proof of a clause :math:`D` from :math:`\Gamma` such that
+  :math:`\tval{D}_{\tau[P \mapsto \bot]} = \bot`,
+  then there is a resolution proof of a clause :math:`E` from :math:`\Gamma` such that
+  :math:`\tval{E}_\tau = \bot`.
+
+We leave the proof of this fact to you.
+
+
+.. _section_natural_deduction:
+
+Natural deduction
+-----------------
+
 ..
-  We have seen that there is a simple algorithm for determining whether
-  a formula of propositional logic is valid,
-  namely, simple evaluate the formula under all truth assignments
-  to its variables.
-  A *deductive system* or *proof* system is supposed to
-  provide a system of axioms and rules that can be used to establish
-  validity more efficiently.
-  In fact, it is an open theoretical question as to whether
-  any such system can do substantially better than providing the
-  entire truth table in the worst case.
-  But we have seen that SAT solvers can do much better in practice,
-  and when they determine that a result in unsatisfiable,
-  they generally can be set to output a proof that can be checked
-  by an independent checker.
-  The proof-based approach to testing validity is also closer
-  to informal reasoning practice:
-  it seems more natural to use rules to establish the validity of a formula like
-  :math:`(A \to B) \land (B \to C) \to (A \to C)`
-  than to write out the truth table.
-  And when we turn to first-order logic, we will see that, in that case,
-  there is no algorithm that can determine the validity of formulas.
-  In that case, the best we can do is search for a proof in a suitable
-  deductive calculus.
-
-  When it comes to talking about formal proofs, the words *proof*, *deduction*,
-  and *derivation* are often used interchangeably.
-  The last two are sometimes useful to distinguish formal derivations from
-  ordinary (informal) mathematical proofs.
-
-
-  Proof systems
-  -------------
-
-  Talk about proof systems in general.
-
-  Introduce notation: :math:`\proves A` and :math:`\Gamma \proves A`.
-
-  Introduce terminology: soundness, completeness.
-
-  Talk about the deduction rule.
-
-  Talk about trivial proof system for CNF formulas. (Alas, Tseitin preserves
-  satisfiability, not validity; so this doesn't constitute an efficient proof system!)
-
-  (Include a brief discussion of complexity.
-  The satisfiability problem is NP-complete.
-  The notion of a polynomially-bounded
-  proof system, and mention that it is an open question whether such a thing
-  exists.)
-
-
-  Natural deduction
-  -----------------
-
   Sequents, rules.
 
   Soundness.
@@ -67,129 +428,18 @@ Deduction for Propositional Logic
   Definitions.
 
 
-  A sequent calculus
-  ------------------
+.. _section_compactness:
 
-  Describe a short sequent calculus for NNF formulas.
+Compactness
+-----------
 
-  Prove soundness and completeness.
+..
+  [The relationship between strong completeness and weak completeness.]
 
-  Cut rule, definitions.
+  [The compactness theorem.]
 
+  [Proof.]
 
-  Resolution
-  ----------
-
-  The resolution rule.
-
-  Soundness and completeness as a refutation calculus:
-  the empty clause is derivable if and only if the original set
-  of clauses is unsatisfiable.
-
-  Prove it in the following form: either the empty clause is
-  derivable, or there is a satisfying assignment.
-
-  Describe unit propagation and pure literal elimination.
-
-  Definitions and extended resolution.
-
-  The resolution algorithm.
-
-
-  The DPLL algorithm
-  ------------------
-
-  (This is just a sketch)
-
-  The Davis--Putnam--Logemann--Loveland (DPLL) algorithm is a procedure
-  for determining whether or not a propositional formula is satisfiable.
-  In the worst case, it runs in time :math:`O(2^n)`, where :math:`n` is the length
-  of the input. But together with a technique known as *CDCL*, described
-  in the next section, it forms the basis for the most efficient SAT solvers
-  available today.
-
-  As was the case with the resolution calculus, we can describe DPLL as a
-  procedure that tries to refute a set of clauses, and, if it fails,
-  produces a satisfying assignment.
-  The procedure corresponds to a variant of the resolution calculus
-  in which the resolution rule is replaced by the splitting rule:
-
-  .. raw:: html
-
-      <div class="math notranslate nohighlight">
-      \[\begin{prooftree}
-      \AXC{$\Gamma \cup \{ p \}$}
-      \AXC{$\Gamma \cup \{ \lnot p \} $}
-      \BIC{$\Gamma$}
-      \end{prooftree}\]</div>
-
-  .. raw:: latex
-
-      \begin{prooftree}
-      \AXC{$\Gamma \cup \{ p \}$}
-      \AXC{$\Gamma \cup \{ \lnot p \}$}
-      \BIC{$\Gamma$}
-      \end{prooftree}
-
-  Here :math:`\Gamma` is a set of clauses, :math:`\Gamma \cup \{ p \}` is
-  :math:`\Gamma` with a new singleton clause :math:`p`, and
-  :math:`\Gamma \cup \{ \lnot p \}` is :math:`\Gamma` with a new singleton clause :math:`p`.
-  Read downwards, the rule says
-  that if we can refute :math:`\Gamma \cup \{ p \}` and we can refute
-  :math:`\Gamma \cup \{ \lnot p \}`,
-  then we can refute the set of clauses :math:`\Gamma`.
-  Read upwards, it says that if we are looking for a satisfying assignment
-  for :math:`\Gamma`,
-  we should look for either a satisfying assignment in which :math:`p`
-  has the value :math:`\top`,
-  or one in which :math:`p` has the value :math:`\bot`.
-  Once again, the rule goes both ways:
-  if we can refute :math:`\Gamma`
-  then we can refute both :math:`\Gamma \cup \{ p \}` and :math:`\Gamma \cup \{ \lnot p \}`;
-  dually, if we have a satisfying assignment for either :math:`\Gamma \cup \{ p \}` and :math:`\Gamma \cup \{ \lnot p \}`,
-  we have a satisfying assignment for :math:`\Gamma`.
-  The point is that in each branch we can immediately apply the unit
-  resolution and pure literal rule and get rid of the variable :math:`p`
-  entirely.
-
-  The DPLL algorithm is as follows:
-
-      Given a set of clauses :math:`\Gamma`:
-
-        - eagerly apply unit propagation and pure literal rule
-        - if the resulting set :math:`\Gamma` is empty, it is satisfiable.
-        - if one of the clauses is the empty clause, :math:`\Gamma` is unsatisfiable.
-        - otherwise, pick a propositional variable, :math:`p`, and recursively
-
-          - look for a satisfying assignment of :math:`\Gamma \cup \{p \}`
-          - if :math:`\Gamma \cup \{p \}` is unsatisfiable, look for a satisfying assignment of
-            :math:`\Gamma \cup \{ \lnot p\}`
-
-  (State soundness and completeness.)
-
-
-  Conflict driven clause learning
-  -------------------------------
-
-  The fact that the satisfiability problem is NP-complete is viewed as evidence
-  that there is no algorithm that runs in polynomial time worst-case complexity.
-  This had long been interpreted as evidence that there are no efficient algorithms
-  for determining satisfiability.
-  But some breakthrough ideas in the 1990s led to the development of satisfiability
-  algorithms that work extremely well on many of the types of problems that
-  come up in practice.
-  One of those ideas is the use of *conflict driven clauses learning*, or CDCL.
-
-  (Explain CDCL here.)
-
-
-  Propositional logic in Lean
-  ---------------------------
-
-  Explain the type `Prop` and the encoding of propositional formulas.
-
-  Explain how to use Lean as a proof system.
-
-  Give complete list of propositional rules (tactics).
+  [An application: tilings]
 
 

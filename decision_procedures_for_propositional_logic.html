@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>7. Decision Procedures &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  <title>6. Decision Procedures &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
   
 
   
@@ -44,8 +44,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="8. Using SAT Solvers" href="using_sat_solvers.html" />
-    <link rel="prev" title="6. Lean as a Proof Assistant" href="using_lean_as_a_proof_assistant.html" /> 
+    <link rel="next" title="7. Using SAT Solvers" href="using_sat_solvers.html" />
+    <link rel="prev" title="5. Implementing Propositional Logic" href="implementing_propositional_logic.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -94,20 +94,20 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Using Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">6. Lean as a Proof Assistant</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Decision Procedures</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#the-tseitin-transformation">7.1. The Tseitin transformation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#unit-propagation-and-the-pure-literal-rule">7.2. Unit propagation and the pure literal rule</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dpll">7.3. DPLL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#autarkies-and-2-sat">7.4. Autarkies and 2-SAT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cdcl">7.5. CDCL</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Decision Procedures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-tseitin-transformation">6.1. The Tseitin transformation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unit-propagation-and-the-pure-literal-rule">6.2. Unit propagation and the pure literal rule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dpll">6.3. DPLL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#autarkies-and-2-sat">6.4. Autarkies and 2-SAT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cdcl">6.5. CDCL</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">8. Using SAT Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">9. Deduction for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
@@ -163,7 +163,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">7. </span>Decision Procedures</li>
+      <li><span class="section-number">6. </span>Decision Procedures</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -183,7 +183,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="decision-procedures">
-<span id="chapter-decision-procedures-for-propositional-logic"></span><h1><span class="section-number">7. </span>Decision Procedures<a class="headerlink" href="#decision-procedures" title="Permalink to this headline">¶</a></h1>
+<span id="chapter-decision-procedures-for-propositional-logic"></span><h1><span class="section-number">6. </span>Decision Procedures<a class="headerlink" href="#decision-procedures" title="Permalink to this headline">¶</a></h1>
 <p>We have seen that it is possible to determine whether or not a propositional formula is valid
 by writing out its entire truth table.
 This seems pretty inefficient; if a formula <span class="math notranslate nohighlight">\(A\)</span> has <span class="math notranslate nohighlight">\(n\)</span> variables,
@@ -223,7 +223,7 @@ This provides a recipe for determining the validity of <span class="math notrans
 namely, use a SAT solver to determine whether <span class="math notranslate nohighlight">\(\lnot A\)</span>
 is satisfiable, and then change a “yes” answer to a “no” and vice-versa.</p>
 <div class="section" id="the-tseitin-transformation">
-<span id="section-the-tseitin-transformation"></span><h2><span class="section-number">7.1. </span>The Tseitin transformation<a class="headerlink" href="#the-tseitin-transformation" title="Permalink to this headline">¶</a></h2>
+<span id="section-the-tseitin-transformation"></span><h2><span class="section-number">6.1. </span>The Tseitin transformation<a class="headerlink" href="#the-tseitin-transformation" title="Permalink to this headline">¶</a></h2>
 <p>We have seen that if <span class="math notranslate nohighlight">\(A\)</span> is a propositional formula, the smallest CNF equivalent
 may be exponentially longer.
 The Tseitin transformation provides an elegant workaround:
@@ -461,7 +461,7 @@ can be represented by the conjunction of the clauses <span class="math notransla
 can be represented by the single clause <span class="math notranslate nohighlight">\(\lnot d \lor \ell_1 \lor \cdots \lor \ell_n\)</span>.</p>
 </div>
 <div class="section" id="unit-propagation-and-the-pure-literal-rule">
-<span id="section-unit-propagation-and-the-pure-literal-rule"></span><h2><span class="section-number">7.2. </span>Unit propagation and the pure literal rule<a class="headerlink" href="#unit-propagation-and-the-pure-literal-rule" title="Permalink to this headline">¶</a></h2>
+<span id="section-unit-propagation-and-the-pure-literal-rule"></span><h2><span class="section-number">6.2. </span>Unit propagation and the pure literal rule<a class="headerlink" href="#unit-propagation-and-the-pure-literal-rule" title="Permalink to this headline">¶</a></h2>
 <p>In earlier chapters, we considered only truth assignments that assign a truth value to all propositional
 variables. However, complete search methods for SAT like DPLL use <em>partial assignments</em>, which assign truth
 values to some subset of the variables. For a clause <span class="math notranslate nohighlight">\(C\)</span> and partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
@@ -524,7 +524,7 @@ so the pure literal rule will assign it to <span class="math notranslate nohighl
 three satisfying assignments, while <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau}\)</span> has only two satisfying assignments.</p>
 </div>
 <div class="section" id="dpll">
-<h2><span class="section-number">7.3. </span>DPLL<a class="headerlink" href="#dpll" title="Permalink to this headline">¶</a></h2>
+<span id="section-dpll"></span><h2><span class="section-number">6.3. </span>DPLL<a class="headerlink" href="#dpll" title="Permalink to this headline">¶</a></h2>
 <p>One of the first and most well-known decision procedures for SAT problems is the Davis-Putnam-Logemann-Loveland
 (DPLL) algorithm, which was invented by Davis, Logemann, and Loveland in 1962,
 based on
@@ -616,7 +616,7 @@ In the meanwhile, as a placeholder, we provide a few snippets.</p>
 </div>
 </div>
 <div class="section" id="autarkies-and-2-sat">
-<span id="section-autarkies-and-2-sat"></span><h2><span class="section-number">7.4. </span>Autarkies and 2-SAT<a class="headerlink" href="#autarkies-and-2-sat" title="Permalink to this headline">¶</a></h2>
+<span id="section-autarkies-and-2-sat"></span><h2><span class="section-number">6.4. </span>Autarkies and 2-SAT<a class="headerlink" href="#autarkies-and-2-sat" title="Permalink to this headline">¶</a></h2>
 <p>Unit propagation and the pure literal rule form the core of the DPLL algorithm.
 In this section, we present a generalization of the pure literal rule,
 and we illustrate its use by providing an efficient algorithm for a restricted version of SAT.</p>
@@ -675,7 +675,7 @@ or contains the empty clause,
 which indicates that the original clause is unsatisfiable.</p>
 </div>
 <div class="section" id="cdcl">
-<span id="section-cdcl"></span><h2><span class="section-number">7.5. </span>CDCL<a class="headerlink" href="#cdcl" title="Permalink to this headline">¶</a></h2>
+<span id="section-cdcl"></span><h2><span class="section-number">6.5. </span>CDCL<a class="headerlink" href="#cdcl" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -685,8 +685,8 @@ which indicates that the original clause is unsatisfiable.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="using_sat_solvers.html" class="btn btn-neutral float-right" title="8. Using SAT Solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="using_lean_as_a_proof_assistant.html" class="btn btn-neutral float-left" title="6. Lean as a Proof Assistant" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="using_sat_solvers.html" class="btn btn-neutral float-right" title="7. Using SAT Solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="implementing_propositional_logic.html" class="btn btn-neutral float-left" title="5. Implementing Propositional Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

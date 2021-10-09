@@ -2,8 +2,8 @@
 
 .. _chapter_using_lean_as_a_proof_assistant_as_a_proof_assistant:
 
-Lean as a Proof Assistant
-=========================
+Using Lean as a Proof Assistant
+===============================
 
 In :numref:`Chapter %s <chapter_using_lean_as_a_programming_language>`,
 we considered the use of Lean as a programming
