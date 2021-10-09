@@ -19,7 +19,7 @@ if and only if there is a :math:`d` such that :math:`P(d, x)` holds.
 In this case, we say that :math:`d` is a *proof of membership* for :math:`x`.
 We typically require that checking a proof is easy, say, by requiring that :math:`P(d, x)`
 runs in polynomial time.
-This if often easy to do by putting a lot of information into :math:`d`.
+This is often easy to do by putting a lot of information into :math:`d`.
 NP is the class of languages that have a polynomial time proof system with the additional property
 that for every :math:`x` in the language, there is a proof of membership :math:`d` whose
 length is polynomially bounded in the length of :math:`x`.
