@@ -278,7 +278,9 @@ numbering high enough to avoid a clash.)</p>
                 <span class="o">(</span><span class="n">defLit</span> <span class="o">(</span><span class="n">newdefs.size</span> <span class="bp">-</span> <span class="mi">1</span><span class="o">),</span> <span class="n">newdefs</span><span class="o">)</span>
 </pre></div>
 </div>
-<p>The function takes an NNF formula and a list of definitions,
+<p>The keyword <cite>where</cite> is used to define an auxiliary function that is not
+meant to be used anywhere else.
+The function <cite>mkDefs</cite> takes an NNF formula and a list of definitions,
 and it returns an augmented list of definitions and a literal
 representing the original formula.
 More precisely, the list <cite>defs</cite> is an array of disjunctions and conjunctions
@@ -552,12 +554,78 @@ the DPLL tree consists of four leaf nodes. The figure below shows the DPLL trees
 <blockquote>
 <div><a class="reference internal image-reference" href="_images/dpll.png"><img alt="dpll example" class="align-center" src="_images/dpll.png" style="height: 150px;" /></a>
 </div></blockquote>
-<p>We have implemented a basic version of the DPLL procedure in Lean.
-We will discuss it in class and soon provide an explanation here.
-In the meanwhile, as a placeholder, we provide a few snippets.</p>
-<p>The following function simplifies a clause given an assignment to a literal:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- Simplifies the CNF assuming `x` is true. `x` must not be a constant. -/</span>
-<span class="kd">def</span> <span class="n">simplify</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
+<p>We have implemented a basic version of the DPLL procedure in Lean,
+which can be found in the <cite>Examples</cite> folder.
+We will start at the top level and work our way down.
+The function <cite>dpllSat</cite> accepts a CNF formula and returns either a satisfying
+assignment or <cite>none</cite> if there aren’t any.
+It calls <cite>propagateUnits</cite> to perform unit propagation,
+and then calls <cite>dpllSatAux</cite> to iteratively pick an unassigned variable
+and split on that variable.
+We use the keyword <cite>partial</cite> to allow for an arbitrary recursive call.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">dpllSatAux</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span>
+    <span class="n">Option</span> <span class="o">(</span><span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:=</span>
+  <span class="k">if</span> <span class="n">φ.hasEmpty</span> <span class="k">then</span> <span class="n">none</span>
+  <span class="k">else</span> <span class="k">match</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="n">φ</span> <span class="k">with</span>
+  <span class="c1">-- No variables left to split on, we found a solution.</span>
+  <span class="bp">|</span> <span class="n">none</span> <span class="bp">=&gt;</span> <span class="n">some</span> <span class="o">(</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">)</span>
+  <span class="c1">-- Split on `x`.</span>
+  <span class="c1">-- `&lt;|&gt;` is the &quot;or else&quot; operator, which tries one action and if that fails</span>
+  <span class="c1">-- tries the other.</span>
+  <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="n">goWithNew</span> <span class="n">x</span> <span class="n">τ</span> <span class="n">φ</span> <span class="bp">&lt;|&gt;</span> <span class="n">goWithNew</span> <span class="o">(</span><span class="bp">-</span><span class="n">x</span><span class="o">)</span> <span class="n">τ</span> <span class="n">φ</span>
+
+<span class="n">where</span>
+  <span class="sd">/-- Assigns `x` to true and continues out DPLL. -/</span>
+  <span class="n">goWithNew</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span>
+      <span class="n">Option</span> <span class="o">(</span><span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:=</span>
+    <span class="k">let</span> <span class="o">(</span><span class="n">τ&#39;</span><span class="o">,</span> <span class="n">φ&#39;</span><span class="o">)</span> <span class="o">:=</span> <span class="n">propagateWithNew</span> <span class="n">x</span> <span class="n">τ</span> <span class="n">φ</span>
+    <span class="n">dpllSatAux</span> <span class="n">τ&#39;</span> <span class="n">φ&#39;</span>
+
+<span class="sd">/-- Solve `φ` using DPLL. Return a satisfying assignment if found, otherwise `none`. -/</span>
+<span class="kd">def</span> <span class="n">dpllSat</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Option</span> <span class="n">PropAssignment</span> <span class="o">:=</span>
+  <span class="k">let</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">propagateUnits</span> <span class="o">[]</span> <span class="n">φ</span>
+  <span class="o">(</span><span class="n">dpllSatAux</span> <span class="n">τ</span> <span class="n">φ</span><span class="o">)</span><span class="bp">.</span><span class="n">map</span> <span class="k">fun</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">_</span><span class="o">⟩</span> <span class="bp">=&gt;</span> <span class="n">τ</span>
+</pre></div>
+</div>
+<p>The function <cite>pickSplit?</cite> naively chooses the first variable it finds.
+It follows the Lean convention of using a question mark for a function that
+returns an element of an option type.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="bp">→</span> <span class="n">Option</span> <span class="n">Lit</span>
+  <span class="bp">|</span> <span class="o">[]</span>      <span class="bp">=&gt;</span> <span class="n">none</span>
+  <span class="bp">|</span> <span class="n">c</span> <span class="o">::</span> <span class="n">cs</span> <span class="bp">=&gt;</span> <span class="k">match</span> <span class="n">c</span> <span class="k">with</span>
+    <span class="bp">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">xs</span> <span class="bp">=&gt;</span> <span class="n">x</span>
+    <span class="bp">|</span> <span class="n">_</span>       <span class="bp">=&gt;</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="n">cs</span>
+</pre></div>
+</div>
+<p>The function <cite>propagateUnits</cite> performs unit propagation and returns the resulting
+formula and the augmented truth assignment.
+As long as there is a unit clause, it simplifies the formula and adds the new
+literal to the assignment.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span> <span class="o">:=</span>
+  <span class="c1">-- If `φ` is unsat, we&#39;re done.</span>
+  <span class="k">if</span> <span class="n">φ.hasEmpty</span> <span class="k">then</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
+  <span class="k">else</span> <span class="k">match</span> <span class="n">φ.findUnit</span> <span class="k">with</span>
+    <span class="c1">-- If there are no unit clauses, we&#39;re done.</span>
+    <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
+    <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span>
+      <span class="c1">-- If there is a unit clause `x`, simplify the formula</span>
+      <span class="c1">-- assuming `x` is true and continue propagating.</span>
+      <span class="k">let</span> <span class="n">φ&#39;</span> <span class="o">:=</span> <span class="n">simplify</span> <span class="n">x</span> <span class="n">φ</span>
+      <span class="k">if</span> <span class="n">τ.mem</span> <span class="n">x.name</span>
+      <span class="k">then</span> <span class="n">panic</span><span class="bp">!</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;&#39;{x}&#39; has already been assigned and should not appear in the formula.&quot;</span>
+      <span class="k">else</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ.withLit</span> <span class="n">x</span><span class="o">)</span> <span class="n">φ&#39;</span>
+</pre></div>
+</div>
+<p>The function <cite>propagateWithNew</cite> is used to peform a split on the literal <cite>x</cite>.
+It assigns the value of <cite>x</cite> and then does unit propagation.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">propagateWithNew</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span>
+    <span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span> <span class="o">:=</span>
+  <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ.withLit</span> <span class="n">x</span><span class="o">)</span> <span class="o">(</span><span class="n">simplify</span> <span class="n">x</span> <span class="n">φ</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Finally, the function <cite>simplify</cite> simplifies a CNF formula by assigning the literal <cite>x</cite>
+to true, assuming <cite>x</cite> is not one of the constants <cite>⊥</cite> or <cite>⊤</cite>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">simplify</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
   <span class="n">assert</span><span class="bp">!</span> <span class="n">x</span> <span class="bp">!=</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="bp">⊥</span><span class="o">}</span> <span class="bp">&amp;&amp;</span> <span class="n">x</span> <span class="bp">!=</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="bp">⊤</span><span class="o">}</span>
   <span class="k">match</span> <span class="n">φ</span> <span class="k">with</span>
   <span class="bp">|</span> <span class="o">[]</span>      <span class="bp">=&gt;</span> <span class="o">[]</span>
@@ -569,49 +637,6 @@ In the meanwhile, as a placeholder, we provide a few snippets.</p>
                <span class="k">else</span> <span class="n">c.eraseAll</span> <span class="n">x.negate</span> <span class="o">::</span> <span class="n">cs&#39;</span>
 
 <span class="k">#eval</span> <span class="n">toString</span> <span class="bp">&lt;|</span> <span class="n">simplify</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span><span class="o">}</span> <span class="n">cnf</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span> <span class="bp">-</span><span class="n">q</span> <span class="n">p</span> <span class="bp">-</span><span class="n">p</span><span class="o">,</span> <span class="n">p</span><span class="o">,</span> <span class="n">q</span> <span class="n">q</span><span class="o">,</span> <span class="bp">-</span><span class="n">q</span> <span class="bp">-</span><span class="n">p</span><span class="o">,</span> <span class="bp">-</span><span class="n">p</span><span class="o">}</span>
-</pre></div>
-</div>
-<p>The following performs unit propagation:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- Performs a round of unit propagation on `φ` under the assignment `τ`.</span>
-<span class="sd">Returns an updated assignment and a simplified formula.</span>
-
-<span class="sd">Assumes no additions to `τ` since last `simplify _ φ` call.</span>
-<span class="sd">NB: If branching in DPLL, call `simplify` first. -/</span>
-<span class="n">partial</span> <span class="kd">def</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span> <span class="o">:=</span>
-  <span class="c1">-- If `φ` is unsat, we&#39;re done.</span>
-  <span class="k">if</span> <span class="n">φ.hasEmpty</span> <span class="k">then</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
-  <span class="k">else</span> <span class="k">match</span> <span class="n">φ.findUnit</span> <span class="k">with</span>
-    <span class="c1">-- If there are no unit clauses, we&#39;re done.</span>
-    <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span>
-    <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span>
-      <span class="c1">-- If there is a unit clause `x`, simplify the formula</span>
-      <span class="c1">-- assuming `x` is true and continue propagating.</span>
-      <span class="k">let</span> <span class="n">φ&#39;</span> <span class="o">:=</span> <span class="n">simplify</span> <span class="n">x</span> <span class="n">φ</span>
-      <span class="k">if</span> <span class="n">τ.mem</span> <span class="n">x.name</span>
-      <span class="k">then</span> <span class="n">panic</span><span class="bp">!</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;Forgot to simplify -- &#39;{x}&#39; has already been assigned and should not appear in the formula.&quot;</span>
-      <span class="k">else</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ.withLit</span> <span class="n">x</span><span class="o">)</span> <span class="n">φ&#39;</span>
-</pre></div>
-</div>
-<p>And the following is the main procedure:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">dpllSatAux</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Option</span> <span class="o">(</span><span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:=</span>
-  <span class="k">if</span> <span class="n">φ.hasEmpty</span> <span class="k">then</span> <span class="n">none</span>
-  <span class="k">else</span> <span class="k">match</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="n">φ</span> <span class="k">with</span>
-  <span class="c1">-- No variables left to split on, we found a solution.</span>
-  <span class="bp">|</span> <span class="n">none</span> <span class="bp">=&gt;</span> <span class="n">some</span> <span class="o">(</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">)</span>
-  <span class="c1">-- Split on `x`.</span>
-  <span class="c1">-- `&lt;|&gt;` is the &quot;or else&quot; operator which tries one action, and if that failed tries the other.</span>
-  <span class="bp">|</span> <span class="n">some</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="n">goWithNew</span> <span class="n">x</span> <span class="n">τ</span> <span class="n">φ</span> <span class="bp">&lt;|&gt;</span> <span class="n">goWithNew</span> <span class="o">(</span><span class="bp">-</span><span class="n">x</span><span class="o">)</span> <span class="n">τ</span> <span class="n">φ</span>
-
-<span class="n">where</span>
-  <span class="sd">/-- Assigns `x` to true and continues out DPLL. -/</span>
-  <span class="n">goWithNew</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Option</span> <span class="o">(</span><span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:=</span>
-    <span class="k">let</span> <span class="o">(</span><span class="n">τ&#39;</span><span class="o">,</span> <span class="n">φ&#39;</span><span class="o">)</span> <span class="o">:=</span> <span class="n">propagateWithNew</span> <span class="n">x</span> <span class="n">τ</span> <span class="n">φ</span>
-    <span class="n">dpllSatAux</span> <span class="n">τ&#39;</span> <span class="n">φ&#39;</span>
-
-<span class="sd">/-- Solve `φ` using DPLL. Return a satisfying assignment if found, otherwise `none`. -/</span>
-<span class="kd">def</span> <span class="n">dpllSat</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Option</span> <span class="n">PropAssignment</span> <span class="o">:=</span>
-  <span class="k">let</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">φ</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">propagateUnits</span> <span class="o">[]</span> <span class="n">φ</span>
-  <span class="o">(</span><span class="n">dpllSatAux</span> <span class="n">τ</span> <span class="n">φ</span><span class="o">)</span><span class="bp">.</span><span class="n">map</span> <span class="k">fun</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">_</span><span class="o">⟩</span> <span class="bp">=&gt;</span> <span class="n">τ</span>
 </pre></div>
 </div>
 </div>
@@ -676,6 +701,59 @@ which indicates that the original clause is unsatisfiable.</p>
 </div>
 <div class="section" id="cdcl">
 <span id="section-cdcl"></span><h2><span class="section-number">6.5. </span>CDCL<a class="headerlink" href="#cdcl" title="Permalink to this headline">¶</a></h2>
+<p>The Conflict-Driven Clause-Learning (CDCL) decision procedure is the most successful SAT solving
+paradigm. Although it evolved from DPLL, modern implementations of CDCL have hardly any resemblance
+with the classic decision procedure. The algorithms differ in core algorithmic choices.
+When designing an algorithm, one typically needs to choose between making the algorithm smart or
+making it fast. Having it both ways is generally not an option due to conflicting requirements for the datastructures.
+State-of-the-art DPLL algorithms are designed to be smart: spend serious computational effort to
+pick the best variable in each recursive call to make the binary tree relatively small. As we will describe below,
+CDCL focuses on being fast. Unit propagation is by far the most computationally expensive step
+and everything in a CDCL solver is designed by make that as fast as possible. That prevents
+more complicated heuristics. Another important design decision for SAT solving algorithms is
+determining whether you plan to find a satisfying assignment or prove that none exists. DPLL
+focuses on finding a satisfying assignment by picking the most satisfiable branch first, while
+CDCL, as the name suggests, prefers conflicts and wants to find a short refutation. A
+satisfying assignment is a counterexample to no refutation exists.</p>
+<p>The early development of CDCL is four decades later than DPLL. While DPLL simply backtracks
+when a conflict (leaf node) is reached, CDCL turns this conflict into a conflict clause that is
+added to the formula. The first and arguably most important step towards CDCL is the invention
+which clause to add: the first unique implication point. The first unique implication point is an
+invention by Marques-Silva and Sakallah (1996) and is still used in all modern day top-tier
+solvers.</p>
+<p>The best decision heuristic for CDCL selects the unassigned variable that occurs
+most frequently in recently learned conflict clauses. This heuristic, called
+Variable-State Independent Decaying Sum (VSIDS in short), was introduced
+in the zChaff SAT solver by Moskewicz and co-authors (2001). The heuristic
+was been improved over the years, in particular by E'en and S&quot;orensson (2003)
+in their solver MiniSAT. In recent years some other advances have been made as well.
+However, selecting variables in recent conflict clauses is still the foundation.</p>
+<p>Adding clauses to the input formula could significantly increase the cost of unit propagation.
+Therefore clause learning was not immediately successful. The contribution that showed the
+effectiveness of clause learning in practice is the 2-literal watchpointers datastructure.
+In short, the solver does not maintain a full occurrence list of clauses, but only an
+occurrence list of the first two literals in a clause. These first two literals are required to
+have the following invariant: either both literals are unassigned or one of them is
+assigned to true. That invariant is enough to ensure that the clause is not unit. In case
+an assignment breaks the invariant, then the entire clause is explored to check whether
+it is possible to fix the invariant by swapping a satisfied or unassigned literal to the first
+two positions. If this is not possible, the clause is unit and the unassigned literal
+is assigned to true or the clause is falsified which triggers the learning procedure in
+the solver.</p>
+<p>Another key difference between CDCL and DPLL is that the former restarts very
+frequently. Restarting sounds drastic, but simply means that all variables are
+unassigned. The remainder of the solver state, such as the heuristics and the
+learned clauses, are not altered. Modern SAT solver restart often: say roughly
+a thousand times per second (although this depends on the size of the formula).
+As a consequence, no binary search tree is constructed. Instead, CDCL might
+be best viewed a conflict-clause generator without any systematic search.</p>
+<p>The are various other parts in CDCL solvers that are important for fast
+performance but that are beyond the scope of this course. For example,
+CDCL solvers do not only learn many clauses, but they also aggressively
+delete them to reduce the impact on unit propagation. Also, CDCL solvers
+use techniques to rewrite the formula, so called inprocessing techniques.
+In top-tier solvers, about half the runtime can be devoted to such
+techniques.</p>
 </div>
 </div>
 

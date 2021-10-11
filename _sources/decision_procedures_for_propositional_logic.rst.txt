@@ -97,7 +97,9 @@ numbering high enough to avoid a clash.)
   :start-after: -- textbook: mkDefs
   :end-before: -- end textbook: mkDefs
 
-The function takes an NNF formula and a list of definitions,
+The keyword `where` is used to define an auxiliary function that is not
+meant to be used anywhere else.
+The function `mkDefs` takes an NNF formula and a list of definitions,
 and it returns an augmented list of definitions and a literal
 representing the original formula.
 More precisely, the list `defs` is an array of disjunctions and conjunctions
@@ -328,27 +330,51 @@ the DPLL tree consists of four leaf nodes. The figure below shows the DPLL trees
    :alt: dpll example
    :align: center
 
-We have implemented a basic version of the DPLL procedure in Lean.
-We will discuss it in class and soon provide an explanation here.
-In the meanwhile, as a placeholder, we provide a few snippets.
-
-The following function simplifies a clause given an assignment to a literal:
+We have implemented a basic version of the DPLL procedure in Lean,
+which can be found in the `Examples` folder.
+We will start at the top level and work our way down.
+The function `dpllSat` accepts a CNF formula and returns either a satisfying
+assignment or `none` if there aren't any.
+It calls `propagateUnits` to perform unit propagation,
+and then calls `dpllSatAux` to iteratively pick an unassigned variable
+and split on that variable.
+We use the keyword `partial` to allow for an arbitrary recursive call.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
-  :start-after: -- textbook: simplify
-  :end-before: -- end textbook: simplify
+  :start-after: -- textbook: dpllSat
+  :end-before: -- end textbook: dpllSat
 
-The following performs unit propagation:
+The function `pickSplit?` naively chooses the first variable it finds.
+It follows the Lean convention of using a question mark for a function that
+returns an element of an option type.
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
+  :start-after: -- textbook: pickSplit?
+  :end-before: -- end textbook: pickSplit?
+
+The function `propagateUnits` performs unit propagation and returns the resulting
+formula and the augmented truth assignment.
+As long as there is a unit clause, it simplifies the formula and adds the new
+literal to the assignment.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
   :start-after: -- textbook: propagateUnits
   :end-before: -- end textbook: propagateUnits
 
-And the following is the main procedure:
+The function `propagateWithNew` is used to peform a split on the literal `x`.
+It assigns the value of `x` and then does unit propagation.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
-  :start-after: -- textbook: dpllSat
-  :end-before: -- end textbook: dpllSat
+  :start-after: -- textbook: propagateWithNew
+  :end-before: -- end textbook: propagateWithNew
+
+Finally, the function `simplify` simplifies a CNF formula by assigning the literal `x`
+to true, assuming `x` is not one of the constants `⊥` or `⊤`.
+
+.. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
+  :start-after: -- textbook: simplify
+  :end-before: -- end textbook: simplify
+
 
 .. _section_autarkies_and_2_sat:
 
@@ -422,5 +448,63 @@ which indicates that the original clause is unsatisfiable.
 CDCL
 ----
 
+The Conflict-Driven Clause-Learning (CDCL) decision procedure is the most successful SAT solving
+paradigm. Although it evolved from DPLL, modern implementations of CDCL have hardly any resemblance
+with the classic decision procedure. The algorithms differ in core algorithmic choices.
+When designing an algorithm, one typically needs to choose between making the algorithm smart or
+making it fast. Having it both ways is generally not an option due to conflicting requirements for the datastructures.
+State-of-the-art DPLL algorithms are designed to be smart: spend serious computational effort to
+pick the best variable in each recursive call to make the binary tree relatively small. As we will describe below,
+CDCL focuses on being fast. Unit propagation is by far the most computationally expensive step
+and everything in a CDCL solver is designed by make that as fast as possible. That prevents
+more complicated heuristics. Another important design decision for SAT solving algorithms is
+determining whether you plan to find a satisfying assignment or prove that none exists. DPLL
+focuses on finding a satisfying assignment by picking the most satisfiable branch first, while
+CDCL, as the name suggests, prefers conflicts and wants to find a short refutation. A
+satisfying assignment is a counterexample to no refutation exists.
+
+The early development of CDCL is four decades later than DPLL. While DPLL simply backtracks
+when a conflict (leaf node) is reached, CDCL turns this conflict into a conflict clause that is
+added to the formula. The first and arguably most important step towards CDCL is the invention
+which clause to add: the first unique implication point. The first unique implication point is an
+invention by Marques-Silva and Sakallah (1996) and is still used in all modern day top-tier
+solvers.
+
+The best decision heuristic for CDCL selects the unassigned variable that occurs
+most frequently in recently learned conflict clauses. This heuristic, called
+Variable-State Independent Decaying Sum (VSIDS in short), was introduced
+in the zChaff SAT solver by Moskewicz and co-authors (2001). The heuristic
+was been improved over the years, in particular by E\'en and S\"orensson (2003)
+in their solver MiniSAT. In recent years some other advances have been made as well.
+However, selecting variables in recent conflict clauses is still the foundation.
+
+Adding clauses to the input formula could significantly increase the cost of unit propagation.
+Therefore clause learning was not immediately successful. The contribution that showed the
+effectiveness of clause learning in practice is the 2-literal watchpointers datastructure.
+In short, the solver does not maintain a full occurrence list of clauses, but only an
+occurrence list of the first two literals in a clause. These first two literals are required to
+have the following invariant: either both literals are unassigned or one of them is
+assigned to true. That invariant is enough to ensure that the clause is not unit. In case
+an assignment breaks the invariant, then the entire clause is explored to check whether
+it is possible to fix the invariant by swapping a satisfied or unassigned literal to the first
+two positions. If this is not possible, the clause is unit and the unassigned literal
+is assigned to true or the clause is falsified which triggers the learning procedure in
+the solver.
+
+Another key difference between CDCL and DPLL is that the former restarts very
+frequently. Restarting sounds drastic, but simply means that all variables are
+unassigned. The remainder of the solver state, such as the heuristics and the
+learned clauses, are not altered. Modern SAT solver restart often: say roughly
+a thousand times per second (although this depends on the size of the formula).
+As a consequence, no binary search tree is constructed. Instead, CDCL might
+be best viewed a conflict-clause generator without any systematic search.
+
+The are various other parts in CDCL solvers that are important for fast
+performance but that are beyond the scope of this course. For example,
+CDCL solvers do not only learn many clauses, but they also aggressively
+delete them to reduce the impact on unit propagation. Also, CDCL solvers
+use techniques to rewrite the formula, so called inprocessing techniques.
+In top-tier solvers, about half the runtime can be devoted to such
+techniques.
 
 

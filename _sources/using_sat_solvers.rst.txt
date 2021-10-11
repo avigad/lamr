@@ -125,12 +125,14 @@ Place number is a grid consisting of nine squares subdivided into a further nine
 number appears once in each horizontal line, vertical line, and square. This puzzle can be seen as a graph coloring
 where each small square is a vertex, and vertices are connected if and only if the corresponding small squares occur
 the the same horizontal line, vertical line, or square. Below is one of the hardest sudoko puzzles with only 17 given numbers.
-It can be easily solved using a SAT solver.
 
 .. image:: ../figures/sudoku.*
   :width: 200 px
   :alt: sudoku puzzle
   :align: center
+
+If you take a look at the file `sudoku.lean` in the `Examples` folder,
+you will see that it is easily solved by a SAT solver.
 
 Exercise: grid coloring
 -----------------------

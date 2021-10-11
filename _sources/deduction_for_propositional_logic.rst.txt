@@ -119,7 +119,7 @@ This proof system is sound and complete.
 Proving soundness is straightforward: you only need to check that each axiom is valid
 and that modus ponens preserves truth.
 This enables us to show, by induction, that each line of a proof :math:`C_1, \ldots, C_m`
-if :math:`A` from :math:`\Gamma` is true under an assignment :math:`\tau`,
+of :math:`A` from :math:`\Gamma` is true under an assignment :math:`\tau`,
 assuming every formula in :math:`\Gamma` is.
 Proving completeness requires more work.
 But axiomatic systems are no longer of much practical interest:

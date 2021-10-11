@@ -291,9 +291,10 @@ problem into a SAT problem using the encoding described above.</p>
 Place number is a grid consisting of nine squares subdivided into a further nine smaller squares in such a way that every
 number appears once in each horizontal line, vertical line, and square. This puzzle can be seen as a graph coloring
 where each small square is a vertex, and vertices are connected if and only if the corresponding small squares occur
-the the same horizontal line, vertical line, or square. Below is one of the hardest sudoko puzzles with only 17 given numbers.
-It can be easily solved using a SAT solver.</p>
+the the same horizontal line, vertical line, or square. Below is one of the hardest sudoko puzzles with only 17 given numbers.</p>
 <a class="reference internal image-reference" href="_images/sudoku.png"><img alt="sudoku puzzle" class="align-center" src="_images/sudoku.png" style="width: 200px;" /></a>
+<p>If you take a look at the file <cite>sudoku.lean</cite> in the <cite>Examples</cite> folder,
+you will see that it is easily solved by a SAT solver.</p>
 </div>
 <div class="section" id="exercise-grid-coloring">
 <h2><span class="section-number">7.3. </span>Exercise: grid coloring<a class="headerlink" href="#exercise-grid-coloring" title="Permalink to this headline">¶</a></h2>
