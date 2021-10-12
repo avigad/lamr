@@ -1095,19 +1095,20 @@ section
 
 variable [DecidableEq α]
 
-protected def union (l₁ l₂ : List α) : List α :=
-foldr insert l₂ l₁
+protected def union : List α → List α → List α
+  | [], l₂        => l₂
+  | (a :: l₁), l₂ => List.union l₁ (insert a l₂)
 
 @[simp] theorem nil_union (l : List α) : nil.union l = l := by simp [List.union, foldr]
 
 @[simp] theorem cons_union (a : α) (l₁ l₂ : List α) :
-  (a :: l₁).union l₂ = insert a (l₁.union l₂) := by simp [List.union, foldr]
+  (a :: l₁).union l₂ = l₁.union (insert a l₂) := by simp [List.union, foldr]
 
 @[simp] theorem mem_union_iff [DecidableEq α] {x : α} {l₁ l₂ : List α} :
     x ∈ l₁.union l₂ ↔ x ∈ l₁ ∨ x ∈ l₂ := by
-  induction l₁ with
+  induction l₁ generalizing l₂ with
   | nil => simp
-  | cons a l' ih => simp [ih, or_assoc]
+  | cons a l' ih => simp [ih, mem_insert_iff, or_comm (x = a), or_assoc]
 
 end
 
