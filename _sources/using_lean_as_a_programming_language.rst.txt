@@ -458,11 +458,33 @@ not referred to by another part of an expression.
 Notice the notation: `#[]` denotes a fresh array (Lean infers the type from context),
 and the `Array.push` function adds a new element at the end of the array.
 
-The following example shows how to compute a two-dimensional array and print it out.
+The following example shows how to compute a two-dimensional array, a ten by ten
+multiplication table.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_programming_language/examples5.lean
    :start-after: -- textbook: mulTable
    :end-before: -- end textbook: mulTable
+
+Alternatively, you can use the function `Array.mkArray` to initialize an array
+(in this case, to the values 0), and then use the `Array.set!` function
+to replace the elements later one.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_programming_language/examples5.lean
+   :start-after: -- textbook: mulTable
+   :end-before: -- end textbook: mulTable
+
+Here we replace the ith row by the previous ith row, with the jth column updated.
+
+The following snippet prints out the table. The idiom `show T from t`
+is a way of telling Lean that term `t` should have type `T`.
+Writing `@id T t` has a similar effect, as does writing `(t : T)`.
+(A difference is that the first two expressions have type `T` exactly,
+whereas `(t : T)` ensures that `t` has a type that Lean recognizes as being
+equivalent to `T`.)
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_programming_language/examples5.lean
+   :start-after: -- textbook: show mulTable
+   :end-before: -- end textbook: show mulTable
 
 
 Exercises

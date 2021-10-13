@@ -685,26 +685,50 @@ not referred to by another part of an expression.</p>
 </div>
 <p>Notice the notation: <cite>#[]</cite> denotes a fresh array (Lean infers the type from context),
 and the <cite>Array.push</cite> function adds a new element at the end of the array.</p>
-<p>The following example shows how to compute a two-dimensional array and print it out.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="k">do</span>
+<p>The following example shows how to compute a two-dimensional array, a ten by ten
+multiplication table.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="k">do</span>
   <span class="k">let</span> <span class="n">mut</span> <span class="n">table</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
-  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
+  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
     <span class="k">let</span> <span class="n">mut</span> <span class="n">row</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
-    <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
+    <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
       <span class="n">row</span> <span class="o">:=</span> <span class="n">row.push</span> <span class="o">((</span><span class="n">i</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">j</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">))</span>
     <span class="n">table</span> <span class="o">:=</span> <span class="n">table.push</span> <span class="n">row</span>
   <span class="n">table</span>
 
-<span class="k">#eval</span> <span class="n">mulTable</span> <span class="mi">10</span>
+<span class="k">#eval</span> <span class="n">mulTable</span>
+</pre></div>
+</div>
+<p>Alternatively, you can use the function <cite>Array.mkArray</cite> to initialize an array
+(in this case, to the values 0), and then use the <cite>Array.set!</cite> function
+to replace the elements later one.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="k">do</span>
+  <span class="k">let</span> <span class="n">mut</span> <span class="n">table</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
+  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
+    <span class="k">let</span> <span class="n">mut</span> <span class="n">row</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
+    <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
+      <span class="n">row</span> <span class="o">:=</span> <span class="n">row.push</span> <span class="o">((</span><span class="n">i</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">j</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">))</span>
+    <span class="n">table</span> <span class="o">:=</span> <span class="n">table.push</span> <span class="n">row</span>
+  <span class="n">table</span>
 
-<span class="kd">def</span> <span class="n">printMulTable</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="o">:=</span> <span class="k">do</span>
-  <span class="k">let</span> <span class="n">t</span> <span class="o">:=</span> <span class="n">mulTable</span> <span class="n">n</span>
-  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
-    <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
-      <span class="n">IO.print</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;{t[i][j]} &quot;</span>
+<span class="k">#eval</span> <span class="n">mulTable</span>
+</pre></div>
+</div>
+<p>Here we replace the ith row by the previous ith row, with the jth column updated.</p>
+<p>The following snippet prints out the table. The idiom <cite>show T from t</cite>
+is a way of telling Lean that term <cite>t</cite> should have type <cite>T</cite>.
+Writing <cite>&#64;id T t</cite> has a similar effect, as does writing <cite>(t : T)</cite>.
+(A difference is that the first two expressions have type <cite>T</cite> exactly,
+whereas <cite>(t : T)</cite> ensures that <cite>t</cite> has a type that Lean recognizes as being
+equivalent to <cite>T</cite>.)</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="k">show</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="k">from</span> <span class="k">do</span>
+  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
+    <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
+      <span class="k">let</span> <span class="n">numstr</span> <span class="o">:=</span> <span class="n">toString</span> <span class="n">mulTable</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span>
+      <span class="c1">-- print 1-3 spaces</span>
+      <span class="n">IO.print</span> <span class="bp">$</span> <span class="s2">&quot; &quot;</span><span class="bp">.</span><span class="n">pushn</span> <span class="sc">&#39; &#39;</span> <span class="o">(</span><span class="mi">3</span> <span class="bp">-</span> <span class="n">numstr.length</span><span class="o">)</span>
+      <span class="n">IO.print</span> <span class="n">numstr</span>
     <span class="n">IO.println</span> <span class="s2">&quot;&quot;</span>
-
-<span class="k">#eval</span> <span class="n">printMulTable</span> <span class="mi">10</span>
 </pre></div>
 </div>
 </div>
