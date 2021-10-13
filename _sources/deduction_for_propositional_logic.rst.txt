@@ -418,14 +418,245 @@ We leave the proof of this fact to you.
 Natural deduction
 -----------------
 
-..
-  Sequents, rules.
+We now consider a type of deductive system that was introduced by Gerhard Gentzen
+in the 1930s, known as *natural deduction*. As the name suggests,
+the system was designed to model the way someone might carry out an informal
+logical argument.
+As a result, the system is not particularly good for automated reasoning and
+proof search,
+though it might be a good choice if the goal is to find a human-readable proof in the end.
+The main interest, rather, is that it provides a nice framework for representing
+informal arguments.
+Of all the systems we consider in this section, this one is the closest to the
+foundation system of logic that is built in to Lean.
 
-  Soundness.
+In natural deduction, the goal is to derive sequents of the form
+:math:`\Gamma \fCenter A`,
+where :math:`\Gamma` is a finite set of formulas and :math:`A` is a formula.
+The interpretation of such a sequent is, of course, that :math:`A` follows
+from the hypotheses in :math:`\Gamma`.
+Notice that we have overloaded the symbol :math:`\proves`, which is ordinarily
+used to express the provability relation.
+The two are clearly related: :math:`\Gamma` proves :math:`A` in the ordinary
+sense is now interpreted as saying that there is a finite subset :math:`\Gamma' \subseteq \Gamma` such that the sequent :math:`\Gamma \fCenter A` is derivable in natural deduction.
+Sometimes people use other notation for sequents, like :math:`\Gamma \Rightarrow A`.
+But Lean also uses the :math:`\proves` symbol for sequents,
+so we will stick with that.
 
-  Sketch completeness.
+We write ":math:`\Gamma, A`" for :math:`\Gamma \cup \{ A \}` to represent the hypotheses
+in :math:`\Gamma` together with the additional hypothesis :math:`A`.
+The first rule is trivial: we always have
 
-  Definitions.
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$\Gamma, A \fCenter A$.}
+      \end{prooftree}\]</div>
+
+  .. raw:: latex
+
+      \begin{prooftree}
+      \Axiom$\Gamma, A \fCenter A$.
+      \end{prooftree}
+
+This says that :math:`A` follows from any list of assumptions that includes :math:`A`.
+Most of the other connectives include *introduction rules*,
+which allow us to *introduce* the connective into a proof,
+and *elimination rules*, that tell us how to use them.
+For example, the rules for :math:`\land` are as follows:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$\Gamma \fCenter A$}
+      \AXC{$\Gamma \fCenter B$}
+      \BIC{$\Gamma \fCenter A \land B$}
+      \end{prooftree}
+      \quad \quad
+      \begin{prooftree}
+      \AXC{$\Gamma \fCenter A_0 \land A_1$}
+      \UIC{$\Gamma \fCenter A_i$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AX$\Gamma \fCenter A$
+      \AX$\Gamma \fCenter B$
+      \BI$\Gamma \fCenter A \land B$
+      \DP
+      \quad \quad
+      \AX$\Gamma \fCenter A_0 \land A_1$
+      \UI$\Gamma \fCenter A_i$
+      \DP
+      \end{center}
+
+The rules for implication are as follows:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$\Gamma, A \fCenter B$}
+      \UIC{$\Gamma \fCenter A \limplies B$}
+      \end{prooftree}
+      \quad \quad
+      \begin{prooftree}
+      \AXC{$\Gamma \fCenter A \limplies B$}
+      \AXC{$\Gamma \fCenter A$}
+      \BIC{$\Gamma \fCenter B$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AX$\Gamma, A \fCenter B$
+      \UI$\Gamma \fCenter A \limplies B$
+      \DP
+      \quad \quad
+      \AX$\Gamma \fCenter A \limplies B$
+      \AX$\Gamma \fCenter A$
+      \BI$\Gamma \fCenter B$
+      \DP
+      \end{center}
+
+Notice that in the introduction rule, to prove :math:`A \limplies B`, we
+temporarily assume :math:`A` and show that :math:`B` follows.
+The rules for disjunction, which codify proof by cases, are as follows:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$\Gamma \fCenter A_i$}
+      \UIC{$\Gamma \fCenter A_0 \lor A_1$}
+      \end{prooftree}
+      \quad \quad
+      \begin{prooftree}
+      \AXC{$\Gamma \fCenter A \lor B$}
+      \AXC{$\Gamma, A \fCenter C$}
+      \AXC{$\Gamma, B \fCenter C$}
+      \TIC{$\Gamma \fCenter C$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AX$\Gamma \fCenter A_i$
+      \UI$\Gamma \fCenter A_0 \lor A_1$
+      \DP
+      \quad \quad
+      \AX$\Gamma \fCenter A \lor B$
+      \AX$\Gamma, A \fCenter C$
+      \AX$\Gamma, B \fCenter C$
+      \TI$\Gamma \fCenter C$
+      \DP
+      \end{center}
+
+For classical logic, we also add the following principle of proof by contradiction:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$\Gamma, \lnot A \fCenter \bot$}
+      \UIC{$\Gamma \fCenter A$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AX$\Gamma, \lnot A \fCenter \bot$
+      \UI$\Gamma \fCenter A$
+      \DP
+      \end{center}
+
+These rules cover a complete set of connectives, since we can define :math:`\lnot A`
+to be :math:`A \limplies \bot`, define :math:`\top` to be :math:`\lnot \bot`, and
+define :math:`A \liff B` to be :math:`(A \limplies B) \land (B \limplies A)`.
+You should think about what the natural rules for these connectives would be if we were
+to include them in the calculus.
+
+As an example, here is a proof of :math:`A \limplies (B \limplies A \land B)`:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$A, B \fCenter A$}
+      \AXC{$A, B \fCenter B$}
+      \BIC{$A, B \fCenter A \land B$}
+      \UIC{$A \fCenter B \limplies A \land B$}
+      \UIC{$\fCenter A \limplies (B \limplies A \land B)$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AX$A, B \fCenter A$
+      \AX$A, B \fCenter B$
+      \BI$A, B \fCenter A \land B$
+      \UI$A \fCenter B \limplies A \land B$
+      \UI$\fCenter A \limplies (B \limplies A \land B)$
+      \DP
+      \end{center}
+
+And here is a proof of :math:`A \land B \limplies B \land A`:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$A \land B \fCenter A \land B$}
+      \UIC{$A \land B \fCenter B$}
+      \AXC{$A \land B \fCenter A \land B$}
+      \UIC{$A \land B \fCenter A$}
+      \BIC{$A \land B \fCenter B \land A$}
+      \UIC{$\fCenter A \land B \limplies B \land A$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AX$A \land B \fCenter A \land B$
+      \UI$A \land B \fCenter B$
+      \AX$A \land B \fCenter A \land B$
+      \UI$A \land B \fCenter A$
+      \BI$A \land B \fCenter B \land A$
+      \UI$\fCenter A \land B \limplies B \land A$
+      \DP
+      \end{center}
+
+As with the sequent calculus, there are more efficient ways of representing
+natural deduction proofs that only show the conclusion at each node and
+leave the hypotheses implicit.
+This avoids having to repeat a long list of hypotheses at every node.
+There are also presentations of sequent calculi for classical logic that use
+two-sided sequents, as we did for natural deduction.
+The most effective approach is to use sequents of the
+form :math:`\Gamma \fCenter \Delta`, where :math:`\Gamma` and :math:`\Delta`
+are finite sets and we interpret the sequent as saying that if all the hypotheses
+in :math:`\Gamma` are true, then at least one of the formulas in :math:`\Delta` is true.
+This is aligned with the annotations of positive and negative formulas that one
+sometimes finds in tableau calculi.
+
+.. Admonition:: Theorem
+
+    Natural deduction is sound and complete for classical propositional logic.
+    In other words, a sequent :math:`\Gamma \fCenter A` is derivable if and only
+    if :math:`\Gamma \models A`.
+
+We will not take the time to prove this here. One way to prove it is to
+show that natural deduction can simulate another calculus, like the sequent calculus,
+for which a completeness proof is easier.
 
 
 .. _section_compactness:
@@ -433,13 +664,44 @@ Natural deduction
 Compactness
 -----------
 
-..
-  [The relationship between strong completeness and weak completeness.]
+In automated reasoning, when we write :math:`\Gamma \models A` to express
+that :math:`A` is entailed by hypotheses in :math:`\Gamma`,
+we generally have the in mind case where :math:`\Gamma` is finite.
+But the definition makes sense when :math:`\Gamma` is infinite.
+The same is true in the when we talk about provability of :math:`A`
+from a set of hypotheses :math:`\Gamma`.
+Now, in the case of provability, it is clear that for any set :math:`\Gamma`,
+finite or infinite, :math:`\Gamma \proves A` if and only if there is a finite
+subset :math:`\Gamma' \subseteq \Gamma` such that :math:`\Gamma \proves A`.
+The corresponding fact about the entailment relation is also true:
 
-  [The compactness theorem.]
+.. Admonition:: Theorem (the compactness theorem for propositional logic)
 
-  [Proof.]
+    For any set of propositional formulas :math:`\Gamma`,
+    :math:`\Gamma \models A` if and only if there is a finite
+    subset :math:`\Gamma' \subseteq \Gamma` such that :math:`\Gamma' \models A`.
 
-  [An application: tilings]
+In this chapter, we focused on the soundness and completeness theorems in the
+case where :math:`\Gamma` is finite.
+But soundness carries over straightforwardly to the infinite case,
+and it is possible to prove completeness for arbitrary :math:`\Gamma` as well.
+You can check that compactness follows from these stronger versions of soundness
+and completeness, given the fact that any proof can use only a finite number of hypotheses.
+Conversely, the stronger versions of the completeness theorem
+follows from the weaker one using the compactness theorem.
 
+As an example of an application of the compactness theorem, imagine a
+finite set of oriented square tiles :math:`S`, all the same size, where "oriented" means that
+each has is a distinguished top edge.
+Suppose each edge of each tile is labeled with finitely many colors.
+A *tiling of the plane* with tiles from :math:`S` is an ordinary arrangement of (copies of) tiles in :math:`S` in an infinite square grid,
+like the squares on an infinite sheet of graph paper,
+such that adjacent edges have the same color.
 
+.. Admonition:: Theorem
+
+    Suppose that for every natural number :math:`n`, there is an :math:`n \times n`
+    tiling with tiles from :math:`S`. Then there is a tiling of the entire
+    plane with tiles from :math:`S`.
+
+You should think about how this follows from the compactness theorem.
