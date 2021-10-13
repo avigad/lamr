@@ -39,25 +39,40 @@ def primes (n : Nat) : Array Nat := do
 #eval (primes 10000).size
 -- end textbook: primes
 
-
 -- textbook: mulTable
-def mulTable (n : Nat) : Array (Array Nat) := do
+def mulTable : Array (Array Nat) := do
   let mut table := #[]
-  for i in [:n] do
+  for i in [:10] do
     let mut row := #[]
-    for j in [:n] do
+    for j in [:10] do
       row := row.push ((i + 1) * (j + 1))
     table := table.push row
   table
 
-#eval mulTable 10
-
-def printMulTable (n : Nat) : IO Unit := do
-  let t := mulTable n
-  for i in [:n] do
-    for j in [:n] do
-      IO.print s!"{t[i][j]} "
-    IO.println ""
-
-#eval printMulTable 10
+#eval mulTable
 -- end textbook: mulTable
+
+-- textbook: mulTable'
+def mulTable' : Array (Array Nat) := do
+  let mut s : Array (Array Nat) := mkArray 10 (mkArray 10 0)
+  for i in [:10] do
+    for j in [:10] do
+      s := s.set! i $ s[i].set! j ((i + 1) * (j + 1))
+  s
+-- end textbook: mulTable'
+
+/-
+The `show T from t` declares the type.
+Writing `@Id T t` has the same effect.
+-/
+
+-- textbook: show mulTable
+#eval show IO Unit from do
+  for i in [:10] do
+    for j in [:10] do
+      let numstr := toString mulTable[i][j]
+      -- print 1-3 spaces
+      IO.print $ " ".pushn ' ' (3 - numstr.length)
+      IO.print numstr
+    IO.println ""
+-- end textbook: show mulTable
