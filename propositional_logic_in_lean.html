@@ -1,0 +1,644 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>9. Propositional Logic in Lean &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="10. Terms and Formulas" href="terms_and_formulas.html" />
+    <link rel="prev" title="8. Deduction for Propositional Logic" href="deduction_for_propositional_logic.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">9. Propositional Logic in Lean</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#implication">9.1. Implication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conjunction">9.2. Conjunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disjunction">9.3. Disjunction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#negation">9.4. Negation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#miscellany">9.5. Miscellany</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas_in_lean.html">13. Equational Reasoning in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas_in_lean.html#structural-induction-in-lean">14. Structural Induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">15. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">16. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">18. Simple Type Theory</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Logic and Mechanized Reasoning</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">9. </span>Propositional Logic in Lean</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/propositional_logic_in_lean.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="propositional-logic-in-lean">
+<span id="chapter-propositional-logic-in-lean"></span><h1><span class="section-number">9. </span>Propositional Logic in Lean<a class="headerlink" href="#propositional-logic-in-lean" title="Permalink to this headline">¶</a></h1>
+<p>In <a class="reference internal" href="using_lean_as_a_programming_language.html#chapter-lean-as-a-programming-language"><span class="std std-numref">Chapter 3</span></a>,
+we considered the use of Lean as a programming
+language, and in <a class="reference internal" href="implementing_propositional_logic.html#chapter-implementing-propositional-logic"><span class="std std-numref">Chapter 5</span></a>
+we saw that you can use Lean to define data types for things like propositional formulas
+and truth assignments, and thereby implement algorithms that act on these objects.</p>
+<p>In this chapter, we will show to represent propositional formulas directly in
+Lean’s underlying foundation. In this sense, we are using Lean’s foundation as an <em>object
+language</em> rather than a <em>metalanguage</em> for logic.
+To clarify the distinction, imagine implementing one programming language, such as Lisp, in
+another programming language, like C++.
+In this scenario, we can characterize Lisp as being the object language, that is, the
+one that is being implemented, and C++ as the metalanguage, the one that is carrying out
+the implementation.
+What we did in <a class="reference internal" href="implementing_propositional_logic.html#chapter-implementing-propositional-logic"><span class="std std-numref">Chapter 5</span></a> is similar:
+we are used one logical system, Lean, to
+implement another one, propositional logic.
+One goal of this chapter is to clarify the sense in which Lean itself is a logical system,
+which is to say, its language can be used to state mathematical theorems and prove them.
+Propositional logic is only a starting point.
+In chapters to come we will see that Lean’s logical foundation is powerful and expressive
+enough to carry out almost any mathematical argument.</p>
+<p>This means that Lean’s logical foundation serves as both a programming language and
+a mathematical language. Combining the two brings a number of benefits:</p>
+<ul class="simple">
+<li><p>It allows us to specify the behavior of computer programs in the same language that we write them.</p></li>
+<li><p>It allows us to prove, rigorously, that our computer programs are correct, which is to say,
+that they meet their specifications.</p></li>
+<li><p>It allows us to enforce preconditions on our programs. For example, we can write functions
+whose input is required to be a positive integer, a requirement that is enforced
+statically, at compile time. Compiler optimizations can make use of this knowledge.</p></li>
+<li><p>It allows us to compute with objects in our mathematical libraries.</p></li>
+<li><p>It gives us ways of using computation in mathematical proofs.</p></li>
+</ul>
+<p>Although we will not discuss it in this course, Lean also serves as its own <em>metaprogramming
+language</em>, which means that we can use Lean to develop automation that can help us construct
+programs and proofs.
+In that way, Lean becomes a self-extending system, meaning that we can
+improve its support for programming and theorem proving using the system itself.</p>
+<div class="section" id="implication">
+<span id="section-implication"></span><h2><span class="section-number">9.1. </span>Implication<a class="headerlink" href="#implication" title="Permalink to this headline">¶</a></h2>
+<p>In Lean, we can declare variables that range over propositions, and then
+use them to build more complicated propositions.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">p</span> <span class="n">q</span> <span class="n">r</span> <span class="n">s</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span>
+
+<span class="k">#check</span> <span class="n">True</span>
+<span class="k">#check</span> <span class="n">False</span>
+<span class="k">#check</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span>
+<span class="k">#check</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span>
+<span class="k">#check</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span>
+<span class="k">#check</span> <span class="n">p</span> <span class="bp">↔</span> <span class="n">q</span>
+<span class="k">#check</span> <span class="bp">¬</span> <span class="n">p</span>
+</pre></div>
+</div>
+<p>Hovering over the symbols will give you options for typing them. Using <cite>\and</cite>, <cite>\or</cite>, <cite>\to</cite>,
+<cite>\iff</cite>, and <cite>\not</cite> will work.</p>
+<p>In Lean, if <cite>p</cite> has type <cite>Prop</cite>, then a term <cite>t</cite> of type <cite>p</cite> is a proof of <cite>p</cite>.
+Lean’s proof language is essentially the same as its programming language, which means that
+we can write proofs the same way we write programs.
+Instead of using the identifier <cite>def</cite>, it is conventional to use the word <cite>theorem</cite>
+to name the proof of a proposition.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">foo</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="n">hp</span> <span class="n">hq</span> <span class="bp">=&gt;</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hq</span>
+
+<span class="kd">theorem</span> <span class="n">bar</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∧</span> <span class="n">p</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">hq</span><span class="o">,</span> <span class="n">hp</span><span class="o">⟩</span>
+</pre></div>
+</div>
+<p>The expression after the <cite>:=</cite> is sometimes called a <em>proof term</em>.</p>
+<p>You can read more about how to writing proof terms in
+<a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">Theorem Proving in Lean 4</a>.
+In this chapter, we will describe an alternative method of writing proofs, using <em>tactics</em>.
+A tactic proof is essentially a piece of metacode, a list of instructions that tells
+Lean how to construct the proof term. In Lean, we enter tactic mode with the keyword <cite>by</cite>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">apply</span> <span class="n">h</span>
+</pre></div>
+</div>
+<p>Here the keyword <cite>example</cite> simply introduces an unnamed theorem (or definition).
+The <cite>intro</cite> tactic introduces the hypothesis and names it <cite>h</cite>.
+If you put the cursor on that line and check the editor <cite>Lean infoview</cite> editor,
+you will see the current state of the proof, that looks like this:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="n">q</span> <span class="n">r</span> <span class="n">s</span> <span class="o">:</span> <span class="kt">Prop</span>
+<span class="n">h</span> <span class="o">:</span> <span class="n">p</span>
+<span class="bp">⊢</span> <span class="n">p</span>
+</pre></div>
+</div>
+<p>Think is a <em>sequent</em>, as described in the last chapter:
+it expresses that the current goal is to prove <cite>p</cite>,
+using the assumption <cite>h : p</cite>.
+In contrast to the sequent calculus we considered for natural deduction,
+here the hypothesis that <cite>p</cite> hold is labeled with the identifier <cite>h</cite>.
+You can use any identifier as a label.
+Also, in contrast with the sequent calculus for natural deduction,
+the variables <cite>p</cite>, <cite>q</cite>, <cite>r</cite>, and <cite>s</cite> are included, together with their type.
+Later on we will see that other kinds of data, like natural numbers,
+can be included as variables in the context.
+Notice also that in Lean, hypotheses like <cite>α : Type</cite>, <cite>p : Prop</cite>, <cite>n : Nat</cite>, and
+<cite>h : p</cite>, so the context can include variables ranging over data types,
+propositions, elements over the data types, and proofs (or assumptions) that the propositions hold.</p>
+<p>In <cite>intro</cite> tactic implements the implication introduction rule the natural deduction calculus.
+The <cite>apply</cite> tactic in the proof applies the hypothesis <cite>h</cite> to solve the goal.
+In this case, since it <cite>h</cite> solves the goal exactly, we could write <cite>exact h</cite> instead.
+We could also write <cite>assumption</cite>, which tells Lean to look for any assumption in the
+context that solves the goal.
+This corresponds to the assumption rule in the natural deduction calculus.</p>
+</div>
+<div class="section" id="conjunction">
+<h2><span class="section-number">9.2. </span>Conjunction<a class="headerlink" href="#conjunction" title="Permalink to this headline">¶</a></h2>
+<p>There is a theorem in the library called <cite>And.intro</cite> that encodes the and-introduction
+rule in the natural deduction calculus, telling us that we can prove <cite>p ∧ q</cite> by proving
+each of <cite>p</cite> and <cite>q</cite> in turn.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">and_example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">hp</span>
+  <span class="n">intro</span> <span class="n">hq</span>
+  <span class="n">apply</span> <span class="n">And.intro</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">hp</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">hq</span>
+
+<span class="k">#print</span> <span class="n">and_example</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="n">hp</span> <span class="n">hq</span> <span class="bp">=&gt;</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hq</span>
+</pre></div>
+</div>
+<p>After applying <cite>And.intro</cite>, the goal is split into two goals, one which requires
+us to prove <cite>p</cite>, and the other which requires us to prove <cite>q</cite>.
+Each of these is accomplished with the <cite>exact</cite> tactic.
+As you step through the proof, you can see the state change.
+The periods in each case serve to <em>focus</em> on the next goal, so that only that goal
+is visible in that part of the proof.
+Strictly speaking, they are not necessary; try deleting them to confirm that the proof
+still goes through.
+Still, they provide a nice way of making the structure of the proof manifest,
+and this, in turn, results in more robust proof scripts.
+The <cite>#print</cite> statement shows that the tactics have the effect of constructing a proof term.
+The subsequent example provides the proof term explicitly.
+In fact, the term makes it clear that introducing <cite>hp</cite> and <cite>hq</cite> and then applying
+<cite>And.intro</cite> is an unnecessary detour. The theorem we have proved is exactly <cite>And.intro</cite>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="o">:=</span> <span class="n">And.intro</span>
+</pre></div>
+</div>
+<p>At this point, there are two tricks that are worth mentioning.
+First, at any point in a proof, you can solve the current goal with the <cite>sorry</cite> tactic.
+You can prove any theorem at all using <cite>sorry</cite>.
+It’s cheating, and the squiggly line the editor puts underneath the word tells you as much.
+But it is often a useful device when writing proofs, because it means you can temporarily
+close a goal to work on others, and then come back to it.</p>
+<p>The other trick is to use the <cite>done</cite> tactic. The <cite>done</cite> tactic doesn’t do anything;
+it just declares that the proof is over.
+If the proof isn’t over, Lean gives you an error message, and the error message tells you
+exactly the remaining goals.
+So this gives you a way to mark the end of a proof in progress, so that you can easily
+monitor what is left to be done.</p>
+<p>The natural way to <em>use</em> a conjunction <cite>h : p ∧ q</cite> in a hypothesis is to split it
+to the hypotheses <cite>hp : p</cite> and <cite>hq : q</cite>.
+This rule is commonly used in sequent calculi.
+There are various ways to do it.
+One is to use a destructuring <cite>have</cite>:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∧</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="k">have</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h</span>
+  <span class="n">apply</span> <span class="n">And.intro</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">hq</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">hp</span>
+</pre></div>
+</div>
+<p>Here the angle brackets are Lean’s <em>anonymous constructor</em> notation.
+You can type them with <cite>\&lt;</cite> and <cite>\&gt;</cite>.
+In this case, the <cite>have</cite> command tells Lean to match against
+whatever constructor matches the proposition,
+in this case, <cite>And.intro</cite>.
+Another option is to use the <cite>cases</cite> tactic, which matches the cases against the constructor:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∧</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">cases</span> <span class="n">h</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">intro</span> <span class="n">hp</span> <span class="n">hq</span> <span class="bp">=&gt;</span>
+    <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hq</span> <span class="n">hp</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∧</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">cases</span> <span class="n">h</span>
+  <span class="n">case</span> <span class="n">intro</span> <span class="n">hp</span> <span class="n">hq</span> <span class="bp">=&gt;</span>
+    <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hq</span> <span class="n">hp</span>
+</pre></div>
+</div>
+<p>These are two slightly different formulations of the same proof.
+Notice that in the second variation we drop the keyword <cite>with</cite>
+and use the <cite>case</cite> tactic instead of the vertical bar.</p>
+<p>The pattern-matching <cite>have</cite> we have used above is also useful in its more basic form,
+in which it is simply used to state and prove an intermediate statement.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span>  <span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
+  <span class="k">have</span> <span class="n">hr</span> <span class="o">:</span> <span class="n">r</span> <span class="o">:=</span> <span class="n">h2</span> <span class="n">hq</span>
+  <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hr</span>
+
+  <span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
+  <span class="k">have</span> <span class="n">hr</span> <span class="o">:=</span> <span class="n">h2</span> <span class="n">hq</span>
+  <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hr</span>
+
+  <span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">let</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
+  <span class="k">have</span> <span class="n">hr</span> <span class="o">:</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+    <span class="n">apply</span> <span class="n">h2</span>
+    <span class="n">exact</span> <span class="n">hq</span>
+  <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hr</span>
+</pre></div>
+</div>
+<p>In the first example, the second <cite>have</cite> claims an auxiliary statement, <cite>r</cite>,
+and proves it with the term <cite>h2 hq</cite>.
+After that, we have the assumption <cite>hr : r</cite> in the context: having proved it,
+we can refer back to it with the label.
+This provides a form of forward reasoning whereby we can state and prove results
+that will help us get to the final goal.
+The second example shows that we can even omit the information that <cite>r</cite> is the claim;
+Lean can infer it from the proof.
+The third example shows that we can also prove the intermediate claim in tactic mode,
+using the keyword <cite>by</cite>.</p>
+<p>The <cite>have</cite> statement is similar to a <cite>let</cite> statement that we have already seen when
+we used Lean as a programming language.
+In fact, using a <cite>let</cite> also works:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">let</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
+  <span class="k">let</span> <span class="n">hr</span> <span class="o">:</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+    <span class="n">apply</span> <span class="n">h2</span>
+    <span class="n">exact</span> <span class="n">hq</span>
+  <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hr</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">let</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
+  <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="o">(</span><span class="n">h2</span> <span class="n">hq</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>With both <cite>have</cite> and <cite>let</cite>, we can take the proofs to
+abbreviate the result of substituting the proof of <cite>r</cite> where we used <cite>hr</cite>,
+as in the last example above.
+There is a subtle difference between <cite>have</cite> and <cite>let</cite>: while the
+data in the <cite>let</cite> statement is available in the body of the statement after the <cite>let</cite>,
+a <cite>have</cite> only records the existence of an expression of the corresponding type.
+When we use a <cite>have</cite>, typically we only care that the corresponding fact has been proved,
+and the specifics of the proof are irrelevant. For that reason,
+<cite>have</cite> is more appropriate for proofs.</p>
+</div>
+<div class="section" id="disjunction">
+<h2><span class="section-number">9.3. </span>Disjunction<a class="headerlink" href="#disjunction" title="Permalink to this headline">¶</a></h2>
+<p>The theorem <cite>Or.inr</cite> in the library corresponds to the
+right introduction rule, which proves <cite>p ∨ q</cite> from <cite>p</cite>.
+The left introduction rule is given by <cite>Or.inl</cite>.
+We can carry out a proof by cases
+using either the theorem <cite>Or.elim</cite> or the <cite>cases</cite> tactic.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∨</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">apply</span> <span class="n">Or.elim</span> <span class="n">h</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hp</span>
+    <span class="n">apply</span> <span class="n">Or.inr</span>
+    <span class="n">exact</span> <span class="n">hp</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hq</span>
+    <span class="n">apply</span> <span class="n">Or.inl</span>
+    <span class="n">exact</span> <span class="n">hq</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∨</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">cases</span> <span class="n">h</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">inl</span> <span class="n">hp</span> <span class="bp">=&gt;</span>
+    <span class="n">exact</span> <span class="n">Or.inr</span> <span class="n">hp</span>
+  <span class="bp">|</span> <span class="n">inr</span> <span class="n">hq</span> <span class="bp">=&gt;</span>
+    <span class="n">exact</span> <span class="n">Or.inl</span> <span class="n">hq</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∨</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">cases</span> <span class="n">h</span>
+  <span class="n">case</span> <span class="n">inl</span> <span class="n">hp</span> <span class="bp">=&gt;</span>
+    <span class="n">exact</span> <span class="n">Or.inr</span> <span class="n">hp</span>
+  <span class="n">case</span> <span class="n">inr</span> <span class="n">hq</span> <span class="bp">=&gt;</span>
+    <span class="n">exact</span> <span class="n">Or.inl</span> <span class="n">hq</span>
+</pre></div>
+</div>
+<p>Notice that in contrast to casing on a conjunction, which results in one new goal and
+two new hypotheses,
+casing on a disjunction results in two new goals, each with one new hypotheses.</p>
+</div>
+<div class="section" id="negation">
+<h2><span class="section-number">9.4. </span>Negation<a class="headerlink" href="#negation" title="Permalink to this headline">¶</a></h2>
+<p>In Lean, <cite>¬ p</cite> is defined to be <cite>p → False</cite>. For most purposes, the two
+expressions are interchangeable. This means that you can prove <cite>¬ p</cite>
+by assuming <cite>p</cite> and deriving <cite>False</cite>, and if you have <cite>hp : p</cite> and <cite>hnp : ¬ p</cite>,
+then the result <cite>hnp hp</cite> of applying the first to the second is a proof of <cite>False</cite>.
+The following illustrates these ideas in action.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">q</span> <span class="bp">→</span> <span class="bp">¬</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">hnq</span> <span class="n">hp</span>
+  <span class="n">apply</span> <span class="n">hnq</span>
+  <span class="n">apply</span> <span class="n">h</span>
+  <span class="n">apply</span> <span class="n">hp</span>
+</pre></div>
+</div>
+<p>Here, <cite>intro hnp hp</cite> is equivalent to writing <cite>intro hnp</cite> followed by <cite>intro hp</cite>.
+Lean provides other means of dealing with negations.
+For example, the <cite>contradiction</cite> tactic finishes off a goal whenever the context
+contains a statement and its negation.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">contradiction</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">apply</span> <span class="n">Or.elim</span> <span class="n">h1</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hp</span>
+    <span class="n">contradiction</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hq</span>
+    <span class="n">exact</span> <span class="n">hq</span>
+</pre></div>
+</div>
+<p>In a similar way, the theorem <cite>absurd</cite> shows that anything follows from a statement and
+its negation. The first and second examples below are really the same:
+writing <cite>by exact t</cite> simply constructs the proof <cite>t</cite>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">exact</span> <span class="n">absurd</span> <span class="n">h1</span> <span class="n">h2</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="n">absurd</span> <span class="n">h1</span> <span class="n">h2</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">apply</span> <span class="n">Or.elim</span> <span class="n">h1</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hp</span>
+    <span class="n">exact</span> <span class="n">absurd</span> <span class="n">hp</span> <span class="n">h2</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hq</span>
+    <span class="n">exact</span> <span class="n">hq</span>
+</pre></div>
+</div>
+<p>The <cite>contradiction</cite> tactic also works if the context contains <cite>False</cite>.
+Alternatively, casing on <cite>h : False</cite> finishes off a proof.
+Intuitively, there are no cases!</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">False</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">contradiction</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">False</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">cases</span> <span class="n">h</span>
+</pre></div>
+</div>
+<p>The principles we have used before all fall within what is known as
+<em>intuitionistic</em> logic. Many mathematical arguments require <em>classical</em> logic,
+which is embodied in the <em>law of the excluded middle</em>.
+In Lean, if <cite>p</cite> is a proposition, <cite>em p</cite> is the principal <cite>p ∨ ¬ p</cite>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">apply</span> <span class="n">Or.elim</span> <span class="o">(</span><span class="n">em</span> <span class="n">p</span><span class="o">)</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hp</span>
+    <span class="n">apply</span> <span class="n">Or.inr</span>
+    <span class="n">apply</span> <span class="n">h1</span>
+    <span class="n">exact</span> <span class="n">hp</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hnp</span>
+    <span class="n">apply</span> <span class="n">Or.inl</span>
+    <span class="n">exact</span> <span class="n">hnp</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="bp">¬</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">hnnp</span>
+  <span class="n">apply</span> <span class="n">Or.elim</span> <span class="o">(</span><span class="n">em</span> <span class="n">p</span><span class="o">)</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hp</span><span class="bp">;</span> <span class="n">exact</span> <span class="n">hp</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="n">hnp</span>
+    <span class="n">contradiction</span>
+</pre></div>
+</div>
+<p>The following illustrate two other formulations of classical logic,
+allowing proof by cases and proof by contradiction.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="bp">¬</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">hnnp</span>
+  <span class="n">apply</span> <span class="n">Classical.byCases</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="o">(</span><span class="n">hp</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span>
+    <span class="n">exact</span> <span class="n">hp</span>
+  <span class="bp">.</span> <span class="n">intro</span> <span class="o">(</span><span class="n">hnp</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span><span class="o">)</span>
+    <span class="n">exact</span> <span class="n">absurd</span> <span class="n">hnp</span> <span class="n">hnnp</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="bp">¬</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">hnnp</span>
+  <span class="n">apply</span> <span class="n">Classical.byContradiction</span>
+  <span class="n">intro</span> <span class="o">(</span><span class="n">hnp</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span><span class="o">)</span>
+  <span class="n">exact</span> <span class="n">hnnp</span> <span class="n">hnp</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="miscellany">
+<h2><span class="section-number">9.5. </span>Miscellany<a class="headerlink" href="#miscellany" title="Permalink to this headline">¶</a></h2>
+<p>The rules for bi-implication are illustrated by the next two examples.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">↔</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="o">⟨</span><span class="n">h3</span><span class="o">,</span> <span class="n">h4</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
+  <span class="n">apply</span> <span class="n">h3</span>
+  <span class="n">exact</span> <span class="n">h2</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">↔</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">↔</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="o">⟨</span><span class="n">h2</span><span class="o">,</span> <span class="n">h3</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
+  <span class="n">apply</span> <span class="n">Iff.intro</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">h3</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">h2</span>
+</pre></div>
+</div>
+<p>It is worth keeping in mind that tactics serve to construct proof terms,
+and that you can often be more concise by writing the proof terms yourself,
+as in the following examples.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∨</span> <span class="n">p</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="n">h</span> <span class="bp">=&gt;</span> <span class="n">Or.elim</span> <span class="n">h</span> <span class="o">(</span><span class="k">fun</span> <span class="n">hp</span> <span class="bp">=&gt;</span> <span class="n">Or.inr</span> <span class="n">hp</span><span class="o">)</span> <span class="o">(</span><span class="k">fun</span> <span class="n">hq</span> <span class="bp">=&gt;</span> <span class="n">Or.inl</span> <span class="n">hq</span><span class="o">)</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">q</span> <span class="bp">→</span> <span class="bp">¬</span> <span class="n">p</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="n">hnq</span> <span class="n">hp</span> <span class="bp">=&gt;</span> <span class="n">hnq</span> <span class="o">(</span><span class="n">h1</span> <span class="n">hp</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>You should think about these examples and how they work.
+One strategy for learning how to write proof terms is to name
+the theorems that you prove with tactics, and then use the <cite>#print</cite>
+command to print them out.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="terms_and_formulas.html" class="btn btn-neutral float-right" title="10. Terms and Formulas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="deduction_for_propositional_logic.html" class="btn btn-neutral float-left" title="8. Deduction for Propositional Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

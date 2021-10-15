@@ -19,10 +19,11 @@ Logic and Mechanized Reasoning
    decision_procedures_for_propositional_logic
    using_sat_solvers
    deduction_for_propositional_logic
-   using_lean_as_a_proof_assistant
+   propositional_logic_in_lean
    terms_and_formulas
    implementing_terms_and_formulas
    using_smt_solvers
+   terms_and_formulas_in_lean
    first_order_logic
    implementing_first_order_logic
    using_first_order_theorem_provers

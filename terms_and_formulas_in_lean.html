@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>9. Using Lean as a Proof Assistant &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  <title>13. Equational Reasoning in Lean &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
   
 
   
@@ -42,8 +42,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="10. Terms and Formulas" href="terms_and_formulas.html" />
-    <link rel="prev" title="8. Deduction for Propositional Logic" href="deduction_for_propositional_logic.html" /> 
+    <link rel="next" title="15. First-Order Logic" href="first_order_logic.html" />
+    <link rel="prev" title="12. Using SMT solvers" href="using_smt_solvers.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,25 +92,22 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Using Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">9. Using Lean as a Proof Assistant</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#propositional-logic-in-lean">9.1. Propositional Logic in Lean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#equational-reasoning-in-lean">9.2. Equational Reasoning in Lean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#structural-induction-in-lean">9.3. Structural Induction in Lean</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
 <li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">13. First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">14. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">16. Simple Type Theory</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">13. Equational Reasoning in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#structural-induction-in-lean">14. Structural Induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">15. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">16. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">18. Simple Type Theory</a></li>
 </ul>
 
             
@@ -159,13 +156,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">9. </span>Using Lean as a Proof Assistant</li>
+      <li><span class="section-number">13. </span>Equational Reasoning in Lean</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/using_lean_as_a_proof_assistant.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/terms_and_formulas_in_lean.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -178,33 +175,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="using-lean-as-a-proof-assistant">
-<span id="chapter-using-lean-as-a-proof-assistant-as-a-proof-assistant"></span><h1><span class="section-number">9. </span>Using Lean as a Proof Assistant<a class="headerlink" href="#using-lean-as-a-proof-assistant" title="Permalink to this headline">¶</a></h1>
-<p>In <a class="reference internal" href="using_lean_as_a_programming_language.html#chapter-using-lean-as-a-programming-language"><span class="std std-numref">Chapter 3</span></a>,
-we considered the use of Lean as a programming
-language, and in <a class="reference internal" href="implementing_propositional_logic.html#chapter-implementing-propositional-logic"><span class="std std-numref">Chapter 5</span></a>
-we saw that you can use Lean to define data types for things like propositional formulas
-and truth assignments, and thereby implement algorithms that act on these objects.</p>
-<p>In this chapter, we will show how it is possible to represent propositional formulas directly in
-Lean’s underlying foundation. In this sense, we are using Lean’s foundation as an <em>object
-language</em> rather than a <em>metalanguage</em> for logic.
-To clarify the distinction, imagine implementing one programming language, such as Lisp, in
-another programming language, like C++.
-In this scenario, we can characterize Lisp as being the object language, that is, the
-one that is being implemented, and C++ as the metalanguage, the one that is carrying out
-the implementation.
-Defining propositional logic in Lean is similar: we are using one logical system, Lean, to
-implement another one, propositional logic.
-Our goal in this chapter is to clarify the sense in which Lean itself is a logical system,
-which is to say, its language can be used to state mathematical theorems and prove them.</p>
-<div class="section" id="propositional-logic-in-lean">
-<span id="section-propositional-logic-in-lean"></span><h2><span class="section-number">9.1. </span>Propositional Logic in Lean<a class="headerlink" href="#propositional-logic-in-lean" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="equational-reasoning-in-lean">
-<span id="section-equational-reasoning-in-lean"></span><h2><span class="section-number">9.2. </span>Equational Reasoning in Lean<a class="headerlink" href="#equational-reasoning-in-lean" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="equational-reasoning-in-lean">
+<span id="section-equational-reasoning-in-lean"></span><span id="chapter-terms-and-relations-in-lean"></span><h1><span class="section-number">13. </span>Equational Reasoning in Lean<a class="headerlink" href="#equational-reasoning-in-lean" title="Permalink to this headline">¶</a></h1>
 </div>
 <div class="section" id="structural-induction-in-lean">
-<span id="section-structural-induction-in-lean"></span><h2><span class="section-number">9.3. </span>Structural Induction in Lean<a class="headerlink" href="#structural-induction-in-lean" title="Permalink to this headline">¶</a></h2>
+<span id="section-structural-induction-in-lean"></span><h1><span class="section-number">14. </span>Structural Induction in Lean<a class="headerlink" href="#structural-induction-in-lean" title="Permalink to this headline">¶</a></h1>
 <p>A feature of working with a system like Lean,
 which is based on a formal logical foundation,
 is that you can not only define data types and functions
@@ -331,7 +306,6 @@ wrong when we omit it.</p>
 </pre></div>
 </div>
 </div>
-</div>
 
 
            </div>
@@ -339,8 +313,8 @@ wrong when we omit it.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="terms_and_formulas.html" class="btn btn-neutral float-right" title="10. Terms and Formulas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="deduction_for_propositional_logic.html" class="btn btn-neutral float-left" title="8. Deduction for Propositional Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="first_order_logic.html" class="btn btn-neutral float-right" title="15. First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="using_smt_solvers.html" class="btn btn-neutral float-left" title="12. Using SMT solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

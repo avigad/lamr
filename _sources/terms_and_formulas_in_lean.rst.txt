@@ -1,35 +1,6 @@
 .. highlight:: lean
 
-.. _chapter_using_lean_as_a_proof_assistant_as_a_proof_assistant:
-
-Using Lean as a Proof Assistant
-===============================
-
-In :numref:`Chapter %s <chapter_using_lean_as_a_programming_language>`,
-we considered the use of Lean as a programming
-language, and in :numref:`Chapter %s <chapter_implementing_propositional_logic>`
-we saw that you can use Lean to define data types for things like propositional formulas
-and truth assignments, and thereby implement algorithms that act on these objects.
-
-In this chapter, we will show how it is possible to represent propositional formulas directly in
-Lean's underlying foundation. In this sense, we are using Lean's foundation as an *object
-language* rather than a *metalanguage* for logic.
-To clarify the distinction, imagine implementing one programming language, such as Lisp, in
-another programming language, like C++.
-In this scenario, we can characterize Lisp as being the object language, that is, the
-one that is being implemented, and C++ as the metalanguage, the one that is carrying out
-the implementation.
-Defining propositional logic in Lean is similar: we are using one logical system, Lean, to
-implement another one, propositional logic.
-Our goal in this chapter is to clarify the sense in which Lean itself is a logical system,
-which is to say, its language can be used to state mathematical theorems and prove them.
-
-
-.. _section_propositional_logic_in_lean:
-
-Propositional Logic in Lean
----------------------------
-
+.. _chapter_terms_and_relations_in_lean:
 
 .. _section_equational_reasoning_in_lean:
 
