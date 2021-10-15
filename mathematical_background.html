@@ -465,7 +465,7 @@ every pair of lists <span class="math notranslate nohighlight">\(\ell\)</span> a
 \[\fn{reverse}(\fn{reverse}(\ell)) = \ell\]</div>
 <p>From a mathematical point of view, this definition of the reverse function above
 is as good as any other, since it specifies the function we want unambiguously.
-But in <code class="xref std std-numref docutils literal notranslate"><span class="pre">Chapter</span> <span class="pre">%s</span></code> we will see that such a definition can also be interpreted as executable code in a functional programming language such as Lean. In this case, the execution is quadratic in the length of the list (think about why). The following definition is more efficient in that sense:</p>
+But in <a class="reference internal" href="using_lean_as_a_programming_language.html#chapter-lean-as-a-programming-language"><span class="std std-numref">Chapter 3</span></a> we will see that such a definition can also be interpreted as executable code in a functional programming language such as Lean. In this case, the execution is quadratic in the length of the list (think about why). The following definition is more efficient in that sense:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\fn{reverseAux}([], m) &amp;= m \\
 \fn{reverseAux}((a \mathbin{::} \ell), m) &amp;= \fn{reverseAux}(\ell, (a \mathbin{::} m)) \\
