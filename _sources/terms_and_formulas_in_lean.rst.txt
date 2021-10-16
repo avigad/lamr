@@ -1,16 +1,19 @@
 .. highlight:: lean
 
-.. _chapter_terms_and_relations_in_lean:
+.. _chapter_terms_and_formulas_in_lean:
+
+Terms and Formulas in Lean
+==========================
 
 .. _section_equational_reasoning_in_lean:
 
-Equational Reasoning in Lean
+Equational reasoning in Lean
 ----------------------------
 
 
 .. _section_structural_induction_in_lean:
 
-Structural Induction in Lean
+Structural induction in Lean
 ----------------------------
 
 A feature of working with a system like Lean,
