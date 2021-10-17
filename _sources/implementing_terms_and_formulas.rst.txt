@@ -1,4 +1,0 @@
-.. _chapter_implementing_terms_and_formulas:
-
-Implementing Terms and Formulas
-===============================

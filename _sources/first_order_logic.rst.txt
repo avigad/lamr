@@ -2,3 +2,223 @@
 
 First-Order Logic
 =================
+
+Consider the statement "Bill and Tracy are married and all their children are smart."
+Propositional logic will let us model this statement as a conjunction, but it doesn't give
+us the means to model the fact that marriage is a relationship between two people,
+a relationship that in this case is claimed to hold between Bill and Tracy.
+It doesn't allow us to express the fact that if a person, X, is married to another person, Y,
+then Y is married to X.
+It also doesn't allow us to model the fact that the second conjunct quantifies
+over children,
+the fact that being a child of someone is an asymmetric relationship,
+or the fact that being smart is a property that someone may or may not have.
+
+*First-order* logic will let us do all these things.
+In many ways, the syntax and semantics of first-order logic is similar to the syntax and
+semantics of propositional logic.
+One difference is that now we need two categories of expressions, *terms* and *formulas*.
+Terms name things in the intended interpretation (in the example above, people),
+whereas formulas say things about those objects.
+But in each case, the set of expressions is defined syntactically, and we use recursive
+definitions to specify how to evaluate them for a given interpretation,
+just as we did for propositional logic.
+
+But there is a sense in which propositional logic and first-order logic are worlds apart.
+We have seen that for any given propositional formula, we can specify an interpretation
+by assigning truth values to its finitely many variables.
+In contrast, there are first-order formulas that are satisfiable, but only when interpreted
+with an infinite domain of objects.
+We also saw that the method of writing out a truth table provides an easy (though inefficient)
+decision procedure for propositional logic, and that a propositional formula is provable
+if and only if it is valid.
+This means that the question of provability for propositional logic is also decidable.
+In contrast, the question of provability for first-order logic is equivalent to the halting problem.
+
+Even worse, the question of the *truth* of a first-order sentence in an intended interpretation
+is often even more undecidable than the halting problem.
+For example, questions as to the truth of a first-order statement about the natural numbers
+in a vocabulary that includes only basic arithmetic is undecidable,
+even giving an oracle for the halting problem, an oracle for the halting problem relative
+to the halting problem, or any finite iteration of that sort.
+
+What is a poor computer scientist to do? We will see that there are at least two avenues
+we can pursue.
+The first thing we can do is develop decision procedures for fragments of first-order logic,
+or restricted interpretations of first-order logic.
+In particular, we will consider procedures for equational reasoning and procedures for reasoning
+about linear arithmetic on the real numbers.
+Such procedures are implemented by contemporary *SMT solvers*, on top of SAT-solving methods.
+The other thing we can do is develop means of searching for proofs from axioms,
+in such a way that we are guaranteed to find one if such a proof exists,
+even though the search may not terminate if there is none.
+This brings us to the domain of first-order theorem proving, which we will also explore.
+
+
+Syntax
+------
+
+To specify a first-order language, :math:`L`, we start by specifying some constant
+symbols, some function symbols, and some relation symbols.
+Each of the function and relation symbols comes with an associated *arity*, namely,
+a specification of the number of arguments.
+For example, to design a language to reason about the integers,
+we might choose to have constants :math:`0` and :math:`1`,
+a binary function :math:`f(x, y)` to represent addition,
+a binary function :math:`g(x, y)` to represent multiplication,
+a unary function :math:`h(x)` to represent negation,
+and a binary relation :math:`R(x, y)` to represent the relation :math:`x < y`.
+
+The set of *terms* is defined to be the set of all things we can obtain using variables,
+constants, and function symbols.
+For example, :math:`f(g(x, 1), h(y))` is a term.
+The following definition makes this more precise:
+
+.. admonition:: Definition
+
+    The set of terms of the language :math:`L` is generated inductively as follows:
+
+    - Each variable :math:`x, y, z, \ldots` is a term.
+    - Each constant symbol of :math:`L` is a term.
+    - If :math:`f` is any :math:`n`-ary function symbol of :math:`L` and
+      :math:`t_1, t_2, \ldots, t_n` are terms of :math:`L`,
+      then :math:`f(t_1, t_2, \ldots, t_n)` is a term.
+
+Keep in mind that a term is supposed to name an object, given an interpretation of the symbols
+and an assignment to the free variables.
+For example, with the interpretation above, :math:`f(g(x, 1), h(y))` denotes the integer
+4 when :math:`x` is assigned to 6 and :math:`y` is assigned to :math:`2`.
+The semantics we present below makes this precise.
+In contrast, a formula is supposed to make a statement, again given an interpretation of the
+symbols and an assignment to the free variables.
+
+.. admonition:: Definition
+
+    The set of formulas of the language :math:`L` is generated inductively as follows:
+
+    - If :math:`R` is any :math:`n`-ary relation symbol of :math:`L` and
+      :math:`t_1, t_2, \ldots, t_n` are terms of :math:`L`,
+      then :math:`R(t_1, t_2, \ldots, t_n)` is a formula.
+    - If :math:`s` and :math:`t` are terms, then :math:`s = t` is a formula.
+    - :math:`\top` and :math:`\bot` are formulas.
+    - If :math:`A` and :math:`B` are formulas, so are :math:`\lnot A`, :math:`A \land B`,
+      :math:`A \lor B`, :math:`A \limplies B`, and :math:`A \liff B`.
+    - If :math:`A` is a formula and `x` is any variable, then :math:`\fa x A` and :math:`\ex x A`.
+
+Most of the clauses should be familiar. In the last one,
+:math:`\fa x A` ("for all :math:`x`, :math:`A`") expresses that
+:math:`A` holds of every element in the intended interpretation, and
+:math:`\ex x A` ("there exists an :math:`x` such that :math:`A`") expresses that
+:math:`A` holds of some element in the intended interpretation.
+Once again, the semantics we present below makes this precise.
+It is sometimes useful to think of constants as 0-ary function symbols,
+that is, function symbols that don't take any arguments.
+In a similar way, a 0-ary relation symbol is just a propositional variable.
+
+As we did in :numref:`Chapter %s<chapter_propositional_logic>`, we can define notions of depth
+and complexity for terms and formulas.
+We can say what it means for a term to be a subterm of another term,
+and say what it means for a formula to be a subformula of another formula.
+We can also say what it means to substitute a term :math:`t` for a variable :math:`x`
+in another term :math:`s`, which we denote :math:`s[t/x]`,
+and what it means to substitute a term :math:`t` for a variable :math:`x` in a formula :math:`A`,
+which we denote :math:`A[t/x]`.
+These operations are of central importance in first-order logic.
+
+The set of variables that occur in a term can be defined by recursion on terms.
+Consider the formula :math:`\ex z (x < z \land z < y)`. Intuitively, this says "there is
+something between :math:`x` and :math:`y`." The variable :math:`z` is said to be *bound*
+in this formula, whereas :math:`x` and :math:`y` are said to be *free*.
+The set of free variables of a formula can be defined by recursion on formulas.
+Intuitively, the formula above says the same thing as :math:`\ex w (x < w \land w < y)`.
+Logicians and computer scientists often "identify" formulas up to renaming of their bound
+variables, which is to say, they consider these formulas to be the same and rename bound
+variables freely.
+
+You should take care to rename bound variables when carrying out substitution to avoid capture.
+For example, the formula :math:`\fa x \ex y y > x` says that for every :math:`x` there is
+some number greater than it. This is clearly true when we interpret the statement in the integers,
+but the statement is patently false when we substitute :math:`y` for :math:`x` in
+:math:`\ex y y > x`. If we rename the bound variable :math:`y` to :math:`z`,
+we can substitute :math:`y` for :math:`x` without problems.
+You should *never* rename a free variable, however.
+Saying that there is something bigger than
+:math:`x` is not the same as saying there is something bigger than :math:`z`.
+
+Spelling out the nuances of bound variables precisely is one of the most annoying theoretical
+chores in mathematical logic and computer science. It can be done, but we will
+gloss over the details, and rely on your intuition and common sense to get by.
+
+
+Using First-Order Logic
+-----------------------
+
+Learning to use the language of first-order logic takes some practice.
+Consider the following statements:
+
+-  Every integer is even or odd, but not both.
+-  A integer is even if and only if it is divisible by two.
+-  If some integer, :math:`x`, is even, then so is :math:`x^2`.
+-  A integer :math:`x` is even if and only if :math:`x + 1` is odd.
+-  For any three integers :math:`x`, :math:`y`, and :math:`z`, if :math:`x` divides :math:`y` and
+   :math:`y` divides :math:`z`, then :math:`x` divides :math:`z`.
+
+Given the language of arithmetic described above, let's write :math:`x + y` instead of
+:math:`f(x, y)` and :math:`x \cdot y` instead of :math:`g(x, y)`. We can then write 2 for
+:math:`1 + 1` and :math:`x^2` for :math:`x \cdot x`, and we can define the following
+formulas:
+
+- :math:`\fn{even}(x) \equiv \ex y x = 2 \cdot y`
+- :math:`\fn{odd}(x) \equiv \ex y x = 2 \cdot y + 1`
+- :math:`x \mid y \equiv \ex z y = x \cdot z`.
+
+With these, the statements above can be written as follows:
+
+- :math:`\fa x (\fn{even}(x) \lor \fn{odd}(x)) \land \neg (\fn{even}(x) \land \fn{odd}(x))`
+- :math:`\fa x \fn{even}(x) \liff 2 \mid x`
+- :math:`\fa x \fn{even}(x) \limplies \fn{even}(x^2)`
+- :math:`\fa x \fn{even}(x) \liff \fn{odd}(x+1)`
+- :math:`\fa x \fa y \fa z x \mid y \land y \mid z \limplies x \mid z`.
+
+The statement with which we began this chapter might be written as follows:
+
+.. math::
+
+    \fn{married}(\fn{Bill}, \fn{Tracy}) \land
+    \fa x \fn{childOf}(x, \fn{Bill}) \land \fn{childOf}(x, \fn{Tracy}) \limplies \fn{smart}(x).
+
+When reading such formulas, we give the quantifiers the widest scope possible, and use
+parentheses to limit the scope. In other words, :math:`\fa x A \land B` means
+:math:`\fa x (A \land B)`, and we write :math:`(\fa x A) \land B` if we want to limit the
+scope to :math:`A`. We can shorten the last example by writing
+:math:`\fa {x \, y \, z} x \mid y \land y \mid z \limplies x \mid z`.
+
+Notice that quantifiers always range over the entire universe of objects,
+integers in the first set of examples and possibly people in the example involving Bill and Tracy.
+We can restrict the domain of a quantifier using propositional connectives:
+
+- To say "there is an even number between 1 and 3," we write
+  :math:`\ex x \fn{even}(x) \land 1 < x \land x < 3`.
+
+- To say "every even number greater than 1 is greater than 3," we write
+  :math:`\fa x \fn{even}(x) \land x > 1 \limplies x > 3`.
+
+This process is known as *relativization*.
+
+It is natural to consider variations on first-order logic with different *sorts* of variables.
+For example, a formal representation of Euclidean geometry might have
+variables :math:`p, q, r, \ldots` ranging over points,
+other variables :math:`L, M, N, \ldots` ranging over lines,
+and maybe even variables :math:`\alpha, \beta, \gamma, \ldots` ranging over circles.
+A relation symbol :math:`\fn{on}(p, L)` used to express that point :math:`p` lies on the line
+:math:`L` should come with a specification that the first argument is a point
+and the second argument is a line.
+This is known as *many-sorted first-order logic*.
+We will consider even more expressive generalizations of first-order logic later on.
+In the meanwhile, to keep the theoretical exposition simple,
+we will focus on first-order logic with only one variable sort.
+
+
+Semantics
+---------
+

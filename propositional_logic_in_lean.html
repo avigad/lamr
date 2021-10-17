@@ -42,7 +42,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="10. Terms and Formulas" href="terms_and_formulas.html" />
+    <link rel="next" title="10. First-Order Logic" href="first_order_logic.html" />
     <link rel="prev" title="8. Deduction for Propositional Logic" href="deduction_for_propositional_logic.html" /> 
 </head>
 
@@ -95,7 +95,7 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">9. Propositional Logic in Lean</a><ul>
@@ -106,13 +106,13 @@
 <li class="toctree-l2"><a class="reference internal" href="#miscellany">9.5. Miscellany</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas_in_lean.html">13. Terms and Formulas in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">14. First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">15. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">16. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_and_search_for_first_order_logic.html">14. Deduction and Search for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">17. Simple Type Theory</a></li>
 </ul>
 
@@ -385,7 +385,7 @@ in which it is simply used to state and prove an intermediate statement.</p>
   <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hr</span>
 
   <span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="k">let</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
+  <span class="k">have</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
   <span class="k">have</span> <span class="n">hr</span> <span class="o">:</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
     <span class="n">apply</span> <span class="n">h2</span>
     <span class="n">exact</span> <span class="n">hq</span>
@@ -598,7 +598,7 @@ command to print them out.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="terms_and_formulas.html" class="btn btn-neutral float-right" title="10. Terms and Formulas" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="first_order_logic.html" class="btn btn-neutral float-right" title="10. First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="deduction_for_propositional_logic.html" class="btn btn-neutral float-left" title="8. Deduction for Propositional Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

@@ -1,0 +1,11 @@
+.. _chapter_decision_procedures_for_first_order_logic:
+
+Decision Procedures for First-Order Logic
+=========================================
+
+Equality
+--------
+
+
+Linear arithmetic
+-----------------

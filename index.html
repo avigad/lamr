@@ -94,17 +94,17 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas_in_lean.html">13. Terms and Formulas in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">14. First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">15. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">16. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_and_search_for_first_order_logic.html">14. Deduction and Search for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">17. Simple Type Theory</a></li>
 </ul>
 
@@ -210,13 +210,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="implementing_propositional_logic.html#propositional-formulas">5.1. Propositional formulas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementing_propositional_logic.html#syntax">5.1. Syntax</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementing_propositional_logic.html#semantics">5.2. Semantics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementing_propositional_logic.html#normal-forms">5.3. Normal Forms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementing_propositional_logic.html#exercises">5.4. Exercises</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_propositional_logic.html#the-tseitin-transformation">6.1. The Tseitin transformation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_propositional_logic.html#unit-propagation-and-the-pure-literal-rule">6.2. Unit propagation and the pure literal rule</a></li>
 <li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_propositional_logic.html#dpll">6.3. DPLL</a></li>
@@ -247,17 +247,32 @@
 <li class="toctree-l2"><a class="reference internal" href="propositional_logic_in_lean.html#miscellany">9.5. Miscellany</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas_in_lean.html">13. Terms and Formulas in Lean</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="terms_and_formulas_in_lean.html#equational-reasoning-in-lean">13.1. Equational reasoning in Lean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="terms_and_formulas_in_lean.html#structural-induction-in-lean">13.2. Structural induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="first_order_logic.html#syntax">10.1. Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_order_logic.html#using-first-order-logic">10.2. Using First-Order Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_order_logic.html#semantics">10.3. Semantics</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">14. First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">15. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">16. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="implementing_first_order_logic.html#syntax">11.1. Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementing_first_order_logic.html#semantics">11.2. Semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementing_first_order_logic.html#first-order-unification">11.3. First-order unification</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_first_order_logic.html#equality">12.1. Equality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_first_order_logic.html#linear-arithmetic">12.2. Linear arithmetic</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_and_search_for_first_order_logic.html">14. Deduction and Search for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="first_order_logic_in_lean.html#equational-reasoning">16.1. Equational reasoning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_order_logic_in_lean.html#structural-induction">16.2. Structural induction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="first_order_logic_in_lean.html#quantifiers">16.3. Quantifiers</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">17. Simple Type Theory</a></li>
 </ul>
 </div>

@@ -2,8 +2,8 @@
 
 .. _chapter_decision_procedures_for_propositional_logic:
 
-Decision Procedures
-===================
+Decision Procedures for Propositional Logic
+===========================================
 
 We have seen that it is possible to determine whether or not a propositional formula is valid
 by writing out its entire truth table.

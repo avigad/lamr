@@ -5,9 +5,9 @@
 Implementing Propositional Logic
 ================================
 
-.. _section: implementing_propositional_formulas:
+.. _section_implementing_propositional_syntax:
 
-Propositional formulas
+Syntax
 ----------------------
 
 We have seen that the set of propositional formulas can be defined

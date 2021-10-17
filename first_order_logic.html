@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>14. First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  <title>10. First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
   
 
   
@@ -36,14 +36,16 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "{\\mathrel{\\to}}", "liff": "{\\mathrel{\\leftrightarrow}}", "proves": "{\\vdash}", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\mathrel{\\proves}"}}}</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="15. Implementing First-Order Logic" href="implementing_first_order_logic.html" />
-    <link rel="prev" title="13. Terms and Formulas in Lean" href="terms_and_formulas_in_lean.html" /> 
+    <link rel="next" title="11. Implementing First-Order Logic" href="implementing_first_order_logic.html" />
+    <link rel="prev" title="9. Propositional Logic in Lean" href="propositional_logic_in_lean.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,17 +97,22 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_terms_and_formulas.html">11. Implementing Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas_in_lean.html">13. Terms and Formulas in Lean</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">14. First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">15. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">16. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">10. First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#syntax">10.1. Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-first-order-logic">10.2. Using First-Order Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#semantics">10.3. Semantics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_and_search_for_first_order_logic.html">14. Deduction and Search for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">17. Simple Type Theory</a></li>
 </ul>
 
@@ -155,7 +162,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">14. </span>First-Order Logic</li>
+      <li><span class="section-number">10. </span>First-Order Logic</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -175,7 +182,205 @@
            <div itemprop="articleBody">
             
   <div class="section" id="first-order-logic">
-<span id="chapter-first-order-logic"></span><h1><span class="section-number">14. </span>First-Order Logic<a class="headerlink" href="#first-order-logic" title="Permalink to this headline">¶</a></h1>
+<span id="chapter-first-order-logic"></span><h1><span class="section-number">10. </span>First-Order Logic<a class="headerlink" href="#first-order-logic" title="Permalink to this headline">¶</a></h1>
+<p>Consider the statement “Bill and Tracy are married and all their children are smart.”
+Propositional logic will let us model this statement as a conjunction, but it doesn’t give
+us the means to model the fact that marriage is a relationship between two people,
+a relationship that in this case is claimed to hold between Bill and Tracy.
+It doesn’t allow us to express the fact that if a person, X, is married to another person, Y,
+then Y is married to X.
+It also doesn’t allow us to model the fact that the second conjunct quantifies
+over children,
+the fact that being a child of someone is an asymmetric relationship,
+or the fact that being smart is a property that someone may or may not have.</p>
+<p><em>First-order</em> logic will let us do all these things.
+In many ways, the syntax and semantics of first-order logic is similar to the syntax and
+semantics of propositional logic.
+One difference is that now we need two categories of expressions, <em>terms</em> and <em>formulas</em>.
+Terms name things in the intended interpretation (in the example above, people),
+whereas formulas say things about those objects.
+But in each case, the set of expressions is defined syntactically, and we use recursive
+definitions to specify how to evaluate them for a given interpretation,
+just as we did for propositional logic.</p>
+<p>But there is a sense in which propositional logic and first-order logic are worlds apart.
+We have seen that for any given propositional formula, we can specify an interpretation
+by assigning truth values to its finitely many variables.
+In contrast, there are first-order formulas that are satisfiable, but only when interpreted
+with an infinite domain of objects.
+We also saw that the method of writing out a truth table provides an easy (though inefficient)
+decision procedure for propositional logic, and that a propositional formula is provable
+if and only if it is valid.
+This means that the question of provability for propositional logic is also decidable.
+In contrast, the question of provability for first-order logic is equivalent to the halting problem.</p>
+<p>Even worse, the question of the <em>truth</em> of a first-order sentence in an intended interpretation
+is often even more undecidable than the halting problem.
+For example, questions as to the truth of a first-order statement about the natural numbers
+in a vocabulary that includes only basic arithmetic is undecidable,
+even giving an oracle for the halting problem, an oracle for the halting problem relative
+to the halting problem, or any finite iteration of that sort.</p>
+<p>What is a poor computer scientist to do? We will see that there are at least two avenues
+we can pursue.
+The first thing we can do is develop decision procedures for fragments of first-order logic,
+or restricted interpretations of first-order logic.
+In particular, we will consider procedures for equational reasoning and procedures for reasoning
+about linear arithmetic on the real numbers.
+Such procedures are implemented by contemporary <em>SMT solvers</em>, on top of SAT-solving methods.
+The other thing we can do is develop means of searching for proofs from axioms,
+in such a way that we are guaranteed to find one if such a proof exists,
+even though the search may not terminate if there is none.
+This brings us to the domain of first-order theorem proving, which we will also explore.</p>
+<div class="section" id="syntax">
+<h2><span class="section-number">10.1. </span>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<p>To specify a first-order language, <span class="math notranslate nohighlight">\(L\)</span>, we start by specifying some constant
+symbols, some function symbols, and some relation symbols.
+Each of the function and relation symbols comes with an associated <em>arity</em>, namely,
+a specification of the number of arguments.
+For example, to design a language to reason about the integers,
+we might choose to have constants <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(1\)</span>,
+a binary function <span class="math notranslate nohighlight">\(f(x, y)\)</span> to represent addition,
+a binary function <span class="math notranslate nohighlight">\(g(x, y)\)</span> to represent multiplication,
+a unary function <span class="math notranslate nohighlight">\(h(x)\)</span> to represent negation,
+and a binary relation <span class="math notranslate nohighlight">\(R(x, y)\)</span> to represent the relation <span class="math notranslate nohighlight">\(x &lt; y\)</span>.</p>
+<p>The set of <em>terms</em> is defined to be the set of all things we can obtain using variables,
+constants, and function symbols.
+For example, <span class="math notranslate nohighlight">\(f(g(x, 1), h(y))\)</span> is a term.
+The following definition makes this more precise:</p>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>The set of terms of the language <span class="math notranslate nohighlight">\(L\)</span> is generated inductively as follows:</p>
+<ul class="simple">
+<li><p>Each variable <span class="math notranslate nohighlight">\(x, y, z, \ldots\)</span> is a term.</p></li>
+<li><p>Each constant symbol of <span class="math notranslate nohighlight">\(L\)</span> is a term.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(f\)</span> is any <span class="math notranslate nohighlight">\(n\)</span>-ary function symbol of <span class="math notranslate nohighlight">\(L\)</span> and
+<span class="math notranslate nohighlight">\(t_1, t_2, \ldots, t_n\)</span> are terms of <span class="math notranslate nohighlight">\(L\)</span>,
+then <span class="math notranslate nohighlight">\(f(t_1, t_2, \ldots, t_n)\)</span> is a term.</p></li>
+</ul>
+</div>
+<p>Keep in mind that a term is supposed to name an object, given an interpretation of the symbols
+and an assignment to the free variables.
+For example, with the interpretation above, <span class="math notranslate nohighlight">\(f(g(x, 1), h(y))\)</span> denotes the integer
+4 when <span class="math notranslate nohighlight">\(x\)</span> is assigned to 6 and <span class="math notranslate nohighlight">\(y\)</span> is assigned to <span class="math notranslate nohighlight">\(2\)</span>.
+The semantics we present below makes this precise.
+In contrast, a formula is supposed to make a statement, again given an interpretation of the
+symbols and an assignment to the free variables.</p>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>The set of formulas of the language <span class="math notranslate nohighlight">\(L\)</span> is generated inductively as follows:</p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(R\)</span> is any <span class="math notranslate nohighlight">\(n\)</span>-ary relation symbol of <span class="math notranslate nohighlight">\(L\)</span> and
+<span class="math notranslate nohighlight">\(t_1, t_2, \ldots, t_n\)</span> are terms of <span class="math notranslate nohighlight">\(L\)</span>,
+then <span class="math notranslate nohighlight">\(R(t_1, t_2, \ldots, t_n)\)</span> is a formula.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are terms, then <span class="math notranslate nohighlight">\(s = t\)</span> is a formula.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\top\)</span> and <span class="math notranslate nohighlight">\(\bot\)</span> are formulas.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are formulas, so are <span class="math notranslate nohighlight">\(\lnot A\)</span>, <span class="math notranslate nohighlight">\(A \land B\)</span>,
+<span class="math notranslate nohighlight">\(A \lor B\)</span>, <span class="math notranslate nohighlight">\(A \limplies B\)</span>, and <span class="math notranslate nohighlight">\(A \liff B\)</span>.</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(A\)</span> is a formula and <cite>x</cite> is any variable, then <span class="math notranslate nohighlight">\(\fa x A\)</span> and <span class="math notranslate nohighlight">\(\ex x A\)</span>.</p></li>
+</ul>
+</div>
+<p>Most of the clauses should be familiar. In the last one,
+<span class="math notranslate nohighlight">\(\fa x A\)</span> (“for all <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(A\)</span>”) expresses that
+<span class="math notranslate nohighlight">\(A\)</span> holds of every element in the intended interpretation, and
+<span class="math notranslate nohighlight">\(\ex x A\)</span> (“there exists an <span class="math notranslate nohighlight">\(x\)</span> such that <span class="math notranslate nohighlight">\(A\)</span>”) expresses that
+<span class="math notranslate nohighlight">\(A\)</span> holds of some element in the intended interpretation.
+Once again, the semantics we present below makes this precise.
+It is sometimes useful to think of constants as 0-ary function symbols,
+that is, function symbols that don’t take any arguments.
+In a similar way, a 0-ary relation symbol is just a propositional variable.</p>
+<p>As we did in <a class="reference internal" href="propositional_logic.html#chapter-propositional-logic"><span class="std std-numref">Chapter 4</span></a>, we can define notions of depth
+and complexity for terms and formulas.
+We can say what it means for a term to be a subterm of another term,
+and say what it means for a formula to be a subformula of another formula.
+We can also say what it means to substitute a term <span class="math notranslate nohighlight">\(t\)</span> for a variable <span class="math notranslate nohighlight">\(x\)</span>
+in another term <span class="math notranslate nohighlight">\(s\)</span>, which we denote <span class="math notranslate nohighlight">\(s[t/x]\)</span>,
+and what it means to substitute a term <span class="math notranslate nohighlight">\(t\)</span> for a variable <span class="math notranslate nohighlight">\(x\)</span> in a formula <span class="math notranslate nohighlight">\(A\)</span>,
+which we denote <span class="math notranslate nohighlight">\(A[t/x]\)</span>.
+These operations are of central importance in first-order logic.</p>
+<p>The set of variables that occur in a term can be defined by recursion on terms.
+Consider the formula <span class="math notranslate nohighlight">\(\ex z (x &lt; z \land z &lt; y)\)</span>. Intuitively, this says “there is
+something between <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.” The variable <span class="math notranslate nohighlight">\(z\)</span> is said to be <em>bound</em>
+in this formula, whereas <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> are said to be <em>free</em>.
+The set of free variables of a formula can be defined by recursion on formulas.
+Intuitively, the formula above says the same thing as <span class="math notranslate nohighlight">\(\ex w (x &lt; w \land w &lt; y)\)</span>.
+Logicians and computer scientists often “identify” formulas up to renaming of their bound
+variables, which is to say, they consider these formulas to be the same and rename bound
+variables freely.</p>
+<p>You should take care to rename bound variables when carrying out substitution to avoid capture.
+For example, the formula <span class="math notranslate nohighlight">\(\fa x \ex y y &gt; x\)</span> says that for every <span class="math notranslate nohighlight">\(x\)</span> there is
+some number greater than it. This is clearly true when we interpret the statement in the integers,
+but the statement is patently false when we substitute <span class="math notranslate nohighlight">\(y\)</span> for <span class="math notranslate nohighlight">\(x\)</span> in
+<span class="math notranslate nohighlight">\(\ex y y &gt; x\)</span>. If we rename the bound variable <span class="math notranslate nohighlight">\(y\)</span> to <span class="math notranslate nohighlight">\(z\)</span>,
+we can substitute <span class="math notranslate nohighlight">\(y\)</span> for <span class="math notranslate nohighlight">\(x\)</span> without problems.
+You should <em>never</em> rename a free variable, however.
+Saying that there is something bigger than
+<span class="math notranslate nohighlight">\(x\)</span> is not the same as saying there is something bigger than <span class="math notranslate nohighlight">\(z\)</span>.</p>
+<p>Spelling out the nuances of bound variables precisely is one of the most annoying theoretical
+chores in mathematical logic and computer science. It can be done, but we will
+gloss over the details, and rely on your intuition and common sense to get by.</p>
+</div>
+<div class="section" id="using-first-order-logic">
+<h2><span class="section-number">10.2. </span>Using First-Order Logic<a class="headerlink" href="#using-first-order-logic" title="Permalink to this headline">¶</a></h2>
+<p>Learning to use the language of first-order logic takes some practice.
+Consider the following statements:</p>
+<ul class="simple">
+<li><p>Every integer is even or odd, but not both.</p></li>
+<li><p>A integer is even if and only if it is divisible by two.</p></li>
+<li><p>If some integer, <span class="math notranslate nohighlight">\(x\)</span>, is even, then so is <span class="math notranslate nohighlight">\(x^2\)</span>.</p></li>
+<li><p>A integer <span class="math notranslate nohighlight">\(x\)</span> is even if and only if <span class="math notranslate nohighlight">\(x + 1\)</span> is odd.</p></li>
+<li><p>For any three integers <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(z\)</span>, if <span class="math notranslate nohighlight">\(x\)</span> divides <span class="math notranslate nohighlight">\(y\)</span> and
+<span class="math notranslate nohighlight">\(y\)</span> divides <span class="math notranslate nohighlight">\(z\)</span>, then <span class="math notranslate nohighlight">\(x\)</span> divides <span class="math notranslate nohighlight">\(z\)</span>.</p></li>
+</ul>
+<p>Given the language of arithmetic described above, let’s write <span class="math notranslate nohighlight">\(x + y\)</span> instead of
+<span class="math notranslate nohighlight">\(f(x, y)\)</span> and <span class="math notranslate nohighlight">\(x \cdot y\)</span> instead of <span class="math notranslate nohighlight">\(g(x, y)\)</span>. We can then write 2 for
+<span class="math notranslate nohighlight">\(1 + 1\)</span> and <span class="math notranslate nohighlight">\(x^2\)</span> for <span class="math notranslate nohighlight">\(x \cdot x\)</span>, and we can define the following
+formulas:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\fn{even}(x) \equiv \ex y x = 2 \cdot y\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fn{odd}(x) \equiv \ex y x = 2 \cdot y + 1\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(x \mid y \equiv \ex z y = x \cdot z\)</span>.</p></li>
+</ul>
+<p>With these, the statements above can be written as follows:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\fa x (\fn{even}(x) \lor \fn{odd}(x)) \land \neg (\fn{even}(x) \land \fn{odd}(x))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa x \fn{even}(x) \liff 2 \mid x\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa x \fn{even}(x) \limplies \fn{even}(x^2)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa x \fn{even}(x) \liff \fn{odd}(x+1)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa x \fa y \fa z x \mid y \land y \mid z \limplies x \mid z\)</span>.</p></li>
+</ul>
+<p>The statement with which we began this chapter might be written as follows:</p>
+<div class="math notranslate nohighlight">
+\[\fn{married}(\fn{Bill}, \fn{Tracy}) \land
+\fa x \fn{childOf}(x, \fn{Bill}) \land \fn{childOf}(x, \fn{Tracy}) \limplies \fn{smart}(x).\]</div>
+<p>When reading such formulas, we give the quantifiers the widest scope possible, and use
+parentheses to limit the scope. In other words, <span class="math notranslate nohighlight">\(\fa x A \land B\)</span> means
+<span class="math notranslate nohighlight">\(\fa x (A \land B)\)</span>, and we write <span class="math notranslate nohighlight">\((\fa x A) \land B\)</span> if we want to limit the
+scope to <span class="math notranslate nohighlight">\(A\)</span>. We can shorten the last example by writing
+<span class="math notranslate nohighlight">\(\fa {x \, y \, z} x \mid y \land y \mid z \limplies x \mid z\)</span>.</p>
+<p>Notice that quantifiers always range over the entire universe of objects,
+integers in the first set of examples and possibly people in the example involving Bill and Tracy.
+We can restrict the domain of a quantifier using propositional connectives:</p>
+<ul class="simple">
+<li><p>To say “there is an even number between 1 and 3,” we write
+<span class="math notranslate nohighlight">\(\ex x \fn{even}(x) \land 1 &lt; x \land x &lt; 3\)</span>.</p></li>
+<li><p>To say “every even number greater than 1 is greater than 3,” we write
+<span class="math notranslate nohighlight">\(\fa x \fn{even}(x) \land x &gt; 1 \limplies x &gt; 3\)</span>.</p></li>
+</ul>
+<p>This process is known as <em>relativization</em>.</p>
+<p>It is natural to consider variations on first-order logic with different <em>sorts</em> of variables.
+For example, a formal representation of Euclidean geometry might have
+variables <span class="math notranslate nohighlight">\(p, q, r, \ldots\)</span> ranging over points,
+other variables <span class="math notranslate nohighlight">\(L, M, N, \ldots\)</span> ranging over lines,
+and maybe even variables <span class="math notranslate nohighlight">\(\alpha, \beta, \gamma, \ldots\)</span> ranging over circles.
+A relation symbol <span class="math notranslate nohighlight">\(\fn{on}(p, L)\)</span> used to express that point <span class="math notranslate nohighlight">\(p\)</span> lies on the line
+<span class="math notranslate nohighlight">\(L\)</span> should come with a specification that the first argument is a point
+and the second argument is a line.
+This is known as <em>many-sorted first-order logic</em>.
+We will consider even more expressive generalizations of first-order logic later on.
+In the meanwhile, to keep the theoretical exposition simple,
+we will focus on first-order logic with only one variable sort.</p>
+</div>
+<div class="section" id="semantics">
+<h2><span class="section-number">10.3. </span>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
 
@@ -184,8 +389,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="implementing_first_order_logic.html" class="btn btn-neutral float-right" title="15. Implementing First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="terms_and_formulas_in_lean.html" class="btn btn-neutral float-left" title="13. Terms and Formulas in Lean" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="implementing_first_order_logic.html" class="btn btn-neutral float-right" title="11. Implementing First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="propositional_logic_in_lean.html" class="btn btn-neutral float-left" title="9. Propositional Logic in Lean" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

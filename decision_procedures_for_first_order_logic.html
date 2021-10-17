@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>11. Implementing Terms and Formulas &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  <title>12. Decision Procedures for First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
   
 
   
@@ -42,8 +42,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="12. Using SMT solvers" href="using_smt_solvers.html" />
-    <link rel="prev" title="10. Terms and Formulas" href="terms_and_formulas.html" /> 
+    <link rel="next" title="13. Using SMT solvers" href="using_smt_solvers.html" />
+    <link rel="prev" title="11. Implementing First-Order Logic" href="implementing_first_order_logic.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -95,17 +95,21 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas.html">10. Terms and Formulas</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">11. Implementing Terms and Formulas</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">12. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="terms_and_formulas_in_lean.html">13. Terms and Formulas in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">14. First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">15. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">16. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">12. Decision Procedures for First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#equality">12.1. Equality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linear-arithmetic">12.2. Linear arithmetic</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deduction_and_search_for_first_order_logic.html">14. Deduction and Search for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">17. Simple Type Theory</a></li>
 </ul>
 
@@ -155,13 +159,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li><span class="section-number">11. </span>Implementing Terms and Formulas</li>
+      <li><span class="section-number">12. </span>Decision Procedures for First-Order Logic</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/implementing_terms_and_formulas.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/decision_procedures_for_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -174,8 +178,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="implementing-terms-and-formulas">
-<span id="chapter-implementing-terms-and-formulas"></span><h1><span class="section-number">11. </span>Implementing Terms and Formulas<a class="headerlink" href="#implementing-terms-and-formulas" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="decision-procedures-for-first-order-logic">
+<span id="chapter-decision-procedures-for-first-order-logic"></span><h1><span class="section-number">12. </span>Decision Procedures for First-Order Logic<a class="headerlink" href="#decision-procedures-for-first-order-logic" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="equality">
+<h2><span class="section-number">12.1. </span>Equality<a class="headerlink" href="#equality" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="linear-arithmetic">
+<h2><span class="section-number">12.2. </span>Linear arithmetic<a class="headerlink" href="#linear-arithmetic" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
 
@@ -184,8 +194,8 @@
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="using_smt_solvers.html" class="btn btn-neutral float-right" title="12. Using SMT solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="terms_and_formulas.html" class="btn btn-neutral float-left" title="10. Terms and Formulas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="using_smt_solvers.html" class="btn btn-neutral float-right" title="13. Using SMT solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="implementing_first_order_logic.html" class="btn btn-neutral float-left" title="11. Implementing First-Order Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

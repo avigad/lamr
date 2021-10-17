@@ -20,13 +20,13 @@ Logic and Mechanized Reasoning
    using_sat_solvers
    deduction_for_propositional_logic
    propositional_logic_in_lean
-   terms_and_formulas
-   implementing_terms_and_formulas
-   using_smt_solvers
-   terms_and_formulas_in_lean
    first_order_logic
    implementing_first_order_logic
+   decision_procedures_for_first_order_logic
+   using_smt_solvers
+   deduction_and_search_for_first_order_logic
    using_first_order_theorem_provers
+   first_order_logic_in_lean
    simple_type_theory
 
 .. * :ref:`genindex`

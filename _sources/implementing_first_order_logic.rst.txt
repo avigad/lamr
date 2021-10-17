@@ -2,3 +2,12 @@
 
 Implementing First-Order Logic
 ==============================
+
+Syntax
+------
+
+Semantics
+---------
+
+First-order unification
+-----------------------

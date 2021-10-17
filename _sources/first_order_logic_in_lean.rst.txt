@@ -1,20 +1,20 @@
 .. highlight:: lean
 
-.. _chapter_terms_and_formulas_in_lean:
+.. _chapter_first_order_logic_in_lean:
 
-Terms and Formulas in Lean
-==========================
+First-Order Logic in Lean
+=========================
 
 .. _section_equational_reasoning_in_lean:
 
-Equational reasoning in Lean
-----------------------------
+Equational reasoning
+--------------------
 
 
 .. _section_structural_induction_in_lean:
 
-Structural induction in Lean
-----------------------------
+Structural induction
+--------------------
 
 A feature of working with a system like Lean,
 which is based on a formal logical foundation,
@@ -132,3 +132,5 @@ With those facts in hand, we have the identity we are after:
    (For example, use extended binary trees and formalize proofs from previous chapter.)
 
 
+Quantifiers
+-----------
