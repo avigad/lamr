@@ -1,0 +1,4 @@
+.. _chapter_deduction_for_first_order_logic:
+
+Deduction for First-Order Logic
+===============================

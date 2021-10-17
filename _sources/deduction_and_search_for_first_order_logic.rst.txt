@@ -1,4 +1,0 @@
-.. _chapter_deduction_and_search_for_first_order_logic:
-
-Deduction and Search for First-Order Logic
-==========================================
