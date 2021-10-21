@@ -120,7 +120,7 @@ def decodeSolution (dim : Nat) (τ : List Lit) : Except String Sudoku := do
       s := { s with rows := s.rows.take i ++ [row] ++ s.rows.drop (i+1) }
   return s
 
-def units := [[(mkLit 0 1 3)], 
+def units := [[(mkLit 0 1 3)],
               [(mkLit 0 3 2)],
               [(mkLit 1 6 6)],
               [(mkLit 1 7 8)],

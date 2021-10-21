@@ -240,7 +240,7 @@ macro_rules
 instance : Repr CnfForm :=
   ⟨fun cnf _ => "cnf!{" ++ String.intercalate ", " (List.map (toString ∘ repr) cnf) ++ "}"⟩
 
-instance : ToString CnfForm :=
+instance : ToString CnfForm := 
   ⟨fun
     | [] => "⊤"
     | cs => " ∧ ".intercalate (cs.map toString)⟩
@@ -290,7 +290,7 @@ instance : ToString PropAssignment where
     s!"\{{mapping}}"
 
 def PropAssignment.mem (τ : PropAssignment) (x : String) : Bool :=
-  List.any τ (fun (y, _) => x == y)
+  List.any τ (fun (y, _) => x == y) 
 
 def PropAssignment.withLit (τ : PropAssignment) : Lit → PropAssignment
   | Lit.pos x => (x, true) :: τ

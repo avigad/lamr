@@ -16,8 +16,8 @@ protected def List.eraseAll {α} [BEq α] : List α → α → List α
     | true  => List.eraseAll as b
     | false => a :: List.eraseAll as b
 
--- textbook: simplify
 /-- Simplifies the CNF assuming `x` is true. `x` must not be a constant. -/
+-- textbook: simplify
 def simplify (x : Lit) (φ : CnfForm) : CnfForm :=
   assert! x != lit!{⊥} && x != lit!{⊤}
   match φ with
@@ -44,12 +44,12 @@ def CnfForm.findUnit : CnfForm → Option Lit
   | [x] :: cs => some x
   | c :: cs   => findUnit cs
 
--- textbook: propagateUnits
 /-- Performs a round of unit propagation on `φ` under the assignment `τ`.
 Returns an updated assignment and a simplified formula.
 
 Assumes no additions to `τ` since last `simplify _ φ` call.
 NB: If branching in DPLL, call `simplify` first. -/
+-- textbook: propagateUnits
 partial def propagateUnits (τ : PropAssignment) (φ : CnfForm) : PropAssignment × CnfForm :=
   -- If `φ` is unsat, we're done.
   if φ.hasEmpty then ⟨τ, φ⟩
@@ -61,13 +61,16 @@ partial def propagateUnits (τ : PropAssignment) (φ : CnfForm) : PropAssignment
       -- assuming `x` is true and continue propagating.
       let φ' := simplify x φ
       if τ.mem x.name
-      then panic! s!"Forgot to simplify -- '{x}' has already been assigned and should not appear in the formula."
+      then panic! s!"'{x}' has already been assigned and should not appear in the formula."
       else propagateUnits (τ.withLit x) φ'
 -- end textbook: propagateUnits
 
 /-- Assign (previously unassigned) `x` to true and peform unit propagation. -/
-def propagateWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) : PropAssignment × CnfForm :=
+-- textbook: propagateWithNew
+def propagateWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) :
+    PropAssignment × CnfForm :=
   propagateUnits (τ.withLit x) (simplify x φ)
+-- end textbook: propagateWithNew
 
 #eval toString <| propagateUnits [] cnf!{p, q, q -q}
 #eval toString <| propagateUnits [] cnf!{p, q, -q -q}
@@ -76,25 +79,30 @@ def propagateWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) : PropAssign
 /-- Picks which literal to split on. The parity (whether it's negated) returned should
 be tried first, and then the opposite. -/
 -- TODO which heuristics could be used here?
+-- textbook: pickSplit?
 def pickSplit? : CnfForm → Option Lit
   | []      => none
   | c :: cs => match c with
     | x :: xs => x
     | _       => pickSplit? cs
+-- end textbook: pickSplit?
 
 -- textbook: dpllSat
-partial def dpllSatAux (τ : PropAssignment) (φ : CnfForm) : Option (PropAssignment × CnfForm) :=
+partial def dpllSatAux (τ : PropAssignment) (φ : CnfForm) :
+    Option (PropAssignment × CnfForm) :=
   if φ.hasEmpty then none
   else match pickSplit? φ with
   -- No variables left to split on, we found a solution.
   | none => some (τ, φ)
   -- Split on `x`.
-  -- `<|>` is the "or else" operator which tries one action, and if that failed tries the other.
+  -- `<|>` is the "or else" operator, which tries one action and if that fails
+  -- tries the other.
   | some x => goWithNew x τ φ <|> goWithNew (-x) τ φ
 
 where
   /-- Assigns `x` to true and continues out DPLL. -/
-  goWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) : Option (PropAssignment × CnfForm) :=
+  goWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) :
+      Option (PropAssignment × CnfForm) :=
     let (τ', φ') := propagateWithNew x τ φ
     dpllSatAux τ' φ'
 
