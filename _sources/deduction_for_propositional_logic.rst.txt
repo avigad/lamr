@@ -141,7 +141,7 @@ The rules are as follows:
 
       <div class="math notranslate nohighlight">
       \[\begin{prooftree}
-      \AXC{$\Gamma, P, \lnot P$}
+      \AXC{$\Gamma, p, \lnot p$}
       \end{prooftree}\]
 
       \[\begin{prooftree}
@@ -159,13 +159,13 @@ The rules are as follows:
   .. raw:: latex
 
       \begin{center}
-      \AXC{$\Gamma, P, \lnot P$}
-      \DP
+      \AXC{$\Gamma, p, \lnot p$}
+      \DP \\
       \ \\
       \AXC{$\Gamma, A$}
       \AXC{$\Gamma, B$}
       \BIC{$\Gamma, A \land B$}
-      \DP
+      \DP \\
       \ \\
       \AXC{$\Gamma, A, B$}
       \UIC{$\Gamma, A \lor B$}
@@ -173,7 +173,7 @@ The rules are as follows:
       \end{center}
 
 The first rule says that either something in :math:`\Gamma` is true,
-or :math:`P` is true, or :math:`\lnot P` is true. The second rule says that
+or :math:`p` is true, or :math:`\lnot p` is true. The second rule says that
 if either something in :math:`\Gamma` is true or :math:`A` is true, and
 either something in :math:`\Gamma` is true or :math:`B` is true, then
 either something in :math:`\Gamma` is true or :math:`A \land B` is true.
@@ -184,7 +184,7 @@ If we take these to be statements about truth values relative to some truth assi
 these rules are clearly sound with respect to the semantics.
 
 The set :math:`\Gamma` is called a *sequent*. (More specifically, it is called
-as *one-sided* sequent; we'll see two-sides sequents below.)
+as *one-sided* sequent; we'll see two-sided sequents below.)
 A system of rules like this is therefore called a sequent calculus.
 As with axiomatic systems, we can think of a proof as a sequence of lines,
 but it is also common to represent proofs diagrammatically,
@@ -240,7 +240,34 @@ a counterexample to :math:`\Gamma`.
 This is an important idea in automated reasoning, namely, it is desirable to search for a proof in
 such a way that failure implies the existence of a counterexample.
 
-The sequent calculus is closely related to *tableau* proof systems that are also commonly
+What we have described is more precisely a *cut-free* sequent calculus.
+It is also sound to add the cut rule:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$\Gamma, A$}
+      \AXC{$\Gamma, \mathord{\sim}A$}
+      \BIC{$\Gamma$}
+      \end{prooftree}\]
+      </div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AXC{$\Gamma, A$}
+      \AXC{$\Gamma, \mathord{\sim}A$}
+      \BIC{$\Gamma$}
+      \DP
+      \end{center}
+
+Here :math:`\mathord{\sim}A` is the negation operator for negation-normal form formulas,
+which switches :math:`\land` and :math:`\lor` and switches positive and negative literals.
+Proofs with cuts can be more efficient proofs without them, but we have seen that
+the calculus is complete without them.
+
+The cut-free sequent calculus is closely related to *tableau* proof systems that are also commonly
 used in automated reasoning.
 In the sequent proof above, there is a lot of needless repetition of formulas; tableau representations
 do a better job of recording only what changes as we go up the tree.
@@ -291,21 +318,21 @@ If :math:`C` is a clause and :math:`\ell` is a literal, we write :math:`C, \ell`
 
       <div class="math notranslate nohighlight">
       \[\begin{prooftree}
-      \AXC{$C, P$}
-      \AXC{$C, \lnot P$}
-      \BIC{$C$}
+      \AXC{$C, p$}
+      \AXC{$D, \lnot p$}
+      \BIC{$D \lor D$}
       \end{prooftree}\]</div>
 
   .. raw:: latex
 
       \begin{prooftree}
-      \AXC{$C, P$}
-      \AXC{$C, \lnot P$}
-      \BIC{$C$}
+      \AXC{$C, p$}
+      \AXC{$D, \lnot p$}
+      \BIC{$C \lor D$}
       \end{prooftree}
 
-The rule says that if either :math:`C` or :math:`P` is true, and either :math:`C` or :math:`\lnot P`
-is true, then :math:`C` has to be true. A *resolution proof* of a clause :math:`C` from
+The rule says that if either :math:`C` or :math:`p` is true, and either :math:`D` or :math:`\lnot p`
+is true, then :math:`C \lor D` has to be true. A *resolution proof* of a clause :math:`C` from
 a set of clauses :math:`\Gamma` is a sequence of steps (or a labelled tree) that obtains :math:`C`
 from :math:`\Gamma` using instances of the resolution rule. A *resolution refutation* of :math:`\Gamma`
 is a resolution proof of the empty clause from :math:`\Gamma`.
@@ -390,6 +417,7 @@ Unit propagation can be viewed as a special case of the splitting rule:
 If a CNF formula contains a unit clause with literal :math:`\ell`,
 then splitting on :math:`\ell` fails immediately on one branch,
 and the other branch corresponds to the result of applying unit propagation.
+
 Reasoning about the pure literal rule is more subtle. Suppose :math:`\ell` is pure in
 :math:`\tval{\Gamma}_\tau`, and consider the DPLL search
 starting from :math:`\tval{\Gamma}_{\tau[\ell \mapsto \top]}`,

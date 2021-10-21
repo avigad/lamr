@@ -309,7 +309,7 @@ The rules are as follows:</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\begin{prooftree}
-\AXC{$\Gamma, P, \lnot P$}
+\AXC{$\Gamma, p, \lnot p$}
 \end{prooftree}\]
 
 \[\begin{prooftree}
@@ -324,7 +324,7 @@ The rules are as follows:</p>
 \end{prooftree}
 \]</div></div></blockquote>
 <p>The first rule says that either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true,
-or <span class="math notranslate nohighlight">\(P\)</span> is true, or <span class="math notranslate nohighlight">\(\lnot P\)</span> is true. The second rule says that
+or <span class="math notranslate nohighlight">\(p\)</span> is true, or <span class="math notranslate nohighlight">\(\lnot p\)</span> is true. The second rule says that
 if either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true or <span class="math notranslate nohighlight">\(A\)</span> is true, and
 either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true or <span class="math notranslate nohighlight">\(B\)</span> is true, then
 either something in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true or <span class="math notranslate nohighlight">\(A \land B\)</span> is true.
@@ -334,7 +334,7 @@ If we take these to be statements about truth values relative to some truth assi
 <span class="math notranslate nohighlight">\(\tau\)</span>,
 these rules are clearly sound with respect to the semantics.</p>
 <p>The set <span class="math notranslate nohighlight">\(\Gamma\)</span> is called a <em>sequent</em>. (More specifically, it is called
-as <em>one-sided</em> sequent; we’ll see two-sides sequents below.)
+as <em>one-sided</em> sequent; we’ll see two-sided sequents below.)
 A system of rules like this is therefore called a sequent calculus.
 As with axiomatic systems, we can think of a proof as a sequence of lines,
 but it is also common to represent proofs diagrammatically,
@@ -381,7 +381,21 @@ If one branch fails to terminate with an axiom, reading off a counterexample to 
 a counterexample to <span class="math notranslate nohighlight">\(\Gamma\)</span>.
 This is an important idea in automated reasoning, namely, it is desirable to search for a proof in
 such a way that failure implies the existence of a counterexample.</p>
-<p>The sequent calculus is closely related to <em>tableau</em> proof systems that are also commonly
+<p>What we have described is more precisely a <em>cut-free</em> sequent calculus.
+It is also sound to add the cut rule:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{prooftree}
+\AXC{$\Gamma, A$}
+\AXC{$\Gamma, \mathord{\sim}A$}
+\BIC{$\Gamma$}
+\end{prooftree}\]
+</div></div></blockquote>
+<p>Here <span class="math notranslate nohighlight">\(\mathord{\sim}A\)</span> is the negation operator for negation-normal form formulas,
+which switches <span class="math notranslate nohighlight">\(\land\)</span> and <span class="math notranslate nohighlight">\(\lor\)</span> and switches positive and negative literals.
+Proofs with cuts can be more efficient proofs without them, but we have seen that
+the calculus is complete without them.</p>
+<p>The cut-free sequent calculus is closely related to <em>tableau</em> proof systems that are also commonly
 used in automated reasoning.
 In the sequent proof above, there is a lot of needless repetition of formulas; tableau representations
 do a better job of recording only what changes as we go up the tree.
@@ -425,12 +439,12 @@ If <span class="math notranslate nohighlight">\(C\)</span> is a clause and <span
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\begin{prooftree}
-\AXC{$C, P$}
-\AXC{$C, \lnot P$}
-\BIC{$C$}
+\AXC{$C, p$}
+\AXC{$D, \lnot p$}
+\BIC{$D \lor D$}
 \end{prooftree}\]</div></div></blockquote>
-<p>The rule says that if either <span class="math notranslate nohighlight">\(C\)</span> or <span class="math notranslate nohighlight">\(P\)</span> is true, and either <span class="math notranslate nohighlight">\(C\)</span> or <span class="math notranslate nohighlight">\(\lnot P\)</span>
-is true, then <span class="math notranslate nohighlight">\(C\)</span> has to be true. A <em>resolution proof</em> of a clause <span class="math notranslate nohighlight">\(C\)</span> from
+<p>The rule says that if either <span class="math notranslate nohighlight">\(C\)</span> or <span class="math notranslate nohighlight">\(p\)</span> is true, and either <span class="math notranslate nohighlight">\(D\)</span> or <span class="math notranslate nohighlight">\(\lnot p\)</span>
+is true, then <span class="math notranslate nohighlight">\(C \lor D\)</span> has to be true. A <em>resolution proof</em> of a clause <span class="math notranslate nohighlight">\(C\)</span> from
 a set of clauses <span class="math notranslate nohighlight">\(\Gamma\)</span> is a sequence of steps (or a labelled tree) that obtains <span class="math notranslate nohighlight">\(C\)</span>
 from <span class="math notranslate nohighlight">\(\Gamma\)</span> using instances of the resolution rule. A <em>resolution refutation</em> of <span class="math notranslate nohighlight">\(\Gamma\)</span>
 is a resolution proof of the empty clause from <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
@@ -506,8 +520,8 @@ Remember that there are three steps that are interleaved in DPLL:</p>
 <p>Unit propagation can be viewed as a special case of the splitting rule:
 If a CNF formula contains a unit clause with literal <span class="math notranslate nohighlight">\(\ell\)</span>,
 then splitting on <span class="math notranslate nohighlight">\(\ell\)</span> fails immediately on one branch,
-and the other branch corresponds to the result of applying unit propagation.
-Reasoning about the pure literal rule is more subtle. Suppose <span class="math notranslate nohighlight">\(\ell\)</span> is pure in
+and the other branch corresponds to the result of applying unit propagation.</p>
+<p>Reasoning about the pure literal rule is more subtle. Suppose <span class="math notranslate nohighlight">\(\ell\)</span> is pure in
 <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>, and consider the DPLL search
 starting from <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau[\ell \mapsto \top]}\)</span>,
 which is a subset of <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>. If DPLL finds a satisfying assignment

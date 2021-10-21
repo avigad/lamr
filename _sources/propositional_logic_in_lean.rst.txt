@@ -74,7 +74,7 @@ to name the proof of a proposition.
 
 The expression after the `:=` is sometimes called a *proof term*.
 
-You can read more about how to writing proof terms in
+You can read more about writing proof terms in
 `Theorem Proving in Lean 4 <https://leanprover.github.io/theorem_proving_in_lean4/>`_.
 In this chapter, we will describe an alternative method of writing proofs, using *tactics*.
 A tactic proof is essentially a piece of metacode, a list of instructions that tells
@@ -86,7 +86,7 @@ Lean how to construct the proof term. In Lean, we enter tactic mode with the key
 
 Here the keyword `example` simply introduces an unnamed theorem (or definition).
 The `intro` tactic introduces the hypothesis and names it `h`.
-If you put the cursor on that line and check the editor `Lean infoview` editor,
+If you put the cursor on that line and check the `Lean infoview` in the editor,
 you will see the current state of the proof, that looks like this:
 
 .. code-block::
@@ -95,23 +95,23 @@ you will see the current state of the proof, that looks like this:
   h : p
   ⊢ p
 
-Think is a *sequent*, as described in the last chapter:
+Think of this as a *sequent*, as described in the last chapter:
 it expresses that the current goal is to prove `p`,
 using the assumption `h : p`.
 In contrast to the sequent calculus we considered for natural deduction,
-here the hypothesis that `p` hold is labeled with the identifier `h`.
+here the hypothesis that `p` holds is labeled with the identifier `h`.
 You can use any identifier as a label.
 Also, in contrast with the sequent calculus for natural deduction,
 the variables `p`, `q`, `r`, and `s` are included, together with their type.
 Later on we will see that other kinds of data, like natural numbers,
 can be included as variables in the context.
 Notice also that in Lean, hypotheses like `α : Type`, `p : Prop`, `n : Nat`, and
-`h : p`, so the context can include variables ranging over data types,
-propositions, elements over the data types, and proofs (or assumptions) that the propositions hold.
+`h : p` are all possible, so the context can include variables ranging over data types,
+propositions, elements of the data types, and proofs (or assumptions) that the propositions hold.
 
-In `intro` tactic implements the implication introduction rule the natural deduction calculus.
+In `intro` tactic implements the implication introduction rule of the natural deduction calculus.
 The `apply` tactic in the proof applies the hypothesis `h` to solve the goal.
-In this case, since it `h` solves the goal exactly, we could write `exact h` instead.
+In this case, since `h` solves the goal exactly, we could write `exact h` instead.
 We could also write `assumption`, which tells Lean to look for any assumption in the
 context that solves the goal.
 This corresponds to the assumption rule in the natural deduction calculus.
@@ -237,7 +237,7 @@ using either the theorem `Or.elim` or the `cases` tactic.
 
 Notice that in contrast to casing on a conjunction, which results in one new goal and
 two new hypotheses,
-casing on a disjunction results in two new goals, each with one new hypotheses.
+casing on a disjunction results in two new goals, each with one new hypothesis.
 
 
 Negation

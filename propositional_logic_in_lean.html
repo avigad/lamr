@@ -251,7 +251,7 @@ to name the proof of a proposition.</p>
 </pre></div>
 </div>
 <p>The expression after the <cite>:=</cite> is sometimes called a <em>proof term</em>.</p>
-<p>You can read more about how to writing proof terms in
+<p>You can read more about writing proof terms in
 <a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">Theorem Proving in Lean 4</a>.
 In this chapter, we will describe an alternative method of writing proofs, using <em>tactics</em>.
 A tactic proof is essentially a piece of metacode, a list of instructions that tells
@@ -263,29 +263,29 @@ Lean how to construct the proof term. In Lean, we enter tactic mode with the key
 </div>
 <p>Here the keyword <cite>example</cite> simply introduces an unnamed theorem (or definition).
 The <cite>intro</cite> tactic introduces the hypothesis and names it <cite>h</cite>.
-If you put the cursor on that line and check the editor <cite>Lean infoview</cite> editor,
+If you put the cursor on that line and check the <cite>Lean infoview</cite> in the editor,
 you will see the current state of the proof, that looks like this:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="n">q</span> <span class="n">r</span> <span class="n">s</span> <span class="o">:</span> <span class="kt">Prop</span>
 <span class="n">h</span> <span class="o">:</span> <span class="n">p</span>
 <span class="bp">⊢</span> <span class="n">p</span>
 </pre></div>
 </div>
-<p>Think is a <em>sequent</em>, as described in the last chapter:
+<p>Think of this as a <em>sequent</em>, as described in the last chapter:
 it expresses that the current goal is to prove <cite>p</cite>,
 using the assumption <cite>h : p</cite>.
 In contrast to the sequent calculus we considered for natural deduction,
-here the hypothesis that <cite>p</cite> hold is labeled with the identifier <cite>h</cite>.
+here the hypothesis that <cite>p</cite> holds is labeled with the identifier <cite>h</cite>.
 You can use any identifier as a label.
 Also, in contrast with the sequent calculus for natural deduction,
 the variables <cite>p</cite>, <cite>q</cite>, <cite>r</cite>, and <cite>s</cite> are included, together with their type.
 Later on we will see that other kinds of data, like natural numbers,
 can be included as variables in the context.
 Notice also that in Lean, hypotheses like <cite>α : Type</cite>, <cite>p : Prop</cite>, <cite>n : Nat</cite>, and
-<cite>h : p</cite>, so the context can include variables ranging over data types,
-propositions, elements over the data types, and proofs (or assumptions) that the propositions hold.</p>
-<p>In <cite>intro</cite> tactic implements the implication introduction rule the natural deduction calculus.
+<cite>h : p</cite> are all possible, so the context can include variables ranging over data types,
+propositions, elements of the data types, and proofs (or assumptions) that the propositions hold.</p>
+<p>In <cite>intro</cite> tactic implements the implication introduction rule of the natural deduction calculus.
 The <cite>apply</cite> tactic in the proof applies the hypothesis <cite>h</cite> to solve the goal.
-In this case, since it <cite>h</cite> solves the goal exactly, we could write <cite>exact h</cite> instead.
+In this case, since <cite>h</cite> solves the goal exactly, we could write <cite>exact h</cite> instead.
 We could also write <cite>assumption</cite>, which tells Lean to look for any assumption in the
 context that solves the goal.
 This corresponds to the assumption rule in the natural deduction calculus.</p>
@@ -463,7 +463,7 @@ using either the theorem <cite>Or.elim</cite> or the <cite>cases</cite> tactic.<
 </div>
 <p>Notice that in contrast to casing on a conjunction, which results in one new goal and
 two new hypotheses,
-casing on a disjunction results in two new goals, each with one new hypotheses.</p>
+casing on a disjunction results in two new goals, each with one new hypothesis.</p>
 </div>
 <div class="section" id="negation">
 <h2><span class="section-number">9.4. </span>Negation<a class="headerlink" href="#negation" title="Permalink to this headline">¶</a></h2>
