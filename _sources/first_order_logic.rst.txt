@@ -144,13 +144,14 @@ we can substitute :math:`y` for :math:`x` without problems.
 You should *never* rename a free variable, however.
 Saying that there is something bigger than
 :math:`x` is not the same as saying there is something bigger than :math:`z`.
+A formula without free variables is called a *sentence*.
 
 Spelling out the nuances of bound variables precisely is one of the most annoying theoretical
 chores in mathematical logic and computer science. It can be done, but we will
 gloss over the details, and rely on your intuition and common sense to get by.
 
 
-Using First-Order Logic
+Using first-order logic
 -----------------------
 
 Learning to use the language of first-order logic takes some practice.
@@ -221,4 +222,85 @@ we will focus on first-order logic with only one variable sort.
 
 Semantics
 ---------
+
+In order to evaluate a propositional formula :math:`A`, all we need to know is the assignment
+of truth values to variables occurring in :math:`A`. Given such an assignment, :math:`\tau`,
+we were able to define the truth value :math:`\tval{A}_\tau`.
+
+In first-order logic, there are two things we need to evaluate, namely, terms and formulas.
+A term like :math:`f(x, g(y, z))` has variables :math:`x`, :math:`y`, :math:`z`, that we think
+of as ranging over objects, like numbers, people, or whatever.
+So in this case our interpretation of the language has to specify the domain of objects that
+we have in mind.
+It also has to specify interpretations of all the function and relation symbols in the language
+as functions and relations on the corresponding set.
+Such a structure is known as a *model*.
+
+.. Admonition:: Definition
+
+  A *model* :math:`\mdl M` for a language consists of
+
+  - A set of objects, :math:`|\mdl M|`, called the *universe* of :math:`\mdl M`.
+  - For each function symbol :math:`f` in the language, a function :math:`f^{\mdl M}`
+    from the universe of :math:`\mdl M` to itself, with the corresponding arity.
+  - For each relation symbol :math:`R` in the language, a relation :math:`R^{\mdl M}`
+    on the universe of :math:`\mdl M`, with the corresponding arity.
+
+Let :math:`\sigma` be an assignment of elements of :math:`|\mdl M|` to variables.
+Then every term :math:`t` has a value :math:`\tval{t}_{\mdl M, \sigma}` in :math:`|\mdl M|`
+defined recursively as follows:
+
+  - :math:`\tval{x}_{\mdl M, \sigma} = \sigma(x)`
+  - For every :math:`n`-ary function symbol :math:`f` and every tuple of terms
+    :math:`t_1, \ldots, t_n`, :math:`\tval{f(t_1, \ldots, t_n)}_{\mdl M, \sigma} =
+    f^{\mdl M}(\tval{t_1}_{\mdl M, \sigma}, \ldots, \tval{t_n}_{\mdl M, \sigma})`
+
+Remember that we can think of constant symbols as 0-ary function symbols, so
+:math:`\tval{c}_{\mdl M, \sigma} = c_{\mdl M}` is implicit in the second clause.
+
+We can also say what it means for a formula :math:`A` to be true in :math:`\mdl M`
+relative to the assignment :math:`\sigma`:
+
+   - :math:`\mdl M \models_\sigma t = t'` if and only if :math:`\tval{t}_{\mdl M, \sigma} = \tval{t'}_{\mdl M, \sigma}`.
+   - :math:`\mdl M \models_\sigma R(t_0, \ldots, t_{n-1})` if and only if :math:`R^{\mdl M}(\tval{t_0}_{\mdl M, \sigma}, \ldots, \tval{t_{n-1}}_{\mdl M, \sigma})`.
+   - :math:`\mdl M \models_\sigma \bot` is always false.
+   - :math:`\mdl M \models_\sigma \top` is always true.
+   - :math:`\mdl M \models_\sigma A \land B` if and only if :math:`\mdl M \models_\sigma A` and :math:`\mdl M \models_\sigma B`.
+   - :math:`\mdl M \models_\sigma A \lor B` if and only if :math:`\mdl M \models_\sigma A` or :math:`\mdl M \models_\sigma B`.
+   - :math:`\mdl M \models_\sigma A \limplies B` if and only if :math:`\mdl M \not\models_\sigma A` or :math:`\mdl M \models_\sigma B`.
+   - :math:`\mdl M \models_\sigma A \liff B` if and only if :math:`\mdl M \models_\sigma A` and :math:`\mdl M \models_\sigma B` either both hold or both don't hold.
+   - :math:`\mdl M \models_\sigma \fa x A` if and only if for every :math:`a \in | \mdl M|`, :math:`\mdl M \models_{\sigma[x \mapsto a]} A`.
+   - :math:`\mdl M \models_\sigma \ex x A` if and only if for some :math:`a \in | \mdl M|`, :math:`\mdl M \models_{\sigma[x \mapsto a]} A`.
+
+Most of the clauses are the same as for propositional logic. It's the first two base cases
+and the clauses for the quantifiers that are new.
+
+The fact that formulas can be interpreted in different models is central to modern logic.
+Take, for example, the sentence :math:`\fa x \ex y R(x, y)`.
+This is true of the real numbers with the less-than relation, but false of the natural numbers
+with the greater-than relation. What about the integers with the relation ":math:`x` divides :math:`y`?"
+
+
+Normal forms
+------------
+
+The notion of a formula in negation normal form carries over to first-order logic, where now
+we allow quantifiers as well. Every formula can be put in negation normal form using the
+identities :math:`(\lnot \fa x A) \liff \ex x \lnot A` and :math:`(\lnot \ex x A) \liff \fa x \lnot A`.
+
+Is there anything similar to CNF? It helps that it is always possible to bring quantifiers
+to the front of a formula, using these identities, which hold when :math:`x` is not free in
+:math:`B`:
+
+.. math::
+
+    (\fa x A) \lor B & \liff \fa x A \lor B \\
+    (\fa x A) \land B & \liff \fa x A \land B \\
+    (\ex x A) \lor B & \liff \ex x A \land B \\
+    (\ex x A) \land B & \liff \ex x A \land B
+
+We can ensure that these apply by renaming the bound variable if necessary.
+We can then put the inside formula in CNF if we want. But it turns out to be more useful to
+automated reasoning to eliminate the quantifiers entirely.
+We can do that using *Skolem functions*, which we will tell you about later on.
 

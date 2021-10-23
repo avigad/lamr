@@ -37,7 +37,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "{\\mathrel{\\to}}", "liff": "{\\mathrel{\\leftrightarrow}}", "proves": "{\\vdash}", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\mathrel{\\proves}"}}}</script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -103,8 +103,9 @@
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">10. First-Order Logic</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#syntax">10.1. Syntax</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-first-order-logic">10.2. Using First-Order Logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-first-order-logic">10.2. Using first-order logic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#semantics">10.3. Semantics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#normal-forms">10.4. Normal forms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
@@ -312,13 +313,14 @@ but the statement is patently false when we substitute <span class="math notrans
 we can substitute <span class="math notranslate nohighlight">\(y\)</span> for <span class="math notranslate nohighlight">\(x\)</span> without problems.
 You should <em>never</em> rename a free variable, however.
 Saying that there is something bigger than
-<span class="math notranslate nohighlight">\(x\)</span> is not the same as saying there is something bigger than <span class="math notranslate nohighlight">\(z\)</span>.</p>
+<span class="math notranslate nohighlight">\(x\)</span> is not the same as saying there is something bigger than <span class="math notranslate nohighlight">\(z\)</span>.
+A formula without free variables is called a <em>sentence</em>.</p>
 <p>Spelling out the nuances of bound variables precisely is one of the most annoying theoretical
 chores in mathematical logic and computer science. It can be done, but we will
 gloss over the details, and rely on your intuition and common sense to get by.</p>
 </div>
 <div class="section" id="using-first-order-logic">
-<h2><span class="section-number">10.2. </span>Using First-Order Logic<a class="headerlink" href="#using-first-order-logic" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">10.2. </span>Using first-order logic<a class="headerlink" href="#using-first-order-logic" title="Permalink to this headline">¶</a></h2>
 <p>Learning to use the language of first-order logic takes some practice.
 Consider the following statements:</p>
 <ul class="simple">
@@ -380,6 +382,81 @@ we will focus on first-order logic with only one variable sort.</p>
 </div>
 <div class="section" id="semantics">
 <h2><span class="section-number">10.3. </span>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h2>
+<p>In order to evaluate a propositional formula <span class="math notranslate nohighlight">\(A\)</span>, all we need to know is the assignment
+of truth values to variables occurring in <span class="math notranslate nohighlight">\(A\)</span>. Given such an assignment, <span class="math notranslate nohighlight">\(\tau\)</span>,
+we were able to define the truth value <span class="math notranslate nohighlight">\(\tval{A}_\tau\)</span>.</p>
+<p>In first-order logic, there are two things we need to evaluate, namely, terms and formulas.
+A term like <span class="math notranslate nohighlight">\(f(x, g(y, z))\)</span> has variables <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(z\)</span>, that we think
+of as ranging over objects, like numbers, people, or whatever.
+So in this case our interpretation of the language has to specify the domain of objects that
+we have in mind.
+It also has to specify interpretations of all the function and relation symbols in the language
+as functions and relations on the corresponding set.
+Such a structure is known as a <em>model</em>.</p>
+<div class="admonition-definition admonition">
+<p class="admonition-title">Definition</p>
+<p>A <em>model</em> <span class="math notranslate nohighlight">\(\mdl M\)</span> for a language consists of</p>
+<ul class="simple">
+<li><p>A set of objects, <span class="math notranslate nohighlight">\(|\mdl M|\)</span>, called the <em>universe</em> of <span class="math notranslate nohighlight">\(\mdl M\)</span>.</p></li>
+<li><p>For each function symbol <span class="math notranslate nohighlight">\(f\)</span> in the language, a function <span class="math notranslate nohighlight">\(f^{\mdl M}\)</span>
+from the universe of <span class="math notranslate nohighlight">\(\mdl M\)</span> to itself, with the corresponding arity.</p></li>
+<li><p>For each relation symbol <span class="math notranslate nohighlight">\(R\)</span> in the language, a relation <span class="math notranslate nohighlight">\(R^{\mdl M}\)</span>
+on the universe of <span class="math notranslate nohighlight">\(\mdl M\)</span>, with the corresponding arity.</p></li>
+</ul>
+</div>
+<p>Let <span class="math notranslate nohighlight">\(\sigma\)</span> be an assignment of elements of <span class="math notranslate nohighlight">\(|\mdl M|\)</span> to variables.
+Then every term <span class="math notranslate nohighlight">\(t\)</span> has a value <span class="math notranslate nohighlight">\(\tval{t}_{\mdl M, \sigma}\)</span> in <span class="math notranslate nohighlight">\(|\mdl M|\)</span>
+defined recursively as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\tval{x}_{\mdl M, \sigma} = \sigma(x)\)</span></p></li>
+<li><p>For every <span class="math notranslate nohighlight">\(n\)</span>-ary function symbol <span class="math notranslate nohighlight">\(f\)</span> and every tuple of terms
+<span class="math notranslate nohighlight">\(t_1, \ldots, t_n\)</span>, <span class="math notranslate nohighlight">\(\tval{f(t_1, \ldots, t_n)}_{\mdl M, \sigma} =
+f^{\mdl M}(\tval{t_1}_{\mdl M, \sigma}, \ldots, \tval{t_n}_{\mdl M, \sigma})\)</span></p></li>
+</ul>
+</div></blockquote>
+<p>Remember that we can think of constant symbols as 0-ary function symbols, so
+<span class="math notranslate nohighlight">\(\tval{c}_{\mdl M, \sigma} = c_{\mdl M}\)</span> is implicit in the second clause.</p>
+<p>We can also say what it means for a formula <span class="math notranslate nohighlight">\(A\)</span> to be true in <span class="math notranslate nohighlight">\(\mdl M\)</span>
+relative to the assignment <span class="math notranslate nohighlight">\(\sigma\)</span>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma t = t'\)</span> if and only if <span class="math notranslate nohighlight">\(\tval{t}_{\mdl M, \sigma} = \tval{t'}_{\mdl M, \sigma}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma R(t_0, \ldots, t_{n-1})\)</span> if and only if <span class="math notranslate nohighlight">\(R^{\mdl M}(\tval{t_0}_{\mdl M, \sigma}, \ldots, \tval{t_{n-1}}_{\mdl M, \sigma})\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma \bot\)</span> is always false.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma \top\)</span> is always true.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma A \land B\)</span> if and only if <span class="math notranslate nohighlight">\(\mdl M \models_\sigma A\)</span> and <span class="math notranslate nohighlight">\(\mdl M \models_\sigma B\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma A \lor B\)</span> if and only if <span class="math notranslate nohighlight">\(\mdl M \models_\sigma A\)</span> or <span class="math notranslate nohighlight">\(\mdl M \models_\sigma B\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma A \limplies B\)</span> if and only if <span class="math notranslate nohighlight">\(\mdl M \not\models_\sigma A\)</span> or <span class="math notranslate nohighlight">\(\mdl M \models_\sigma B\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma A \liff B\)</span> if and only if <span class="math notranslate nohighlight">\(\mdl M \models_\sigma A\)</span> and <span class="math notranslate nohighlight">\(\mdl M \models_\sigma B\)</span> either both hold or both don’t hold.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma \fa x A\)</span> if and only if for every <span class="math notranslate nohighlight">\(a \in | \mdl M|\)</span>, <span class="math notranslate nohighlight">\(\mdl M \models_{\sigma[x \mapsto a]} A\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma \ex x A\)</span> if and only if for some <span class="math notranslate nohighlight">\(a \in | \mdl M|\)</span>, <span class="math notranslate nohighlight">\(\mdl M \models_{\sigma[x \mapsto a]} A\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<p>Most of the clauses are the same as for propositional logic. It’s the first two base cases
+and the clauses for the quantifiers that are new.</p>
+<p>The fact that formulas can be interpreted in different models is central to modern logic.
+Take, for example, the sentence <span class="math notranslate nohighlight">\(\fa x \ex y R(x, y)\)</span>.
+This is true of the real numbers with the less-than relation, but false of the natural numbers
+with the greater-than relation. What about the integers with the relation “<span class="math notranslate nohighlight">\(x\)</span> divides <span class="math notranslate nohighlight">\(y\)</span>?”</p>
+</div>
+<div class="section" id="normal-forms">
+<h2><span class="section-number">10.4. </span>Normal forms<a class="headerlink" href="#normal-forms" title="Permalink to this headline">¶</a></h2>
+<p>The notion of a formula in negation normal form carries over to first-order logic, where now
+we allow quantifiers as well. Every formula can be put in negation normal form using the
+identities <span class="math notranslate nohighlight">\((\lnot \fa x A) \liff \ex x \lnot A\)</span> and <span class="math notranslate nohighlight">\((\lnot \ex x A) \liff \fa x \lnot A\)</span>.</p>
+<p>Is there anything similar to CNF? It helps that it is always possible to bring quantifiers
+to the front of a formula, using these identities, which hold when <span class="math notranslate nohighlight">\(x\)</span> is not free in
+<span class="math notranslate nohighlight">\(B\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}(\fa x A) \lor B &amp; \liff \fa x A \lor B \\
+(\fa x A) \land B &amp; \liff \fa x A \land B \\
+(\ex x A) \lor B &amp; \liff \ex x A \land B \\
+(\ex x A) \land B &amp; \liff \ex x A \land B\end{split}\]</div>
+<p>We can ensure that these apply by renaming the bound variable if necessary.
+We can then put the inside formula in CNF if we want. But it turns out to be more useful to
+automated reasoning to eliminate the quantifiers entirely.
+We can do that using <em>Skolem functions</em>, which we will tell you about later on.</p>
 </div>
 </div>
 
