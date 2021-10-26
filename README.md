@@ -106,7 +106,6 @@ you can update it by typing the following commands from inside the repository fo
 ```
   git pull
   lake build
-
 ```
 You will then have to manually copy new files from the `LAMR/Examples`
 folder to the `User/Examples` folder. 
