@@ -188,7 +188,7 @@ we considered the use of Lean as a programming
 language, and in <a class="reference internal" href="implementing_propositional_logic.html#chapter-implementing-propositional-logic"><span class="std std-numref">Chapter 5</span></a>
 we saw that you can use Lean to define data types for things like propositional formulas
 and truth assignments, and thereby implement algorithms that act on these objects.</p>
-<p>In this chapter, we will show to represent propositional formulas directly in
+<p>In this chapter, we will show how to represent propositional formulas directly in
 Lean’s underlying foundation. In this sense, we are using Lean’s foundation as an <em>object
 language</em> rather than a <em>metalanguage</em> for logic.
 To clarify the distinction, imagine implementing one programming language, such as Lisp, in
@@ -289,6 +289,40 @@ In this case, since <cite>h</cite> solves the goal exactly, we could write <cite
 We could also write <cite>assumption</cite>, which tells Lean to look for any assumption in the
 context that solves the goal.
 This corresponds to the assumption rule in the natural deduction calculus.</p>
+<p>The <cite>apply</cite> tactic can also be used to apply an implication.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">apply</span> <span class="n">h1</span>
+  <span class="n">exact</span> <span class="n">h2</span>
+</pre></div>
+</div>
+<p>In this example, applying <cite>p → q</cite> to the goal reduces the task of
+proving <cite>q</cite> to the task of proving <cite>p</cite>.
+Lean also provides a means of reasoning forward from hypotheses,
+using the <cite>have</cite> tactic:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="n">h3</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h2</span>
+  <span class="n">exact</span> <span class="n">h3</span>
+</pre></div>
+</div>
+<p>Here the first line of the proof states an intermediate goal of proving
+<cite>q</cite>, which is achieved by applying <cite>h1</cite> to <cite>h2</cite>.
+The result is named <cite>h3</cite>, which we can then use in the next line.
+We can leave out the information that <cite>h3</cite> is a proof of <cite>q</cite>,
+because Lean can figure that out:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="n">h3</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h2</span>
+  <span class="n">exact</span> <span class="n">h3</span>
+</pre></div>
+</div>
+<p>Defining <cite>h3</cite> to be <cite>h1 h2</cite> and then applying it is just the same
+as using <cite>exact h1 h2</cite> directly to solve the goal, and that, in turn,
+amounts to constructing the proof <cite>h1 h2</cite>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">exact</span> <span class="n">h1</span> <span class="n">h2</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h2</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="conjunction">
 <h2><span class="section-number">9.2. </span>Conjunction<a class="headerlink" href="#conjunction" title="Permalink to this headline">¶</a></h2>
@@ -326,8 +360,8 @@ In fact, the term makes it clear that introducing <cite>hp</cite> and <cite>hq</
 </pre></div>
 </div>
 <p>At this point, there are two tricks that are worth mentioning.
-First, at any point in a proof, you can solve the current goal with the <cite>sorry</cite> tactic.
-You can prove any theorem at all using <cite>sorry</cite>.
+First, at any point in a proof, you can solve the current goal with the <cite>admit</cite> tactic.
+You can prove any theorem at all using <cite>admit</cite>.
 It’s cheating, and the squiggly line the editor puts underneath the word tells you as much.
 But it is often a useful device when writing proofs, because it means you can temporarily
 close a goal to work on others, and then come back to it.</p>
@@ -372,34 +406,15 @@ Another option is to use the <cite>cases</cite> tactic, which matches the cases 
 <p>These are two slightly different formulations of the same proof.
 Notice that in the second variation we drop the keyword <cite>with</cite>
 and use the <cite>case</cite> tactic instead of the vertical bar.</p>
-<p>The pattern-matching <cite>have</cite> we have used above is also useful in its more basic form,
-in which it is simply used to state and prove an intermediate statement.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span>  <span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="k">have</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
-  <span class="k">have</span> <span class="n">hr</span> <span class="o">:</span> <span class="n">r</span> <span class="o">:=</span> <span class="n">h2</span> <span class="n">hq</span>
-  <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hr</span>
-
-  <span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="k">have</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
-  <span class="k">have</span> <span class="n">hr</span> <span class="o">:=</span> <span class="n">h2</span> <span class="n">hq</span>
-  <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hr</span>
-
-  <span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="k">have</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
-  <span class="k">have</span> <span class="n">hr</span> <span class="o">:</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
-    <span class="n">apply</span> <span class="n">h2</span>
-    <span class="n">exact</span> <span class="n">hq</span>
-  <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hr</span>
+<p>Here are some examples of using the pattern-matching <cite>have</cite> with
+the ordinary one.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="n">h3</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h2</span>
+  <span class="n">exact</span> <span class="n">h3</span>
 </pre></div>
 </div>
 <p>In the first example, the second <cite>have</cite> claims an auxiliary statement, <cite>r</cite>,
 and proves it with the term <cite>h2 hq</cite>.
-After that, we have the assumption <cite>hr : r</cite> in the context: having proved it,
-we can refer back to it with the label.
-This provides a form of forward reasoning whereby we can state and prove results
-that will help us get to the final goal.
-The second example shows that we can even omit the information that <cite>r</cite> is the claim;
-Lean can infer it from the proof.
 The third example shows that we can also prove the intermediate claim in tactic mode,
 using the keyword <cite>by</cite>.</p>
 <p>The <cite>have</cite> statement is similar to a <cite>let</cite> statement that we have already seen when

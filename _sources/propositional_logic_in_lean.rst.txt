@@ -11,7 +11,7 @@ language, and in :numref:`Chapter %s <chapter_implementing_propositional_logic>`
 we saw that you can use Lean to define data types for things like propositional formulas
 and truth assignments, and thereby implement algorithms that act on these objects.
 
-In this chapter, we will show to represent propositional formulas directly in
+In this chapter, we will show how to represent propositional formulas directly in
 Lean's underlying foundation. In this sense, we are using Lean's foundation as an *object
 language* rather than a *metalanguage* for logic.
 To clarify the distinction, imagine implementing one programming language, such as Lisp, in
@@ -116,9 +116,43 @@ We could also write `assumption`, which tells Lean to look for any assumption in
 context that solves the goal.
 This corresponds to the assumption rule in the natural deduction calculus.
 
+The `apply` tactic can also be used to apply an implication.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: apply
+   :end-before: -- end textbook
+
+In this example, applying `p → q` to the goal reduces the task of
+proving `q` to the task of proving `p`.
+Lean also provides a means of reasoning forward from hypotheses,
+using the `have` tactic:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: have
+   :end-before: -- end textbook
+
+Here the first line of the proof states an intermediate goal of proving
+`q`, which is achieved by applying `h1` to `h2`.
+The result is named `h3`, which we can then use in the next line.
+We can leave out the information that `h3` is a proof of `q`,
+because Lean can figure that out:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: have again
+   :end-before: -- end textbook
+
+Defining `h3` to be `h1 h2` and then applying it is just the same
+as using `exact h1 h2` directly to solve the goal, and that, in turn,
+amounts to constructing the proof `h1 h2`.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: application
+   :end-before: -- end textbook
+
 
 Conjunction
 -----------
+
 There is a theorem in the library called `And.intro` that encodes the and-introduction
 rule in the natural deduction calculus, telling us that we can prove `p ∧ q` by proving
 each of `p` and `q` in turn.
@@ -147,8 +181,8 @@ In fact, the term makes it clear that introducing `hp` and `hq` and then applyin
    :end-before: -- end textbook
 
 At this point, there are two tricks that are worth mentioning.
-First, at any point in a proof, you can solve the current goal with the `sorry` tactic.
-You can prove any theorem at all using `sorry`.
+First, at any point in a proof, you can solve the current goal with the `admit` tactic.
+You can prove any theorem at all using `admit`.
 It's cheating, and the squiggly line the editor puts underneath the word tells you as much.
 But it is often a useful device when writing proofs, because it means you can temporarily
 close a goal to work on others, and then come back to it.
@@ -185,8 +219,8 @@ These are two slightly different formulations of the same proof.
 Notice that in the second variation we drop the keyword `with`
 and use the `case` tactic instead of the vertical bar.
 
-The pattern-matching `have` we have used above is also useful in its more basic form,
-in which it is simply used to state and prove an intermediate statement.
+Here are some examples of using the pattern-matching `have` with
+the ordinary one.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: have
@@ -194,12 +228,6 @@ in which it is simply used to state and prove an intermediate statement.
 
 In the first example, the second `have` claims an auxiliary statement, `r`,
 and proves it with the term `h2 hq`.
-After that, we have the assumption `hr : r` in the context: having proved it,
-we can refer back to it with the label.
-This provides a form of forward reasoning whereby we can state and prove results
-that will help us get to the final goal.
-The second example shows that we can even omit the information that `r` is the claim;
-Lean can infer it from the proof.
 The third example shows that we can also prove the intermediate claim in tactic mode,
 using the keyword `by`.
 
