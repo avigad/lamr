@@ -3,9 +3,7 @@ Copyright (c) 2021 Mario Carneiro. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Author: Mario Carneiro
 -/
-import Mathlib.Tactic.Split
 import Mathlib.Tactic.NoMatch
-import Mathlib.Tactic.Block
 import Lean.Elab.Command
 
 open Lean Parser.Tactic Elab Command Elab.Tactic Meta
@@ -75,33 +73,24 @@ where
       let (_, mvarId) ← Meta.intro1P mvarId
       pure [mvarId]
 
-example : ∀ a b : Nat, a = b → b = a := by
-  introv h
-  exact h.symm
-
-macro "assumption'" : tactic => `(allGoals assumption)
+macro "assumption'" : tactic => `(all_goals assumption)
 
 elab "exacts" "[" hs:term,* "]" : tactic => do
   for stx in hs.getElems do
     evalTactic (← `(tactic| exact $stx))
   evalTactic (← `(tactic| done))
 
-example (n : Nat) : n = n := by
-  induction n
-  exacts [rfl, rfl]
-  exacts []
-
 --TODO : which expr equality to use?
-elab "guardExprEq " r:term " := " p:term : tactic => do
+elab "guardExprEq " r:term " := " p:term : tactic => withMainContext do
   let r ← elabTerm r none
   let p ← elabTerm p none
   if not (r == p) then throwError "failed: {r} != {p}"
 
-elab "guardTarget" r:term : tactic => do
+elab "guardTarget" r:term : tactic => withMainContext do
   let r ← elabTerm r none
   let t ← getMainTarget
   let t ← t.consumeMData
-  if not (r == t) then throwError m!"target of main goal is {t}"
+  if not (r == t) then throwError m!"target of main goal is {t}, not {r}"
 
 syntax (name := guardHyp) "guardHyp " ident (" : " term)? (" := " term)? : tactic
 @[tactic guardHyp] def evalGuardHyp : Lean.Elab.Tactic.Tactic := fun stx =>
@@ -129,14 +118,6 @@ syntax (name := guardHyp) "guardHyp " ident (" : " term)? (" := " term)? : tacti
       | none, none          => ()
   | _ => throwUnsupportedSyntax
 
-example (n : Nat) : Nat := by
-  guardHyp n : Nat
-  let m : Nat := 1
-  guardHyp m := 1
-  guardHyp m : Nat := 1
-  guardTarget Nat
-  exact 0
-
 elab "matchTarget" t:term : tactic  => do
   withMainContext do
     let (val) ← elabTerm t (← inferType (← getMainTarget))
@@ -154,31 +135,11 @@ macro_rules
   | `(tactic| byContra) => `(tactic| (apply Classical.byContradiction; intro))
   | `(tactic| byContra $e) => `(tactic| (apply Classical.byContradiction; intro $e))
 
-example (a b : Nat) : a ≠ b → ¬ a = b := by
-  intros
-  byContra H
-  contradiction
-
-example (a b : Nat) : ¬¬ a = b → a = b := by
-  intros
-  byContra H
-  contradiction
-
-example (p q : Prop) : ¬¬ p → p := by
-  intros
-  byContra H
-  contradiction
-
 macro "sorry" : tactic => `(exact sorry)
 
 elab "iterate " n:num seq:tacticSeq : tactic => do
   for i in [:n.toNat] do
     evalTactic seq
-
-example (n m : Nat) : Unit := by
-  cases n
-  cases m
-  iterate 3 exact ()
 
 partial def repeat'Aux (seq : Syntax) : List MVarId → TacticM Unit
 | []    => ()
@@ -193,11 +154,6 @@ partial def repeat'Aux (seq : Syntax) : List MVarId → TacticM Unit
 elab "repeat' " seq:tacticSeq : tactic => do
   let gs ← getGoals
   repeat'Aux seq gs
-
-example (p q r s : Prop) : p → q → r → s → (p ∧ q) ∧ (r ∧ s ∧ p) ∧ (p ∧ r ∧ q) := by
-  intros
-  repeat' constructor
-  repeat' assumption
 
 elab "anyGoals " seq:tacticSeq : tactic => do
   let mvarIds ← getGoals
@@ -215,12 +171,3 @@ elab "anyGoals " seq:tacticSeq : tactic => do
   if not anySuccess then
     throwError "failed on all goals"
   setGoals mvarIdsNew.toList
-
-example (p q : Prop) : p → q → (p ∧ q) ∧ (p ∧ q ∧ p) := by
-  intros
-  split
-  failIfSuccess anyGoals assumption
-  allGoals split
-  anyGoals assumption
-  split
-  anyGoals assumption

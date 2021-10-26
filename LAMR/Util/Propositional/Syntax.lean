@@ -2,9 +2,12 @@ import Mathlib
 
 -- TODO: move to Mathlib
 
-def List.Union [DecidableEq α]: List (List α) → List α
+def List.Union [Hashable α] [DecidableEq α]: List (List α) → List α
   | [] => []
   | (l ::ls) => l.union (ls.Union)
+
+instance [Hashable α] : Hashable (List α) :=
+  ⟨fun l => l.foldl (init := 42) fun acc x => mixHash acc (hash x)⟩
 
 /-
 Propositional formulas.
@@ -123,6 +126,9 @@ def ofDimacs? (s : String) : Option Lit :=
   else if s[0] == '-' then neg (s.drop 1)
   else pos s
 
+instance : Hashable Lit where
+  hash l := hash (toString l)
+
 end Lit
 
 /-
@@ -211,6 +217,9 @@ instance : ToString Clause :=
     | [] => "⊥"
     | c  => "(" ++ " ∨ ".intercalate (List.map toString c) ++ ")"⟩
 
+instance : Hashable Clause :=
+  inferInstanceAs (Hashable (List Lit))
+
 end Clause
 
 /- Formulas in CNF. -/
@@ -253,6 +262,9 @@ def disj (cnf1 cnf2 : CnfForm) : CnfForm :=
 
 def conj (cnf1 cnf2 : CnfForm) : CnfForm :=
   cnf1.union cnf2
+
+instance : ForIn m CnfForm (List Lit) :=
+  inferInstanceAs (ForIn m (List (List Lit)) (List Lit))
 
 end CnfForm
 

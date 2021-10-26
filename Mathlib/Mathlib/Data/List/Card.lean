@@ -21,13 +21,15 @@ theorem inj_on_of_subset {f : α → β} {as bs : List α} (h : inj_on f bs) (hs
 protected def equiv (as bs : List α) := ∀ x, x ∈ as ↔ x ∈ bs
 
 theorem equiv_iff_subset_and_subset {as bs : List α} : as.equiv bs ↔ as ⊆ bs ∧ bs ⊆ as :=
-  ⟨fun h => ⟨fun xas => (h _).1 xas, fun xbs => (h _).2 xbs⟩, fun ⟨h1, h2⟩ x => ⟨h1, h2⟩⟩
+Iff.intro
+  (fun h => ⟨fun _ xas => (h _).1 xas, fun _ xbs => (h _).2 xbs⟩)
+  (fun ⟨h1, h2⟩ x => ⟨@h1 x, @h2 x⟩)
 
 theorem insert_equiv_cons [DecidableEq α] (a : α) (as : List α) : (insert a as).equiv (a :: as) :=
   fun x => by simp
 
-theorem union_equiv_append [DecidableEq α] (as bs : List α) : (as.union bs).equiv (as ++ bs) :=
-  fun x => by simp
+-- theorem union_equiv_append [DecidableEq α] (as bs : List α) : (as.union bs).equiv (as ++ bs) :=
+--   fun x => by simp
 
 section decidable_eq
 variable [DecidableEq α] [DecidableEq β]
@@ -49,12 +51,12 @@ theorem mem_remove_iff {a b : α} {as : List α} : b ∈ remove a as ↔ b ∈ a
       exact ⟨fun ⟨h1, h2⟩ => ⟨Or.inr h1, h2⟩, fun ⟨h1, h2⟩ => ⟨Or.resolve_left h1 (h ▸ h2), h2⟩⟩
     | inr h =>
       simp [if_neg h, ih]
-      split
-        focus
+      constructor
+      { focus
         intro h'
         cases h' with
         | inl h₁ => exact ⟨Or.inl h₁, h₁.symm ▸ (Ne.symm h)⟩
-        | inr h₁ => exact ⟨Or.inr h₁.1, h₁.2⟩
+        | inr h₁ => exact ⟨Or.inr h₁.1, h₁.2⟩ }
       intro ⟨h1, h2⟩
       cases h1 with
       | inl h1' => exact Or.inl h1'
@@ -124,7 +126,7 @@ theorem card_subset_le : ∀ {as bs : List α}, as ⊆ bs → card as ≤ card b
   | (a :: as), bs, hsub => by
     cases Decidable.em (a ∈ as) with
     | inl h' =>
-      have hsub' : as ⊆ bs := fun xmem => hsub (mem_cons_of_mem a xmem)
+      have hsub' : as ⊆ bs := fun _ xmem => hsub (mem_cons_of_mem a xmem)
       simp [h', card_subset_le hsub']
     | inr h' =>
       have : a ∈ bs := hsub (Or.inl rfl)
@@ -182,9 +184,9 @@ theorem card_append_disjoint : ∀ {as bs : List α},
       have h1 : a ∉ bs := fun h' => disj (mem_cons_self a as) h'
       simp [h, h1, card_append_disjoint disj', Nat.add_right_comm]
 
-theorem card_union_disjoint {as bs : List α} (h : disjoint as bs) :
-    card (as.union bs) = card as + card bs := by
-  rw [card_eq_of_equiv (union_equiv_append as bs), card_append_disjoint h]
+-- theorem card_union_disjoint {as bs : List α} (h : disjoint as bs) :
+--     card (as.union bs) = card as + card bs := by
+--   rw [card_eq_of_equiv (union_equiv_append as bs), card_append_disjoint h]
 
 end decidable_eq
 

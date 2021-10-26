@@ -26,6 +26,32 @@ example : p → p := by
   apply h
 -- end textbook
 
+-- textbook: apply
+example (h1 : p → q) (h2 : p) : q := by
+  apply h1
+  exact h2
+-- end textbook
+
+-- textbook: have
+example (h1 : p → q) (h2 : p) : q := by
+  have h3 : q := h1 h2
+  exact h3
+-- end textbook
+
+-- textbook: have again
+example (h1 : p → q) (h2 : p) : q := by
+  have h3 := h1 h2
+  exact h3
+-- end textbook
+
+-- textbook: application
+example (h1 : p → q) (h2 : p) : q := by
+  exact h1 h2
+
+example (h1 : p → q) (h2 : p) : q := h1 h2
+-- end textbook
+
+
 -- textbook: and example
 theorem and_example : p → q → p ∧ q := by
   intro hp

@@ -88,7 +88,7 @@ on Windows, OS/X, or Linux.
 2. Clone this repository, using `git clone` or the `Download ZIP` option on the `Code` button
 above.
 
-3. Inside the top folder of the repository, type `leanpkg build` to compile the library files.
+3. Inside the top folder of the repository, type `lake build` to compile the library files.
 Also, copy the examples folder from the `LAMR` folder to the `User` folder.
 
 4. Open the repository folder in VS Code.
@@ -105,11 +105,12 @@ If you are using on old virtual machine or a local version of the repository, ho
 you can update it by typing the following commands from inside the repository folder:
 ```
   git pull
-  leanpkg build
+  lake build
 
 ```
 You will then have to manually copy new files from the `LAMR/Examples`
-folder to the `User/Examples` folder.
+folder to the `User/Examples` folder. 
+You may have to type `elan update` if you installed Lean a while ago.
 
 If you have forked the repository on Github, you can update the fork by clicking the "fetch upstream"
 button.
