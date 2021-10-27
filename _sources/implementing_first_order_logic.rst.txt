@@ -1,13 +1,181 @@
+.. highlight:: lean
+
 .. _chapter_implementing_first_order_logic:
 
 Implementing First-Order Logic
 ==============================
 
-Syntax
-------
+Our implementation of first-order logic in Lean is similar to our implementation of
+propositional logic in Lean,
+covering both the syntax and the semantics.
+We will also show how to implement *unification*, and algorithm that is fundamental
+to the mechanization of first-order reasoning.
 
-Semantics
----------
+Terms
+-----
 
-First-order unification
------------------------
+Our implementation of terms is straightforward.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/syntax.lean
+   :start-after: -- textbook: FOTerm
+   :end-before: -- end
+
+A term is either a variable or a function symbol applied to a list of
+terms.
+We have defined syntax for `FOTerm`:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/syntax.lean
+   :start-after: -- textbook: FOTerm syntax
+   :end-before: -- end
+
+The notation `%x` is used for a variable. Notice that a constant like `c` is represented
+as an application of the symbol to the empty list. Notice also that the definition
+does nothing to check the arity of the function symbols.
+Ordinarily, first-order logic allows us to specify that `f` and
+`g` are binary functions and that another function, `h`, is unary.
+Our definition of `FOTerm` allows the application of any string to any number
+of arguments.
+This simplifies a number of aspects of the implementation.
+As an exercise, you might want to write a function `well-formed` in Lean that,
+given a specification of a list of symbols and their arities,
+checks that an `FOTerm` uses only those symbols and with the correct arity.
+Later in the course, we will talk about systems more expressive than
+first-order logic that provide other ways of specifying
+a function's intended arguments.
+Lean's type system provides a very elaborate and expressive means for doing so,
+and you can think of the specification of arities in first-order logic as being
+a minimal form of a typing judgment.
+
+Remember that to evaluate a first-order language, we needs an assignment of values to the variables,
+as well as interpretations of the function and relation symbols.
+Since our symbols are identified as strings,
+in general an interpretation of synmbols is an assignment of values to strings:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/syntax.lean
+   :start-after: -- textbook: FOAssignment
+   :end-before: -- end
+
+Any function definable in Lean can serve this purpose.
+Keep in mind that we have to fix a type `α`, corresponding to the universe
+of the structure in which we carry out the interpretation.
+
+Since it is often useful to specify an assignment by giving a finite list of values,
+we have implemented syntax for that:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/syntax.lean
+   :start-after: -- textbook: assign syntax
+   :end-before: -- end
+
+You can type the symbol `↦` as `\\mapsto`.
+Formally, the notation produces an *association list*, essentially just a list of
+key / value pairs.
+But we have also told Lean how to coerce such an association list to an `FOAssignment`
+when necessary.
+The following examples provide a few different Lean idioms for specifying that
+an `assign!` expression should be interpreted as an `FOAssignment`.
+(It should also happen automatically when you pass such an expression as an argument
+to a function that expect an `FOAssignment`.)
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/syntax.lean
+   :start-after: -- textbook: assign syntax as FOAssignment
+   :end-before: -- end
+
+It is now easy to define substitution for terms. Such a function should take
+a term and an assignment of terms to variables, and replace the variables by the
+assigned terms.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/syntax.lean
+   :start-after: -- textbook: subst
+   :end-before: -- end
+
+Here we try it out:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/syntax.lean
+   :start-after: -- textbook: subst example
+   :end-before: -- end
+
+
+Evaluating terms
+----------------
+
+To evaluate a term, we need not only an assignment of values to the variables
+occurring in the term, but also an interpretation of all the function symbols.
+Setting aside concerns about arities, we can interpret any
+function taking some number of elements of `α` to `α` as an element of type
+`List α → α`.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: FnInterp
+   :end-before: -- end
+
+If a function is intended to be used as a binary function,
+we really care about the interpretation when it is applied to lists of
+length two.
+In our quick-and-dirty implementation, we have to define values for lists
+of other lengths, but any values will do. For example,
+we can define an interpretation of constants and functions on the natural numbers
+as follows:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: arithFnInterp
+   :end-before: -- end
+
+Or, alternatively:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: arithFnInterp'
+   :end-before: -- end
+
+With `FnInterp` in place, it is easy to define a function that evaluates terms:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: term eval
+   :end-before: -- end
+
+Even though the function always terminates, Lean 4 is not yet able to prove
+termination automatically, so we use the keyword `partial`.
+
+Let's try it out.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: arith_ex1
+   :end-before: -- end
+
+When we talked about propositional logic, we proved a theorem that says
+that evaluating the result of a substitution is the same as
+evaluating the original formula relative to an assignment of the values
+of the substituted formula. In the context of terms, the identity is as follows:
+
+.. math::
+
+   \tval{t[s/x]}_\sigma = \tval{t}_{\sigma[x \mapsto \tval{s}_\sigma]}.
+
+The proof is essentially the same.
+Our current implementation is more general in that it allows us to
+substitute multiple formulas at once,
+but we can see the principle at play in the fact that the two evaluations
+below produce the same answer.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: substitution and evaluation
+   :end-before: -- end
+
+And here is another crazy idea: we can view substitution as the result
+of evaluating a term in a model where the universe consists of terms,
+and where each function symbol `f` is interpreted
+as the function "build a term by applying `f`.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: substitution as evaluation
+   :end-before: -- end
+
+You should think about what is going on here. Such a model is known as a
+*term model*.
+
+
+Formulas
+--------
+
+
+Unification
+-----------

@@ -36,6 +36,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -101,9 +103,10 @@
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">11. Implementing First-Order Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#syntax">11.1. Syntax</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#semantics">11.2. Semantics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#first-order-unification">11.3. First-order unification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#terms">11.1. Terms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#evaluating-terms">11.2. Evaluating terms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#formulas">11.3. Formulas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unification">11.4. Unification</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
@@ -181,14 +184,207 @@
             
   <div class="section" id="implementing-first-order-logic">
 <span id="chapter-implementing-first-order-logic"></span><h1><span class="section-number">11. </span>Implementing First-Order Logic<a class="headerlink" href="#implementing-first-order-logic" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="syntax">
-<h2><span class="section-number">11.1. </span>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h2>
+<p>Our implementation of first-order logic in Lean is similar to our implementation of
+propositional logic in Lean,
+covering both the syntax and the semantics.
+We will also show how to implement <em>unification</em>, and algorithm that is fundamental
+to the mechanization of first-order reasoning.</p>
+<div class="section" id="terms">
+<h2><span class="section-number">11.1. </span>Terms<a class="headerlink" href="#terms" title="Permalink to this headline">¶</a></h2>
+<p>Our implementation of terms is straightforward.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">FOTerm</span>
+  <span class="bp">|</span> <span class="n">var</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">FOTerm</span>
+  <span class="bp">|</span> <span class="n">app</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">List</span> <span class="n">FOTerm</span> <span class="bp">→</span> <span class="n">FOTerm</span>
+  <span class="n">deriving</span> <span class="n">Repr</span><span class="o">,</span> <span class="n">Inhabited</span><span class="o">,</span> <span class="n">BEq</span>
+</pre></div>
 </div>
-<div class="section" id="semantics">
-<h2><span class="section-number">11.2. </span>Semantics<a class="headerlink" href="#semantics" title="Permalink to this headline">¶</a></h2>
+<p>A term is either a variable or a function symbol applied to a list of
+terms.
+We have defined syntax for <cite>FOTerm</cite>:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">ex1</span> <span class="o">:=</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="bp">%</span><span class="n">x</span> <span class="o">}</span>
+<span class="kd">def</span> <span class="n">ex2</span> <span class="o">:=</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">c</span> <span class="o">}</span>
+<span class="kd">def</span> <span class="n">ex3</span> <span class="o">:=</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">),</span> <span class="n">f</span><span class="o">(</span><span class="n">g</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="n">d</span><span class="o">)),</span> <span class="n">b</span><span class="o">))</span> <span class="o">}</span>
+
+<span class="k">#print</span> <span class="n">ex1</span>
+<span class="k">#print</span> <span class="n">ex2</span>
+<span class="k">#print</span> <span class="n">ex3</span>
+
+<span class="k">#eval</span> <span class="n">ex1</span>
+<span class="k">#eval</span> <span class="n">ex2</span>
+<span class="k">#eval</span> <span class="n">ex3</span>
+</pre></div>
 </div>
-<div class="section" id="first-order-unification">
-<h2><span class="section-number">11.3. </span>First-order unification<a class="headerlink" href="#first-order-unification" title="Permalink to this headline">¶</a></h2>
+<p>The notation <cite>%x</cite> is used for a variable. Notice that a constant like <cite>c</cite> is represented
+as an application of the symbol to the empty list. Notice also that the definition
+does nothing to check the arity of the function symbols.
+Ordinarily, first-order logic allows us to specify that <cite>f</cite> and
+<cite>g</cite> are binary functions and that another function, <cite>h</cite>, is unary.
+Our definition of <cite>FOTerm</cite> allows the application of any string to any number
+of arguments.
+This simplifies a number of aspects of the implementation.
+As an exercise, you might want to write a function <cite>well-formed</cite> in Lean that,
+given a specification of a list of symbols and their arities,
+checks that an <cite>FOTerm</cite> uses only those symbols and with the correct arity.
+Later in the course, we will talk about systems more expressive than
+first-order logic that provide other ways of specifying
+a function’s intended arguments.
+Lean’s type system provides a very elaborate and expressive means for doing so,
+and you can think of the specification of arities in first-order logic as being
+a minimal form of a typing judgment.</p>
+<p>Remember that to evaluate a first-order language, we needs an assignment of values to the variables,
+as well as interpretations of the function and relation symbols.
+Since our symbols are identified as strings,
+in general an interpretation of synmbols is an assignment of values to strings:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">FOAssignment</span> <span class="n">α</span> <span class="o">:=</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">α</span>
+</pre></div>
+</div>
+<p>Any function definable in Lean can serve this purpose.
+Keep in mind that we have to fix a type <cite>α</cite>, corresponding to the universe
+of the structure in which we carry out the interpretation.</p>
+<p>Since it is often useful to specify an assignment by giving a finite list of values,
+we have implemented syntax for that:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">3</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">5</span><span class="o">,</span> <span class="n">z</span> <span class="bp">↦</span> <span class="mi">2</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>You can type the symbol <cite>↦</cite> as <cite>\mapsto</cite>.
+Formally, the notation produces an <em>association list</em>, essentially just a list of
+key / value pairs.
+But we have also told Lean how to coerce such an association list to an <cite>FOAssignment</cite>
+when necessary.
+The following examples provide a few different Lean idioms for specifying that
+an <cite>assign!</cite> expression should be interpreted as an <cite>FOAssignment</cite>.
+(It should also happen automatically when you pass such an expression as an argument
+to a function that expect an <cite>FOAssignment</cite>.)</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">assign1</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">3</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">5</span><span class="o">,</span> <span class="n">z</span> <span class="bp">↦</span> <span class="mi">2</span><span class="o">}</span>
+<span class="k">#check</span> <span class="n">assign1</span>
+<span class="k">#eval</span>  <span class="n">assign1</span> <span class="s2">&quot;x&quot;</span>
+
+<span class="k">#check</span> <span class="o">(</span><span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">3</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">5</span><span class="o">,</span> <span class="n">z</span> <span class="bp">↦</span> <span class="mi">2</span><span class="o">}</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">Nat</span><span class="o">)</span>
+
+<span class="k">#check</span> <span class="bp">@</span><span class="n">id</span> <span class="o">(</span><span class="n">FOAssignment</span> <span class="n">Nat</span><span class="o">)</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">3</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">5</span><span class="o">,</span> <span class="n">z</span> <span class="bp">↦</span> <span class="mi">2</span><span class="o">}</span>
+
+<span class="k">#check</span> <span class="k">show</span> <span class="n">FOAssignment</span> <span class="n">Nat</span> <span class="k">from</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">3</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">5</span><span class="o">,</span> <span class="n">z</span> <span class="bp">↦</span> <span class="mi">2</span><span class="o">}</span>
+
+<span class="k">#check</span> <span class="k">let</span> <span class="n">this</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">3</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">5</span><span class="o">,</span> <span class="n">z</span> <span class="bp">↦</span> <span class="mi">2</span><span class="o">}</span>
+       <span class="n">this</span>
+</pre></div>
+</div>
+<p>It is now easy to define substitution for terms. Such a function should take
+a term and an assignment of terms to variables, and replace the variables by the
+assigned terms.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">subst</span> <span class="o">(</span><span class="n">σ</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="o">:</span> <span class="n">FOTerm</span> <span class="bp">→</span> <span class="n">FOTerm</span>
+  <span class="bp">|</span> <span class="n">var</span> <span class="n">x</span>   <span class="bp">=&gt;</span> <span class="n">σ</span> <span class="n">x</span>
+  <span class="bp">|</span> <span class="n">app</span> <span class="n">f</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">app</span> <span class="n">f</span> <span class="o">(</span><span class="n">l.map</span> <span class="o">(</span><span class="n">subst</span> <span class="n">σ</span><span class="o">))</span>
+</pre></div>
+</div>
+<p>Here we try it out:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">ex3.subst</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span><span class="n">h</span><span class="o">(</span><span class="n">a</span><span class="o">)},</span> <span class="n">y</span> <span class="bp">↦</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span><span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">h</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="n">d</span><span class="o">)}}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="evaluating-terms">
+<h2><span class="section-number">11.2. </span>Evaluating terms<a class="headerlink" href="#evaluating-terms" title="Permalink to this headline">¶</a></h2>
+<p>To evaluate a term, we need not only an assignment of values to the variables
+occurring in the term, but also an interpretation of all the function symbols.
+Setting aside concerns about arities, we can interpret any
+function taking some number of elements of <cite>α</cite> to <cite>α</cite> as an element of type
+<cite>List α → α</cite>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- an interpretation of function symbols -/</span>
+<span class="kd">def</span> <span class="n">FnInterp</span> <span class="n">α</span> <span class="o">:=</span> <span class="n">FOAssignment</span> <span class="o">(</span><span class="n">List</span> <span class="n">α</span> <span class="bp">→</span> <span class="n">α</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>If a function is intended to be used as a binary function,
+we really care about the interpretation when it is applied to lists of
+length two.
+In our quick-and-dirty implementation, we have to define values for lists
+of other lengths, but any values will do. For example,
+we can define an interpretation of constants and functions on the natural numbers
+as follows:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">arithFnInterp</span> <span class="o">:</span> <span class="n">FnInterp</span> <span class="n">Nat</span>
+  <span class="bp">|</span> <span class="s2">&quot;plus&quot;</span>  <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">+</span> <span class="n">l.getA</span> <span class="mi">1</span>
+  <span class="bp">|</span> <span class="s2">&quot;times&quot;</span> <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">*</span> <span class="n">l.getA</span> <span class="mi">1</span>
+  <span class="bp">|</span> <span class="s2">&quot;zero&quot;</span>  <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
+  <span class="bp">|</span> <span class="s2">&quot;one&quot;</span>   <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">1</span>
+  <span class="bp">|</span> <span class="s2">&quot;two&quot;</span>   <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">2</span>
+  <span class="bp">|</span> <span class="s2">&quot;three&quot;</span> <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">3</span>
+  <span class="bp">|</span> <span class="n">_</span>       <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">arbitrary</span>
+</pre></div>
+</div>
+<p>Or, alternatively:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">arithFnInterp&#39;</span> <span class="o">:</span> <span class="n">FnInterp</span> <span class="n">Nat</span> <span class="o">:=</span>
+<span class="n">assign</span><span class="bp">!</span><span class="o">{</span>
+  <span class="n">plus</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="o">:</span> <span class="n">List</span> <span class="n">Nat</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">+</span> <span class="n">l.getA</span> <span class="mi">1</span><span class="o">,</span>
+  <span class="n">times</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">*</span> <span class="n">l.getA</span> <span class="mi">1</span><span class="o">,</span>
+  <span class="n">zero</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">0</span><span class="o">,</span>
+  <span class="n">one</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">1</span><span class="o">,</span>
+  <span class="n">two</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">2</span><span class="o">,</span>
+  <span class="n">three</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">3</span> <span class="o">}</span>
+</pre></div>
+</div>
+<p>With <cite>FnInterp</cite> in place, it is easy to define a function that evaluates terms:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- evaluate a term relative to a variable assignment -/</span>
+<span class="n">partial</span> <span class="kd">def</span> <span class="n">eval</span> <span class="o">{</span><span class="n">α</span><span class="o">}</span> <span class="o">[</span><span class="n">Inhabited</span> <span class="n">α</span><span class="o">]</span> <span class="o">(</span><span class="n">fn</span> <span class="o">:</span> <span class="n">FnInterp</span> <span class="n">α</span><span class="o">)</span> <span class="o">(</span><span class="n">σ</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">α</span><span class="o">)</span> <span class="o">:</span> <span class="n">FOTerm</span> <span class="bp">→</span> <span class="n">α</span>
+  <span class="bp">|</span> <span class="n">var</span> <span class="n">x</span>   <span class="bp">=&gt;</span> <span class="n">σ</span> <span class="n">x</span>
+  <span class="bp">|</span> <span class="n">app</span> <span class="n">f</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">fn</span> <span class="n">f</span> <span class="o">(</span><span class="n">l.map</span> <span class="o">(</span><span class="n">eval</span> <span class="n">fn</span> <span class="n">σ</span><span class="o">))</span>
+</pre></div>
+</div>
+<p>Even though the function always terminates, Lean 4 is not yet able to prove
+termination automatically, so we use the keyword <cite>partial</cite>.</p>
+<p>Let’s try it out.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">arith_ex1</span> <span class="o">:=</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">plus</span><span class="o">(</span><span class="n">times</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="n">two</span><span class="o">),</span> <span class="n">plus</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="n">three</span><span class="o">))</span> <span class="o">}</span>
+
+<span class="k">#eval</span> <span class="n">arith_ex1.eval</span> <span class="n">arithFnInterp</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span> <span class="n">x</span> <span class="bp">↦</span> <span class="mi">3</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">5</span> <span class="o">}</span>
+<span class="k">#eval</span> <span class="n">arith_ex1.eval</span> <span class="n">arithFnInterp</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span> <span class="n">x</span> <span class="bp">↦</span> <span class="mi">7</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">11</span> <span class="o">}</span>
+</pre></div>
+</div>
+<p>When we talked about propositional logic, we proved a theorem that says
+that evaluating the result of a substitution is the same as
+evaluating the original formula relative to an assignment of the values
+of the substituted formula. In the context of terms, the identity is as follows:</p>
+<div class="math notranslate nohighlight">
+\[\tval{t[s/x]}_\sigma = \tval{t}_{\sigma[x \mapsto \tval{s}_\sigma]}.\]</div>
+<p>The proof is essentially the same.
+Our current implementation is more general in that it allows us to
+substitute multiple formulas at once,
+but we can see the principle at play in the fact that the two evaluations
+below produce the same answer.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">arith_ex2</span> <span class="o">:=</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">plus</span><span class="o">(</span><span class="n">one</span><span class="o">,</span> <span class="n">times</span><span class="o">(</span><span class="n">three</span><span class="o">,</span> <span class="bp">%</span><span class="n">z</span><span class="o">))}</span>
+
+<span class="kd">def</span> <span class="n">arith_ex3</span> <span class="o">:=</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">plus</span><span class="o">(</span><span class="bp">%</span><span class="n">z</span><span class="o">,</span> <span class="n">two</span><span class="o">)</span> <span class="o">}</span>
+
+<span class="kd">def</span> <span class="n">arith_ex4</span> <span class="o">:=</span> <span class="n">arith_ex1.subst</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span> <span class="n">x</span> <span class="bp">↦</span> <span class="n">arith_ex2</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="n">arith_ex3</span>  <span class="o">}</span>
+
+<span class="c1">-- these two should give the same result!</span>
+
+<span class="k">#eval</span> <span class="n">arith_ex4.eval</span> <span class="n">arithFnInterp</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">z</span> <span class="bp">↦</span> <span class="mi">7</span><span class="o">}</span>
+
+<span class="k">#eval</span> <span class="n">arith_ex1.eval</span> <span class="n">arithFnInterp</span>
+  <span class="n">assign</span><span class="bp">!</span><span class="o">{</span> <span class="n">x</span> <span class="bp">↦</span> <span class="o">(</span><span class="n">arith_ex1.eval</span> <span class="n">arithFnInterp</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">z</span> <span class="bp">↦</span> <span class="mi">7</span><span class="o">}),</span>
+           <span class="n">y</span> <span class="bp">↦</span> <span class="o">(</span><span class="n">arith_ex2.eval</span> <span class="n">arithFnInterp</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">z</span> <span class="bp">↦</span> <span class="mi">7</span><span class="o">})</span> <span class="o">}</span>
+</pre></div>
+</div>
+<p>And here is another crazy idea: we can view substitution as the result
+of evaluating a term in a model where the universe consists of terms,
+and where each function symbol <cite>f</cite> is interpreted
+as the function “build a term by applying <cite>f</cite>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">TermFnInterp</span> <span class="o">:</span> <span class="n">FnInterp</span> <span class="n">FOTerm</span> <span class="o">:=</span> <span class="n">FOTerm.app</span>
+
+<span class="kd">def</span> <span class="n">FOTerm.subst&#39;</span> <span class="o">:=</span> <span class="n">eval</span> <span class="n">TermFnInterp</span>
+
+<span class="kd">def</span> <span class="n">arith_ex4&#39;</span> <span class="o">:=</span> <span class="n">arith_ex1.subst&#39;</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span> <span class="n">x</span> <span class="bp">↦</span> <span class="n">arith_ex2</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="n">arith_ex3</span>  <span class="o">}</span>
+
+<span class="k">#eval</span> <span class="n">arith_ex4</span>
+<span class="k">#eval</span> <span class="n">arith_ex4&#39;</span>  <span class="c1">-- the same!</span>
+</pre></div>
+</div>
+<p>You should think about what is going on here. Such a model is known as a
+<em>term model</em>.</p>
+</div>
+<div class="section" id="formulas">
+<h2><span class="section-number">11.3. </span>Formulas<a class="headerlink" href="#formulas" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="unification">
+<h2><span class="section-number">11.4. </span>Unification<a class="headerlink" href="#unification" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
