@@ -125,6 +125,25 @@ and what it means to substitute a term :math:`t` for a variable :math:`x` in a f
 which we denote :math:`A[t/x]`.
 These operations are of central importance in first-order logic.
 
+We will later need a notion of *simultaneous substitution*, which replaces multiple variables at once.
+In this context, a *substitution* :math:`\sigma` is a mapping from a set of variables to terms in a language.
+(If we want, we can think of :math:`\sigma` as a mapping from the set of *all* variables to terms which
+assigns the remaining variables to themselves.) Given a substitution :math:`\sigma` and a term `t`,
+the substitution :math:`\sigma \, t` is defined recursively as follows:
+
+.. math::
+
+    \sigma \, x & = \sigma(x) \\
+    \sigma \, f (t_1, \ldots, t_n) & = f (\sigma \, t_1, \ldots, \sigma \, t_n)
+
+In other words, :math:`\sigma` tells us what to plug in for the variables,
+and otherwise the substitution leaves the function symbols and constants the same.
+If :math:`A` is a formula, the definition of the substitution :math:`\sigma \, A`
+is similar, though it is slightly complicated by the fact that we might have to
+rename the bound variables when we carry out the substitution.
+Implementations of first-order logic have to deal with that appropriately,
+but we will not worry about the details here.
+
 The set of variables that occur in a term can be defined by recursion on terms.
 Consider the formula :math:`\ex z (x < z \land z < y)`. Intuitively, this says "there is
 something between :math:`x` and :math:`y`." The variable :math:`z` is said to be *bound*
@@ -259,7 +278,7 @@ Remember that we can think of constant symbols as 0-ary function symbols, so
 :math:`\tval{c}_{\mdl M, \sigma} = c_{\mdl M}` is implicit in the second clause.
 
 We can also say what it means for a formula :math:`A` to be true in :math:`\mdl M`
-relative to the assignment :math:`\sigma`:
+relative to the assignment :math:`\sigma`, which we write as :math:`\mdl M \models_\sigma A`:
 
    - :math:`\mdl M \models_\sigma t = t'` if and only if :math:`\tval{t}_{\mdl M, \sigma} = \tval{t'}_{\mdl M, \sigma}`.
    - :math:`\mdl M \models_\sigma R(t_0, \ldots, t_{n-1})` if and only if :math:`R^{\mdl M}(\tval{t_0}_{\mdl M, \sigma}, \ldots, \tval{t_{n-1}}_{\mdl M, \sigma})`.
@@ -279,6 +298,23 @@ The fact that formulas can be interpreted in different models is central to mode
 Take, for example, the sentence :math:`\fa x \ex y R(x, y)`.
 This is true of the real numbers with the less-than relation, but false of the natural numbers
 with the greater-than relation. What about the integers with the relation ":math:`x` divides :math:`y`?"
+
+If :math:`\mdl M \models_\sigma A`, we also say that :math:`A` is satisfied by :math:`\mdl M`
+and :math:`\sigma`, and that :math:`A` is *satisfiable*.
+Remember that saying that :math:`A` is a sentence means that it has no free variables. In that case,
+we don't have to talk about an assignment :math:`\sigma`, so a sentence is satisfiable
+if it is true in some model. If :math:`\mdl M \models A`, we also say that :math:`\mdl M` is a
+model of :math:`A`.
+
+We say that a sentence :math:`A` is *valid*, written :math:`\models A`, if it is true in every model.
+(More generally, a formula with free variables is valid if it is true in every model with respect to every assignment
+of variables to elements in the universe of that model.)
+In analogy with propositional logic, if :math:`\Gamma` is a set of sentences and :math:`A` is a sentence,
+we say :math:`\Gamma` *entails* :math:`A` and write :math:`\Gamma \models A`
+if every model of :math:`\Gamma` is also a model of :math:`A`.
+This means that the symbol :math:`\models` is overloaded, since :math:`\Gamma \models A` and :math:`\mdl M \models A`
+mean different things. Sometimes people also write :math:`\models_{\mdl M} A` instead of :math:`\mdl M \models A`,
+and :math:`\models_{\mdl M, \sigma} A` instead of :math:`\mdl M \models_\sigma A`.
 
 
 Normal forms

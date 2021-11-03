@@ -49,7 +49,7 @@ a minimal form of a typing judgment.
 Remember that to evaluate a first-order language, we needs an assignment of values to the variables,
 as well as interpretations of the function and relation symbols.
 Since our symbols are identified as strings,
-in general an interpretation of synmbols is an assignment of values to strings:
+in general an interpretation of symbols is an assignment of values to strings:
 
 .. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/syntax.lean
    :start-after: -- textbook: FOAssignment

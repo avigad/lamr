@@ -540,7 +540,7 @@ Intuitively, there are no cases!</p>
 which is embodied in the <em>law of the excluded middle</em>.
 In Lean, if <cite>p</cite> is a proposition, <cite>em p</cite> is the principal <cite>p ∨ ¬ p</cite>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="n">apply</span> <span class="n">Or.elim</span> <span class="o">(</span><span class="n">em</span> <span class="n">p</span><span class="o">)</span>
+  <span class="n">apply</span> <span class="n">Or.elim</span> <span class="o">(</span><span class="n">Classical.em</span> <span class="n">p</span><span class="o">)</span>
   <span class="bp">.</span> <span class="n">intro</span> <span class="n">hp</span>
     <span class="n">apply</span> <span class="n">Or.inr</span>
     <span class="n">apply</span> <span class="n">h1</span>
@@ -551,7 +551,7 @@ In Lean, if <cite>p</cite> is a proposition, <cite>em p</cite> is the principal 
 
 <span class="kd">example</span> <span class="o">:</span> <span class="bp">¬</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">intro</span> <span class="n">hnnp</span>
-  <span class="n">apply</span> <span class="n">Or.elim</span> <span class="o">(</span><span class="n">em</span> <span class="n">p</span><span class="o">)</span>
+  <span class="n">apply</span> <span class="n">Or.elim</span> <span class="o">(</span><span class="n">Classical.em</span> <span class="n">p</span><span class="o">)</span>
   <span class="bp">.</span> <span class="n">intro</span> <span class="n">hp</span><span class="bp">;</span> <span class="n">exact</span> <span class="n">hp</span>
   <span class="bp">.</span> <span class="n">intro</span> <span class="n">hnp</span>
     <span class="n">contradiction</span>

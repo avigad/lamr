@@ -296,6 +296,21 @@ in another term <span class="math notranslate nohighlight">\(s\)</span>, which w
 and what it means to substitute a term <span class="math notranslate nohighlight">\(t\)</span> for a variable <span class="math notranslate nohighlight">\(x\)</span> in a formula <span class="math notranslate nohighlight">\(A\)</span>,
 which we denote <span class="math notranslate nohighlight">\(A[t/x]\)</span>.
 These operations are of central importance in first-order logic.</p>
+<p>We will later need a notion of <em>simultaneous substitution</em>, which replaces multiple variables at once.
+In this context, a <em>substitution</em> <span class="math notranslate nohighlight">\(\sigma\)</span> is a mapping from a set of variables to terms in a language.
+(If we want, we can think of <span class="math notranslate nohighlight">\(\sigma\)</span> as a mapping from the set of <em>all</em> variables to terms which
+assigns the remaining variables to themselves.) Given a substitution <span class="math notranslate nohighlight">\(\sigma\)</span> and a term <cite>t</cite>,
+the substitution <span class="math notranslate nohighlight">\(\sigma \, t\)</span> is defined recursively as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\sigma \, x &amp; = \sigma(x) \\
+\sigma \, f (t_1, \ldots, t_n) &amp; = f (\sigma \, t_1, \ldots, \sigma \, t_n)\end{split}\]</div>
+<p>In other words, <span class="math notranslate nohighlight">\(\sigma\)</span> tells us what to plug in for the variables,
+and otherwise the substitution leaves the function symbols and constants the same.
+If <span class="math notranslate nohighlight">\(A\)</span> is a formula, the definition of the substitution <span class="math notranslate nohighlight">\(\sigma \, A\)</span>
+is similar, though it is slightly complicated by the fact that we might have to
+rename the bound variables when we carry out the substitution.
+Implementations of first-order logic have to deal with that appropriately,
+but we will not worry about the details here.</p>
 <p>The set of variables that occur in a term can be defined by recursion on terms.
 Consider the formula <span class="math notranslate nohighlight">\(\ex z (x &lt; z \land z &lt; y)\)</span>. Intuitively, this says “there is
 something between <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>.” The variable <span class="math notranslate nohighlight">\(z\)</span> is said to be <em>bound</em>
@@ -418,7 +433,7 @@ f^{\mdl M}(\tval{t_1}_{\mdl M, \sigma}, \ldots, \tval{t_n}_{\mdl M, \sigma})\)</
 <p>Remember that we can think of constant symbols as 0-ary function symbols, so
 <span class="math notranslate nohighlight">\(\tval{c}_{\mdl M, \sigma} = c_{\mdl M}\)</span> is implicit in the second clause.</p>
 <p>We can also say what it means for a formula <span class="math notranslate nohighlight">\(A\)</span> to be true in <span class="math notranslate nohighlight">\(\mdl M\)</span>
-relative to the assignment <span class="math notranslate nohighlight">\(\sigma\)</span>:</p>
+relative to the assignment <span class="math notranslate nohighlight">\(\sigma\)</span>, which we write as <span class="math notranslate nohighlight">\(\mdl M \models_\sigma A\)</span>:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(\mdl M \models_\sigma t = t'\)</span> if and only if <span class="math notranslate nohighlight">\(\tval{t}_{\mdl M, \sigma} = \tval{t'}_{\mdl M, \sigma}\)</span>.</p></li>
@@ -439,6 +454,21 @@ and the clauses for the quantifiers that are new.</p>
 Take, for example, the sentence <span class="math notranslate nohighlight">\(\fa x \ex y R(x, y)\)</span>.
 This is true of the real numbers with the less-than relation, but false of the natural numbers
 with the greater-than relation. What about the integers with the relation “<span class="math notranslate nohighlight">\(x\)</span> divides <span class="math notranslate nohighlight">\(y\)</span>?”</p>
+<p>If <span class="math notranslate nohighlight">\(\mdl M \models_\sigma A\)</span>, we also say that <span class="math notranslate nohighlight">\(A\)</span> is satisfied by <span class="math notranslate nohighlight">\(\mdl M\)</span>
+and <span class="math notranslate nohighlight">\(\sigma\)</span>, and that <span class="math notranslate nohighlight">\(A\)</span> is <em>satisfiable</em>.
+Remember that saying that <span class="math notranslate nohighlight">\(A\)</span> is a sentence means that it has no free variables. In that case,
+we don’t have to talk about an assignment <span class="math notranslate nohighlight">\(\sigma\)</span>, so a sentence is satisfiable
+if it is true in some model. If <span class="math notranslate nohighlight">\(\mdl M \models A\)</span>, we also say that <span class="math notranslate nohighlight">\(\mdl M\)</span> is a
+model of <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<p>We say that a sentence <span class="math notranslate nohighlight">\(A\)</span> is <em>valid</em>, written <span class="math notranslate nohighlight">\(\models A\)</span>, if it is true in every model.
+(More generally, a formula with free variables is valid if it is true in every model with respect to every assignment
+of variables to elements in the universe of that model.)
+In analogy with propositional logic, if <span class="math notranslate nohighlight">\(\Gamma\)</span> is a set of sentences and <span class="math notranslate nohighlight">\(A\)</span> is a sentence,
+we say <span class="math notranslate nohighlight">\(\Gamma\)</span> <em>entails</em> <span class="math notranslate nohighlight">\(A\)</span> and write <span class="math notranslate nohighlight">\(\Gamma \models A\)</span>
+if every model of <span class="math notranslate nohighlight">\(\Gamma\)</span> is also a model of <span class="math notranslate nohighlight">\(A\)</span>.
+This means that the symbol <span class="math notranslate nohighlight">\(\models\)</span> is overloaded, since <span class="math notranslate nohighlight">\(\Gamma \models A\)</span> and <span class="math notranslate nohighlight">\(\mdl M \models A\)</span>
+mean different things. Sometimes people also write <span class="math notranslate nohighlight">\(\models_{\mdl M} A\)</span> instead of <span class="math notranslate nohighlight">\(\mdl M \models A\)</span>,
+and <span class="math notranslate nohighlight">\(\models_{\mdl M, \sigma} A\)</span> instead of <span class="math notranslate nohighlight">\(\mdl M \models_\sigma A\)</span>.</p>
 </div>
 <div class="section" id="normal-forms">
 <h2><span class="section-number">10.4. </span>Normal forms<a class="headerlink" href="#normal-forms" title="Permalink to this headline">¶</a></h2>
