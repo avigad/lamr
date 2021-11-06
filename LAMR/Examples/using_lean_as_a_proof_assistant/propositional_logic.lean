@@ -1,4 +1,4 @@
-import LAMR
+import Init
 
 -- textbook: Prop
 variable (p q r s : Prop)
@@ -205,7 +205,7 @@ example (h : False) : p := by
 
 -- textbook: excluded middle
 example (h1 : p → q) : ¬ p ∨ q := by
-  apply Or.elim (em p)
+  apply Or.elim (Classical.em p)
   . intro hp
     apply Or.inr
     apply h1
@@ -216,7 +216,7 @@ example (h1 : p → q) : ¬ p ∨ q := by
 
 example : ¬ ¬ p → p := by
   intro hnnp
-  apply Or.elim (em p)
+  apply Or.elim (Classical.em p)
   . intro hp; exact hp
   . intro hnp
     contradiction

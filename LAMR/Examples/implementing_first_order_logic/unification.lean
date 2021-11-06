@@ -7,19 +7,22 @@ A unification algorithm, from John Harrison's book.
 
 -/
 
+-- textbook: isTriv?
 partial def isTriv? (env : AssocList String FOTerm) (x : String) : FOTerm → Option Bool
   | var y      => if y = x then true
                    else if !env.contains y then false
                    else isTriv? env x (env.getA y)
   | app f l    => loop l
-                  where
-                    loop : List FOTerm → Option Bool
-                      | []    => false
-                      | a::as => match isTriv? env x a with
-                                   | true  => none
-                                   | false => loop as
-                                   | none  => none
+where
+  loop : List FOTerm → Option Bool
+    | []    => false
+    | a::as => match isTriv? env x a with
+                  | true  => none
+                  | false => loop as
+                  | none  => none
+-- end
 
+-- textbook: unify?
 partial def unify? (env : AssocList String FOTerm) : List (FOTerm × FOTerm) →
                                                       Option (AssocList String FOTerm)
   | [] => some env
@@ -34,23 +37,25 @@ partial def unify? (env : AssocList String FOTerm) : List (FOTerm × FOTerm) →
         | false => unify? (env.cons x t) eqs
         | none  => none
   | (t, var x) :: eqs => unify? env ((var x, t) :: eqs)
+-- end
 
+-- textbook: fullUnify
 partial def usolve (env : AssocList String FOTerm) : AssocList String FOTerm := do
-  let env' := env.mapVal (subst (env : FOAssignment FOTerm))
+  let env' := env.mapVal (subst env)
   if env' == env then env else usolve env'
 
 partial def fullUnify (eqs : List (FOTerm × FOTerm)) : Option (AssocList String FOTerm) :=
   match unify? AssocList.nil eqs with
     | some l => usolve l
     | none   => none
+-- end
 
+-- textbook: unify examples
 partial def unifyAndApply (eqs : List (FOTerm × FOTerm)) : Option (List (FOTerm × FOTerm)) :=
   match fullUnify eqs with
     | some l => let σ : FOAssignment FOTerm := l
                 eqs.map (fun (s, t) => (subst σ s, subst σ t))
     | none   => none
-
-/- The examples from John's book. -/
 
 def unify_ex1 := [ (term!{ f(%x, g(%y))}, term!{ f(f(%z), %w) }) ]
 
@@ -73,3 +78,4 @@ def unify_ex4 := [ (term!{ %x0 }, term!{ f(%x1, %x1) } ),
 
 #eval toString $ fullUnify unify_ex4
 #eval toString $ unifyAndApply unify_ex4
+-- end

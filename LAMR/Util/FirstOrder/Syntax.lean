@@ -18,11 +18,13 @@ declare_syntax_cat foterm
 syntax "term!{" foterm "}" : term
 syntax "%" ident : foterm
 syntax ident : foterm
+syntax num : foterm
 syntax ident "(" foterm,+ ")" : foterm
 
 macro_rules
   | `(term!{ % $x:ident })              => `(var $(quote x.getId.toString))
   | `(term!{ $x:ident })                => `(app $(quote x.getId.toString) [])
+  | `(term!{ $n:numLit })                => `(app $(quote <| toString n.isNatLit?.get!) [])
   | `(term!{ $x:ident ( $[$args],* ) }) => do
       let args ← args.mapM fun x => `(term!{ $x })
       `(app $(quote x.getId.toString) [ $args,* ])
@@ -58,6 +60,10 @@ macro_rules
   | `( assign!{ $[$xs:ident ↦ $vs:term],* } ) =>
     let xs := xs.map fun x => quote x.getId.toString
     `((List.toAssocList [$[( $xs , $vs )],*]))
+
+-- for a term assignment, the default is the identity
+instance : Coe (AssocList String FOTerm) (FOAssignment FOTerm) :=
+  ⟨fun l x => if l.contains x then l.getA x else FOTerm.var x⟩
 
 instance [Inhabited α] : Coe (AssocList String α) (FOAssignment α) := ⟨fun l => l.getA⟩
 
@@ -95,29 +101,29 @@ declare_syntax_cat foform
 
 syntax "fo!{" foform "}"  : term
 
-syntax "⊤"                              : foform
-syntax "⊥"                              : foform
-syntax:50 "(" term:50 " ~ " term:50 ")" : foform
-syntax ident "(" foterm,+ ")"           : foform
-syntax:35 foform:36 " ∧ " foform:35     : foform
-syntax:30 foform:31 " ∨ " foform:30     : foform
-syntax:20 foform:21 " → " foform:20     : foform
-syntax:20 foform:21 " ↔ " foform:20     : foform
-syntax:max "¬ " foform:40               : foform
-syntax:max "(" foform ")"               : foform
-syntax:max "∀" ident "."  foform        : foform
-syntax:max "∃" ident "."  foform        : foform
+syntax     "⊤"                       : foform
+syntax     "⊥"                       : foform
+syntax:50  foterm:51 " = " foterm:50 : foform
+syntax:max "¬" foform:40             : foform
+syntax:35  foform:36 " ∧ " foform:35 : foform
+syntax:30  foform:31 " ∨ " foform:30 : foform
+syntax:20  foform:21 " → " foform:20 : foform
+syntax:20  foform:21 " ↔ " foform:20 : foform
+syntax:max "(" foform ")"            : foform
+syntax     ident "(" foterm,+ ")"    : foform
+syntax:max "∀" ident "."  foform     : foform
+syntax:max "∃" ident "."  foform     : foform
 
 macro_rules
-  | `(fo!{⊤})         => `(FOForm.tr)
-  | `(fo!{⊥})         => `(FOForm.fls)
-  | `(fo!{($s ~ $t)}) => `(FOForm.eq term!{$s} term!{$t})
-  | `(fo!{¬ $p})      => `(FOForm.neg fo!{$p})
-  | `(fo!{$p ∧ $q})   => `(FOForm.conj fo!{$p} fo!{$q})
-  | `(fo!{$p ∨ $q})   => `(FOForm.disj fo!{$p} fo!{$q})
-  | `(fo!{$p → $q})   => `(FOForm.impl fo!{$p} fo!{$q})
-  | `(fo!{$p ↔ $q})   => `(FOForm.biImpl fo!{$p} fo!{$q})
-  | `(fo!{($p:foform)}) => `(fo!{$p})
+  | `(fo!{⊤})              => `(FOForm.tr)
+  | `(fo!{⊥})              => `(FOForm.fls)
+  | `(fo!{$s:foterm = $t}) => `(FOForm.eq term!{$s} term!{$t})
+  | `(fo!{¬$p})            => `(FOForm.neg fo!{$p})
+  | `(fo!{$p ∧ $q})        => `(FOForm.conj fo!{$p} fo!{$q})
+  | `(fo!{$p ∨ $q})        => `(FOForm.disj fo!{$p} fo!{$q})
+  | `(fo!{$p → $q})        => `(FOForm.impl fo!{$p} fo!{$q})
+  | `(fo!{$p ↔ $q})        => `(FOForm.biImpl fo!{$p} fo!{$q})
+  | `(fo!{($p:foform)})    => `(fo!{$p})
   | `(fo!{ $x:ident ( $[$args],* ) }) => do
       let args ← args.mapM fun x => `(term!{ $x })
       `(rel $(quote x.getId.toString) [ $args,* ])
@@ -125,11 +131,11 @@ macro_rules
   | `(fo!{ ∃ $x:ident . $p:foform }) => `(ex $(quote x.getId.toString) fo!{$p})
 
 private partial def toString : FOForm → String
-  | eq s t   => s.toString ++ " ~ " ++ t.toString
+  | eq s t   => s.toString ++ " = " ++ t.toString
   | rel r ts => r ++ "(" ++ (String.join $ (ts.map FOTerm.toString).intersperse ", ") ++ ")"
   | tr       => "⊤"
   | fls      => "⊥"
-  | neg p    => "(¬ " ++ toString p ++ ")"
+  | neg p    => "(¬" ++ toString p ++ ")"
   | conj p q => "(" ++ toString p ++ " ∧ " ++ toString q ++ ")"
   | disj p q => "(" ++ toString p ++ " ∨ " ++ toString q ++ ")"
   | impl p q => "(" ++ toString p ++ " → " ++ toString q ++ ")"
