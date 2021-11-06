@@ -291,6 +291,10 @@ function taking some number of elements of <cite>α</cite> to <cite>α</cite> as
 <cite>List α → α</cite>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- an interpretation of function symbols -/</span>
 <span class="kd">def</span> <span class="n">FnInterp</span> <span class="n">α</span> <span class="o">:=</span> <span class="n">FOAssignment</span> <span class="o">(</span><span class="n">List</span> <span class="n">α</span> <span class="bp">→</span> <span class="n">α</span><span class="o">)</span>
+
+<span class="c1">-- coerces an association list to a function</span>
+<span class="kd">instance</span> <span class="o">[</span><span class="n">Inhabited</span> <span class="n">α</span><span class="o">]</span> <span class="o">:</span> <span class="n">Coe</span> <span class="o">(</span><span class="n">AssocList</span> <span class="n">String</span> <span class="o">(</span><span class="n">List</span> <span class="n">α</span> <span class="bp">→</span> <span class="n">α</span><span class="o">))</span> <span class="o">(</span><span class="n">FnInterp</span> <span class="n">α</span><span class="o">)</span> <span class="o">:=</span>
+<span class="o">⟨</span><span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span><span class="o">⟩</span>
 </pre></div>
 </div>
 <p>If a function is intended to be used as a binary function,
@@ -329,8 +333,8 @@ as follows:</p>
 </pre></div>
 </div>
 <p>Even though the function always terminates, Lean 4 is not yet able to prove
-termination automatically, so we use the keyword <cite>partial</cite>.</p>
-<p>Let’s try it out.</p>
+termination automatically, so we use the keyword <cite>partial</cite>.
+Let’s try it out.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">arith_ex1</span> <span class="o">:=</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">plus</span><span class="o">(</span><span class="n">times</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="n">two</span><span class="o">),</span> <span class="n">plus</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="n">three</span><span class="o">))</span> <span class="o">}</span>
 
 <span class="k">#eval</span> <span class="n">arith_ex1.eval</span> <span class="n">arithFnInterp</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span> <span class="n">x</span> <span class="bp">↦</span> <span class="mi">3</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">5</span> <span class="o">}</span>
@@ -366,7 +370,7 @@ below produce the same answer.</p>
 <p>And here is another crazy idea: we can view substitution as the result
 of evaluating a term in a model where the universe consists of terms,
 and where each function symbol <cite>f</cite> is interpreted
-as the function “build a term by applying <cite>f</cite>.</p>
+as the function “build a term by applying <cite>f</cite>.”</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">TermFnInterp</span> <span class="o">:</span> <span class="n">FnInterp</span> <span class="n">FOTerm</span> <span class="o">:=</span> <span class="n">FOTerm.app</span>
 
 <span class="kd">def</span> <span class="n">FOTerm.subst&#39;</span> <span class="o">:=</span> <span class="n">eval</span> <span class="n">TermFnInterp</span>
@@ -382,9 +386,341 @@ as the function “build a term by applying <cite>f</cite>.</p>
 </div>
 <div class="section" id="formulas">
 <h2><span class="section-number">11.3. </span>Formulas<a class="headerlink" href="#formulas" title="Permalink to this headline">¶</a></h2>
+<p>Since the universe of a first-order model may be infinite, we would not
+expect to be able to evaluate arbitrary first-order formulas in
+an arbitrary model.
+Evaluating quantifiers in our model of arithmetic would require
+testing instantiations to all the natural numbers.
+If we could do that, we could easily settle the truth of the sentence</p>
+<div class="math notranslate nohighlight">
+\[\fa x \ex y y &gt; x \land \fn{prime}(y) \land \fn{prime}(y + 2),\]</div>
+<p>which says that there are infinitely many values <span class="math notranslate nohighlight">\(y\)</span> such that <span class="math notranslate nohighlight">\(y\)</span>
+and <span class="math notranslate nohighlight">\(y + 2\)</span> are both prime.
+This is known as the <em>twin primes conjecture</em>, and it is a major open question
+in number theory.</p>
+<p>We can, however, evaluate quantifiers over finite universes. In the definition
+of a first-order model below,
+we assume that the universe is given by a finite list of values.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="sd">/-- an interpretation of relation symbols -/</span>
+<span class="kd">def</span> <span class="n">RelInterp</span> <span class="n">α</span> <span class="o">:=</span> <span class="n">FOAssignment</span> <span class="o">(</span><span class="n">List</span> <span class="n">α</span> <span class="bp">→</span> <span class="n">Bool</span><span class="o">)</span>
+
+<span class="kd">structure</span> <span class="n">FOModel</span> <span class="o">(</span><span class="n">α</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">)</span> <span class="n">where</span>
+  <span class="o">(</span><span class="n">univ</span> <span class="o">:</span> <span class="n">List</span> <span class="n">α</span><span class="o">)</span>
+  <span class="o">(</span><span class="n">fn</span> <span class="o">:</span> <span class="n">FnInterp</span> <span class="n">α</span><span class="o">)</span>
+  <span class="o">(</span><span class="n">rel</span> <span class="o">:</span> <span class="n">RelInterp</span> <span class="n">α</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In our quick-and-dirty implementation, we don’t require that
+the universe <cite>univ</cite> is closed under the functions. In other words,
+it’s possible that we can apply a function to some elements on the list <cite>univ</cite>
+and get something that isn’t in the list.
+It wouldn’t be hard to write a procedure that checks that, given a finite
+list of functions and their intended arities.
+(A more efficient way of handling this is instead to <em>prove</em> that the
+functions all return values in universe,
+giving Lean’s theorem proving capabilities.)
+In the examples in this section, we won’t use function symbols at all,
+except for some constants that are clearly o.k.</p>
+<p>To handle the quantifiers, we need a procedure that takes an assignment
+<span class="math notranslate nohighlight">\(\sigma\)</span> and produces an updated assignment <span class="math notranslate nohighlight">\(\sigma[x \mapsto v]\)</span>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">FOAssignment.update</span> <span class="o">(</span><span class="n">σ</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">α</span><span class="o">)</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span> <span class="o">(</span><span class="n">v</span> <span class="o">:</span> <span class="n">α</span><span class="o">)</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">α</span>
+  <span class="bp">|</span> <span class="n">y</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">y</span> <span class="bp">==</span> <span class="n">x</span> <span class="k">then</span> <span class="n">v</span> <span class="k">else</span> <span class="n">σ</span> <span class="n">y</span>
+</pre></div>
+</div>
+<p>With that in hand, the evaluation function is entirely straightforward.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">FOForm.eval</span> <span class="o">{</span><span class="n">α</span><span class="o">}</span> <span class="o">[</span><span class="n">Inhabited</span> <span class="n">α</span><span class="o">]</span> <span class="o">[</span><span class="n">BEq</span> <span class="n">α</span><span class="o">]</span>
+    <span class="o">(</span><span class="n">M</span> <span class="o">:</span> <span class="n">FOModel</span> <span class="n">α</span><span class="o">)</span> <span class="o">(</span><span class="n">σ</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">α</span><span class="o">)</span> <span class="o">:</span> <span class="n">FOForm</span> <span class="bp">→</span> <span class="n">Bool</span>
+  <span class="bp">|</span> <span class="n">eq</span> <span class="n">t1</span> <span class="n">t2</span> <span class="bp">=&gt;</span> <span class="n">t1.eval</span> <span class="n">M.fn</span> <span class="n">σ</span> <span class="bp">==</span> <span class="n">t2.eval</span> <span class="n">M.fn</span> <span class="n">σ</span>
+  <span class="bp">|</span> <span class="n">rel</span> <span class="n">r</span> <span class="n">ts</span> <span class="bp">=&gt;</span>  <span class="n">M.rel</span> <span class="n">r</span> <span class="o">(</span><span class="n">ts.map</span> <span class="bp">$</span> <span class="n">FOTerm.eval</span> <span class="n">M.fn</span> <span class="n">σ</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">tr</span> <span class="bp">=&gt;</span> <span class="n">true</span>
+  <span class="bp">|</span> <span class="n">fls</span> <span class="bp">=&gt;</span> <span class="n">false</span>
+  <span class="bp">|</span> <span class="n">neg</span> <span class="n">A</span> <span class="bp">=&gt;</span> <span class="bp">!</span><span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">A</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">conj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">A</span><span class="o">)</span> <span class="bp">&amp;&amp;</span> <span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">disj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">A</span><span class="o">)</span> <span class="bp">||</span> <span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">impl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="bp">!</span><span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">A</span><span class="o">)</span> <span class="bp">||</span> <span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">biImpl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="bp">!</span><span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">A</span><span class="o">)</span> <span class="bp">||</span> <span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">B</span><span class="o">))</span> <span class="bp">&amp;&amp;</span> <span class="o">(</span><span class="bp">!</span><span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">B</span><span class="o">)</span> <span class="bp">||</span> <span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="n">σ</span> <span class="n">A</span><span class="o">))</span>
+  <span class="bp">|</span> <span class="n">ex</span> <span class="n">x</span> <span class="n">A</span> <span class="bp">=&gt;</span> <span class="k">do</span>
+      <span class="k">let</span> <span class="n">mut</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">false</span>
+      <span class="n">for</span> <span class="n">val</span> <span class="k">in</span> <span class="n">M.univ</span> <span class="k">do</span>
+        <span class="k">if</span> <span class="n">eval</span> <span class="n">M</span> <span class="o">(</span><span class="n">σ.update</span> <span class="n">x</span> <span class="n">val</span><span class="o">)</span> <span class="n">A</span> <span class="k">then</span>
+          <span class="n">b</span> <span class="o">:=</span> <span class="n">true</span><span class="bp">;</span> <span class="n">break</span>
+      <span class="n">b</span>
+  <span class="bp">|</span> <span class="n">all</span> <span class="n">x</span> <span class="n">A</span> <span class="bp">=&gt;</span> <span class="k">do</span>
+      <span class="k">let</span> <span class="n">mut</span> <span class="n">b</span> <span class="o">:=</span> <span class="n">true</span>
+      <span class="n">for</span> <span class="n">val</span> <span class="k">in</span> <span class="n">M.univ</span> <span class="k">do</span>
+        <span class="k">if</span> <span class="bp">!</span><span class="o">(</span><span class="n">eval</span> <span class="n">M</span> <span class="o">(</span><span class="n">σ.update</span> <span class="n">x</span> <span class="n">val</span><span class="o">)</span> <span class="n">A</span><span class="o">)</span> <span class="k">then</span>
+          <span class="n">b</span> <span class="o">:=</span> <span class="n">false</span><span class="bp">;</span> <span class="n">break</span>
+      <span class="n">b</span>
+</pre></div>
+</div>
+<p>Let’s try it out on a baby model of arithmetic that only has the numbers
+0 to 9 in the universe.
+We reuse the function interpretation <cite>arithFnInterp</cite> from before, so that we
+have the constants <cite>zero</cite>, <cite>one</cite>, <cite>two</cite>, and <cite>three</cite>.
+The interpretation also gives us addition and multiplication, but we won’t use those.
+As far as relations, we interpret two: the binary less-than relation <cite>lt</cite>
+and the predicate <cite>even</cite>.
+We also define the trivial assignment which assigns 0 to all the variables.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">babyArithMdl</span> <span class="o">:</span> <span class="n">FOModel</span> <span class="n">Nat</span> <span class="n">where</span>
+  <span class="n">univ</span> <span class="o">:=</span> <span class="n">List.range</span> <span class="mi">10</span>  <span class="c">/-</span><span class="cm"> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 -/</span>
+  <span class="n">fn</span>   <span class="o">:=</span> <span class="n">arithFnInterp</span>
+  <span class="n">rel</span>  <span class="o">:=</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span>
+            <span class="n">lt</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="o">:</span> <span class="n">List</span> <span class="n">Nat</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">&lt;</span> <span class="n">l.getA</span> <span class="mi">1</span> <span class="k">then</span> <span class="n">true</span> <span class="k">else</span> <span class="n">false</span><span class="o">,</span>
+            <span class="n">even</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="o">:</span> <span class="n">List</span> <span class="n">Nat</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">%</span> <span class="mi">2</span> <span class="bp">==</span> <span class="mi">0</span> <span class="o">}</span>
+
+<span class="kd">def</span> <span class="n">trivAssignment</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="k">fun</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>We can try it out:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)}</span><span class="bp">.</span><span class="n">eval</span> <span class="n">babyArithMdl</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">5</span><span class="o">}</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)}</span><span class="bp">.</span><span class="n">eval</span> <span class="n">babyArithMdl</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">6</span><span class="o">}</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">y.</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)}</span><span class="bp">.</span><span class="n">eval</span> <span class="n">babyArithMdl</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">8</span><span class="o">}</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">y.</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)}</span><span class="bp">.</span><span class="n">eval</span> <span class="n">babyArithMdl</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">9</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>It’s an unpleasant feature of our syntax that we have to put a percent sign
+in front of variables in order to distinguish them from constants,
+while we do not use the percent sign with the quantifiers.
+To facilitate testing sentences, we write a simple function <cite>testeval</cite>
+that evaluates any formula in our model with respect to the trivial variable assignment.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">FOForm.testeval</span> <span class="o">(</span><span class="n">A</span> <span class="o">:</span> <span class="n">FOForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Bool</span> <span class="o">:=</span> <span class="n">A.eval</span> <span class="n">babyArithMdl</span> <span class="n">trivAssignment</span>
+
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="n">even</span><span class="o">(</span><span class="n">two</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="n">even</span><span class="o">(</span><span class="n">three</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
+
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="n">two</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="n">two</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span><span class="n">two</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">%</span><span class="n">x</span> <span class="bp">=</span> <span class="n">zero</span><span class="o">}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span><span class="n">three</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">%</span><span class="n">x</span> <span class="bp">=</span> <span class="n">zero</span><span class="o">}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span><span class="n">three</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">%</span><span class="n">x</span> <span class="bp">=</span> <span class="n">zero</span> <span class="bp">∨</span> <span class="bp">%</span><span class="n">x</span> <span class="bp">=</span> <span class="n">two</span><span class="o">}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
+<span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">¬</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="unification">
 <h2><span class="section-number">11.4. </span>Unification<a class="headerlink" href="#unification" title="Permalink to this headline">¶</a></h2>
+<p>Suppose we are working with a language that is meant to describe the real
+numbers and we have either proved or assumed the following sentence:</p>
+<div class="math notranslate nohighlight">
+\[\fa {x, y, z} x &lt; y \to x + z &lt; y + z.\]</div>
+<p>Suppose also that we are trying to prove</p>
+<div class="math notranslate nohighlight">
+\[ab + 7 &lt; c + 7.\]</div>
+<p>Even though we haven’t talked about proof systems for first-order logic
+yet, it should be clear that we want to instantiate the universal quantifiers
+in the sentence by substituting <span class="math notranslate nohighlight">\(ab\)</span> for <span class="math notranslate nohighlight">\(x\)</span>,
+<span class="math notranslate nohighlight">\(c\)</span> for <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(7\)</span> for <span class="math notranslate nohighlight">\(z\)</span>, so that the
+conclusion matches the goal.</p>
+<p>You probably did not have to think about this much.
+You identified the problem as that
+of finding a substitution for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(z\)</span> that
+has the effect of making the expression <span class="math notranslate nohighlight">\(x + z &lt; y + z\)</span> the same as
+<span class="math notranslate nohighlight">\(ab + 7 &lt; c + 7\)</span>. This is what is known as a <em>matching</em> problem
+for first-order terms. This kind of pattern matching is fundamental to reasoning,
+and hence also fundamental to logic.
+The general formulation of the problem is as follows:
+we are given pairs of terms <span class="math notranslate nohighlight">\((s_1, t_1), (s_2, t_2), \ldots, (s_n, t_n)\)</span>
+and we are looking for a substitution <span class="math notranslate nohighlight">\(\sigma\)</span>
+with the property that for every <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(\sigma \, s_i = t_i\)</span>.</p>
+<p>The generalization of the matching problem in which we are allowed to substitute
+for the variables in the terms <span class="math notranslate nohighlight">\(t_i\)</span> as well as the terms <span class="math notranslate nohighlight">\(s_i\)</span> is known as
+<em>unification</em>.
+In other words, the input to a unification problem is the same as before,
+but now we are looking for a substitution <span class="math notranslate nohighlight">\(\sigma\)</span>
+with the property that for every <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(\sigma \, s_i = \sigma \, t_i\)</span>.
+For example, consider the following two expressions:</p>
+<div class="math notranslate nohighlight">
+\[f(x, f(x, a)) &lt; z \quad\quad f(b, y) &lt; c\]</div>
+<p>If we substitute <span class="math notranslate nohighlight">\(b\)</span> for <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(f(b, a)\)</span> for <span class="math notranslate nohighlight">\(y\)</span>, and
+<span class="math notranslate nohighlight">\(c\)</span> for <span class="math notranslate nohighlight">\(z\)</span>, both expressions become <span class="math notranslate nohighlight">\(f(b, f(b, a)) &lt; c\)</span>.
+When we discuss resolution proofs for first-order logic, we will see that
+such unification problems come up in a context where are are trying
+to prove a contradiction and we have derived something like
+<span class="math notranslate nohighlight">\(\fa {x, z} f(x, f(x, a)) &lt; z\)</span>
+and <span class="math notranslate nohighlight">\(\fa y f(b, y) \not&lt; c\)</span>. The unification problem tells us how to
+instantiate the universal quantifiers in order to prove a contradiction.</p>
+<p>To prevent confusion in the future, we would like to point out that what counts as a
+variable or a constant depends on the context. For example, we can ask for
+an assignment to <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> that unifies <span class="math notranslate nohighlight">\(f(x, z)\)</span> and <span class="math notranslate nohighlight">\(f(z, y)\)</span> without assigning anything to <span class="math notranslate nohighlight">\(z\)</span>.
+In that case, we are treating <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> as variables and <span class="math notranslate nohighlight">\(z\)</span>
+as a constant.
+In Lean, the variables <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span> that can be assigned in a unification
+problem are sometimes called <em>metavariables</em> and written as <span class="math notranslate nohighlight">\(?x\)</span> and <span class="math notranslate nohighlight">\(?y\)</span>.
+For simplicity, we will continue to use letters like <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, and <span class="math notranslate nohighlight">\(z\)</span>
+for variables and letters like <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(b\)</span>, and <span class="math notranslate nohighlight">\(c\)</span> as constants.
+What is important when specifying a unification problem is simply that it is clear which symbols play the role of variables and which have to remain fixed.</p>
+<p>There is a linear-time algorithm that solves any unification problem
+or determines that there is no solution, and, in fact produces a <em>most general unifier</em>,
+or <em>mgu</em>. A most general unifier <span class="math notranslate nohighlight">\(\sigma\)</span> for a problem is a substitution that unifies each
+pair in the list and has the property that if <span class="math notranslate nohighlight">\(\tau\)</span> is <em>any</em> unifier for the problem,
+then <span class="math notranslate nohighlight">\(\tau\)</span> can be expressed as the result of following <span class="math notranslate nohighlight">\(\sigma\)</span> by
+another substitution.
+Here we will describe such an algorithm, but we will not go so far as
+to prove its correctness or show that it produces a most general unifier.
+Our implementation is adapted from one by John Harrison in his <em>Handbook of Practical
+Logic and Automated Reasoning</em>, which is an excellent reference for most of the topics
+we cover in this book, and a lot more.
+In particular, it proves that the algorithm we describe below always terminates with
+a most general unifier if the pairs can be unified at all,
+and fails with <cite>none</cite> otherwise.
+There is also a nice presentation of
+unification in the book <em>Term Rewriting and All that</em> by Franz Baader and Tobias Nipkow.</p>
+<p>Some unification problems are easy. To unify <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(f(a, z)\)</span>, we simply
+assign <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(f(a, z)\)</span>. To be a most general unifier,
+it is important that
+the resulting term, <span class="math notranslate nohighlight">\(f(a, z)\)</span> has the variable <cite>z</cite>. We can also solve the problem
+by assigning <span class="math notranslate nohighlight">\(f(a, a)\)</span> to <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(a\)</span> to <span class="math notranslate nohighlight">\(z\)</span>, but that is less
+general. It can be seen as the result of mapping <span class="math notranslate nohighlight">\(x\)</span> to
+<span class="math notranslate nohighlight">\(f(a, z)\)</span> and then applying another substitution that maps <span class="math notranslate nohighlight">\(z\)</span> to <span class="math notranslate nohighlight">\(a\)</span>.</p>
+<p>For another easy example, we can unify <span class="math notranslate nohighlight">\(f(x, b)\)</span> and <span class="math notranslate nohighlight">\(f(g(c), b)\)</span> by
+mapping <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(g(c)\)</span>. Since both expressions are of the form
+<span class="math notranslate nohighlight">\(f(\cdot, \cdot)\)</span>, to unify the expressions it is clearly necessary and
+sufficient to unify the arguments.
+For the same reason, it is clear that <span class="math notranslate nohighlight">\(f(x, b)\)</span> and <span class="math notranslate nohighlight">\(g(c)\)</span>
+can’t be unified.</p>
+<p>An interesting phenomenon arises with the unification problem <span class="math notranslate nohighlight">\((x, f(y)), (y, g(x))\)</span>.
+The first pair tells us we have to map <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(f(y)\)</span>, and
+the second pair tells us we have to map <span class="math notranslate nohighlight">\(y\)</span> to <span class="math notranslate nohighlight">\(g(x)\)</span>.
+Applying this substitution to each pair yields
+<span class="math notranslate nohighlight">\((f(y), f(g(x)))\)</span> in the first pair and <span class="math notranslate nohighlight">\((g(x), g(f(y)))\)</span>
+in the second, which doesn’t solve the problem.
+Repeating the substitution doesn’t help.
+The problem is that when we start with <span class="math notranslate nohighlight">\(x\)</span>, we find a chain of assignments
+to variables in the terms on the right-hand side that ultimately
+leads to a term that involves <span class="math notranslate nohighlight">\(x\)</span>.
+In others words, the list of associations contains a <em>cycle</em>.
+If we ever reach a point where we are forced to admit a cycle of
+associations, the algorithm should fail. This is known as the <em>occurs check</em>.</p>
+<p>The algorithm below maintains an <em>association list</em> of pairs <span class="math notranslate nohighlight">\((x, t)\)</span>
+indicating that the variable <span class="math notranslate nohighlight">\(x\)</span> should be unified with the term <span class="math notranslate nohighlight">\(t\)</span>.
+(An association list is essentially just a list of pairs, but for efficiency
+it uses a single constructor to cons a pair onto the list.)
+Each variable <span class="math notranslate nohighlight">\(x\)</span> occurs only once on the left side of a pair.
+We allow the list to contain a tuple of pairs like <span class="math notranslate nohighlight">\((x, y)\)</span>, <span class="math notranslate nohighlight">\((y, z)\)</span>,
+and <span class="math notranslate nohighlight">\((z, w)\)</span>, since we can clean that up later, say, by assigning
+all the variables to <span class="math notranslate nohighlight">\(w\)</span>.</p>
+<p>Suppose we have an association list <span class="math notranslate nohighlight">\(\fn{env}\)</span> and we are considering adding
+the pair <span class="math notranslate nohighlight">\((x, t)\)</span>. The following function returns <cite>some true</cite> if the assignment
+is trivial, which is to say, <span class="math notranslate nohighlight">\(t\)</span> is <span class="math notranslate nohighlight">\(x\)</span> or there is a chain of variable associations
+that amounts to assigning <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(x\)</span>. In that case, we can ignore the pair.
+The function returns <cite>some false</cite> for any nontrivial assignment, unless
+it detects a cycle, in which case it returns <cite>none</cite> to indicate failure.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">isTriv</span><span class="bp">?</span> <span class="o">(</span><span class="n">env</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span> <span class="o">:</span> <span class="n">FOTerm</span> <span class="bp">→</span> <span class="n">Option</span> <span class="n">Bool</span>
+  <span class="bp">|</span> <span class="n">var</span> <span class="n">y</span>      <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">y</span> <span class="bp">=</span> <span class="n">x</span> <span class="k">then</span> <span class="n">true</span>
+                   <span class="k">else</span> <span class="k">if</span> <span class="bp">!</span><span class="n">env.contains</span> <span class="n">y</span> <span class="k">then</span> <span class="n">false</span>
+                   <span class="k">else</span> <span class="n">isTriv</span><span class="bp">?</span> <span class="n">env</span> <span class="n">x</span> <span class="o">(</span><span class="n">env.getA</span> <span class="n">y</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">app</span> <span class="n">f</span> <span class="n">l</span>    <span class="bp">=&gt;</span> <span class="n">loop</span> <span class="n">l</span>
+<span class="n">where</span>
+  <span class="n">loop</span> <span class="o">:</span> <span class="n">List</span> <span class="n">FOTerm</span> <span class="bp">→</span> <span class="n">Option</span> <span class="n">Bool</span>
+    <span class="bp">|</span> <span class="o">[]</span>    <span class="bp">=&gt;</span> <span class="n">false</span>
+    <span class="bp">|</span> <span class="n">a</span><span class="o">::</span><span class="n">as</span> <span class="bp">=&gt;</span> <span class="k">match</span> <span class="n">isTriv</span><span class="bp">?</span> <span class="n">env</span> <span class="n">x</span> <span class="n">a</span> <span class="k">with</span>
+                  <span class="bp">|</span> <span class="n">true</span>  <span class="bp">=&gt;</span> <span class="n">none</span>
+                  <span class="bp">|</span> <span class="n">false</span> <span class="bp">=&gt;</span> <span class="n">loop</span> <span class="n">as</span>
+                  <span class="bp">|</span> <span class="n">none</span>  <span class="bp">=&gt;</span> <span class="n">none</span>
+</pre></div>
+</div>
+<p>With that in place, the following function takes an association list, <cite>env</cite>,
+and a list of pairs to unify, and it returns an association list.
+The clauses are as follows:</p>
+<ul class="simple">
+<li><p>If the list is pairs is empty, there is nothing to do.</p></li>
+<li><p>If the first pair on the list is a pair of function applications, then</p>
+<ul>
+<li><p>if the pair is of the form <span class="math notranslate nohighlight">\(f(t_1, \ldots, t_n)\)</span> and <span class="math notranslate nohighlight">\(f(s_1, \ldots, s_n)\)</span>,
+add the pairs <span class="math notranslate nohighlight">\((s_1, t_1) \ldots (s_n, t_n)\)</span> to the list of pairs to unify
+and continue recursively, and</p></li>
+<li><p>if the function symbols don’t match or the number of arguments
+is not the same, fail.</p></li>
+</ul>
+</li>
+<li><p>If the pair is of the form <span class="math notranslate nohighlight">\((x, t)\)</span>, then</p>
+<ul>
+<li><p>if there is a pair <span class="math notranslate nohighlight">\((x, s)\)</span> already in <span class="math notranslate nohighlight">\(\fn{env}\)</span>,
+add <span class="math notranslate nohighlight">\((s, t)\)</span> to the list of pairs to unify
+and continue recursively, and</p></li>
+<li><p>otherwise add <span class="math notranslate nohighlight">\((x, t)\)</span> to <span class="math notranslate nohighlight">\(\fn{env}\)</span> unless it is a trivial assignment,
+and continue recursively with the remaining pairs.</p></li>
+</ul>
+</li>
+<li><p>If the pair is of the form <span class="math notranslate nohighlight">\((t, x)\)</span>, then turn it around and recursively
+use the previous case.</p></li>
+</ul>
+<p>The algorithm is implemented as follows.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">unify</span><span class="bp">?</span> <span class="o">(</span><span class="n">env</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="o">:</span> <span class="n">List</span> <span class="o">(</span><span class="n">FOTerm</span> <span class="bp">×</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="bp">→</span>
+                                                      <span class="n">Option</span> <span class="o">(</span><span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="o">[]</span> <span class="bp">=&gt;</span> <span class="n">some</span> <span class="n">env</span>
+  <span class="bp">|</span> <span class="o">(</span><span class="n">app</span> <span class="n">f1</span> <span class="n">l1</span><span class="o">,</span> <span class="n">app</span> <span class="n">f2</span> <span class="n">l2</span><span class="o">)</span> <span class="o">::</span> <span class="n">eqs</span> <span class="bp">=&gt;</span>
+      <span class="k">if</span> <span class="n">f1</span> <span class="bp">=</span> <span class="n">f2</span> <span class="bp">∧</span> <span class="n">l1.length</span> <span class="bp">=</span> <span class="n">l2.length</span> <span class="k">then</span>
+        <span class="n">unify</span><span class="bp">?</span> <span class="n">env</span> <span class="o">((</span><span class="n">l1.zip</span> <span class="n">l2</span><span class="o">)</span> <span class="bp">++</span> <span class="n">eqs</span><span class="o">)</span>
+      <span class="k">else</span> <span class="n">none</span>
+  <span class="bp">|</span> <span class="o">(</span><span class="n">var</span> <span class="n">x</span><span class="o">,</span> <span class="n">t</span><span class="o">)</span> <span class="o">::</span> <span class="n">eqs</span> <span class="bp">=&gt;</span>
+      <span class="k">if</span> <span class="n">env.contains</span> <span class="n">x</span> <span class="k">then</span> <span class="n">unify</span><span class="bp">?</span> <span class="n">env</span> <span class="o">(</span><span class="n">eqs.cons</span> <span class="o">(</span><span class="n">env.getA</span> <span class="n">x</span><span class="o">,</span> <span class="n">t</span><span class="o">))</span>
+      <span class="k">else</span> <span class="k">match</span> <span class="n">isTriv</span><span class="bp">?</span> <span class="n">env</span> <span class="n">x</span> <span class="n">t</span> <span class="k">with</span>
+        <span class="bp">|</span> <span class="n">true</span>  <span class="bp">=&gt;</span> <span class="n">unify</span><span class="bp">?</span> <span class="n">env</span> <span class="n">eqs</span>
+        <span class="bp">|</span> <span class="n">false</span> <span class="bp">=&gt;</span> <span class="n">unify</span><span class="bp">?</span> <span class="o">(</span><span class="n">env.cons</span> <span class="n">x</span> <span class="n">t</span><span class="o">)</span> <span class="n">eqs</span>
+        <span class="bp">|</span> <span class="n">none</span>  <span class="bp">=&gt;</span> <span class="n">none</span>
+  <span class="bp">|</span> <span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="n">var</span> <span class="n">x</span><span class="o">)</span> <span class="o">::</span> <span class="n">eqs</span> <span class="bp">=&gt;</span> <span class="n">unify</span><span class="bp">?</span> <span class="n">env</span> <span class="o">((</span><span class="n">var</span> <span class="n">x</span><span class="o">,</span> <span class="n">t</span><span class="o">)</span> <span class="o">::</span> <span class="n">eqs</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>The final association list might contain pairs <span class="math notranslate nohighlight">\((x, t)\)</span> and <span class="math notranslate nohighlight">\((y, s)\)</span>
+where <span class="math notranslate nohighlight">\(s\)</span> contains the variable <span class="math notranslate nohighlight">\(x\)</span>. This means that the variable
+<span class="math notranslate nohighlight">\(x\)</span> has to unify with <span class="math notranslate nohighlight">\(t\)</span>, which we can achieve by mapping to
+<span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(t\)</span>. But the resulting substitution will also replace
+<span class="math notranslate nohighlight">\(x\)</span> in <span class="math notranslate nohighlight">\(s\)</span>, so we had better carry out the substitution for <span class="math notranslate nohighlight">\(x\)</span>
+there too.
+The following function, <cite>usolve</cite>, cleans up the list of pairs by iteratively
+substituting the terms on the right for the variables on the left,
+until the association list no longer changes.
+The fact that we have avoided cycles guarantees that it terminates.
+The function after that, <cite>fullUnify</cite>, puts it all together:
+given a list of pairs of terms to unify,
+it computes the association list and uses <cite>usolve</cite> to turn it into a
+substitution.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">usolve</span> <span class="o">(</span><span class="n">env</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span> <span class="o">:=</span> <span class="k">do</span>
+  <span class="k">let</span> <span class="n">env&#39;</span> <span class="o">:=</span> <span class="n">env.mapVal</span> <span class="o">(</span><span class="n">subst</span> <span class="n">env</span><span class="o">)</span>
+  <span class="k">if</span> <span class="n">env&#39;</span> <span class="bp">==</span> <span class="n">env</span> <span class="k">then</span> <span class="n">env</span> <span class="k">else</span> <span class="n">usolve</span> <span class="n">env&#39;</span>
+
+<span class="n">partial</span> <span class="kd">def</span> <span class="n">fullUnify</span> <span class="o">(</span><span class="n">eqs</span> <span class="o">:</span> <span class="n">List</span> <span class="o">(</span><span class="n">FOTerm</span> <span class="bp">×</span> <span class="n">FOTerm</span><span class="o">))</span> <span class="o">:</span> <span class="n">Option</span> <span class="o">(</span><span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="o">:=</span>
+  <span class="k">match</span> <span class="n">unify</span><span class="bp">?</span> <span class="n">AssocList.nil</span> <span class="n">eqs</span> <span class="k">with</span>
+    <span class="bp">|</span> <span class="n">some</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">usolve</span> <span class="n">l</span>
+    <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="n">none</span>
+</pre></div>
+</div>
+<p>Below we try the procedure out by computing some unifiers and applying them
+to the original pairs to make sure that the pairs are indeed unified.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">unifyAndApply</span> <span class="o">(</span><span class="n">eqs</span> <span class="o">:</span> <span class="n">List</span> <span class="o">(</span><span class="n">FOTerm</span> <span class="bp">×</span> <span class="n">FOTerm</span><span class="o">))</span> <span class="o">:</span> <span class="n">Option</span> <span class="o">(</span><span class="n">List</span> <span class="o">(</span><span class="n">FOTerm</span> <span class="bp">×</span> <span class="n">FOTerm</span><span class="o">))</span> <span class="o">:=</span>
+  <span class="k">match</span> <span class="n">fullUnify</span> <span class="n">eqs</span> <span class="k">with</span>
+    <span class="bp">|</span> <span class="n">some</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="k">let</span> <span class="n">σ</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">FOTerm</span> <span class="o">:=</span> <span class="n">l</span>
+                <span class="n">eqs.map</span> <span class="o">(</span><span class="k">fun</span> <span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">t</span><span class="o">)</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">subst</span> <span class="n">σ</span> <span class="n">s</span><span class="o">,</span> <span class="n">subst</span> <span class="n">σ</span> <span class="n">t</span><span class="o">))</span>
+    <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="n">none</span>
+
+<span class="kd">def</span> <span class="n">unify_ex1</span> <span class="o">:=</span> <span class="o">[</span> <span class="o">(</span><span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="n">g</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">))},</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">z</span><span class="o">),</span> <span class="bp">%</span><span class="n">w</span><span class="o">)</span> <span class="o">})</span> <span class="o">]</span>
+
+<span class="k">#eval</span> <span class="n">toString</span> <span class="bp">$</span> <span class="n">fullUnify</span> <span class="n">unify_ex1</span>
+<span class="k">#eval</span> <span class="n">toString</span> <span class="bp">$</span> <span class="n">unifyAndApply</span> <span class="n">unify_ex1</span>
+
+<span class="kd">def</span> <span class="n">unify_ex2</span> <span class="o">:=</span> <span class="o">[</span> <span class="o">(</span><span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="o">},</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="o">})</span> <span class="o">]</span>
+
+<span class="k">#eval</span> <span class="n">toString</span> <span class="bp">$</span> <span class="n">fullUnify</span> <span class="n">unify_ex2</span>
+<span class="k">#eval</span> <span class="n">toString</span> <span class="bp">$</span> <span class="n">unifyAndApply</span> <span class="n">unify_ex2</span>
+
+<span class="kd">def</span> <span class="n">unify_ex3</span> <span class="o">:=</span> <span class="o">[</span> <span class="o">(</span><span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="n">g</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">))</span> <span class="o">},</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="o">})</span> <span class="o">]</span>
+
+<span class="k">#eval</span> <span class="n">toString</span> <span class="bp">$</span> <span class="n">fullUnify</span> <span class="n">unify_ex3</span>
+
+<span class="kd">def</span> <span class="n">unify_ex4</span> <span class="o">:=</span> <span class="o">[</span> <span class="o">(</span><span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="bp">%</span><span class="n">x0</span> <span class="o">},</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">x1</span><span class="o">,</span> <span class="bp">%</span><span class="n">x1</span><span class="o">)</span> <span class="o">}</span> <span class="o">),</span>
+                   <span class="o">(</span><span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="bp">%</span><span class="n">x1</span> <span class="o">},</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">x2</span><span class="o">,</span> <span class="bp">%</span><span class="n">x2</span><span class="o">)</span> <span class="o">}</span> <span class="o">),</span>
+                   <span class="o">(</span><span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="bp">%</span><span class="n">x2</span> <span class="o">},</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">x3</span><span class="o">,</span> <span class="bp">%</span><span class="n">x3</span><span class="o">)</span> <span class="o">}</span> <span class="o">),</span>
+                   <span class="o">(</span><span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="bp">%</span><span class="n">x3</span> <span class="o">},</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">f</span><span class="o">(</span><span class="bp">%</span><span class="n">x4</span><span class="o">,</span> <span class="bp">%</span><span class="n">x4</span><span class="o">)</span> <span class="o">}</span> <span class="o">)]</span>
+
+<span class="k">#eval</span> <span class="n">toString</span> <span class="bp">$</span> <span class="n">fullUnify</span> <span class="n">unify_ex4</span>
+<span class="k">#eval</span> <span class="n">toString</span> <span class="bp">$</span> <span class="n">unifyAndApply</span> <span class="n">unify_ex4</span>
+</pre></div>
+</div>
 </div>
 </div>
 

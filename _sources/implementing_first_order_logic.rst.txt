@@ -134,7 +134,6 @@ With `FnInterp` in place, it is easy to define a function that evaluates terms:
 
 Even though the function always terminates, Lean 4 is not yet able to prove
 termination automatically, so we use the keyword `partial`.
-
 Let's try it out.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
@@ -163,7 +162,7 @@ below produce the same answer.
 And here is another crazy idea: we can view substitution as the result
 of evaluating a term in a model where the universe consists of terms,
 and where each function symbol `f` is interpreted
-as the function "build a term by applying `f`.
+as the function "build a term by applying `f`."
 
 .. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
    :start-after: -- textbook: substitution as evaluation
@@ -176,6 +175,272 @@ You should think about what is going on here. Such a model is known as a
 Formulas
 --------
 
+Since the universe of a first-order model may be infinite, we would not
+expect to be able to evaluate arbitrary first-order formulas in
+an arbitrary model.
+Evaluating quantifiers in our model of arithmetic would require
+testing instantiations to all the natural numbers.
+If we could do that, we could easily settle the truth of the sentence
+
+.. math::
+
+   \fa x \ex y y > x \land \fn{prime}(y) \land \fn{prime}(y + 2),
+
+which says that there are infinitely many values :math:`y` such that :math:`y`
+and :math:`y + 2` are both prime.
+This is known as the *twin primes conjecture*, and it is a major open question
+in number theory.
+
+We can, however, evaluate quantifiers over finite universes. In the definition
+of a first-order model below,
+we assume that the universe is given by a finite list of values.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: FOModel
+   :end-before: -- end
+
+In our quick-and-dirty implementation, we don't require that
+the universe `univ` is closed under the functions. In other words,
+it's possible that we can apply a function to some elements on the list `univ`
+and get something that isn't in the list.
+It wouldn't be hard to write a procedure that checks that, given a finite
+list of functions and their intended arities.
+(A more efficient way of handling this is instead to *prove* that the
+functions all return values in universe,
+giving Lean's theorem proving capabilities.)
+In the examples in this section, we won't use function symbols at all,
+except for some constants that are clearly o.k.
+
+To handle the quantifiers, we need a procedure that takes an assignment
+:math:`\sigma` and produces an updated assignment :math:`\sigma[x \mapsto v]`.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: FOAssignment.update
+   :end-before: -- end
+
+With that in hand, the evaluation function is entirely straightforward.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: FOForm.eval
+   :end-before: -- end
+
+Let's try it out on a baby model of arithmetic that only has the numbers
+0 to 9 in the universe.
+We reuse the function interpretation `arithFnInterp` from before, so that we
+have the constants `zero`, `one`, `two`, and `three`.
+The interpretation also gives us addition and multiplication, but we won't use those.
+As far as relations, we interpret two: the binary less-than relation `lt`
+and the predicate `even`.
+We also define the trivial assignment which assigns 0 to all the variables.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: babyArithMdl
+   :end-before: -- end
+
+We can try it out:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: FOForm eval examples
+   :end-before: -- end
+
+It's an unpleasant feature of our syntax that we have to put a percent sign
+in front of variables in order to distinguish them from constants,
+while we do not use the percent sign with the quantifiers.
+To facilitate testing sentences, we write a simple function `testeval`
+that evaluates any formula in our model with respect to the trivial variable assignment.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/semantics.lean
+   :start-after: -- textbook: more FOForm eval examples
+   :end-before: -- end
+
 
 Unification
 -----------
+
+Suppose we are working with a language that is meant to describe the real
+numbers and we have either proved or assumed the following sentence:
+
+.. math::
+
+   \fa {x, y, z} x < y \to x + z < y + z.
+
+Suppose also that we are trying to prove
+
+.. math::
+
+   ab + 7 < c + 7.
+
+Even though we haven't talked about proof systems for first-order logic
+yet, it should be clear that we want to instantiate the universal quantifiers
+in the sentence by substituting :math:`ab` for :math:`x`,
+:math:`c` for :math:`y`, and :math:`7` for :math:`z`, so that the
+conclusion matches the goal.
+
+You probably did not have to think about this much.
+You identified the problem as that
+of finding a substitution for :math:`x`, :math:`y`, and :math:`z` that
+has the effect of making the expression :math:`x + z < y + z` the same as
+:math:`ab + 7 < c + 7`. This is what is known as a *matching* problem
+for first-order terms. This kind of pattern matching is fundamental to reasoning,
+and hence also fundamental to logic.
+The general formulation of the problem is as follows:
+we are given pairs of terms :math:`(s_1, t_1), (s_2, t_2), \ldots, (s_n, t_n)`
+and we are looking for a substitution :math:`\sigma`
+with the property that for every :math:`i`, :math:`\sigma \, s_i = t_i`.
+
+The generalization of the matching problem in which we are allowed to substitute
+for the variables in the terms :math:`t_i` as well as the terms :math:`s_i` is known as
+*unification*.
+In other words, the input to a unification problem is the same as before,
+but now we are looking for a substitution :math:`\sigma`
+with the property that for every :math:`i`, :math:`\sigma \, s_i = \sigma \, t_i`.
+For example, consider the following two expressions:
+
+.. math::
+
+   f(x, f(x, a)) < z \quad\quad f(b, y) < c
+
+If we substitute :math:`b` for :math:`x`, :math:`f(b, a)` for :math:`y`, and
+:math:`c` for :math:`z`, both expressions become :math:`f(b, f(b, a)) < c`.
+When we discuss resolution proofs for first-order logic, we will see that
+such unification problems come up in a context where are are trying
+to prove a contradiction and we have derived something like
+:math:`\fa {x, z} f(x, f(x, a)) < z`
+and :math:`\fa y f(b, y) \not< c`. The unification problem tells us how to
+instantiate the universal quantifiers in order to prove a contradiction.
+
+To prevent confusion in the future, we would like to point out that what counts as a
+variable or a constant depends on the context. For example, we can ask for
+an assignment to :math:`x` and :math:`y` that unifies :math:`f(x, z)` and :math:`f(z, y)` without assigning anything to :math:`z`.
+In that case, we are treating :math:`x` and :math:`y` as variables and :math:`z`
+as a constant.
+In Lean, the variables :math:`x` and :math:`y` that can be assigned in a unification
+problem are sometimes called *metavariables* and written as :math:`?x` and :math:`?y`.
+For simplicity, we will continue to use letters like :math:`x`, :math:`y`, and :math:`z`
+for variables and letters like :math:`a`, :math:`b`, and :math:`c` as constants.
+What is important when specifying a unification problem is simply that it is clear which symbols play the role of variables and which have to remain fixed.
+
+There is a linear-time algorithm that solves any unification problem
+or determines that there is no solution, and, in fact produces a *most general unifier*,
+or *mgu*. A most general unifier :math:`\sigma` for a problem is a substitution that unifies each
+pair in the list and has the property that if :math:`\tau` is *any* unifier for the problem,
+then :math:`\tau` can be expressed as the result of following :math:`\sigma` by
+another substitution.
+Here we will describe such an algorithm, but we will not go so far as
+to prove its correctness or show that it produces a most general unifier.
+Our implementation is adapted from one by John Harrison in his *Handbook of Practical
+Logic and Automated Reasoning*, which is an excellent reference for most of the topics
+we cover in this book, and a lot more.
+In particular, it proves that the algorithm we describe below always terminates with
+a most general unifier if the pairs can be unified at all,
+and fails with `none` otherwise.
+There is also a nice presentation of
+unification in the book *Term Rewriting and All that* by Franz Baader and Tobias Nipkow.
+
+Some unification problems are easy. To unify :math:`x` and :math:`f(a, z)`, we simply
+assign :math:`x` to :math:`f(a, z)`. To be a most general unifier,
+it is important that
+the resulting term, :math:`f(a, z)` has the variable `z`. We can also solve the problem
+by assigning :math:`f(a, a)` to :math:`x` and :math:`a` to :math:`z`, but that is less
+general. It can be seen as the result of mapping :math:`x` to
+:math:`f(a, z)` and then applying another substitution that maps :math:`z` to :math:`a`.
+
+For another easy example, we can unify :math:`f(x, b)` and :math:`f(g(c), b)` by
+mapping :math:`x` to :math:`g(c)`. Since both expressions are of the form
+:math:`f(\cdot, \cdot)`, to unify the expressions it is clearly necessary and
+sufficient to unify the arguments.
+For the same reason, it is clear that :math:`f(x, b)` and :math:`g(c)`
+can't be unified.
+
+An interesting phenomenon arises with the unification problem :math:`(x, f(y)), (y, g(x))`.
+The first pair tells us we have to map :math:`x` to :math:`f(y)`, and
+the second pair tells us we have to map :math:`y` to :math:`g(x)`.
+Applying this substitution to each pair yields
+:math:`(f(y), f(g(x)))` in the first pair and :math:`(g(x), g(f(y)))`
+in the second, which doesn't solve the problem.
+Repeating the substitution doesn't help.
+The problem is that when we start with :math:`x`, we find a chain of assignments
+to variables in the terms on the right-hand side that ultimately
+leads to a term that involves :math:`x`.
+In others words, the list of associations contains a *cycle*.
+If we ever reach a point where we are forced to admit a cycle of
+associations, the algorithm should fail. This is known as the *occurs check*.
+
+The algorithm below maintains an *association list* of pairs :math:`(x, t)`
+indicating that the variable :math:`x` should be unified with the term :math:`t`.
+(An association list is essentially just a list of pairs, but for efficiency
+it uses a single constructor to cons a pair onto the list.)
+Each variable :math:`x` occurs only once on the left side of a pair.
+We allow the list to contain a tuple of pairs like :math:`(x, y)`, :math:`(y, z)`,
+and :math:`(z, w)`, since we can clean that up later, say, by assigning
+all the variables to :math:`w`.
+
+Suppose we have an association list :math:`\fn{env}` and we are considering adding
+the pair :math:`(x, t)`. The following function returns `some true` if the assignment
+is trivial, which is to say, :math:`t` is :math:`x` or there is a chain of variable associations
+that amounts to assigning :math:`x` to :math:`x`. In that case, we can ignore the pair.
+The function returns `some false` for any nontrivial assignment, unless
+it detects a cycle, in which case it returns `none` to indicate failure.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/unification.lean
+   :start-after: -- textbook: isTriv?
+   :end-before: -- end
+
+With that in place, the following function takes an association list, `env`,
+and a list of pairs to unify, and it returns an association list.
+The clauses are as follows:
+
+- If the list is pairs is empty, there is nothing to do.
+- If the first pair on the list is a pair of function applications, then
+
+  - if the pair is of the form :math:`f(t_1, \ldots, t_n)` and :math:`f(s_1, \ldots, s_n)`,
+    add the pairs :math:`(s_1, t_1) \ldots (s_n, t_n)` to the list of pairs to unify
+    and continue recursively, and
+  - if the function symbols don't match or the number of arguments
+    is not the same, fail.
+
+- If the pair is of the form :math:`(x, t)`, then
+
+  - if there is a pair :math:`(x, s)` already in :math:`\fn{env}`,
+    add :math:`(s, t)` to the list of pairs to unify
+    and continue recursively, and
+  - otherwise add :math:`(x, t)` to :math:`\fn{env}` unless it is a trivial assignment,
+    and continue recursively with the remaining pairs.
+
+- If the pair is of the form :math:`(t, x)`, then turn it around and recursively
+  use the previous case.
+
+The algorithm is implemented as follows.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/unification.lean
+   :start-after: -- textbook: unify
+   :end-before: -- end
+
+The final association list might contain pairs :math:`(x, t)` and :math:`(y, s)`
+where :math:`s` contains the variable :math:`x`. This means that the variable
+:math:`x` has to unify with :math:`t`, which we can achieve by mapping to
+:math:`x` to :math:`t`. But the resulting substitution will also replace
+:math:`x` in :math:`s`, so we had better carry out the substitution for :math:`x`
+there too.
+The following function, `usolve`, cleans up the list of pairs by iteratively
+substituting the terms on the right for the variables on the left,
+until the association list no longer changes.
+The fact that we have avoided cycles guarantees that it terminates.
+The function after that, `fullUnify`, puts it all together:
+given a list of pairs of terms to unify,
+it computes the association list and uses `usolve` to turn it into a
+substitution.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/unification.lean
+   :start-after: -- textbook: fullUnify
+   :end-before: -- end
+
+Below we try the procedure out by computing some unifiers and applying them
+to the original pairs to make sure that the pairs are indeed unified.
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/unification.lean
+   :start-after: -- textbook: unify examples
+   :end-before: -- end
+
+
+
