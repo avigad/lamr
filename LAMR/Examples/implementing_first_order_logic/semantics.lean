@@ -178,6 +178,7 @@ def FOForm.testeval (A : FOForm) : Bool := A.eval babyArithMdl trivAssignment
 #eval fo!{∀ x. even(%x) ∧ lt(%x,two) → %x = zero}.testeval
 #eval fo!{∀ x. even(%x) ∧ lt(%x,three) → %x = zero}.testeval
 #eval fo!{∀ x. even(%x) ∧ lt(%x,three) → %x = zero ∨ %x = two}.testeval
+
 #eval fo!{∀ x. ∃ y. lt(%x, %y)}.testeval
 #eval fo!{∀ x. even(%x) → ∃ y. lt(%x, %y)}.testeval
 #eval fo!{∀ x. ¬ even(%x) → ∃ y. lt(%x, %y)}.testeval

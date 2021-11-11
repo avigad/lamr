@@ -1,4 +1,5 @@
 import LAMR.Util.Misc
+import Std.Data.HashSet
 open Std
 open Lean
 
@@ -13,31 +14,64 @@ inductive FOTerm
 
 namespace FOTerm
 
+def mkConst (c : String) : FOTerm :=
+  app c []
+
 declare_syntax_cat foterm
 
 syntax "term!{" foterm "}" : term
 syntax "%" ident : foterm
 syntax ident : foterm
+syntax "s!" interpolatedStr(term) : foterm
+syntax "{" term "}" : foterm
 syntax num : foterm
 syntax ident "(" foterm,+ ")" : foterm
+syntax ident "[" term "]" : foterm
+syntax "-" foterm : foterm
+syntax foterm " - " foterm : foterm
+syntax foterm " + " foterm : foterm
+syntax foterm " * " foterm : foterm
 
 macro_rules
   | `(term!{ % $x:ident })              => `(var $(quote x.getId.toString))
-  | `(term!{ $x:ident })                => `(app $(quote x.getId.toString) [])
-  | `(term!{ $n:numLit })                => `(app $(quote <| toString n.isNatLit?.get!) [])
+  | `(term!{ $x:ident })                => `(mkConst $(quote x.getId.toString))
+  | `(term!{ { $t:term } })             => `(mkConst (toString $t))
+  | `(term!{ s!$s })                    => `(mkConst s!$s)
+  | `(term!{ $n:numLit })               => `(mkConst $(quote <| toString n.isNatLit?.get!))
   | `(term!{ $x:ident ( $[$args],* ) }) => do
       let args ← args.mapM fun x => `(term!{ $x })
       `(app $(quote x.getId.toString) [ $args,* ])
+  | `(term!{ $x:ident [ $t:term ] }) => do
+      `(app $(quote x.getId.toString) $t)
+  | `(term!{ - $t:foterm }) => do
+      `(app "-" [ term!{ $t } ])
+  | `(term!{ $t:foterm - $u:foterm }) => do
+      `(app "-" [ term!{ $t }, term!{ $u } ])
+  | `(term!{ $t:foterm + $u:foterm }) => do
+      `(app "+" [ term!{ $t }, term!{ $u } ])
+  | `(term!{ $t:foterm * $u:foterm }) => do
+      `(app "*" [ term!{ $t }, term!{ $u } ])
 
 private partial def toString : FOTerm → String
-  | var x => "%"++x
+  | var x    => "%" ++ x
   | app c [] => c
+  | app "-" [t] => s!"-({toString t})"
+  | app "-" [t, u] => s!"({toString t} - {toString u})"
+  | app "+" [t, u] => s!"({toString t} + {toString u})"
+  | app "*" [t, u] => s!"({toString t} * {toString u})"
   | app f ts => f ++ "(" ++ (String.join $ (ts.map toString).intersperse ", ") ++ ")"
 
 instance : ToString FOTerm := ⟨toString⟩
 
 instance : Repr FOTerm where
   reprPrec l _ := s!"term!\{{toString l}}"
+
+/-- Returns a list of all free variable occurrences in the term. -/ 
+partial def freeVars : FOTerm → List String :=
+  go []
+where go (acc : List String) : FOTerm → List String
+  | var s => s :: acc
+  | app _ ts => ts.foldl go acc
 
 end FOTerm
 
@@ -101,18 +135,23 @@ declare_syntax_cat foform
 
 syntax "fo!{" foform "}"  : term
 
-syntax     "⊤"                       : foform
-syntax     "⊥"                       : foform
-syntax:50  foterm:51 " = " foterm:50 : foform
-syntax:max "¬" foform:40             : foform
-syntax:35  foform:36 " ∧ " foform:35 : foform
-syntax:30  foform:31 " ∨ " foform:30 : foform
-syntax:20  foform:21 " → " foform:20 : foform
-syntax:20  foform:21 " ↔ " foform:20 : foform
-syntax:max "(" foform ")"            : foform
-syntax     ident "(" foterm,+ ")"    : foform
-syntax:max "∀" ident "."  foform     : foform
-syntax:max "∃" ident "."  foform     : foform
+syntax     "⊤"                        : foform
+syntax     "⊥"                        : foform
+syntax:50  foterm:51 " = " foterm:50  : foform
+syntax:max "¬" foform:40              : foform
+syntax:35  foform:36 " ∧ " foform:35  : foform
+syntax:30  foform:31 " ∨ " foform:30  : foform
+syntax:20  foform:21 " → " foform:20  : foform
+syntax:20  foform:21 " ↔ " foform:20  : foform
+syntax:max "(" foform ")"             : foform
+syntax     ident "(" foterm,+ ")"     : foform
+syntax     ident "[" term "]"         : foform
+syntax:50  foterm:51 " <= " foterm:50 : foform
+syntax:50  foterm:51 " < "  foterm:50 : foform
+syntax:50  foterm:51 " >= " foterm:50 : foform
+syntax:50  foterm:51 " > "  foterm:50 : foform
+syntax:max "∀" ident "."  foform      : foform
+syntax:max "∃" ident "."  foform      : foform
 
 macro_rules
   | `(fo!{⊤})              => `(FOForm.tr)
@@ -127,11 +166,25 @@ macro_rules
   | `(fo!{ $x:ident ( $[$args],* ) }) => do
       let args ← args.mapM fun x => `(term!{ $x })
       `(rel $(quote x.getId.toString) [ $args,* ])
+  | `(fo!{ $x:ident [ $t:term ] }) => do
+      `(rel $(quote x.getId.toString) $t)
+  | `(fo!{ $t:foterm <= $u:foterm }) => do
+      `(rel "<=" [ term!{ $t }, term!{ $u } ])
+  | `(fo!{ $t:foterm < $u:foterm }) => do
+      `(rel "<" [ term!{ $t }, term!{ $u } ])
+  | `(fo!{ $t:foterm >= $u:foterm }) => do
+      `(rel ">=" [ term!{ $t }, term!{ $u } ])
+  | `(fo!{ $t:foterm > $u:foterm }) => do
+      `(rel ">" [ term!{ $t }, term!{ $u } ])
   | `(fo!{ ∀ $x:ident . $p:foform }) => `(all $(quote x.getId.toString) fo!{$p})
   | `(fo!{ ∃ $x:ident . $p:foform }) => `(ex $(quote x.getId.toString) fo!{$p})
 
 private partial def toString : FOForm → String
   | eq s t   => s.toString ++ " = " ++ t.toString
+  | rel "<=" [t, u] => s!"({FOTerm.toString t} <= {FOTerm.toString u})"
+  | rel "<" [t, u]  => s!"({FOTerm.toString t} < {FOTerm.toString u})"
+  | rel ">=" [t, u] => s!"({FOTerm.toString t} >= {FOTerm.toString u})"
+  | rel ">" [t, u]  => s!"({FOTerm.toString t} > {FOTerm.toString u})"
   | rel r ts => r ++ "(" ++ (String.join $ (ts.map FOTerm.toString).intersperse ", ") ++ ")"
   | tr       => "⊤"
   | fls      => "⊥"
@@ -147,5 +200,38 @@ instance : ToString FOForm := ⟨FOForm.toString⟩
 
 instance : Repr FOForm where
   reprPrec p _ := s!"fo!\{{toString p}}"
+
+/-- Returns a list of all free variable occurrences in the formula. -/ 
+def freeVars : FOForm → List String :=
+  go HashSet.empty
+where go (bound : HashSet String) : FOForm → List String
+  | eq s t => (s.freeVars ++ t.freeVars).filter fun x => !bound.contains x
+  | rel _ ts => ts.map FOTerm.freeVars |>.join.filter fun x => !bound.contains x
+  | neg φ => go bound φ
+  | conj φ ψ => go bound φ
+  | disj φ ψ => go bound φ ++ go bound ψ
+  | impl φ ψ => go bound φ ++ go bound ψ
+  | biImpl φ ψ => go bound φ ++ go bound ψ
+  | all x φ => go (bound.insert x) φ 
+  | ex x φ => go (bound.insert x) φ
+  | _ => []
+
+/-- Returns the bound variable of the first quantifier found if there is one,
+otherwise `none`. -/
+def quantifier? : FOForm → Option String :=
+  go
+where go : FOForm → Option String
+  | neg φ => go φ
+  | conj φ ψ => go φ <|> go ψ
+  | disj φ ψ => go φ <|> go ψ
+  | impl φ ψ => go φ <|> go ψ
+  | biImpl φ ψ => go φ <|> go ψ
+  | all x _ => some x
+  | ex x _ => some x
+  | _ => none
+
+/-- Returns `true` iff the formula contains no quantifiers and no free variables. -/
+def isClosedQuantifierFree (φ : FOForm) : Bool :=
+  φ.freeVars.isEmpty ∧ φ.quantifier?.isNone
 
 end FOForm
