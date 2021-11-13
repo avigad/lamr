@@ -188,7 +188,7 @@ we have seen that it is straightforward to test wither <span class="math notrans
 We have also seen that a formula <span class="math notranslate nohighlight">\(A\)</span> is valid if and only if it is provable,
 and we have considered decision procedures for propositional logic that determine whether
 that is the case.</p>
-<p>In a similar way, given a first-order sentece <span class="math notranslate nohighlight">\(A\)</span> and a model <span class="math notranslate nohighlight">\(\mdl M\)</span>,
+<p>In a similar way, given a first-order sentence <span class="math notranslate nohighlight">\(A\)</span> and a model <span class="math notranslate nohighlight">\(\mdl M\)</span>,
 we can ask whether <span class="math notranslate nohighlight">\(A\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span>.
 But for most fixed choices of <span class="math notranslate nohighlight">\(\mdl M\)</span>, there is no algorithm to determine
 whether or not <span class="math notranslate nohighlight">\(A\)</span> is true. For example, there is no algorithm to determine whether
@@ -252,15 +252,19 @@ decidable.</p>
 where <span class="math notranslate nohighlight">\(b_0\)</span> and <span class="math notranslate nohighlight">\(b_1\)</span> are constants, and we only need to perform
 the comparisons to see whether they are true. Remember that if <span class="math notranslate nohighlight">\(\Gamma\)</span>
 is the empty set, we take it to be trivially satisfied.</p>
-<p>In the inductive step, <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a variable, <span class="math notranslate nohighlight">\(x\)</span>.
-If there is any equation involving <span class="math notranslate nohighlight">\(x\)</span> in <span class="math notranslate nohighlight">\(\Gamma\)</span>, we put
+<p>In the inductive step, <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a variable.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> contains any false constant equations, it is unsatisfiable,
+and it it contains any true constant equations, we can remove them without
+affecting satisfiability.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a nontrivial equation with a variable <span class="math notranslate nohighlight">\(x\)</span>,
+we put
 it in the form <span class="math notranslate nohighlight">\(x = t\)</span> and then substitute <span class="math notranslate nohighlight">\(t\)</span> for <span class="math notranslate nohighlight">\(x\)</span> everywhere.
 The resulting set of constraints has one fewer variable, and clearly
 it is equisatisfiable with the original one.
 Given an assignment to the new set of constraints, we just assign <span class="math notranslate nohighlight">\(x\)</span>
 the value of <span class="math notranslate nohighlight">\(t\)</span>.</p>
-<p>If there are no equations involving <span class="math notranslate nohighlight">\(x\)</span>, we can divide the constraints
-in <span class="math notranslate nohighlight">\(\Gamma\)</span> intro three kinds:</p>
+<p>So we can now assume that there are no equations in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+We can divide the inequalities in <span class="math notranslate nohighlight">\(\Gamma\)</span> intro three kinds:</p>
 <ul class="simple">
 <li><p>those that don’t contain <span class="math notranslate nohighlight">\(x\)</span> at all</p></li>
 <li><p>those that can be expressed in the form <span class="math notranslate nohighlight">\(s_i &lt; x\)</span></p></li>
@@ -288,6 +292,9 @@ then squares it, resulting in doubly exponential behavior.
 The procedure works well in practice, though, since in many applications each variable is
 contained in only a few equations. (There are obvious heuristics, like choosing a variable
 at each stage that minimizes the number of equations at the next stage.)
+There is an implementation of the procedure in the file <cite>FourierMotzkin.lean</cite> in the <cite>Examples</cite>
+folder,
+modulo two components that we ask you to supply.
 SMT solvers use much more efficient methods based on the simplex algorithm from linear programming.</p>
 <p>What does this theorem have to do with logic?
 Suppose the variables are labeled <span class="math notranslate nohighlight">\(x_1, x_2, \ldots, x_n\)</span> and the
@@ -297,7 +304,7 @@ is true of the real numbers when the constraints are interpreted in the expected
 To make this more precise, consider the structure <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;)\)</span>
 in a language with symbols <span class="math notranslate nohighlight">\(0\)</span>, <span class="math notranslate nohighlight">\(1\)</span>, <span class="math notranslate nohighlight">\(+\)</span>, and <span class="math notranslate nohighlight">\(&lt;\)</span>.
 All the constraints can be expressed in this language, albeit in a clunky way. For example,
-we can write <span class="math notranslate nohighlight">\(3 x\)</span> as <span class="math notranslate nohighlight">\(x + x + x\)</span>, and express a constraint like <cite>x -(1/2)y + (4/3)z &lt; 0</cite>
+we can write <span class="math notranslate nohighlight">\(3 x\)</span> as <span class="math notranslate nohighlight">\(x + x + x\)</span>, and express a constraint like <span class="math notranslate nohighlight">\(x -(1/2)y + (4/3)z &lt; 0\)</span>
 as <span class="math notranslate nohighlight">\(6x + 8z &lt; 3y\)</span>. A slight expansion of the proof of the theorem above yields the following:</p>
 <div class="admonition-theorem admonition">
 <p class="admonition-title">Theorem</p>
@@ -346,7 +353,7 @@ there is nothing between a value <span class="math notranslate nohighlight">\(x\
 The decision procedure is more complicated than that for linear arithmetic,
 and we will not discuss it here.
 SMT solvers, however, use efficient implementations the <em>existential fragment</em>
-of the theory, which is to say, the satisfiability problem for quantfier-free formulas.</p>
+of the theory, which is to say, the satisfiability problem for quantifier-free formulas.</p>
 <p>In contrast to the case with the real numbers, however, the result is false if we
 add multiplication.
 In other words, truth in the model <span class="math notranslate nohighlight">\((\mathbb Z, 0, 1, +, \times)\)</span> is undecidable.
@@ -355,6 +362,226 @@ and it is also a consequence of <em>Tarski’s theorem</em> on the undefinabilit
 </div>
 <div class="section" id="equality">
 <h2><span class="section-number">12.3. </span>Equality<a class="headerlink" href="#equality" title="Permalink to this headline">¶</a></h2>
+<p>Fix a language, <span class="math notranslate nohighlight">\(L\)</span>. We will consider equations <span class="math notranslate nohighlight">\(s = t\)</span> and <em>disequations</em>
+<span class="math notranslate nohighlight">\(s \ne t\)</span> between closed terms.
+The fact that we are considering closed terms mean that there are no variables to substitute
+for; computer scientists sometimes call these <em>ground</em> terms.
+(As with unification, in some contexts we may want to treat some variables as constant.
+What is important here is not whether we call them variables or constants, but, rather,
+the fact that we are not considering substitutions.)</p>
+<p>The problem we are addressing here is this: given a set of equations and disequations, is
+it satisfiable? Note that the word “satisfiable” is used in a different sense than it was
+used in the previous two sections. In those sections, we are interested in whether a
+set of formulas is satisfied by a variable assignment in a <em>particular</em>
+model, namely, the reals and the integers, respectively. Here we are asking whether
+a set of sentences is satisfied by any model.</p>
+<p>For example, consider the following set of sentences:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(f(a, a) = b\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(g(c, a) = c\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(g(c, f(a, a)) = f(g(c, a), g(c, a))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(f(c, c) \ne g(c, b)\)</span></p></li>
+</ol>
+<p>Is it satisfiable?</p>
+<p>Before we answer that, let’s make some general observations. A set that only has equations and
+no disequations is easily satisfiable, namely, in a model with a single element, where every
+expression is equal to every other one. Similarly, a set that only has disequations is easily
+satisfiable, unless one of the disequations is of the form <span class="math notranslate nohighlight">\(t \ne t\)</span>.
+For that purpose, we can use the term model, where every term is interpreted as itself.
+The interesting cases fall in between these two extremes, where the equations and disequations
+balance one another.</p>
+<p>Coming back to the question, the following considerations show that the answer is “no.”
+Each of the following is a consequence of the equations above:</p>
+<ol class="arabic simple" start="5">
+<li><p><span class="math notranslate nohighlight">\(g(c, f(a, a)) = g(c, b)\)</span> from 1</p></li>
+<li><p><span class="math notranslate nohighlight">\(f(g(c, a), g(c, a)) = f(c, c)\)</span> from 2</p></li>
+<li><p><span class="math notranslate nohighlight">\(f(c, c) = g(c, b)\)</span> from 3, 5, and 6.</p></li>
+</ol>
+<p>This contradicts the disequation 4 above. To understand what is going on, it is helpful
+to think of <span class="math notranslate nohighlight">\(f\)</span> as addition, <span class="math notranslate nohighlight">\(g\)</span> as multiplication, <span class="math notranslate nohighlight">\(a\)</span> as the number 1,
+and <span class="math notranslate nohighlight">\(b\)</span> as the number 2.
+But the argument is fully abstract, and shows that the disequation cannot hold in any
+model in which all the equations are satisfied.</p>
+<p>These considerations encapsulate the main ideas behind the proof of the following theorem:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>The question as to whether a finite set of ground equations and disequations is satisfiable
+is decidable.</p>
+</div>
+<p>The idea behind the proof is to use a <em>saturation</em> argument: starting from the equations in
+question, we derive new equations until no more equations are derivable.
+If we manage to contradict one of the disequations, the original set is not satisfiable.
+In the case where no contradiction is found, we will argue that the original set is satisfiable.</p>
+<p>To make all this precise, we need a set of rules for deriving equations.</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{prooftree}
+\AXC{$t = t$}
+\end{prooftree}
+\quad \quad
+\begin{prooftree}
+\AXC{$s = t$}
+\UIC{$t = s$}
+\end{prooftree}
+\quad \quad
+\begin{prooftree}
+\AXC{$r = s$}
+\AXC{$s = t$}
+\BIC{$r = t$}
+\end{prooftree}
+\quad\quad
+\begin{prooftree}
+\AXC{$s_1 = t_1$}
+\AXC{$\ldots$}
+\AXC{$s_n = t_n$}
+\TIC{$f(s_1, \ldots, s_n) = f(t_1, \ldots, t_n)$}
+\end{prooftree}
+\]</div></div></blockquote>
+<p>The first three rules express the reflexivity, symmmetry, and transitivity of equality,
+respectively.
+The last rule is called the <em>congruence</em> rule.
+You should convince yourself that using these rules we can derive</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{prooftree}
+\AXC{$r = s$}
+\UIC{$t[r/x] = t[s/x]$}
+\end{prooftree}
+\]</div></div></blockquote>
+<p>for any terms <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(s\)</span>, and <span class="math notranslate nohighlight">\(t\)</span> and variable <span class="math notranslate nohighlight">\(x\)</span>. If we add relation symbols
+and atomic formulas, we would add the following rule:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[
+\begin{prooftree}
+\AXC{$s_1 = t_1$}
+\AXC{$\ldots$}
+\AXC{$s_n = t_n$}
+\AXC{$R(s_1, \ldots, s_n)$}
+\QuaternaryInfC{$R(t_1, \ldots, t_n)$}
+\end{prooftree}
+\]</div></div></blockquote>
+<p>Returning to our proof plan, we want to show that if applying these rules successively
+does not result in a contradiction, then there is a model in which the original equations
+and disequations are all true.
+But a problem arises: what if the original set contains an equation <span class="math notranslate nohighlight">\(a = f(a)\)</span>?
+Then our algorithm falls into an infinite loop, deriving
+<span class="math notranslate nohighlight">\(a = f(a) = f(f(a)) = f(f(f(a))) = \ldots\)</span>.
+The solution is to restrict attention to <em>subterms</em> of terms appearing in the original
+equations and disequations.
+The theorem follows from the following lemma.</p>
+<div class="admonition-lemma admonition">
+<p class="admonition-title">Lemma</p>
+<p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> consist of a set of equations and disequations.
+Let <span class="math notranslate nohighlight">\(S\)</span> be the set of subterms of all the terms occurring in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+Let <span class="math notranslate nohighlight">\(\Gamma'\)</span> be the set of al equations between elements of <span class="math notranslate nohighlight">\(S\)</span>
+that can be derived from the equations in <span class="math notranslate nohighlight">\(\Gamma\)</span> using the rules above.
+Then <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable if and only if no disequation in <span class="math notranslate nohighlight">\(\Gamma\)</span>
+is the negation of an equation in <span class="math notranslate nohighlight">\(\Gamma'\)</span>.</p>
+</div>
+<p>The algorithm implicit in this lemma is called <em>congruence closure</em>.
+We will see that it can be implemented efficiently (and <em>is</em> implemented efficiently in SMT
+solvers) using <em>union-find</em> data structures.</p>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>One direction of the lemma is easy. Since the equational rules preserve truth in any
+model, if we can derive a contradiction from the equations and disequations in <span class="math notranslate nohighlight">\(\Gamma\)</span>,
+then <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable. The other direction is harder.
+Since there are only finitely many pairs of terms in <span class="math notranslate nohighlight">\(S\)</span>, the algorithm necessarily
+terminates.
+We need to show that if it terminates without deriving a contradiction, then there is a model
+that satisfies <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+<p>Say two elements <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are <em>equivalent</em>, written <span class="math notranslate nohighlight">\(s \equiv t\)</span>,
+if they are proved equal from the
+equations in <span class="math notranslate nohighlight">\(\Gamma\)</span>. The rules guarantee that this is an <em>equivalence relation</em>, which is
+to say, it is reflexive, symmetric, and transitive. It is also a <em>congruence</em>, which means that
+applying a function symbol to equivalent terms results in equivalent terms.</p>
+<p>To each element <span class="math notranslate nohighlight">\(t\)</span>, we associate its <em>equivalence class</em> <span class="math notranslate nohighlight">\([t]\)</span>, defined by</p>
+<div class="math notranslate nohighlight">
+\[[t] = \{ s \in S \mid s \equiv t \}.\]</div>
+<p>In words, <span class="math notranslate nohighlight">\([t]\)</span> is the set of terms equivalent to <span class="math notranslate nohighlight">\(t\)</span>.
+Assuming the algorithm terminates without a contradiction, define a model <span class="math notranslate nohighlight">\(\mdl M\)</span>
+whose universe consists of all the equivalence classes of elements of <span class="math notranslate nohighlight">\(S\)</span>
+together with a new element, <span class="math notranslate nohighlight">\(\star\)</span>. For elements <span class="math notranslate nohighlight">\(t_1, \ldots t_n\)</span> in <span class="math notranslate nohighlight">\(S\)</span>,
+interpret each <span class="math notranslate nohighlight">\(n\)</span>-ary function symbol <span class="math notranslate nohighlight">\(f\)</span> by function</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f^{\mdl M}([t_1], \ldots, [t_n]) = \begin{cases}
+  [f(t_1, \ldots, t_n)] &amp; \text{if $f(t_1, \ldots, t_n)$ is in $S$} \\
+  \star &amp; \text{otherwise}
+\end{cases}\end{split}\]</div>
+<p>In other words, what <span class="math notranslate nohighlight">\(f^{\mdl M}\)</span> does to each equivalence class is determined by what
+<span class="math notranslate nohighlight">\(f\)</span> does to each of the elements.
+The fact that <span class="math notranslate nohighlight">\(\equiv\)</span> is a congruence ensures that this makes sense.
+This is just a truncated version of the term model, in which provably equal terms
+are all glued together.</p>
+<p>It is not hard to show that for every term <span class="math notranslate nohighlight">\(t\)</span> in <span class="math notranslate nohighlight">\(S\)</span>,
+<span class="math notranslate nohighlight">\(\tval{t}_{\mdl M}\)</span> is equal to  <span class="math notranslate nohighlight">\([t]\)</span>.
+But this is what we need. For every equation <span class="math notranslate nohighlight">\(s = t\)</span> in <span class="math notranslate nohighlight">\(\Gamma\)</span>, <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are in the
+same equivalence class, so they are equal in the model.
+And if <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are not provably equal, then <span class="math notranslate nohighlight">\([s]\)</span> and <span class="math notranslate nohighlight">\([t]\)</span> are not the same, so
+every disequation <span class="math notranslate nohighlight">\(s \ne t\)</span> in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span> as well.</p>
+</div>
+<p>For examples of the algorithm in action, first let us show that the set</p>
+<div class="math notranslate nohighlight">
+\[f^3(a) = a, \, f^5(a) = a, \, f(a) \ne a\]</div>
+<p>is unsatisfiable, where <span class="math notranslate nohighlight">\(f^n(a)\)</span> abbreviates <span class="math notranslate nohighlight">\(n\)</span>-fold application <span class="math notranslate nohighlight">\(f(f(\cdots f(a)))\)</span>.
+The set of all subterms is</p>
+<div class="math notranslate nohighlight">
+\[a, \, f(a), \, f^2(a), \, f^3(a), \, f^4(a), \, f^5(a).\]</div>
+<p>We start with the equivalence classes <span class="math notranslate nohighlight">\(\{ a, f^3(a) \}\)</span> and <span class="math notranslate nohighlight">\(\{ a, f^5(a)\}\)</span>
+as well as all the others subterms in singleton sets.
+From <span class="math notranslate nohighlight">\(a = f^3(a)\)</span> we derive <span class="math notranslate nohighlight">\(f(a) = f^4(a)\)</span> by congruence, giving rise to the set
+<span class="math notranslate nohighlight">\(\{ f(a), f^4(a) \}\)</span>. Applying congruence again gives rise to the set <span class="math notranslate nohighlight">\(\{ f^2(a), f^5(a) \}\)</span>,
+which is merged with <span class="math notranslate nohighlight">\(\{ a, f^5(a)\}\)</span> to yield <span class="math notranslate nohighlight">\(\{ a, f^2(a), f^5(a) \}\)</span>.
+Applying congruence again yields <span class="math notranslate nohighlight">\(\{ f(a), f^3(a) \}\)</span>. (We ignore the term <span class="math notranslate nohighlight">\(f^6(a)\)</span>.)
+This is merged with the set <span class="math notranslate nohighlight">\(\{ a, f^3(a) \}\)</span> to yield <span class="math notranslate nohighlight">\(\{ a, f(a), f^3(a)\}\)</span>.
+Applying congruence again yields <span class="math notranslate nohighlight">\(\{ f(a), f^2(a), f^4(a)\}\)</span>, which is merged with
+<span class="math notranslate nohighlight">\(\{ a, f(a), f^3(a) \}\)</span> and <span class="math notranslate nohighlight">\(\{ f^2(a), f^5(a) \}\)</span> to yield
+<span class="math notranslate nohighlight">\(\{ a, f(a), f^2(a), f^3(a), f^5(a) \}\)</span>.
+At this point, we have derived <span class="math notranslate nohighlight">\(f(a) = a\)</span>, contradicting the disequality in the original set.
+So the set is unsatisfiable.</p>
+<p>Suppose we start instead with the set</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[f^2(a) = a, \, f^4(a) = a, \, f(a) \ne a, \, f(a) \ne b\]</div>
+</div></blockquote>
+<p>You can check that in this case, the algorithm terminates with the following three
+equivalence classes:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\([a] = \{ a, f^2(a), f^4(a)\}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\([f(a)] = \{ f(a), f^3(a) \}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\([b] = \{ b \}\)</span>.</p></li>
+</ul>
+<p>We now construct a model <span class="math notranslate nohighlight">\(\mdl M\)</span> with these elements and an additional element <span class="math notranslate nohighlight">\(\star\)</span>, with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f^{\mdl M}([a]) &amp; = [f(a)] \\
+f^{\mdl M}([f(a)]) &amp; = [a] \\
+f^{\mdl M}([b]) &amp; = \star \\
+f^{\mdl M}(\star) &amp; = \star\end{split}\]</div>
+<p>You can check that this satisfies the original set of equations and disequations.</p>
+<p>Suppose we allow atomic formulas <span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span> and negated atomic formulas in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+To test satisfiability, we do not have to change much.
+Using the congruence rule for relations, whenever we have derived <span class="math notranslate nohighlight">\(R(s_1, \ldots, s_n)\)</span>
+and <span class="math notranslate nohighlight">\(s_i = t_i\)</span> for every <span class="math notranslate nohighlight">\(i\)</span>, we can conclude <span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span>.
+The algorithm terminates when we contradict a disequality or another negated atomic formula.
+If the algorithm terminates without a contradiction, we build a model as before,
+where we simply declare that <span class="math notranslate nohighlight">\(R^{\mdl M}([t_1], \ldots, [t_n])\)</span> holds if and only if
+we have determined that <span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span> in a consequence of the original set.</p>
+<p>Now suppose we are given an existential sentence <span class="math notranslate nohighlight">\(\ex {x_1, \ldots, x_n} A\)</span>
+where <span class="math notranslate nohighlight">\(A\)</span> is quantifier-free, and suppose we want to determine whether it is satisfiable.
+Replace <span class="math notranslate nohighlight">\(x_1, \ldots, x_n\)</span> in <span class="math notranslate nohighlight">\(A\)</span> with new constants <span class="math notranslate nohighlight">\(c_1, \ldots, c_n\)</span>.
+The resulting quantifier-free sentence is satisfiable if and only if the existential one is.
+Put that sentence in DNF, and use the fact <span class="math notranslate nohighlight">\(A_1 \lor \cdots \lor A_n\)</span> is satisfiable
+if and only if one of the sentences <span class="math notranslate nohighlight">\(A_i\)</span> is.
+That reduces the task to determining whether a conjunction of literals is satisfiable,
+and we have just explained how to do that.</p>
+<p>Since a sentence is valid if and only if its negation is satisfiable, and since the negation
+of a universal sentence is an existential sentence, we have shown the following.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>The satisfiability of an existential sentence in first-order logic is decidable.
+Equivalently, the validity of a universal sentence is decidable.</p>
+</div>
 </div>
 </div>
 

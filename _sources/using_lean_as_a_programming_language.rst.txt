@@ -469,8 +469,8 @@ Alternatively, you can use the function `Array.mkArray` to initialize an array
 to replace the elements later one.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_programming_language/examples5.lean
-   :start-after: -- textbook: mulTable
-   :end-before: -- end textbook: mulTable
+   :start-after: -- textbook: mulTable'
+   :end-before: -- end textbook: mulTable'
 
 Here we replace the ith row by the previous ith row, with the jth column updated.
 

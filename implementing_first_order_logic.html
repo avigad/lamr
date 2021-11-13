@@ -501,6 +501,62 @@ that evaluates any formula in our model with respect to the trivial variable ass
 <span class="k">#eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">¬</span> <span class="n">even</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="n">lt</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)}</span><span class="bp">.</span><span class="n">testeval</span>
 </pre></div>
 </div>
+<p>A software package called <em>Tarski’s World</em> by Jon Barwise and John Etchemendy offers
+a fun way of experimenting with first-order logic. It allows users to lay down blocks
+on an <span class="math notranslate nohighlight">\(8 \times 8\)</span> grid and evaluate sentences about them. Each block is either
+a tetrahedron, a cube, or a dodecahedron, and each is either small, medium, or large.
+The language includes predicates for these, as well as relations like <cite>FrontOf(x, y)</cite>
+and <cite>Between(x, y, z)</cite>. The second one of these holds if and only if <cite>x</cite>, <cite>y</cite>, and <cite>z</cite>
+are either in the same row, in the same column, or on the same diagonal, and <cite>x</cite>
+is between <cite>y</cite> and <cite>z</cite>.</p>
+<p>The file <cite>TarskisWorld</cite> in the <cite>Examples</cite> folder includes a simple implementation in Lean.
+You can define a world and display it:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">myWorld</span> <span class="o">:</span> <span class="n">World</span> <span class="o">:=</span> <span class="o">[</span>
+  <span class="o">⟨</span><span class="n">tet</span><span class="o">,</span> <span class="n">medium</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">2</span><span class="o">⟩,</span>
+  <span class="o">⟨</span><span class="n">tet</span><span class="o">,</span> <span class="n">small</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">4</span><span class="o">⟩,</span>
+  <span class="o">⟨</span><span class="n">cube</span><span class="o">,</span> <span class="n">small</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">4</span><span class="o">⟩,</span>
+  <span class="o">⟨</span><span class="n">cube</span><span class="o">,</span> <span class="n">medium</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">⟩,</span>
+  <span class="o">⟨</span><span class="n">dodec</span><span class="o">,</span> <span class="n">small</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">0</span><span class="o">⟩,</span>
+  <span class="o">⟨</span><span class="n">dodec</span><span class="o">,</span> <span class="n">large</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">4</span><span class="o">⟩</span> <span class="o">]</span>
+
+<span class="k">#eval</span> <span class="n">myWorld.show</span>
+
+<span class="c">/-</span><span class="cm"></span>
+<span class="cm">-----------------------------------------</span>
+<span class="cm">| D- |    |    |    | D+ |    |    |    |</span>
+<span class="cm">-----------------------------------------</span>
+<span class="cm">|    |    |    |    |    |    |    |    |</span>
+<span class="cm">-----------------------------------------</span>
+<span class="cm">|    |    |    |    |    |    | C  |    |</span>
+<span class="cm">-----------------------------------------</span>
+<span class="cm">|    |    |    |    | C- |    |    |    |</span>
+<span class="cm">-----------------------------------------</span>
+<span class="cm">|    |    |    |    |    |    |    |    |</span>
+<span class="cm">-----------------------------------------</span>
+<span class="cm">|    |    |    |    |    |    |    |    |</span>
+<span class="cm">-----------------------------------------</span>
+<span class="cm">|    |    |    |    |    |    |    |    |</span>
+<span class="cm">-----------------------------------------</span>
+<span class="cm">|    |    | T  |    | T- |    |    |    |</span>
+<span class="cm">-----------------------------------------</span>
+<span class="cm">-/</span>
+</pre></div>
+</div>
+<p>Here a plus symbol means that the object is large, a minus symbol means that it is small,
+and no symbol means that it is of medium size.
+You can then evaluate statements about the world:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">myWorld.eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="bp">∃</span> <span class="n">z.</span> <span class="n">Between</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">z</span><span class="o">)}</span>
+<span class="k">#eval</span> <span class="n">myWorld.eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="bp">∃</span> <span class="n">z.</span> <span class="n">Cube</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">Between</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">z</span><span class="o">)}</span>
+<span class="k">#eval</span> <span class="n">myWorld.eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="bp">∃</span> <span class="n">z.</span> <span class="n">Dodec</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">Between</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">z</span><span class="o">)}</span>
+<span class="k">#eval</span> <span class="n">myWorld.eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="n">Small</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)}</span>
+<span class="k">#eval</span> <span class="n">myWorld.eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="n">Small</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">Cube</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="o">}</span>
+<span class="k">#eval</span> <span class="n">myWorld.eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">∀</span> <span class="n">y.</span> <span class="n">Cube</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">Tet</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="bp">→</span> <span class="n">FrontOf</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)}</span>
+<span class="k">#eval</span> <span class="n">myWorld.eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">∀</span> <span class="n">y.</span> <span class="n">Cube</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">Dodec</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="bp">→</span> <span class="n">FrontOf</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)}</span>
+<span class="k">#eval</span> <span class="n">myWorld.eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">Tet</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="n">Cube</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">RightOf</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="o">}</span>
+<span class="k">#eval</span> <span class="n">myWorld.eval</span> <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">Dodec</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="n">Tet</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">RightOf</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="o">}</span>
+</pre></div>
+</div>
+<p>The file <cite>TWExamples</cite> provides two puzzles, taken from <em>Tarski’s World</em>, for you to try.</p>
 </div>
 <div class="section" id="unification">
 <h2><span class="section-number">11.4. </span>Unification<a class="headerlink" href="#unification" title="Permalink to this headline">¶</a></h2>

@@ -9,7 +9,7 @@ We have also seen that a formula :math:`A` is valid if and only if it is provabl
 and we have considered decision procedures for propositional logic that determine whether
 that is the case.
 
-In a similar way, given a first-order sentece :math:`A` and a model :math:`\mdl M`,
+In a similar way, given a first-order sentence :math:`A` and a model :math:`\mdl M`,
 we can ask whether :math:`A` is true in :math:`\mdl M`.
 But for most fixed choices of :math:`\mdl M`, there is no algorithm to determine
 whether or not :math:`A` is true. For example, there is no algorithm to determine whether
@@ -85,16 +85,20 @@ values to the variables that makes them all true. Our first goal is to prove the
     the comparisons to see whether they are true. Remember that if :math:`\Gamma`
     is the empty set, we take it to be trivially satisfied.
 
-    In the inductive step, :math:`\Gamma` contains a variable, :math:`x`.
-    If there is any equation involving :math:`x` in :math:`\Gamma`, we put
+    In the inductive step, :math:`\Gamma` contains a variable.
+    If :math:`\Gamma` contains any false constant equations, it is unsatisfiable,
+    and it it contains any true constant equations, we can remove them without
+    affecting satisfiability.
+    If :math:`\Gamma` contains a nontrivial equation with a variable :math:`x`,
+    we put
     it in the form :math:`x = t` and then substitute :math:`t` for :math:`x` everywhere.
     The resulting set of constraints has one fewer variable, and clearly
     it is equisatisfiable with the original one.
     Given an assignment to the new set of constraints, we just assign :math:`x`
     the value of :math:`t`.
 
-    If there are no equations involving :math:`x`, we can divide the constraints
-    in :math:`\Gamma` intro three kinds:
+    So we can now assume that there are no equations in :math:`\Gamma`.
+    We can divide the inequalities in :math:`\Gamma` intro three kinds:
 
     - those that don't contain :math:`x` at all
     - those that can be expressed in the form :math:`s_i < x`
@@ -122,6 +126,9 @@ then squares it, resulting in doubly exponential behavior.
 The procedure works well in practice, though, since in many applications each variable is
 contained in only a few equations. (There are obvious heuristics, like choosing a variable
 at each stage that minimizes the number of equations at the next stage.)
+There is an implementation of the procedure in the file `FourierMotzkin.lean` in the `Examples`
+folder,
+modulo two components that we ask you to supply.
 SMT solvers use much more efficient methods based on the simplex algorithm from linear programming.
 
 What does this theorem have to do with logic?
@@ -132,7 +139,7 @@ is true of the real numbers when the constraints are interpreted in the expected
 To make this more precise, consider the structure :math:`(\mathbb R, 0, 1, +, <)`
 in a language with symbols :math:`0`, :math:`1`, :math:`+`, and :math:`<`.
 All the constraints can be expressed in this language, albeit in a clunky way. For example,
-we can write :math:`3 x` as :math:`x + x + x`, and express a constraint like `x -(1/2)y + (4/3)z < 0`
+we can write :math:`3 x` as :math:`x + x + x`, and express a constraint like :math:`x -(1/2)y + (4/3)z < 0`
 as :math:`6x + 8z < 3y`. A slight expansion of the proof of the theorem above yields the following:
 
 .. admonition:: Theorem
@@ -189,7 +196,7 @@ there is nothing between a value :math:`x` and :math:`x + 1`.
 The decision procedure is more complicated than that for linear arithmetic,
 and we will not discuss it here.
 SMT solvers, however, use efficient implementations the *existential fragment*
-of the theory, which is to say, the satisfiability problem for quantfier-free formulas.
+of the theory, which is to say, the satisfiability problem for quantifier-free formulas.
 
 In contrast to the case with the real numbers, however, the result is false if we
 add multiplication.
@@ -201,4 +208,310 @@ and it is also a consequence of *Tarski's theorem* on the undefinability of trut
 Equality
 --------
 
+Fix a language, :math:`L`. We will consider equations :math:`s = t` and *disequations*
+:math:`s \ne t` between closed terms.
+The fact that we are considering closed terms mean that there are no variables to substitute
+for; computer scientists sometimes call these *ground* terms.
+(As with unification, in some contexts we may want to treat some variables as constant.
+What is important here is not whether we call them variables or constants, but, rather,
+the fact that we are not considering substitutions.)
+
+The problem we are addressing here is this: given a set of equations and disequations, is
+it satisfiable? Note that the word "satisfiable" is used in a different sense than it was
+used in the previous two sections. In those sections, we are interested in whether a
+set of formulas is satisfied by a variable assignment in a *particular*
+model, namely, the reals and the integers, respectively. Here we are asking whether
+a set of sentences is satisfied by any model.
+
+For example, consider the following set of sentences:
+
+#. :math:`f(a, a) = b`
+#. :math:`g(c, a) = c`
+#. :math:`g(c, f(a, a)) = f(g(c, a), g(c, a))`
+#. :math:`f(c, c) \ne g(c, b)`
+
+Is it satisfiable?
+
+Before we answer that, let's make some general observations. A set that only has equations and
+no disequations is easily satisfiable, namely, in a model with a single element, where every
+expression is equal to every other one. Similarly, a set that only has disequations is easily
+satisfiable, unless one of the disequations is of the form :math:`t \ne t`.
+For that purpose, we can use the term model, where every term is interpreted as itself.
+The interesting cases fall in between these two extremes, where the equations and disequations
+balance one another.
+
+Coming back to the question, the following considerations show that the answer is "no."
+Each of the following is a consequence of the equations above:
+
+5. :math:`g(c, f(a, a)) = g(c, b)` from 1
+6. :math:`f(g(c, a), g(c, a)) = f(c, c)` from 2
+7. :math:`f(c, c) = g(c, b)` from 3, 5, and 6.
+
+This contradicts the disequation 4 above. To understand what is going on, it is helpful
+to think of :math:`f` as addition, :math:`g` as multiplication, :math:`a` as the number 1,
+and :math:`b` as the number 2.
+But the argument is fully abstract, and shows that the disequation cannot hold in any
+model in which all the equations are satisfied.
+
+These considerations encapsulate the main ideas behind the proof of the following theorem:
+
+.. admonition:: Theorem
+
+    The question as to whether a finite set of ground equations and disequations is satisfiable
+    is decidable.
+
+The idea behind the proof is to use a *saturation* argument: starting from the equations in
+question, we derive new equations until no more equations are derivable.
+If we manage to contradict one of the disequations, the original set is not satisfiable.
+In the case where no contradiction is found, we will argue that the original set is satisfiable.
+
+To make all this precise, we need a set of rules for deriving equations.
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$t = t$}
+      \end{prooftree}
+      \quad \quad
+      \begin{prooftree}
+      \AXC{$s = t$}
+      \UIC{$t = s$}
+      \end{prooftree}
+      \quad \quad
+      \begin{prooftree}
+      \AXC{$r = s$}
+      \AXC{$s = t$}
+      \BIC{$r = t$}
+      \end{prooftree}
+      \quad\quad
+      \begin{prooftree}
+      \AXC{$s_1 = t_1$}
+      \AXC{$\ldots$}
+      \AXC{$s_n = t_n$}
+      \TIC{$f(s_1, \ldots, s_n) = f(t_1, \ldots, t_n)$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AXC{$t = t$}
+      \DP
+      \quad \quad
+      \AXC{$s = t$}
+      \UIC{$t = s$}
+      \DP
+      \quad \quad
+      \AXC{$r = s$}
+      \AXC{$s = t$}
+      \BIC{$r = s$}
+      \DP
+      \quad \quad
+      \AXC{$s_1 = t_1$}
+      \AXC{$\ldots$}
+      \AXC{$s_n = t_n$}
+      \TIC{$f(s_1, \ldots, s_n) = f(t_1, \ldots, t_n)$}
+      \DP
+      \end{center}
+
+The first three rules express the reflexivity, symmmetry, and transitivity of equality,
+respectively.
+The last rule is called the *congruence* rule.
+You should convince yourself that using these rules we can derive
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$r = s$}
+      \UIC{$t[r/x] = t[s/x]$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AXC{$r = s$}
+      \UIC{$t[r/x] = t[s/x]$}
+      \DP
+      \end{center}
+
+
+for any terms :math:`r`, :math:`s`, and :math:`t` and variable :math:`x`. If we add relation symbols
+and atomic formulas, we would add the following rule:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[
+      \begin{prooftree}
+      \AXC{$s_1 = t_1$}
+      \AXC{$\ldots$}
+      \AXC{$s_n = t_n$}
+      \AXC{$R(s_1, \ldots, s_n)$}
+      \QuaternaryInfC{$R(t_1, \ldots, t_n)$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AXC{$s_1 = t_1$}
+      \AXC{$\ldots$}
+      \AXC{$s_n = t_n$}
+      \AXC{$R(s_1, \ldots, s_n)$}
+      \QuaternaryInfC{$R(t_1, \ldots, t_n)$}
+      \DP
+      \end{center}
+
+Returning to our proof plan, we want to show that if applying these rules successively
+does not result in a contradiction, then there is a model in which the original equations
+and disequations are all true.
+But a problem arises: what if the original set contains an equation :math:`a = f(a)`?
+Then our algorithm falls into an infinite loop, deriving
+:math:`a = f(a) = f(f(a)) = f(f(f(a))) = \ldots`.
+The solution is to restrict attention to *subterms* of terms appearing in the original
+equations and disequations.
+The theorem follows from the following lemma.
+
+.. admonition:: Lemma
+
+    Let :math:`\Gamma` consist of a set of equations and disequations.
+    Let :math:`S` be the set of subterms of all the terms occurring in :math:`\Gamma`.
+    Let :math:`\Gamma'` be the set of al equations between elements of :math:`S`
+    that can be derived from the equations in :math:`\Gamma` using the rules above.
+    Then :math:`\Gamma` is satisfiable if and only if no disequation in :math:`\Gamma`
+    is the negation of an equation in :math:`\Gamma'`.
+
+The algorithm implicit in this lemma is called *congruence closure*.
+We will see that it can be implemented efficiently (and *is* implemented efficiently in SMT
+solvers) using *union-find* data structures.
+
+.. admonition:: Proof
+
+    One direction of the lemma is easy. Since the equational rules preserve truth in any
+    model, if we can derive a contradiction from the equations and disequations in :math:`\Gamma`,
+    then :math:`\Gamma` is unsatisfiable. The other direction is harder.
+    Since there are only finitely many pairs of terms in :math:`S`, the algorithm necessarily
+    terminates.
+    We need to show that if it terminates without deriving a contradiction, then there is a model
+    that satisfies :math:`\Gamma`.
+
+    Say two elements :math:`s` and :math:`t` are *equivalent*, written :math:`s \equiv t`,
+    if they are proved equal from the
+    equations in :math:`\Gamma`. The rules guarantee that this is an *equivalence relation*, which is
+    to say, it is reflexive, symmetric, and transitive. It is also a *congruence*, which means that
+    applying a function symbol to equivalent terms results in equivalent terms.
+
+    To each element :math:`t`, we associate its *equivalence class* :math:`[t]`, defined by
+
+    .. math::
+
+        [t] = \{ s \in S \mid s \equiv t \}.
+
+    In words, :math:`[t]` is the set of terms equivalent to :math:`t`.
+    Assuming the algorithm terminates without a contradiction, define a model :math:`\mdl M`
+    whose universe consists of all the equivalence classes of elements of :math:`S`
+    together with a new element, :math:`\star`. For elements :math:`t_1, \ldots t_n` in :math:`S`,
+    interpret each :math:`n`-ary function symbol :math:`f` by function
+
+    .. math::
+
+        f^{\mdl M}([t_1], \ldots, [t_n]) = \begin{cases}
+          [f(t_1, \ldots, t_n)] & \text{if $f(t_1, \ldots, t_n)$ is in $S$} \\
+          \star & \text{otherwise}
+        \end{cases}
+
+    In other words, what :math:`f^{\mdl M}` does to each equivalence class is determined by what
+    :math:`f` does to each of the elements.
+    The fact that :math:`\equiv` is a congruence ensures that this makes sense.
+    This is just a truncated version of the term model, in which provably equal terms
+    are all glued together.
+
+    It is not hard to show that for every term :math:`t` in :math:`S`,
+    :math:`\tval{t}_{\mdl M}` is equal to  :math:`[t]`.
+    But this is what we need. For every equation :math:`s = t` in :math:`\Gamma`, :math:`s` and :math:`t` are in the
+    same equivalence class, so they are equal in the model.
+    And if :math:`s` and :math:`t` are not provably equal, then :math:`[s]` and :math:`[t]` are not the same, so
+    every disequation :math:`s \ne t` in :math:`\Gamma` is true in :math:`\mdl M` as well.
+
+For examples of the algorithm in action, first let us show that the set
+
+.. math::
+
+  f^3(a) = a, \, f^5(a) = a, \, f(a) \ne a
+
+is unsatisfiable, where :math:`f^n(a)` abbreviates :math:`n`-fold application :math:`f(f(\cdots f(a)))`.
+The set of all subterms is
+
+.. math::
+
+  a, \, f(a), \, f^2(a), \, f^3(a), \, f^4(a), \, f^5(a).
+
+We start with the equivalence classes :math:`\{ a, f^3(a) \}` and :math:`\{ a, f^5(a)\}`
+as well as all the others subterms in singleton sets.
+From :math:`a = f^3(a)` we derive :math:`f(a) = f^4(a)` by congruence, giving rise to the set
+:math:`\{ f(a), f^4(a) \}`. Applying congruence again gives rise to the set :math:`\{ f^2(a), f^5(a) \}`,
+which is merged with :math:`\{ a, f^5(a)\}` to yield :math:`\{ a, f^2(a), f^5(a) \}`.
+Applying congruence again yields :math:`\{ f(a), f^3(a) \}`. (We ignore the term :math:`f^6(a)`.)
+This is merged with the set :math:`\{ a, f^3(a) \}` to yield :math:`\{ a, f(a), f^3(a)\}`.
+Applying congruence again yields :math:`\{ f(a), f^2(a), f^4(a)\}`, which is merged with
+:math:`\{ a, f(a), f^3(a) \}` and :math:`\{ f^2(a), f^5(a) \}` to yield
+:math:`\{ a, f(a), f^2(a), f^3(a), f^5(a) \}`.
+At this point, we have derived :math:`f(a) = a`, contradicting the disequality in the original set.
+So the set is unsatisfiable.
+
+Suppose we start instead with the set
+
+  .. math::
+
+    f^2(a) = a, \, f^4(a) = a, \, f(a) \ne a, \, f(a) \ne b
+
+You can check that in this case, the algorithm terminates with the following three
+equivalence classes:
+
+- :math:`[a] = \{ a, f^2(a), f^4(a)\}`
+- :math:`[f(a)] = \{ f(a), f^3(a) \}`
+- :math:`[b] = \{ b \}`.
+
+We now construct a model :math:`\mdl M` with these elements and an additional element :math:`\star`, with
+
+.. math::
+
+    f^{\mdl M}([a]) & = [f(a)] \\
+    f^{\mdl M}([f(a)]) & = [a] \\
+    f^{\mdl M}([b]) & = \star \\
+    f^{\mdl M}(\star) & = \star
+
+You can check that this satisfies the original set of equations and disequations.
+
+Suppose we allow atomic formulas :math:`R(t_1, \ldots, t_n)` and negated atomic formulas in :math:`\Gamma`.
+To test satisfiability, we do not have to change much.
+Using the congruence rule for relations, whenever we have derived :math:`R(s_1, \ldots, s_n)`
+and :math:`s_i = t_i` for every :math:`i`, we can conclude :math:`R(t_1, \ldots, t_n)`.
+The algorithm terminates when we contradict a disequality or another negated atomic formula.
+If the algorithm terminates without a contradiction, we build a model as before,
+where we simply declare that :math:`R^{\mdl M}([t_1], \ldots, [t_n])` holds if and only if
+we have determined that :math:`R(t_1, \ldots, t_n)` in a consequence of the original set.
+
+Now suppose we are given an existential sentence :math:`\ex {x_1, \ldots, x_n} A`
+where :math:`A` is quantifier-free, and suppose we want to determine whether it is satisfiable.
+Replace :math:`x_1, \ldots, x_n` in :math:`A` with new constants :math:`c_1, \ldots, c_n`.
+The resulting quantifier-free sentence is satisfiable if and only if the existential one is.
+Put that sentence in DNF, and use the fact :math:`A_1 \lor \cdots \lor A_n` is satisfiable
+if and only if one of the sentences :math:`A_i` is.
+That reduces the task to determining whether a conjunction of literals is satisfiable,
+and we have just explained how to do that.
+
+Since a sentence is valid if and only if its negation is satisfiable, and since the negation
+of a universal sentence is an existential sentence, we have shown the following.
+
+.. admonition:: Theorem
+
+  The satisfiability of an existential sentence in first-order logic is decidable.
+  Equivalently, the validity of a universal sentence is decidable.
+
+
+.. TODO: In the exercises, show the convexity of equational logic.
 

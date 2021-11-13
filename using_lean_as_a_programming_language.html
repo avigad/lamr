@@ -703,16 +703,12 @@ multiplication table.</p>
 <p>Alternatively, you can use the function <cite>Array.mkArray</cite> to initialize an array
 (in this case, to the values 0), and then use the <cite>Array.set!</cite> function
 to replace the elements later one.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="k">do</span>
-  <span class="k">let</span> <span class="n">mut</span> <span class="n">table</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable&#39;</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="k">do</span>
+  <span class="k">let</span> <span class="n">mut</span> <span class="n">s</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">mkArray</span> <span class="mi">10</span> <span class="o">(</span><span class="n">mkArray</span> <span class="mi">10</span> <span class="mi">0</span><span class="o">)</span>
   <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
-    <span class="k">let</span> <span class="n">mut</span> <span class="n">row</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
     <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
-      <span class="n">row</span> <span class="o">:=</span> <span class="n">row.push</span> <span class="o">((</span><span class="n">i</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">j</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">))</span>
-    <span class="n">table</span> <span class="o">:=</span> <span class="n">table.push</span> <span class="n">row</span>
-  <span class="n">table</span>
-
-<span class="k">#eval</span> <span class="n">mulTable</span>
+      <span class="n">s</span> <span class="o">:=</span> <span class="n">s.set</span><span class="bp">!</span> <span class="n">i</span> <span class="bp">$</span> <span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">.</span><span class="n">set</span><span class="bp">!</span> <span class="n">j</span> <span class="o">((</span><span class="n">i</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">j</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">))</span>
+  <span class="n">s</span>
 </pre></div>
 </div>
 <p>Here we replace the ith row by the previous ith row, with the jth column updated.</p>

@@ -253,6 +253,31 @@ that evaluates any formula in our model with respect to the trivial variable ass
    :start-after: -- textbook: more FOForm eval examples
    :end-before: -- end
 
+A software package called *Tarski's World* by Jon Barwise and John Etchemendy offers
+a fun way of experimenting with first-order logic. It allows users to lay down blocks
+on an :math:`8 \times 8` grid and evaluate sentences about them. Each block is either
+a tetrahedron, a cube, or a dodecahedron, and each is either small, medium, or large.
+The language includes predicates for these, as well as relations like `FrontOf(x, y)`
+and `Between(x, y, z)`. The second one of these holds if and only if `x`, `y`, and `z`
+are either in the same row, in the same column, or on the same diagonal, and `x`
+is between `y` and `z`.
+
+The file `TarskisWorld` in the `Examples` folder includes a simple implementation in Lean.
+You can define a world and display it:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/TarskisWorld.lean
+   :start-after: -- textbook: myWorld
+   :end-before: -- end
+
+Here a plus symbol means that the object is large, a minus symbol means that it is small,
+and no symbol means that it is of medium size.
+You can then evaluate statements about the world:
+
+.. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/TarskisWorld.lean
+   :start-after: -- textbook: examples
+   :end-before: -- end
+
+The file `TWExamples` provides two puzzles, taken from *Tarski's World*, for you to try.
 
 Unification
 -----------
