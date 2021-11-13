@@ -184,6 +184,7 @@ def World.eval (world : World) (A : FOForm) : Bool :=
 Try it out.
 -/
 
+-- textbook: myWorld
 def myWorld : World := [
   ⟨tet, medium, 0, 2⟩,
   ⟨tet, small, 0, 4⟩,
@@ -213,9 +214,11 @@ def myWorld : World := [
 |    |    | T  |    | T- |    |    |    |
 -----------------------------------------
 -/
+-- end
 
 -- Don't forget to put % before variables!
 
+-- textbook: examples
 #eval myWorld.eval fo!{∃ x. ∃ y. ∃ z. Between(%x, %y, %z)}
 #eval myWorld.eval fo!{∃ x. ∃ y. ∃ z. Cube(%x) ∧ Between(%x, %y, %z)}
 #eval myWorld.eval fo!{∃ x. ∃ y. ∃ z. Dodec(%x) ∧ Between(%x, %y, %z)}
@@ -225,4 +228,4 @@ def myWorld : World := [
 #eval myWorld.eval fo!{∀ x. ∀ y. Cube(%x) ∧ Dodec(%y) → FrontOf(%x, %y)}
 #eval myWorld.eval fo!{∀ x. Tet(%x) → ∃ y. Cube(%y) ∧ RightOf(%y, %x) }
 #eval myWorld.eval fo!{∀ x. Dodec(%x) → ∃ y. Tet(%y) ∧ RightOf(%y, %x) }
-
+-- end
