@@ -410,40 +410,40 @@ and you can use the notation <code class="docutils literal notranslate"><span cl
 to fill in the value of a Lean expression <code class="docutils literal notranslate"><span class="pre">t</span></code>.
 For example the following declares constants <code class="docutils literal notranslate"><span class="pre">m_{i}_{j}</span></code> as <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code> range over
 values less than <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  for i in [:n] do
-    for j in [:n] do
-      consts := consts.push sexp!{(declare-const {s!&quot;m_{i}_{j}&quot;} (_ BitVec 32))}
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span>  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
+    <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
+      <span class="n">consts</span> <span class="o">:=</span> <span class="n">consts.push</span> <span class="n">sexp</span><span class="bp">!</span><span class="o">{(</span><span class="n">declare</span><span class="bp">-</span><span class="n">const</span> <span class="o">{</span><span class="n">s</span><span class="bp">!</span><span class="s2">&quot;m_{i}_{j}&quot;</span><span class="o">}</span> <span class="o">(</span><span class="n">_</span> <span class="n">BitVec</span> <span class="mi">32</span><span class="o">))}</span>
 </pre></div>
 </div>
 <p>The following declares that each cell is nonzero:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  for i in [:n] do
-    for j in [:n] do
-      asserts := asserts.push sexp!{(bvugt {s!&quot;m_{i}_{j}&quot;} {toBVConst 32 0})}
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span>  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
+    <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
+      <span class="n">asserts</span> <span class="o">:=</span> <span class="n">asserts.push</span> <span class="n">sexp</span><span class="bp">!</span><span class="o">{(</span><span class="n">bvugt</span> <span class="o">{</span><span class="n">s</span><span class="bp">!</span><span class="s2">&quot;m_{i}_{j}&quot;</span><span class="o">}</span> <span class="o">{</span><span class="n">toBVConst</span> <span class="mi">32</span> <span class="mi">0</span><span class="o">})}</span>
 </pre></div>
 </div>
 <p>You can use the syntax <code class="docutils literal notranslate"><span class="pre">...{</span> <span class="pre">}</span></code> to splice an array of s-expressions into an s-expression.
 For example. <code class="docutils literal notranslate"><span class="pre">(foo</span> <span class="pre">...{List.range</span> <span class="pre">3</span> <span class="pre">|&gt;.map</span> <span class="pre">(toString</span> <span class="pre">·)})</span></code> becomes <code class="docutils literal notranslate"><span class="pre">(foo</span> <span class="pre">0</span> <span class="pre">1</span> <span class="pre">2)</span></code>.</p>
 <p>The following wraps all the statements into an assert, and packages them into SMT-LIB format.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  asserts := asserts.map fun c =&gt; sexp!{(assert {c})}
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span>  <span class="n">asserts</span> <span class="o">:=</span> <span class="n">asserts.map</span> <span class="k">fun</span> <span class="n">c</span> <span class="bp">=&gt;</span> <span class="n">sexp</span><span class="bp">!</span><span class="o">{(</span><span class="n">assert</span> <span class="o">{</span><span class="n">c</span><span class="o">})}</span>
 
-  -- Use the theory of quantifier-free bitvector expressions, and find a model if SAT
-  sexps!{
-    (set-logic QF_BV)
-    (set-option :produce-models true)
-    ...{consts ++ asserts}
-    (check-sat)
-    (get-model)
-  }
+  <span class="c1">-- Use the theory of quantifier-free bitvector expressions, and find a model if SAT</span>
+  <span class="n">sexps</span><span class="bp">!</span><span class="o">{</span>
+    <span class="o">(</span><span class="n">set</span><span class="bp">-</span><span class="n">logic</span> <span class="n">QF_BV</span><span class="o">)</span>
+    <span class="o">(</span><span class="n">set</span><span class="bp">-</span><span class="n">option</span> <span class="o">:</span><span class="n">produce</span><span class="bp">-</span><span class="n">models</span> <span class="n">true</span><span class="o">)</span>
+    <span class="bp">...</span><span class="o">{</span><span class="n">consts</span> <span class="bp">++</span> <span class="n">asserts</span><span class="o">}</span>
+    <span class="o">(</span><span class="n">check</span><span class="bp">-</span><span class="n">sat</span><span class="o">)</span>
+    <span class="o">(</span><span class="n">get</span><span class="bp">-</span><span class="n">model</span><span class="o">)</span>
+  <span class="o">}</span>
 </pre></div>
 </div>
 <p>The preceding snippets are all part of a function <code class="docutils literal notranslate"><span class="pre">magicSquareToBvSmt</span></code> that,
 for each value of <span class="math notranslate nohighlight">\(n\)</span>, assembles the constraints into a list of SMT-LIB commands
 that ask for a model of an <span class="math notranslate nohighlight">\(n \times n\)</span> magic square.
 The following calls the SMT solver CVC5 on the resulting formula:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>#eval (do
-  let cmds := magicSquareToBvSmt 3
-  let out ← callCvc5 cmds.toList (verbose := true)
-  : IO Unit)
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="o">(</span><span class="k">do</span>
+  <span class="k">let</span> <span class="n">cmds</span> <span class="o">:=</span> <span class="n">magicSquareToBvSmt</span> <span class="mi">3</span>
+  <span class="k">let</span> <span class="n">out</span> <span class="bp">←</span> <span class="n">callCvc5</span> <span class="n">cmds.toList</span> <span class="o">(</span><span class="n">verbose</span> <span class="o">:=</span> <span class="n">true</span><span class="o">)</span>
+  <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>You can change <code class="docutils literal notranslate"><span class="pre">Cvc5</span></code> to <code class="docutils literal notranslate"><span class="pre">Cvc4</span></code> or <code class="docutils literal notranslate"><span class="pre">Z3</span></code>, as long as the relevant solver is in <code class="docutils literal notranslate"><span class="pre">LAMR/bin</span></code>.</p>
