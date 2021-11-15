@@ -222,7 +222,7 @@ The goal of this chapter is to establish decidability in a few interesting cases
 without worrying about efficiency and implementation.</p>
 <div class="section" id="linear-arithmetic">
 <h2><span class="section-number">12.1. </span>Linear arithmetic<a class="headerlink" href="#linear-arithmetic" title="Permalink to this headline">¶</a></h2>
-<p>A <em>linear expression</em> is one of the form <span class="math notranslate nohighlight">\(a_1 x_2 + a_2 x_2 + \cdots + a_n x_n + b\)</span>,
+<p>A <em>linear expression</em> is one of the form <span class="math notranslate nohighlight">\(a_1 x_1 + a_2 x_2 + \cdots + a_n x_n + b\)</span>,
 where each <span class="math notranslate nohighlight">\(a_i\)</span> is a rational number, <span class="math notranslate nohighlight">\(b\)</span> is a rational number,
 and each <span class="math notranslate nohighlight">\(x_i\)</span> is a variable.
 We think of the variables <span class="math notranslate nohighlight">\(x_i\)</span> as ranging over the real numbers.
@@ -287,7 +287,7 @@ small.)</p>
 <p>The procedure implicit in this proof is known as the <em>Fourier-Motzkin</em> procedure, since
 an incipient presentation of the idea can be found in the work of Jean-Baptiste Joseph
 Fourier in the early nineteenth century. (This is the same Fourier who gave us Fourier
-analysis.) In the worst case, every elimination step divides number the equations in half and
+analysis.) In the worst case, every elimination step divides the number of equations in half and
 then squares it, resulting in doubly exponential behavior.
 The procedure works well in practice, though, since in many applications each variable is
 contained in only a few equations. (There are obvious heuristics, like choosing a variable
@@ -352,7 +352,7 @@ In contrast to the reals, the order on the integers is <em>discrete</em>, since
 there is nothing between a value <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(x + 1\)</span>.
 The decision procedure is more complicated than that for linear arithmetic,
 and we will not discuss it here.
-SMT solvers, however, use efficient implementations the <em>existential fragment</em>
+SMT solvers, however, use efficient implementations of the <em>existential fragment</em>
 of the theory, which is to say, the satisfiability problem for quantifier-free formulas.</p>
 <p>In contrast to the case with the real numbers, however, the result is false if we
 add multiplication.

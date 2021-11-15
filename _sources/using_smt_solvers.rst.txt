@@ -2,3 +2,366 @@
 
 Using SMT solvers
 =================
+
+Satisfiability Modulo Theories (SMT) solvers determine whether a quantifier-free first-order formula can be satisfied with respect to some background theories. In many application areas, problem instances can be transformed into SMT formulas and the SMT solver determines whether there exists a satisfying assignment. The effectiveness of an SMT solver depends on the selection of background theories for a given problem instance. Several strong SMT solvers have been developed, including Z3, CVC4, and Boolector. SMT solvers are frequently used in industry and academia.
+
+
+SMT-LIB Format
+--------------
+
+The input format for SMT solvers is called SMT-LIB. SMT-LIB is much more readable than the DIMACS format for SAT solvers. For example, in SMT-LIB, variable names are strings, while DIMACS uses numbers. Also, whereas SAT solvers require the input to be in conjunctive normal form, this is not the case in SMT-LIB.
+
+Most SMT-LIB input files consist of five blocks:
+
+* Selecting the theory. Examples of theories are QF_UF (uninterpreted functions) and QF_LIA (linear integer arithmetic).
+
+* Declaring variables, functions, and types (called sorts). To declare a variable, one uses a line of the form ``(declare-const name type)``, where ``name`` is the variable name and ``type`` is the variable type. Functions can be declared/defined using ``(declare-fun name (inputTypes) outputType)`` for uninterpreted functions and using ``(declare-fun name (inputTypes) outputType (body))``, otherwise. In both cases ``name`` is the function name, ``(inputTypes)`` the input types,  and ``outputType`` the output type. The ``(body)`` part defines the function.  In a similar way, one can define types, but we won't use this functionality in this chapter. Several predefined types are supported depending on the selected theory. For example QF_UF supports Bool (propositional variables), while QF_LIA supports Int (integers).
+
+* A list of constraints. Constraints in SMT-LIB are of the form ``(assert ...)`` with ``...`` describing the constraint.
+
+* The command ``(check-sat)`` solves the formula encoded above it. Depending on the result, one can then use ``(get-model)`` to obtain a model when the formula is satisfiable or ``(get-unsat-core)`` to extract an unsatisfiable core (a subset of the constraints that is also unsatisfiable) when the formula is unsatisfiable.
+
+* Finally, the command ``(exit)`` terminates the solver.
+
+The example formula shown below uses the theory QF_UF and asks whether the formula :math:`p \land \lnot p` can be satisfied. For each blocked described above, only a single line appears in the formula.
+
+.. code-block:: lisp
+
+    (set-logic QF_UF)
+    (declare-const p Bool)
+    (assert (and p (not p)))
+    (check-sat)
+    (exit)
+
+Another small example is shown below. It uses the theory QF_LIA and asks whether there exists an integer ``x`` that is larger than an integer ``y`` without further constraining these variables. This formula is satisfiable, so we can ask the SMT solver to provide us an example ``x`` and ``y`` which makes the formula true using ``(get-model)``. For example, the solver can return that ``x`` is 5 and ``y`` is 2.
+
+.. code-block:: lisp
+
+   (set-logic QF_LIA)
+   (declare-const x Int)
+   (declare-const y Int)
+   (assert (> x y))
+   (check-sat)
+   (get-model)
+   (exit)
+
+
+Example: Magic squares
+----------------------
+
+A magic square of order :math:`n` is a :math:`n \times n` grid with the numbers 1 to :math:`n^2` occurring exactly once such that the sum for each row, column, and the two main diagonals is the same. Two magic squares are shown below, one of order 3 and one of order 8.
+
+.. list-table::
+
+    * - 4
+      - 9
+      - 2
+    * - 3
+      - 5
+      - 7
+    * - 8
+      - 1
+      - 6
+
+.. list-table::
+
+    * - 61
+      - 3
+      - 2
+      - 64
+      - 57
+      - 7
+      - 6
+      - 60
+    * - 12
+      - 54
+      - 55
+      - 9
+      - 16
+      - 50
+      - 51
+      - 13
+    * - 20
+      - 46
+      - 47
+      - 17
+      - 24
+      - 42
+      - 43
+      - 21
+    * - 37
+      - 27
+      - 26
+      - 40
+      - 33
+      - 31
+      - 30
+      - 36
+    * - 29
+      - 35
+      - 34
+      - 32
+      - 25
+      - 39
+      - 38
+      - 28
+    * - 44
+      - 22
+      - 23
+      - 41
+      - 48
+      - 18
+      - 19
+      - 45
+    * - 52
+      - 14
+      - 15
+      - 49
+      - 56
+      - 10
+      - 11
+      - 53
+    * - 5
+      - 59
+      - 58
+      - 8
+      - 1
+      - 63
+      - 62
+      - 4
+
+It is relatively straightforward to encode the existence of a magic square as an SMT formula.
+After stating the theory, the encoding consists of four parts: 1) declaring a variable for each cell in the grid; 2) enforcing that each cell has a value from 1 to :math:`n^2`; 3) enforcing that all each cell has a unique value; and 4) enforcing that the sum of each row, column, and main diagonals is equal to :math:`(n^3 + n)/2`.
+
+The formula shown below uses the quantifier-free theory of linear integer arithmetic (QF_LIA). The variable for the cell in row ``i`` and column ``j`` is called ``m_i_j``. The variable is declared using ``(declare-const m_i_j Int)``, while the lines
+with ``assert`` constrain the variables.
+
+.. code-block:: lisp
+
+    (set-logic QF_LIA)
+    (declare-const m_0_0 Int)
+    (declare-const m_0_1 Int)
+    (declare-const m_0_2 Int)
+    (declare-const m_1_0 Int)
+    (declare-const m_1_1 Int)
+    (declare-const m_1_2 Int)
+    (declare-const m_2_0 Int)
+    (declare-const m_2_1 Int)
+    (declare-const m_2_2 Int)
+    (assert (and (> m_0_0 0) (<= m_0_0 9)))
+    (assert (and (> m_0_1 0) (<= m_0_1 9)))
+    (assert (and (> m_0_2 0) (<= m_0_2 9)))
+    (assert (and (> m_1_0 0) (<= m_1_0 9)))
+    (assert (and (> m_1_1 0) (<= m_1_1 9)))
+    (assert (and (> m_1_2 0) (<= m_1_2 9)))
+    (assert (and (> m_2_0 0) (<= m_2_0 9)))
+    (assert (and (> m_2_1 0) (<= m_2_1 9)))
+    (assert (and (> m_2_2 0) (<= m_2_2 9)))
+    (assert (distinct m_0_0 m_0_1 m_0_2 m_1_0 m_1_1 m_1_2 m_2_0 m_2_1 m_2_2))
+    (assert (= 15 (+ m_0_0 m_0_1 m_0_2)))
+    (assert (= 15 (+ m_1_0 m_1_1 m_1_2)))
+    (assert (= 15 (+ m_2_0 m_2_1 m_2_2)))
+    (assert (= 15 (+ m_0_0 m_1_0 m_2_0)))
+    (assert (= 15 (+ m_0_1 m_1_1 m_2_1)))
+    (assert (= 15 (+ m_0_2 m_1_2 m_2_2)))
+    (assert (= 15 (+ m_0_2 m_1_1 m_2_0)))
+    (assert (= 15 (+ m_2_0 m_1_1 m_0_2)))
+    (check-sat)
+    (get-model)
+    (exit)
+
+The encoding in the quantifier-free theory of bitvectors (QF_BV) is very similar and shown below. When using bitvectors, one needs to declare the number of bits. In this example, we use 16 bits, which is large enough to compute magic squares of reasonable size. Note that QF_BV uses the bitvector variants of +, -, >, >=, <, and <=, which are ``bvadd``, ``bvsub``, ``bvugt``, ``bvuge``, ``bvult``, and ``bvule``, respectively. Also, constants are expressed differently in QF_BV: they are written as ``#x`` followed by the bitvector in hexadecimal notation.
+
+.. code-block:: lisp
+
+    (set-logic QF_BV)
+    (declare-const m_0_0 (_ BitVec 16))
+    (declare-const m_0_1 (_ BitVec 16))
+    (declare-const m_0_2 (_ BitVec 16))
+    (declare-const m_1_0 (_ BitVec 16))
+    (declare-const m_1_1 (_ BitVec 16))
+    (declare-const m_1_2 (_ BitVec 16))
+    (declare-const m_2_0 (_ BitVec 16))
+    (declare-const m_2_1 (_ BitVec 16))
+    (declare-const m_2_2 (_ BitVec 16))
+    (assert (and (bvugt m_0_0 #x0000) (bvule m_0_0 #x0009)))
+    (assert (and (bvugt m_0_1 #x0000) (bvule m_0_1 #x0009)))
+    (assert (and (bvugt m_0_2 #x0000) (bvule m_0_2 #x0009)))
+    (assert (and (bvugt m_1_0 #x0000) (bvule m_1_0 #x0009)))
+    (assert (and (bvugt m_1_1 #x0000) (bvule m_1_1 #x0009)))
+    (assert (and (bvugt m_1_2 #x0000) (bvule m_1_2 #x0009)))
+    (assert (and (bvugt m_2_0 #x0000) (bvule m_2_0 #x0009)))
+    (assert (and (bvugt m_2_1 #x0000) (bvule m_2_1 #x0009)))
+    (assert (and (bvugt m_2_2 #x0000) (bvule m_2_2 #x0009)))
+    (assert (distinct m_0_0 m_0_1 m_0_2 m_1_0 m_1_1 m_1_2 m_2_0 m_2_1 m_2_2))
+    (assert (= #x000f (bvadd m_0_0 m_0_1 m_0_2)))
+    (assert (= #x000f (bvadd m_1_0 m_1_1 m_1_2)))
+    (assert (= #x000f (bvadd m_2_0 m_2_1 m_2_2)))
+    (assert (= #x000f (bvadd m_0_0 m_1_0 m_2_0)))
+    (assert (= #x000f (bvadd m_0_1 m_1_1 m_2_1)))
+    (assert (= #x000f (bvadd m_0_2 m_1_2 m_2_2)))
+    (assert (= #x000f (bvadd m_0_2 m_1_1 m_2_0)))
+    (assert (= #x000f (bvadd m_2_0 m_1_1 m_0_2)))
+    (check-sat)
+    (get-model)
+    (exit)
+
+Although the encodings of magic squares in QF_LIA and QF_BV look very similar, the performance of SMT solvers on these encodings differs a lot. For example, computing a magic square of order 5 is difficult for SMT solvers using the QF_LIA encoding, while it is easy when using the QF_BV encoding. In fact, it is even easy to solve the QF_BV encoding expressing the existence of a magic square of order 10. The main difference between these two theories is that the solver applies linear arithmetic when using QF_LIA, while it applies what is known as *bit blasting* when using QF_BV. Bit blasting transforms the formula into propositional logic by introducing a propositional variable for each bit in the problem. For some problems, such as magic squares, bit blasting can be very effective. For other problems, bit blasting can result in formulas that are hard to solve.
+
+
+Calling SMT solvers from Lean
+-----------------------------
+
+To use an SMT solver, you can simply create an SMT-LIB file and run the solver on it.
+We also provide a convenient interface for calling any of the three popular solvers
+Z3, CVC4, and CVC5 from Lean. There is an example in the file ``magicSquares.lean``
+in ``Examples/using_smt_solvers``.
+
+To start with, we provide syntax with brackets ``sexp!{`` and ``}`` for writing s-expressions,
+and you can use the notation ``{ t }`` inside an s-expression
+to fill in the value of a Lean expression ``t``.
+For example the following declares constants ``m_{i}_{j}`` as ``i`` and ``j`` range over
+values less than ``n``.
+
+.. literalinclude:: ../../LAMR/Examples/using_smt_solvers/magicSquares.lean
+   :start-after: -- textbook: declare variables
+   :end-before: -- end
+
+The following declares that each cell is nonzero:
+
+.. literalinclude:: ../../LAMR/Examples/using_smt_solvers/magicSquares.lean
+   :start-after: -- textbook: bvugt
+   :end-before: -- end
+
+You can use the syntax ``...{ }`` to splice an array of s-expressions into an s-expression.
+For example. ``(foo ...{List.range 3 |>.map (toString ·)})`` becomes ``(foo 0 1 2)``.
+
+The following wraps all the statements into an assert, and packages them into SMT-LIB format.
+
+.. literalinclude:: ../../LAMR/Examples/using_smt_solvers/magicSquares.lean
+   :start-after: -- textbook: wrap
+   :end-before: -- end
+
+The preceding snippets are all part of a function ``magicSquareToBvSmt`` that,
+for each value of :math:`n`, assembles the constraints into a list of SMT-LIB commands
+that ask for a model of an :math:`n \times n` magic square.
+The following calls the SMT solver CVC5 on the resulting formula:
+
+.. literalinclude:: ../../LAMR/Examples/using_smt_solvers/magicSquares.lean
+   :start-after: -- textbook: call SMT
+   :end-before: -- end
+
+You can change ``Cvc5`` to ``Cvc4`` or ``Z3``, as long as the relevant solver is in ``LAMR/bin``.
+
+
+Application: Verification
+-------------------------
+
+SMT solvers are frequently used for verification tasks. In software verification, SMT solvers can be used to validate whether some optimized code is functionally equivalent to some straightforward code (the specification). For example, consider the C code below, which efficiently computes the number of bits that are set to true in an unsigned integer (32-bit). This code is significantly more efficient compared to looping over the bits to perform the counting.
+
+.. code-block:: c
+
+    int popCount32 (unsigned int x) {
+        x = x - ((x >> 1) & 0x55555555);
+        x = (x & 0x33333333) + ((x >> 2) & 0x33333333);
+        x = ((x + (x >> 4) & 0xf0f0f0f) * 0x1010101) >> 24;
+        return x;
+    }
+
+Validating the correctness of the above procedure can be done efficiently using the small SMT-LIB file shown below. After selecting the theory QF_BV, the file starts with declaring a single 32-bit bitvector ``x``.  For each line in the C code, a function is defined with 32-bit bitvectors as input and as output. Additionally, the specification function is declared as well. Each line in that function extracts a single bit from the bitvector and checks whether it is set to true (``#b1``). In that case it increases the count by 1 (shown as a 32-bit bitvector).
+
+At the end of the SMT-LIB file, there is a single constraint. To check whether the two implementations are equivalent, it asks whether there exists an ``x`` such that the implementations produce a different result. If that formula is satisfiable, then we found a counterexample to the equivalence. If the formula is unsatisfiable, then the implementations are equivalent.
+
+.. code-block:: lisp
+
+    (set-logic QF_BV)
+    (declare-const x (_ BitVec 32))
+
+    (define-fun pcLine1 ((x (_ BitVec 32))) (_ BitVec 32)
+        (bvsub x (bvand (bvlshr x #x00000001) #x55555555)))
+
+    (define-fun pcLine2 ((x (_ BitVec 32))) (_ BitVec 32)
+        (bvadd (bvand x #x33333333) (bvand (bvlshr x #x00000002) #x33333333)))
+
+    (define-fun pcLine3 ((x (_ BitVec 32))) (_ BitVec 32)
+        (bvlshr (bvmul (bvand (bvadd (bvlshr x #x00000004) x) #x0f0f0f0f) #x01010101)
+                        #x00000018))
+
+    (define-fun popCount32 ((x (_ BitVec 32))) (_ BitVec 32)
+         (bvadd (ite (= #b1 ((_ extract  0  0) x)) #x00000001 #x00000000)
+                (ite (= #b1 ((_ extract  1  1) x)) #x00000001 #x00000000)
+                (ite (= #b1 ((_ extract  2  2) x)) #x00000001 #x00000000)
+                ...
+                (ite (= #b1 ((_ extract 30 30) x)) #x00000001 #x00000000)
+                (ite (= #b1 ((_ extract 31 31) x)) #x00000001 #x00000000)))
+
+    (assert (not (= (pcLine3 (pcLine2 (pcLine1 x))) (popCount32 x))))
+    (check-sat)
+    (exit)
+
+This formula can be solved in about a second. Note that this is significantly faster than any implementation that explores the entire search space of :math:`2^{32}` possible inputs.
+
+Exercise: Almost squares
+------------------------
+
+The almost square of order :math:`n` is a rectangle of size :math:`n \times (n + 1)`. The almost squares of orders 1 to 3 can fully cover the almost square of order 4. A solution is shown below.
+
+.. list-table::
+
+    * - 1
+      - 1
+      - 3
+      - 3
+      - 3
+    * - 2
+      - 2
+      - 3
+      - 3
+      - 3
+    * - 2
+      - 2
+      - 3
+      - 3
+      - 3
+    * - 2
+      - 2
+      - 3
+      - 3
+      - 3
+
+In this exercise, we are going to encode whether the almost squares of order 1 to :math:`n` can fully cover the almost of order :math:`m`. The encoding uses the QF_LIA theory. The encoding uses :math:`4n` variables: for the almost square of order ``i``, we use variables ``xmin_i``, ``xmax_i``, ``ymin_i``, and ``ymax_i``. The variable ``xmin_i`` (``xmax_i``) denotes the first (last, respectively) row in which the almost square of order ``i`` is placed. Similarly, the variable ``ymin_i`` (``ymax_i``) denotes the first (last, respectively) column in which the almost square of order ``i`` is placed.
+
+The covering of the almost square of order 4 shown above can be expressed using the following assignment to these variables:
+
+* ``xmin_1 = 1``, ``xmax_1 = 2``, ``ymin_1 = 4``, ``ymax_1 = 4``
+
+* ``xmin_2 = 1``, ``xmax_2 = 2``, ``ymin_2 = 1``, ``ymax_2 = 3``
+
+* ``xmin_3 = 3``, ``xmax_3 = 5``, ``ymin_3 = 1``, ``ymax_3 = 4``
+
+The code fragment below shows the first part of the encoding used to compute the covering. It shows the declaration of the first variables and the first constraints on those variables.
+
+.. code-block:: lisp
+
+    (set-logic QF_LIA)
+    (declare-const xmin_1 Int)
+    (declare-const xmax_1 Int)
+    (declare-const ymin_1 Int)
+    (declare-const ymax_1 Int)
+    ...
+    (assert (and (>= xmin_1 1) (<= xmax_1 5)))
+    (assert (and (>= ymin_1 1) (<= ymax_1 4)))
+    ...
+
+Finish the encoding use the following steps:
+
+Step 1) Express as the constraints that ensure that the almost square of order ``i`` covers exactly a subgrid of
+:math:`n \times (n + 1)` or :math:`(n + 1) \times n`. The only variables that you can use are ``xmin_i``, ``xmax_i``, ``ymin_i``, and ``ymax_i``. Hint: Split the constraint into three parts with one part that enforces the relation between ``xmin_i`` and ``xmax_i``, one part that enforces the relation between ``ymin_i`` and ``ymax_i``, and one part that enforces the relation between all four variables.
+
+Step 2) For each pair of almost squares, express the constraint that they cannot overlap each other, i.e., there is no cell that is covered by multiple almost squares.
+
+Step 3) Determine a grid assignment showing that the almost squares of orders 1 to 8 can fully cover the almost square of order 15. SMT solvers should be able to quickly solve the intended encoding. The same encoding can also be used to cover the almost square of order 55 with the almost squares of order 1 to 20. Solving this formula can take minutes.
+
+Step 4) Encode the same problem using the theory QF_BV and compare the runtimes between the two theories.
+
+

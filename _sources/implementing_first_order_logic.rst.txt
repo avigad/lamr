@@ -46,7 +46,7 @@ Lean's type system provides a very elaborate and expressive means for doing so,
 and you can think of the specification of arities in first-order logic as being
 a minimal form of a typing judgment.
 
-Remember that to evaluate a first-order language, we needs an assignment of values to the variables,
+Remember that to evaluate a first-order language, we need an assignment of values to the variables,
 as well as interpretations of the function and relation symbols.
 Since our symbols are identified as strings,
 in general an interpretation of symbols is an assignment of values to strings:
@@ -74,7 +74,7 @@ when necessary.
 The following examples provide a few different Lean idioms for specifying that
 an `assign!` expression should be interpreted as an `FOAssignment`.
 (It should also happen automatically when you pass such an expression as an argument
-to a function that expect an `FOAssignment`.)
+to a function that expects an `FOAssignment`.)
 
 .. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/syntax.lean
    :start-after: -- textbook: assign syntax as FOAssignment
@@ -151,7 +151,7 @@ of the substituted formula. In the context of terms, the identity is as follows:
 
 The proof is essentially the same.
 Our current implementation is more general in that it allows us to
-substitute multiple formulas at once,
+substitute multiple terms at once,
 but we can see the principle at play in the fact that the two evaluations
 below produce the same answer.
 
@@ -207,7 +207,7 @@ It wouldn't be hard to write a procedure that checks that, given a finite
 list of functions and their intended arities.
 (A more efficient way of handling this is instead to *prove* that the
 functions all return values in universe,
-giving Lean's theorem proving capabilities.)
+using Lean's theorem proving capabilities.)
 In the examples in this section, we won't use function symbols at all,
 except for some constants that are clearly o.k.
 
@@ -394,9 +394,9 @@ associations, the algorithm should fail. This is known as the *occurs check*.
 The algorithm below maintains an *association list* of pairs :math:`(x, t)`
 indicating that the variable :math:`x` should be unified with the term :math:`t`.
 (An association list is essentially just a list of pairs, but for efficiency
-it uses a single constructor to cons a pair onto the list.)
+it uses a constructor with three arguments to cons a pair onto the list.)
 Each variable :math:`x` occurs only once on the left side of a pair.
-We allow the list to contain a tuple of pairs like :math:`(x, y)`, :math:`(y, z)`,
+We allow the list to contain pairs like :math:`(x, y)`, :math:`(y, z)`,
 and :math:`(z, w)`, since we can clean that up later, say, by assigning
 all the variables to :math:`w`.
 
@@ -415,7 +415,7 @@ With that in place, the following function takes an association list, `env`,
 and a list of pairs to unify, and it returns an association list.
 The clauses are as follows:
 
-- If the list is pairs is empty, there is nothing to do.
+- If the list of pairs is empty, there is nothing to do.
 - If the first pair on the list is a pair of function applications, then
 
   - if the pair is of the form :math:`f(t_1, \ldots, t_n)` and :math:`f(s_1, \ldots, s_n)`,
@@ -443,7 +443,7 @@ The algorithm is implemented as follows.
 
 The final association list might contain pairs :math:`(x, t)` and :math:`(y, s)`
 where :math:`s` contains the variable :math:`x`. This means that the variable
-:math:`x` has to unify with :math:`t`, which we can achieve by mapping to
+:math:`x` has to unify with :math:`t`, which we can achieve by mapping
 :math:`x` to :math:`t`. But the resulting substitution will also replace
 :math:`x` in :math:`s`, so we had better carry out the substitution for :math:`x`
 there too.

@@ -231,7 +231,7 @@ a function’s intended arguments.
 Lean’s type system provides a very elaborate and expressive means for doing so,
 and you can think of the specification of arities in first-order logic as being
 a minimal form of a typing judgment.</p>
-<p>Remember that to evaluate a first-order language, we needs an assignment of values to the variables,
+<p>Remember that to evaluate a first-order language, we need an assignment of values to the variables,
 as well as interpretations of the function and relation symbols.
 Since our symbols are identified as strings,
 in general an interpretation of symbols is an assignment of values to strings:</p>
@@ -254,7 +254,7 @@ when necessary.
 The following examples provide a few different Lean idioms for specifying that
 an <cite>assign!</cite> expression should be interpreted as an <cite>FOAssignment</cite>.
 (It should also happen automatically when you pass such an expression as an argument
-to a function that expect an <cite>FOAssignment</cite>.)</p>
+to a function that expects an <cite>FOAssignment</cite>.)</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">assign1</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="mi">3</span><span class="o">,</span> <span class="n">y</span> <span class="bp">↦</span> <span class="mi">5</span><span class="o">,</span> <span class="n">z</span> <span class="bp">↦</span> <span class="mi">2</span><span class="o">}</span>
 <span class="k">#check</span> <span class="n">assign1</span>
 <span class="k">#eval</span>  <span class="n">assign1</span> <span class="s2">&quot;x&quot;</span>
@@ -349,7 +349,7 @@ of the substituted formula. In the context of terms, the identity is as follows:
 \[\tval{t[s/x]}_\sigma = \tval{t}_{\sigma[x \mapsto \tval{s}_\sigma]}.\]</div>
 <p>The proof is essentially the same.
 Our current implementation is more general in that it allows us to
-substitute multiple formulas at once,
+substitute multiple terms at once,
 but we can see the principle at play in the fact that the two evaluations
 below produce the same answer.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">arith_ex2</span> <span class="o">:=</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span> <span class="n">plus</span><span class="o">(</span><span class="n">one</span><span class="o">,</span> <span class="n">times</span><span class="o">(</span><span class="n">three</span><span class="o">,</span> <span class="bp">%</span><span class="n">z</span><span class="o">))}</span>
@@ -418,7 +418,7 @@ It wouldn’t be hard to write a procedure that checks that, given a finite
 list of functions and their intended arities.
 (A more efficient way of handling this is instead to <em>prove</em> that the
 functions all return values in universe,
-giving Lean’s theorem proving capabilities.)
+using Lean’s theorem proving capabilities.)
 In the examples in this section, we won’t use function symbols at all,
 except for some constants that are clearly o.k.</p>
 <p>To handle the quantifiers, we need a procedure that takes an assignment
@@ -655,9 +655,9 @@ associations, the algorithm should fail. This is known as the <em>occurs check</
 <p>The algorithm below maintains an <em>association list</em> of pairs <span class="math notranslate nohighlight">\((x, t)\)</span>
 indicating that the variable <span class="math notranslate nohighlight">\(x\)</span> should be unified with the term <span class="math notranslate nohighlight">\(t\)</span>.
 (An association list is essentially just a list of pairs, but for efficiency
-it uses a single constructor to cons a pair onto the list.)
+it uses a constructor with three arguments to cons a pair onto the list.)
 Each variable <span class="math notranslate nohighlight">\(x\)</span> occurs only once on the left side of a pair.
-We allow the list to contain a tuple of pairs like <span class="math notranslate nohighlight">\((x, y)\)</span>, <span class="math notranslate nohighlight">\((y, z)\)</span>,
+We allow the list to contain pairs like <span class="math notranslate nohighlight">\((x, y)\)</span>, <span class="math notranslate nohighlight">\((y, z)\)</span>,
 and <span class="math notranslate nohighlight">\((z, w)\)</span>, since we can clean that up later, say, by assigning
 all the variables to <span class="math notranslate nohighlight">\(w\)</span>.</p>
 <p>Suppose we have an association list <span class="math notranslate nohighlight">\(\fn{env}\)</span> and we are considering adding
@@ -684,7 +684,7 @@ it detects a cycle, in which case it returns <cite>none</cite> to indicate failu
 and a list of pairs to unify, and it returns an association list.
 The clauses are as follows:</p>
 <ul class="simple">
-<li><p>If the list is pairs is empty, there is nothing to do.</p></li>
+<li><p>If the list of pairs is empty, there is nothing to do.</p></li>
 <li><p>If the first pair on the list is a pair of function applications, then</p>
 <ul>
 <li><p>if the pair is of the form <span class="math notranslate nohighlight">\(f(t_1, \ldots, t_n)\)</span> and <span class="math notranslate nohighlight">\(f(s_1, \ldots, s_n)\)</span>,
@@ -725,7 +725,7 @@ use the previous case.</p></li>
 </div>
 <p>The final association list might contain pairs <span class="math notranslate nohighlight">\((x, t)\)</span> and <span class="math notranslate nohighlight">\((y, s)\)</span>
 where <span class="math notranslate nohighlight">\(s\)</span> contains the variable <span class="math notranslate nohighlight">\(x\)</span>. This means that the variable
-<span class="math notranslate nohighlight">\(x\)</span> has to unify with <span class="math notranslate nohighlight">\(t\)</span>, which we can achieve by mapping to
+<span class="math notranslate nohighlight">\(x\)</span> has to unify with <span class="math notranslate nohighlight">\(t\)</span>, which we can achieve by mapping
 <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(t\)</span>. But the resulting substitution will also replace
 <span class="math notranslate nohighlight">\(x\)</span> in <span class="math notranslate nohighlight">\(s\)</span>, so we had better carry out the substitution for <span class="math notranslate nohighlight">\(x\)</span>
 there too.
