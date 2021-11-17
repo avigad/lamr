@@ -14,7 +14,7 @@ def generalIdent : Parser :=
       let startPos := s.pos
       let s := takeWhile1Fn (fun c => !("(){}[].".contains c) ∧ !c.isWhitespace) "expected generalized identifier" c s
       mkNodeToken `generalIdent startPos c s }
-    
+
 def Lean.Syntax.getGeneralId : Syntax → String
   | Syntax.node _ `generalIdent args => args[0].getAtomVal!
   | s => panic! s!"unexpected syntax '{s}'"
@@ -29,6 +29,9 @@ inductive Sexp where
   deriving Repr, BEq, Inhabited
 
 namespace Sexp
+
+instance : Coe String Sexp :=
+  ⟨Sexp.atom⟩
 
 declare_syntax_cat sexp
 
@@ -54,7 +57,7 @@ macro_rules
     let ss ← ss.mapM fun s => `(sexp!{ $s })
     `([ $[$ss],* ])
   | `(sexps!{ $ss:sexp* ...{ $t:term } $ts:sexp* }) =>
-    `(#[ $[$ss],* ] ++ ($t : Array Sexp) ++ #[ $[$ts],* ])
+    `([ $[$ss],* ] ++ ($t : List Sexp) ++ [ $[$ts],* ])
 
 partial def serialize : Sexp → String
   | atom s  => s
@@ -62,18 +65,47 @@ partial def serialize : Sexp → String
 
 partial def serializeMany (ss : List Sexp) : String :=
   ss.map serialize |> "\n".intercalate
- 
-partial def parse : String → Sexp :=
-  fun _ => atom "" -- TODO use the generated parser ?
-
-instance : Coe String Sexp :=
-  ⟨Sexp.atom⟩
 
 instance : ToString Sexp :=
   ⟨serialize⟩
 
 instance : Repr Sexp where
   reprPrec s _ := s!"sexp!\{{toString s}}"
+
+partial def parse (s : String) : Except String (List Sexp) :=
+  let tks := tokenize #[] s.toSubstring
+  parseMany #[] tks.toList |>.map Prod.fst |>.map Array.toList
+where
+  tokenize (stk : Array Substring) (s : Substring) : Array Substring :=
+    if s.isEmpty then stk
+    else
+      let c := s.front
+      if c == ')' || c == '(' then
+        tokenize (stk.push <| s.take 1) (s.drop 1)
+      else if c.isWhitespace then tokenize stk (s.drop 1)
+      else
+        let tk := s.takeWhile fun c => !c.isWhitespace && c != '(' && c != ')'
+        if tk.bsize > 0 then tokenize (stk.push tk) (s.extract tk.bsize s.bsize)
+        else unreachable!
+
+  parseOne : List Substring → Except String (Sexp × List Substring)
+    | tk :: tks => do
+      if tk.front == ')' then
+        throw "mismatched parentheses"
+      if tk.front == '(' then
+        let (ss, tks) ← parseMany #[] tks
+        return (expr ss.toList, tks)
+      else
+        return  (atom tk.toString, tks)
+    | [] => throw "expected input, got none"
+
+  parseMany (stk : Array Sexp) : List Substring → Except String (Array Sexp × List Substring)
+    | tk :: tks => do
+      if tk.front == ')' then (stk, tks)
+      else
+        let (e, tks) ← parseOne (tk :: tks)
+        parseMany (stk.push e) tks
+    | [] => (stk, [])
 
 end Sexp
 
@@ -94,9 +126,10 @@ private def run' (args : IO.Process.SpawnArgs) : IO String := do
   let out ← IO.Process.output args
   pure out.stdout
 
-/-- Executes the solver with the provided list of commands in SMT-LIB s-expression format. -/
+/-- Executes the solver with the provided list of commands in SMT-LIB s-expression format.
+Returns the solver output as s-expressions. -/
 private def callSolver (args : IO.Process.SpawnArgs) (commands : List Sexp) (verbose : Bool := false)
-    : IO String := do
+    : IO (List Sexp) := do
   let cmdStr := Sexp.serializeMany commands
   if verbose then
     IO.println "Sending SMT-LIB problem:"
@@ -106,6 +139,7 @@ private def callSolver (args : IO.Process.SpawnArgs) (commands : List Sexp) (ver
   if verbose then
     IO.println "\nSolver replied:"
     IO.println out
+  let out ← IO.ofExcept (Sexp.parse out)
   return out
 
 def callCvc4 := @callSolver argsCvc4
@@ -131,3 +165,26 @@ def toBVConst (nBits : Nat) (n : Nat) : String :=
   let nBytes := nBits/8
   let bytes := List.range nBytes |>.map fun i => UInt8.ofNat ((n >>> (i*8)) &&& 0xff)
   "#x" ++ enhexLE bytes
+
+open Std (AssocList)
+
+/-- Extracts constants assigned in a model returned from an SMT solver.
+The model is expected to be a single s-expression representing a list,
+with constant expressions represented by `(define-fun <name> () <type> <body>)`. -/
+def decodeModelConsts : Sexp → AssocList String Sexp
+  | Sexp.expr ss =>
+    ss.foldl (init := AssocList.empty) fun
+      | acc, sexp!{(define-fun {Sexp.atom x} () {_} {body})} =>
+        acc.insert x body
+      | acc, _ => acc
+  | _ => AssocList.empty
+
+/-- Evaluates an SMT-LIB constant numeral such as `0` or `#b01` or `#x02`. -/
+def evalNumConst : Sexp → Option Nat
+  | Sexp.atom s =>
+    let s' :=
+      if s.startsWith "#b" then "0" ++ s.drop 1
+      else if s.startsWith "#x" then "0" ++ s.drop 1
+      else s
+    Lean.Syntax.decodeNatLitVal? s'
+  | Sexp.expr _ => none
