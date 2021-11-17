@@ -421,7 +421,7 @@ values less than <code class="docutils literal notranslate"><span class="pre">n<
       <span class="n">asserts</span> <span class="o">:=</span> <span class="n">asserts.push</span> <span class="n">sexp</span><span class="bp">!</span><span class="o">{(</span><span class="n">bvugt</span> <span class="o">{</span><span class="n">s</span><span class="bp">!</span><span class="s2">&quot;m_{i}_{j}&quot;</span><span class="o">}</span> <span class="o">{</span><span class="n">toBVConst</span> <span class="mi">32</span> <span class="mi">0</span><span class="o">})}</span>
 </pre></div>
 </div>
-<p>You can use the syntax <code class="docutils literal notranslate"><span class="pre">...{</span> <span class="pre">}</span></code> to splice an array of s-expressions into an s-expression.
+<p>You can use the syntax <code class="docutils literal notranslate"><span class="pre">...{</span> <span class="pre">}</span></code> to splice a list of s-expressions into an s-expression.
 For example. <code class="docutils literal notranslate"><span class="pre">(foo</span> <span class="pre">...{List.range</span> <span class="pre">3</span> <span class="pre">|&gt;.map</span> <span class="pre">(toString</span> <span class="pre">·)})</span></code> becomes <code class="docutils literal notranslate"><span class="pre">(foo</span> <span class="pre">0</span> <span class="pre">1</span> <span class="pre">2)</span></code>.</p>
 <p>The following wraps all the statements into an assert, and packages them into SMT-LIB format.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span>  <span class="n">asserts</span> <span class="o">:=</span> <span class="n">asserts.map</span> <span class="k">fun</span> <span class="n">c</span> <span class="bp">=&gt;</span> <span class="n">sexp</span><span class="bp">!</span><span class="o">{(</span><span class="n">assert</span> <span class="o">{</span><span class="n">c</span><span class="o">})}</span>
@@ -430,7 +430,7 @@ For example. <code class="docutils literal notranslate"><span class="pre">(foo</
   <span class="n">sexps</span><span class="bp">!</span><span class="o">{</span>
     <span class="o">(</span><span class="n">set</span><span class="bp">-</span><span class="n">logic</span> <span class="n">QF_BV</span><span class="o">)</span>
     <span class="o">(</span><span class="n">set</span><span class="bp">-</span><span class="n">option</span> <span class="o">:</span><span class="n">produce</span><span class="bp">-</span><span class="n">models</span> <span class="n">true</span><span class="o">)</span>
-    <span class="bp">...</span><span class="o">{</span><span class="n">consts</span> <span class="bp">++</span> <span class="n">asserts</span><span class="o">}</span>
+    <span class="bp">...</span><span class="o">{(</span><span class="n">consts</span> <span class="bp">++</span> <span class="n">asserts</span><span class="o">)</span><span class="bp">.</span><span class="n">toList</span><span class="o">}</span>
     <span class="o">(</span><span class="n">check</span><span class="bp">-</span><span class="n">sat</span><span class="o">)</span>
     <span class="o">(</span><span class="n">get</span><span class="bp">-</span><span class="n">model</span><span class="o">)</span>
   <span class="o">}</span>
@@ -442,11 +442,24 @@ that ask for a model of an <span class="math notranslate nohighlight">\(n \times
 The following calls the SMT solver CVC5 on the resulting formula:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="o">(</span><span class="k">do</span>
   <span class="k">let</span> <span class="n">cmds</span> <span class="o">:=</span> <span class="n">magicSquareToBvSmt</span> <span class="mi">3</span>
-  <span class="k">let</span> <span class="n">out</span> <span class="bp">←</span> <span class="n">callCvc5</span> <span class="n">cmds.toList</span> <span class="o">(</span><span class="n">verbose</span> <span class="o">:=</span> <span class="n">true</span><span class="o">)</span>
+  <span class="c1">-- Set `verbose := false` to hide SMT-LIB communications</span>
+  <span class="k">let</span> <span class="n">out</span> <span class="bp">←</span> <span class="n">callCvc5</span> <span class="n">cmds</span> <span class="o">(</span><span class="n">verbose</span> <span class="o">:=</span> <span class="n">true</span><span class="o">)</span>
+  <span class="k">match</span> <span class="n">out</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">Sexp.atom</span> <span class="s2">&quot;sat&quot;</span> <span class="o">::</span> <span class="n">m</span> <span class="o">::</span> <span class="n">_</span> <span class="bp">=&gt;</span>
+    <span class="n">IO.println</span> <span class="s2">&quot;SAT with assignment:&quot;</span>
+    <span class="n">for</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">in</span> <span class="n">decodeModelConsts</span> <span class="n">m</span> <span class="k">do</span>
+      <span class="n">IO.println</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;{x} ↦ {evalNumConst b |&gt;.get!}&quot;</span>
+    <span class="n">IO.println</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Square:&quot;</span>
+    <span class="n">printMagicSquare</span> <span class="mi">3</span> <span class="n">m</span>
+  <span class="bp">|</span> <span class="n">ss</span> <span class="bp">=&gt;</span>
+    <span class="n">IO.println</span> <span class="s2">&quot;Not SAT. Solver output:&quot;</span>
+    <span class="n">IO.println</span> <span class="n">ss</span>
+
   <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span><span class="o">)</span>
 </pre></div>
 </div>
-<p>You can change <code class="docutils literal notranslate"><span class="pre">Cvc5</span></code> to <code class="docutils literal notranslate"><span class="pre">Cvc4</span></code> or <code class="docutils literal notranslate"><span class="pre">Z3</span></code>, as long as the relevant solver is in <code class="docutils literal notranslate"><span class="pre">LAMR/bin</span></code>.</p>
+<p>The function <code class="docutils literal notranslate"><span class="pre">printMagicSquare</span></code> shows the result.
+You can change <code class="docutils literal notranslate"><span class="pre">Cvc5</span></code> to <code class="docutils literal notranslate"><span class="pre">Cvc4</span></code> or <code class="docutils literal notranslate"><span class="pre">Z3</span></code>, as long as the relevant solver is in <code class="docutils literal notranslate"><span class="pre">LAMR/bin</span></code>.</p>
 </div>
 <div class="section" id="application-verification">
 <h2><span class="section-number">13.4. </span>Application: Verification<a class="headerlink" href="#application-verification" title="Permalink to this headline">¶</a></h2>

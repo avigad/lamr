@@ -235,7 +235,7 @@ The following declares that each cell is nonzero:
    :start-after: -- textbook: bvugt
    :end-before: -- end
 
-You can use the syntax ``...{ }`` to splice an array of s-expressions into an s-expression.
+You can use the syntax ``...{ }`` to splice a list of s-expressions into an s-expression.
 For example. ``(foo ...{List.range 3 |>.map (toString ·)})`` becomes ``(foo 0 1 2)``.
 
 The following wraps all the statements into an assert, and packages them into SMT-LIB format.
@@ -253,6 +253,7 @@ The following calls the SMT solver CVC5 on the resulting formula:
    :start-after: -- textbook: call SMT
    :end-before: -- end
 
+The function ``printMagicSquare`` shows the result.
 You can change ``Cvc5`` to ``Cvc4`` or ``Z3``, as long as the relevant solver is in ``LAMR/bin``.
 
 
