@@ -302,7 +302,9 @@ At the end of the SMT-LIB file, there is a single constraint. To check whether t
     (check-sat)
     (exit)
 
-This formula can be solved in about a second. Note that this is significantly faster than any implementation that explores the entire search space of :math:`2^{32}` possible inputs.
+This formula can be solved in about a second.
+You can find the example implemented in the file ``popCount.lean``.
+Note that this approach is significantly faster than any implementation that explores the entire search space of :math:`2^{32}` possible inputs.
 
 Exercise: Almost squares
 ------------------------
