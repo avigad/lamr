@@ -67,7 +67,7 @@ def sameSize (x y : Object) : Bool := x.size == y.size
 
 def sameRow (x y : Object) : Bool := x.row == y.row
 
-def sameCol (x y : Object) : Bool := x.row == y.row
+def sameCol (x y : Object) : Bool := x.col == y.col
 
 def leftOf (x y : Object) : Bool := x.col < y.col
 

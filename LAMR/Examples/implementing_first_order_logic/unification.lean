@@ -8,7 +8,8 @@ A unification algorithm, from John Harrison's book.
 -/
 
 -- textbook: isTriv?
-partial def isTriv? (env : AssocList String FOTerm) (x : String) : FOTerm → Option Bool
+partial def isTriv? (env : AssocList String FOTerm) (x : String) :
+    FOTerm → Option Bool
   | var y      => if y = x then true
                    else if !env.contains y then false
                    else isTriv? env x (env.getA y)
