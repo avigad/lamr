@@ -299,7 +299,7 @@ and they are not useful for automated reasoning or search.
 We will therefore set them aside and focus our attention on other types of proof systems.</p>
 </div>
 <div class="section" id="a-sequent-calculus">
-<h2><span class="section-number">8.2. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this headline">¶</a></h2>
+<span id="section-propositional-sequent-calculus"></span><h2><span class="section-number">8.2. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this headline">¶</a></h2>
 <p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a finite set of propositional formula in negation normal form.
 The next calculus we will consider is designed to prove that the disjunction of the formulas
 in <span class="math notranslate nohighlight">\(\Gamma\)</span> is valid, which is to say, for every truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
@@ -316,9 +316,8 @@ The rules are as follows:</p>
 \AXC{$\Gamma, A$}
 \AXC{$\Gamma, B$}
 \BIC{$\Gamma, A \land B$}
-\end{prooftree}\]
-
-\[\begin{prooftree}
+\end{prooftree}\quad\quad
+\begin{prooftree}
 \AXC{$\Gamma, A, B$}
 \UIC{$\Gamma, A \lor B$}
 \end{prooftree}

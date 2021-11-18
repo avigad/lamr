@@ -204,6 +204,7 @@ In other words, truth in the model :math:`(\mathbb Z, 0, 1, +, \times)` is undec
 This follows from the methods that Gödel used to prove the incompleteness theorems,
 and it is also a consequence of *Tarski's theorem* on the undefinability of truth.
 
+.. _section_equality:
 
 Equality
 --------

@@ -36,6 +36,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -103,7 +105,13 @@
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">14. Deduction for First-Order Logic</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">14. Deduction for First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#axiomatic-systems">14.1. Axiomatic systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-sequent-calculus">14.2. A sequent calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resolution">14.3. Resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#natural-deduction">14.4. Natural deduction</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">17. Simple Type Theory</a></li>
@@ -176,6 +184,117 @@
             
   <div class="section" id="deduction-for-first-order-logic">
 <span id="chapter-deduction-for-first-order-logic"></span><h1><span class="section-number">14. </span>Deduction for First-Order Logic<a class="headerlink" href="#deduction-for-first-order-logic" title="Permalink to this headline">¶</a></h1>
+<p>The fundamental difference between propositional logic and first-order logic
+is that in first-order logic there are variables and terms
+that stand for objects, and we can form atomic propositions that depend on those objects.
+Within the framework, the two key ingredients are equality and the quantifiers.
+Deduction systems for first-order logic have to extend those for propositional logic
+by providing rules for these.</p>
+<p>As was the case for propositional logic, all the deductive systems we describe in this
+section are sound and complete for first-order logic,
+though we do not provide detailed proofs here.</p>
+<div class="section" id="axiomatic-systems">
+<h2><span class="section-number">14.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Permalink to this headline">¶</a></h2>
+<p>We have already discussed equational reasoning in <a class="reference internal" href="decision_procedures_for_first_order_logic.html#section-equality"><span class="std std-numref">Section 12.3</span></a>.
+We have seen that the natural rules for equality are given by reflexivity, symmetry,
+transitivity, and congruence with respect to functions and relations.
+These can be expressed as rules, but also as first-order axioms:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\fa x x = x\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y} x = y \limplies y = x\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y, z} x = y \land y = z \limplies x = z\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x_1, \ldots, x_n, y_1, \ldots, y_n} x_1 = y_1 \land \cdots x_n = y_n \limplies f(x_1, \ldots, x_n) = f(y_1, \ldots, y_n)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x_1, \ldots, x_n, y_1, \ldots, y_n} x_1 = y_1 \land \cdots x_n = y_n \land R(x_1, \ldots, x_n) \limplies R(y_1, \ldots, y_n)\)</span>.</p></li>
+</ul>
+<p>From these, we can derive substitution for terms and formulas:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y} x = y \limplies t(x) = t(y)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y} x = y \land A(x) \limplies A(y)\)</span></p></li>
+</ul>
+<p>Sometimes these are taken as axioms instead of congruence.
+Remember that we are adopting the convention what when we use notation like <span class="math notranslate nohighlight">\(t(x)\)</span>,
+we have in mind a certain variable <span class="math notranslate nohighlight">\(z\)</span> that <span class="math notranslate nohighlight">\(t\)</span> might depend on and we take
+<span class="math notranslate nohighlight">\(t(x)\)</span> to stand for <span class="math notranslate nohighlight">\(t[x/z]\)</span> and <span class="math notranslate nohighlight">\(t(y)\)</span> to stand for <span class="math notranslate nohighlight">\(t[y/z]\)</span>.
+Similar conventions hold for formula <span class="math notranslate nohighlight">\(A(x)\)</span>.</p>
+<p>The axioms for the quantifiers follow naturally from their meanings:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\((\fa x A) \limplies A[t/x]\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(A[t/x] \limplies \ex x A\)</span>.</p></li>
+</ul>
+<p>The first says that if <span class="math notranslate nohighlight">\(A\)</span> holds of everything, then it holds of any particular thing,
+and the second says that if <span class="math notranslate nohighlight">\(A\)</span> holds of any particular thing, then it holds of something.</p>
+<p>These axioms are only half the story, though. The first axiom tells us how to <em>use</em> a statement
+that starts with a universal quantifier but not how to <em>prove</em> it, and the second one tells us
+how to prove a statement with an existential quantifier but not how to use it. How do we
+prove <span class="math notranslate nohighlight">\(\fa x A\)</span>? Establishing <span class="math notranslate nohighlight">\(\fa x A\)</span> involves showing that <span class="math notranslate nohighlight">\(A\)</span> holds of
+an arbitrary value of <span class="math notranslate nohighlight">\(x\)</span>. To do that, we let <span class="math notranslate nohighlight">\(x\)</span> be arbitrary, and prove <span class="math notranslate nohighlight">\(A\)</span>.
+This suggests the following rule of generalization:</p>
+<blockquote>
+<div><p>From <span class="math notranslate nohighlight">\(A\)</span>, conclude <span class="math notranslate nohighlight">\(\fa x A\)</span>.</p>
+</div></blockquote>
+<p>The actual rule we use is a generalization of this: if we have shown that <span class="math notranslate nohighlight">\(A\)</span> follows
+from <span class="math notranslate nohighlight">\(B\)</span>, and <span class="math notranslate nohighlight">\(B\)</span> doesn’t say anything about <span class="math notranslate nohighlight">\(x\)</span>, then we have shown that
+<span class="math notranslate nohighlight">\(B\)</span> implies that <span class="math notranslate nohighlight">\(A\)</span> holds for any <span class="math notranslate nohighlight">\(x\)</span> at all.</p>
+<ul class="simple">
+<li><p>From <span class="math notranslate nohighlight">\(B \limplies A\)</span> conclude <span class="math notranslate nohighlight">\(B \limplies \fa x A\)</span>, assuming <span class="math notranslate nohighlight">\(x\)</span> is not free in <span class="math notranslate nohighlight">\(B\)</span>.</p></li>
+</ul>
+<p>The dual rule for the existential quantifier says that if <span class="math notranslate nohighlight">\(B\)</span> follows from the assumption
+that <span class="math notranslate nohighlight">\(A\)</span> holds of some <span class="math notranslate nohighlight">\(x\)</span>, then <span class="math notranslate nohighlight">\(B\)</span> follows from the assumption
+that there exists an <span class="math notranslate nohighlight">\(x\)</span> satisfying <span class="math notranslate nohighlight">\(B\)</span>.</p>
+<ul class="simple">
+<li><p>From <span class="math notranslate nohighlight">\(A \limplies B\)</span> conclude <span class="math notranslate nohighlight">\((\ex x A) \limplies B\)</span>, assuming <span class="math notranslate nohighlight">\(x\)</span> is not free in <span class="math notranslate nohighlight">\(B\)</span>.</p></li>
+</ul>
+</div>
+<div class="section" id="a-sequent-calculus">
+<h2><span class="section-number">14.2. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this headline">¶</a></h2>
+<p>We can also extend the cut-free sequent calculus described in <a class="reference internal" href="deduction_for_propositional_logic.html#section-propositional-sequent-calculus"><span class="std std-numref">Section 8.2</span></a> to first-order logic.
+Remember that the system derives sets of formulas <span class="math notranslate nohighlight">\(\Gamma\)</span> in negation-normal form.
+We interpret a proof as telling us that in any model, and with any assignment to the free
+variables, at least one of the formula in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true.
+In the case of propositional logic, we took the axioms to be finite sets <span class="math notranslate nohighlight">\(\Gamma\)</span>
+that contain a complementary pair of atoms <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(\lnot P\)</span>.
+In the presence of equality, we now take the axioms to be sets <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+the set of negations of those formulas can be refuted using equational reasoning.
+For example, <span class="math notranslate nohighlight">\(\lnot P(a), a \ne b, P(b)\)</span> is an axiom, because equational reasoning
+refutes the set <span class="math notranslate nohighlight">\(P(a), a = b, \lnot P(b)\)</span>.
+We can determine whether a finite set of formulas is an axiom using congruence closure.</p>
+<p>The other rules of the system are as follows:</p>
+<blockquote>
+<div>\[\begin{prooftree}
+\AXC{$\Gamma, A$}
+\AXC{$\Gamma, B$}
+\BIC{$\Gamma, A \land B$}
+\end{prooftree} \quad\quad
+\begin{prooftree}
+\AXC{$\Gamma, A, B$}
+\UIC{$\Gamma, A \lor B$}
+\end{prooftree}
+\]
+
+\[\begin{prooftree}
+\AXC{$\Gamma, A$}
+\UIC{$\Gamma, \fa x A$}
+\end{prooftree}
+\quad\quad
+\begin{prooftree}
+\AXC{$\Gamma, A[t/x]$}
+\UIC{$\Gamma, \ex x A$}
+\end{prooftree}
+\]</div></div></blockquote>
+<p>In the rule for the universal quantifier, we require that <span class="math notranslate nohighlight">\(x\)</span> is not free in any formula
+in <span class="math notranslate nohighlight">\(\Gamma\)</span>. This is analogous to the requirement in the previous section that <span class="math notranslate nohighlight">\(x\)</span>
+is not free in the formula <span class="math notranslate nohighlight">\(B\)</span> in the generalization rule.
+You can think of it as saying that <span class="math notranslate nohighlight">\(x\)</span> is really arbitrary.</p>
+<p>As in <a class="reference internal" href="deduction_for_propositional_logic.html#section-propositional-sequent-calculus"><span class="std std-numref">Section 8.2</span></a>, we can add the cut rule, which represents
+a form of modus ponents. In class, we will sketch a proof that this system is complete even
+without the cut rule.</p>
+</div>
+<div class="section" id="resolution">
+<h2><span class="section-number">14.3. </span>Resolution<a class="headerlink" href="#resolution" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="natural-deduction">
+<h2><span class="section-number">14.4. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Permalink to this headline">¶</a></h2>
+</div>
 </div>
 
 

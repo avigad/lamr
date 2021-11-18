@@ -127,6 +127,8 @@ they do not provide convenient means of modeling informal proofs,
 and they are not useful for automated reasoning or search.
 We will therefore set them aside and focus our attention on other types of proof systems.
 
+.. _section_propositional_sequent_calculus:
+
 A sequent calculus
 ------------------
 
@@ -148,9 +150,8 @@ The rules are as follows:
       \AXC{$\Gamma, A$}
       \AXC{$\Gamma, B$}
       \BIC{$\Gamma, A \land B$}
-      \end{prooftree}\]
-
-      \[\begin{prooftree}
+      \end{prooftree}\quad\quad
+      \begin{prooftree}
       \AXC{$\Gamma, A, B$}
       \UIC{$\Gamma, A \lor B$}
       \end{prooftree}
@@ -165,8 +166,7 @@ The rules are as follows:
       \AXC{$\Gamma, A$}
       \AXC{$\Gamma, B$}
       \BIC{$\Gamma, A \land B$}
-      \DP \\
-      \ \\
+      \DP \quad \quad
       \AXC{$\Gamma, A, B$}
       \UIC{$\Gamma, A \lor B$}
       \DP
