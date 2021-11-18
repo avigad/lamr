@@ -46,7 +46,7 @@ def magicSquareToBvSmt (n : Nat) : List Sexp := do
   -- Both diagonals sum up to the magic constant
   asserts := asserts ++ sexps!{
     (= {magic} (bvadd ...{List.range n |>.map fun j => s!"m_{j}_{n-j-1}"}))
-    (= {magic} (bvadd ...{List.range n |>.map fun j => s!"m_{n-j-1}_{j}"}))
+    (= {magic} (bvadd ...{List.range n |>.map fun j => s!"m_{j}_{j}"}))
   }
 
   -- Wrap all assertions in `(assert ..)`
