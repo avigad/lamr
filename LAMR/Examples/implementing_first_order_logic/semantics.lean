@@ -67,15 +67,15 @@ def arith_ex2 := term!{ plus(one, times(three, %z))}
 
 def arith_ex3 := term!{ plus(%z, two) }
 
-def arith_ex4 := arith_ex1.subst assign!{ x ↦ arith_ex2, y ↦ arith_ex3  }
-
 -- these two should give the same result!
 
-#eval arith_ex4.eval arithFnInterp assign!{z ↦ 7}
+#eval (arith_ex1.subst
+        assign!{ x ↦ arith_ex2, y ↦ arith_ex3 }).eval
+        arithFnInterp assign!{z ↦ 7}
 
 #eval arith_ex1.eval arithFnInterp
-  assign!{ x ↦ (arith_ex1.eval arithFnInterp assign!{z ↦ 7}),
-           y ↦ (arith_ex2.eval arithFnInterp assign!{z ↦ 7}) }
+  assign!{ x ↦ (arith_ex2.eval arithFnInterp assign!{z ↦ 7}),
+           y ↦ (arith_ex3.eval arithFnInterp assign!{z ↦ 7}) }
 -- end
 
 /-
@@ -131,18 +131,8 @@ def FOForm.eval {α} [Inhabited α] [BEq α]
   | disj A B => (eval M σ A) || (eval M σ B)
   | impl A B => !(eval M σ A) || (eval M σ B)
   | biImpl A B => (!(eval M σ A) || (eval M σ B)) && (!(eval M σ B) || (eval M σ A))
-  | ex x A => do
-      let mut b := false
-      for val in M.univ do
-        if eval M (σ.update x val) A then
-          b := true; break
-      b
-  | all x A => do
-      let mut b := true
-      for val in M.univ do
-        if !(eval M (σ.update x val) A) then
-          b := false; break
-      b
+  | ex x A => M.univ.any fun val => eval M (σ.update x val) A
+  | all x A => M.univ.all fun val => eval M (σ.update x val) A
 -- end
 
 -- textbook: babyArithMdl
