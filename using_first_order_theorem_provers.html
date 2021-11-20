@@ -36,6 +36,8 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -104,7 +106,12 @@
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="deduction_for_first_order_logic.html">14. Deduction for First-Order Logic</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">15. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">15. Using First-Order Theorem Provers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-aunt-agatha">15.1. Example: Aunt Agatha</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-the-eight-asylum">15.2. Example: The Eight Asylum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercise-the-last-asylum">15.3. Exercise: The Last Asylum</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simple_type_theory.html">17. Simple Type Theory</a></li>
 </ul>
@@ -176,6 +183,183 @@
             
   <div class="section" id="using-first-order-theorem-provers">
 <span id="chapter-using-first-order-theorem-provers"></span><h1><span class="section-number">15. </span>Using First-Order Theorem Provers<a class="headerlink" href="#using-first-order-theorem-provers" title="Permalink to this headline">¶</a></h1>
+<p>Given a set of hypotheses and a conclusion, a first-order theorem prover
+does its best to find a proof of the conclusion from the hypotheses, using
+first-order logic with equality.
+If it finds one, it reports success.
+If the conclusion does not follow from the hypotheses, in some
+situations, the prover can detect that fact and report it.
+But that is the exception rather than the rule.
+In many situations, the prover will simply burn CPU cycles and gobble up memory,
+and, if we are lucky, eventually time out gracefully.</p>
+<p>Let’s not blame the provers. They are fighting a brave battle against incompleteness
+and undecidability, and the fact that there are no a priori guarantees that
+a search will be successful makes the quest all the more exciting.
+In this chapter, we show you how you can call a theorem prover from
+within Lean.</p>
+<div class="section" id="example-aunt-agatha">
+<h2><span class="section-number">15.1. </span>Example: Aunt Agatha<a class="headerlink" href="#example-aunt-agatha" title="Permalink to this headline">¶</a></h2>
+<p>The following story is taken from a talk by Peter Baumgartner.</p>
+<blockquote>
+<div><p>Someone who lives in Dreadbury Mansion killed Aunt Agatha.
+Agatha, the butler, and Charles live in Dreadbury Mansion, and are
+the only people who live therein. A killer always hates his victim,
+and is never richer than his victim. Charles hates no one that Aunt
+Agatha hates. Agatha hates everyone except the butler. The butler
+hates everyone not richer than Aunt Agatha. The butler hates
+everyone Aunt Agatha hates. No one hates everyone. Agatha is not
+the butler.</p>
+<p>Who killed Aunt Agatha?</p>
+</div></blockquote>
+<p>We can represent the hypotheses as follows.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">aunt_agatha_hypotheses</span> <span class="o">:</span> <span class="n">List</span> <span class="n">FOForm</span> <span class="o">:=</span> <span class="o">[</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="n">lives_at_dreadbury</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">killed</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="n">agatha</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">lives_at_dreadbury</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">↔</span> <span class="o">(</span><span class="bp">%</span><span class="n">x</span> <span class="bp">=</span> <span class="n">agatha</span> <span class="bp">∨</span> <span class="bp">%</span><span class="n">x</span> <span class="bp">=</span> <span class="n">butler</span> <span class="bp">∨</span> <span class="bp">%</span><span class="n">x</span> <span class="bp">=</span> <span class="n">charles</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">∀</span> <span class="n">y.</span> <span class="n">killed</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="bp">→</span> <span class="n">hates</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">∀</span> <span class="n">y.</span> <span class="n">killed</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">¬</span> <span class="n">richer</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">hates</span><span class="o">(</span><span class="n">charles</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">→</span> <span class="bp">¬</span> <span class="n">hates</span><span class="o">(</span><span class="n">agatha</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">¬</span> <span class="n">hates</span><span class="o">(</span><span class="n">agatha</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">↔</span> <span class="bp">%</span><span class="n">x</span> <span class="bp">=</span> <span class="n">butler</span><span class="o">},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">¬</span> <span class="n">richer</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="n">agatha</span><span class="o">)</span> <span class="bp">→</span> <span class="n">hates</span><span class="o">(</span><span class="n">butler</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="n">hates</span><span class="o">(</span><span class="n">agatha</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">→</span> <span class="n">hates</span><span class="o">(</span><span class="n">butler</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="bp">¬</span> <span class="n">hates</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">¬</span> <span class="n">agatha</span> <span class="bp">=</span> <span class="n">butler</span><span class="o">}</span>
+<span class="o">]</span>
+</pre></div>
+</div>
+<p>Our first guess, of course, is that the butler did it.
+Here we call Vampire to test that assumption.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">aunt_agatha_guess</span> <span class="o">:=</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="n">killed</span><span class="o">(</span><span class="n">butler</span><span class="o">,</span> <span class="n">agatha</span><span class="o">)}</span>
+
+<span class="c1">-- Termination reason: Satisfiable</span>
+<span class="k">#eval</span> <span class="o">(</span><span class="k">do</span>
+  <span class="n">discard</span> <span class="bp">&lt;|</span> <span class="n">callVampireTptp</span> <span class="n">aunt_agatha_hypotheses</span> <span class="n">aunt_agatha_guess</span> <span class="o">(</span><span class="n">verbose</span> <span class="o">:=</span> <span class="n">true</span><span class="o">)</span>
+  <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Like resolution provers for propositional logic, first-order provers
+generally work by negating the conclusion, adding it to the hypotheses, and
+trying to prove a contradiction.
+In this case, Vampire runs for a while, and ultimately reports that the entailment is not
+valid: the hypotheses together with the negation of the guess are
+satisfiable. In fact, if we negate the guess, Vampire proves
+instantaneously that the butler is not the killer.
+We have no better luck with Charles, leaving us to
+conclude that this must be a case of suicide.
+Vampire confirms this:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">aunt_agatha_conclusion</span> <span class="o">:=</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="n">killed</span><span class="o">(</span><span class="n">agatha</span><span class="o">,</span> <span class="n">agatha</span><span class="o">)}</span>
+
+<span class="c1">-- Termination reason: Refutation</span>
+<span class="k">#eval</span> <span class="o">(</span><span class="k">do</span>
+  <span class="n">discard</span> <span class="bp">&lt;|</span> <span class="n">callVampireTptp</span> <span class="n">aunt_agatha_hypotheses</span> <span class="n">aunt_agatha_conclusion</span> <span class="o">(</span><span class="n">verbose</span> <span class="o">:=</span> <span class="n">true</span><span class="o">)</span>
+  <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>It is also worthwhile finding a proof on your own.</p>
+</div>
+<div class="section" id="example-the-eight-asylum">
+<h2><span class="section-number">15.2. </span>Example: The Eight Asylum<a class="headerlink" href="#example-the-eight-asylum" title="Permalink to this headline">¶</a></h2>
+<p>In an article called “The Asylum of Doctor Tarr and Professor Fether,” published
+in the <em>American Mathematical Monthly</em> and later in a collection <em>The Lady or the Tiger? and other Logic Puzzles</em>,
+Raymond Smullyan tells of an investigation of 11 insane asylums by Inspector Craig of Scotland Yard.
+In each of these asylums, every inhabitant is either a doctor or a patient,
+and every inhabitant is
+either sane or insane. The sane patients are totally sane: everything they believe is true. The insane
+patients are totally insane, in that everything they believe is false.</p>
+<p>The eight asylum is described as follows:</p>
+<blockquote>
+<div><p>The next asylum proved to be quite a puzzler, but Craig
+finally managed to get to the bottom of things. He found out that the following
+conditions prevailed:</p>
+<ol class="arabic simple">
+<li><p>Given any two inhabitants A and B, either A trusts B or he doesn’t.</p></li>
+<li><p>Some of the inhabitants are <em>teachers</em> of other inhabitants. Each inhabitant
+has at least one teacher.</p></li>
+<li><p>No inhabitant A is willing to be a teacher of an inhabitant B unless A
+believes that B trusts himself.</p></li>
+<li><p>For any inhabitant A there is an inhabitant B who trusts all and only those
+inhabitants who have at least one teacher who is trusted by A. (In other words, for
+any inhabitant X, B trusts X if A trusts some teacher of X, and B doesn’t trust X
+unless A trusts some teacher of X.)</p></li>
+<li><p>There is one inhabitant who trusts all the patients but does not trust any of
+the doctors.</p></li>
+</ol>
+<p>Inspector Craig thought this over for a long time and was finally able to prove that
+either one of the the patients was sane or one of doctors was insane. Can you
+find the proof?</p>
+</div></blockquote>
+<p>Given the instructions, we can represent the fact that <span class="math notranslate nohighlight">\(x\)</span> is insane
+with the formula <span class="math notranslate nohighlight">\(\lnot \fn{Sane}(x)\)</span>, and the statement that <span class="math notranslate nohighlight">\(x\)</span> is a patient
+with the formula <span class="math notranslate nohighlight">\(\lnot \fn{Doctor}(x)\)</span>. Moreover, any statement of the form
+“<span class="math notranslate nohighlight">\(x\)</span> believes <span class="math notranslate nohighlight">\(P\)</span>” is equivalent to <span class="math notranslate nohighlight">\(\fn{Sane(x)} \liff P\)</span>,
+because either <span class="math notranslate nohighlight">\(x\)</span> is sane and <span class="math notranslate nohighlight">\(P\)</span> holds or <span class="math notranslate nohighlight">\(x\)</span> is insane and <span class="math notranslate nohighlight">\(P\)</span>
+doesn’t hold. We can therefore formalize the hypotheses as follows:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">asylum_eight_hypotheses</span> <span class="o">:</span> <span class="n">List</span> <span class="n">FOForm</span> <span class="o">:=</span> <span class="o">[</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="n">Teaches</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">x</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">∀</span> <span class="n">y.</span> <span class="n">Teaches</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="bp">→</span> <span class="o">(</span><span class="n">Sane</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">↔</span> <span class="n">Trusts</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">))},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∀</span> <span class="n">x.</span> <span class="bp">∃</span> <span class="n">y.</span> <span class="bp">∀</span> <span class="n">z.</span> <span class="n">Trusts</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">,</span> <span class="bp">%</span><span class="n">z</span><span class="o">)</span> <span class="bp">↔</span> <span class="bp">∃</span> <span class="n">w.</span> <span class="n">Teaches</span><span class="o">(</span><span class="bp">%</span><span class="n">w</span><span class="o">,</span> <span class="bp">%</span><span class="n">z</span><span class="o">)</span> <span class="bp">∧</span> <span class="n">Trusts</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">w</span><span class="o">)},</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="bp">∀</span> <span class="n">y.</span> <span class="bp">¬</span> <span class="n">Doctor</span><span class="o">(</span><span class="bp">%</span><span class="n">y</span><span class="o">)</span> <span class="bp">↔</span> <span class="n">Trusts</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">,</span> <span class="bp">%</span><span class="n">y</span><span class="o">)}</span>
+<span class="o">]</span>
+</pre></div>
+</div>
+<p>It then takes Lean only a few seconds to draw the relevant conclusion.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">asylum_eight_conclusion</span> <span class="o">:=</span>
+  <span class="n">fo</span><span class="bp">!</span><span class="o">{</span><span class="bp">∃</span> <span class="n">x.</span> <span class="n">Doctor</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)</span> <span class="bp">↔</span> <span class="bp">¬</span> <span class="n">Sane</span><span class="o">(</span><span class="bp">%</span><span class="n">x</span><span class="o">)}</span>
+
+<span class="k">#eval</span> <span class="o">(</span><span class="k">do</span>
+  <span class="n">discard</span> <span class="bp">&lt;|</span> <span class="n">callVampireTptp</span> <span class="n">asylum_eight_hypotheses</span> <span class="n">asylum_eight_conclusion</span>
+    <span class="o">(</span><span class="n">verbose</span> <span class="o">:=</span> <span class="n">true</span><span class="o">)</span>
+  <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Once again, it is worthwhile to find a proof by hand. You can use
+Vampire to check some of your conclusions along the way.</p>
+</div>
+<div class="section" id="exercise-the-last-asylum">
+<h2><span class="section-number">15.3. </span>Exercise: The Last Asylum<a class="headerlink" href="#exercise-the-last-asylum" title="Permalink to this headline">¶</a></h2>
+<p>The last puzzle in the chapter reads as follows:</p>
+<blockquote>
+<div><p>The last asylum Craig visited he found to the be the most bizarre of all.
+This asylum was run by two doctors named Doctor Tarr and Professor Fether.
+There were other doctors on the staff as well.
+Now, an inhabitant was called <em>peculiar</em> if he believed that he was a patient.
+An inhabitant was called <em>special</em> if all patients believed he was peculiar
+and no doctor believed he was peculiar.
+Inspector Craig found out that at least one inhabitant was sane and that the
+following condition held:</p>
+<p><em>Condition C:</em> Each inhabitant had a best friend in the asylum.
+Moreover, given any two inhabitants, A and B, if A believed that B
+was special, then A’s best friend believed that B was a patient.</p>
+<p>Shortly after this discovery, Inspector Craig had private interviews with
+Doctor Tarr and Professor Fether.
+Here is the interview with Doctor Tarr:</p>
+<p><em>Craig:</em> Tell me, Doctor Tarr, are all the doctors in this asylum sane?</p>
+<p><em>Tarr:</em> Of course they are!</p>
+<p><em>Craig:</em> What about the patients? Are they all insane?</p>
+<p><em>Tarr:</em> At least one of them is.</p>
+<p>The second answer struck Craig as a surprisingly modest claim! Of course, if all the
+patients are insane, the it certainly is true that at least one is.
+But why was Doctor Tarr being so cautious? Craig then had his interview with
+Professor Fether, which went as follows:</p>
+<p><em>Craig:</em> Doctor Tarr said that at least one patient here is insane. Surely that
+is true, isn’t it?</p>
+<p><em>Professor Fether:</em> Of course it is true! All the patients in this asylum
+are insane! What kind of asylum do you think we are running?</p>
+<p><em>Craig:</em> What about Doctor Tarr? Is he sane?</p>
+<p><em>Professor Fether:</em> Of course he is! How dare you ask me such a question?</p>
+<p>At this point, Craig realized the full horror of the situation! What was it?</p>
+</div></blockquote>
+<p>In the solutions, Smullyan provides a proof that, under these hypotheses,
+all the patients are sane and all the doctors are insane.
+Formalizing the hypotheses, we were able to use Vampire to show something stronger,
+namely, that the hypotheses themselves are inconsistent. In other words, no such asylum
+can possibly exist!</p>
+<p>We encourage you to formalize the problem, and see if you can get Vampire
+to find a contradiction.
+We are grateful to Alexander Bentkamp for working out a pen-and-paper proof.
+See if you can find one as well, perhaps using Smullyan’s solution as a starting point.</p>
+</div>
 </div>
 
 

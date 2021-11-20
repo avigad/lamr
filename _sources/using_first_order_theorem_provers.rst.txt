@@ -1,4 +1,180 @@
+.. highlight:: lean
+
 .. _chapter_using_first_order_theorem_provers:
 
 Using First-Order Theorem Provers
 =================================
+
+Given a set of hypotheses and a conclusion, a first-order theorem prover
+does its best to find a proof of the conclusion from the hypotheses, using
+first-order logic with equality.
+If it finds one, it reports success.
+If the conclusion does not follow from the hypotheses, in some
+situations, the prover can detect that fact and report it.
+But that is the exception rather than the rule.
+In many situations, the prover will simply burn CPU cycles and gobble up memory,
+and, if we are lucky, eventually time out gracefully.
+
+Let's not blame the provers. They are fighting a brave battle against incompleteness
+and undecidability, and the fact that there are no a priori guarantees that
+a search will be successful makes the quest all the more exciting.
+In this chapter, we show you how you can call a theorem prover from
+within Lean.
+
+Example: Aunt Agatha
+--------------------
+
+The following story is taken from a talk by Peter Baumgartner.
+
+    Someone who lives in Dreadbury Mansion killed Aunt Agatha.
+    Agatha, the butler, and Charles live in Dreadbury Mansion, and are
+    the only people who live therein. A killer always hates his victim,
+    and is never richer than his victim. Charles hates no one that Aunt
+    Agatha hates. Agatha hates everyone except the butler. The butler
+    hates everyone not richer than Aunt Agatha. The butler hates
+    everyone Aunt Agatha hates. No one hates everyone. Agatha is not
+    the butler.
+
+    Who killed Aunt Agatha?
+
+We can represent the hypotheses as follows.
+
+.. literalinclude:: ../../LAMR/Examples/using_first_order_theorem_provers/aunt_agatha.lean
+   :start-after: -- textbook: aunt agatha hypotheses
+   :end-before: -- end
+
+Our first guess, of course, is that the butler did it.
+Here we call Vampire to test that assumption.
+
+.. literalinclude:: ../../LAMR/Examples/using_first_order_theorem_provers/aunt_agatha.lean
+   :start-after: -- textbook: aunt agatha guess
+   :end-before: -- end
+
+Like resolution provers for propositional logic, first-order provers
+generally work by negating the conclusion, adding it to the hypotheses, and
+trying to prove a contradiction.
+In this case, Vampire runs for a while, and ultimately reports that the entailment is not
+valid: the hypotheses together with the negation of the guess are
+satisfiable. In fact, if we negate the guess, Vampire proves
+instantaneously that the butler is not the killer.
+We have no better luck with Charles, leaving us to
+conclude that this must be a case of suicide.
+Vampire confirms this:
+
+.. literalinclude:: ../../LAMR/Examples/using_first_order_theorem_provers/aunt_agatha.lean
+   :start-after: -- textbook: aunt agatha conclusion
+   :end-before: -- end
+
+It is also worthwhile finding a proof on your own.
+
+Example: The Eight Asylum
+-------------------------
+
+In an article called "The Asylum of Doctor Tarr and Professor Fether," published
+in the *American Mathematical Monthly* and later in a collection *The Lady or the Tiger? and other Logic Puzzles*,
+Raymond Smullyan tells of an investigation of 11 insane asylums by Inspector Craig of Scotland Yard.
+In each of these asylums, every inhabitant is either a doctor or a patient,
+and every inhabitant is
+either sane or insane. The sane patients are totally sane: everything they believe is true. The insane
+patients are totally insane, in that everything they believe is false.
+
+The eight asylum is described as follows:
+
+  The next asylum proved to be quite a puzzler, but Craig
+  finally managed to get to the bottom of things. He found out that the following
+  conditions prevailed:
+
+  #. Given any two inhabitants A and B, either A trusts B or he doesn't.
+  #. Some of the inhabitants are *teachers* of other inhabitants. Each inhabitant
+     has at least one teacher.
+  #. No inhabitant A is willing to be a teacher of an inhabitant B unless A
+     believes that B trusts himself.
+  #. For any inhabitant A there is an inhabitant B who trusts all and only those
+     inhabitants who have at least one teacher who is trusted by A. (In other words, for
+     any inhabitant X, B trusts X if A trusts some teacher of X, and B doesn't trust X
+     unless A trusts some teacher of X.)
+  #. There is one inhabitant who trusts all the patients but does not trust any of
+     the doctors.
+
+  Inspector Craig thought this over for a long time and was finally able to prove that
+  either one of the the patients was sane or one of doctors was insane. Can you
+  find the proof?
+
+Given the instructions, we can represent the fact that :math:`x` is insane
+with the formula :math:`\lnot \fn{Sane}(x)`, and the statement that :math:`x` is a patient
+with the formula :math:`\lnot \fn{Doctor}(x)`. Moreover, any statement of the form
+":math:`x` believes :math:`P`" is equivalent to :math:`\fn{Sane(x)} \liff P`,
+because either :math:`x` is sane and :math:`P` holds or :math:`x` is insane and :math:`P`
+doesn't hold. We can therefore formalize the hypotheses as follows:
+
+.. literalinclude:: ../../LAMR/Examples/using_first_order_theorem_provers/asylum_eight.lean
+   :start-after: -- textbook: asylum eight hypotheses
+   :end-before: -- end
+
+It then takes Lean only a few seconds to draw the relevant conclusion.
+
+.. literalinclude:: ../../LAMR/Examples/using_first_order_theorem_provers/asylum_eight.lean
+   :start-after: -- textbook: asylum eight conclusion
+   :end-before: -- end
+
+Once again, it is worthwhile to find a proof by hand. You can use
+Vampire to check some of your conclusions along the way.
+
+
+Exercise: The Last Asylum
+-------------------------
+
+The last puzzle in the chapter reads as follows:
+
+    The last asylum Craig visited he found to the be the most bizarre of all.
+    This asylum was run by two doctors named Doctor Tarr and Professor Fether.
+    There were other doctors on the staff as well.
+    Now, an inhabitant was called *peculiar* if he believed that he was a patient.
+    An inhabitant was called *special* if all patients believed he was peculiar
+    and no doctor believed he was peculiar.
+    Inspector Craig found out that at least one inhabitant was sane and that the
+    following condition held:
+
+    *Condition C:* Each inhabitant had a best friend in the asylum.
+    Moreover, given any two inhabitants, A and B, if A believed that B
+    was special, then A's best friend believed that B was a patient.
+
+    Shortly after this discovery, Inspector Craig had private interviews with
+    Doctor Tarr and Professor Fether.
+    Here is the interview with Doctor Tarr:
+
+    *Craig:* Tell me, Doctor Tarr, are all the doctors in this asylum sane?
+
+    *Tarr:* Of course they are!
+
+    *Craig:* What about the patients? Are they all insane?
+
+    *Tarr:* At least one of them is.
+
+    The second answer struck Craig as a surprisingly modest claim! Of course, if all the
+    patients are insane, the it certainly is true that at least one is.
+    But why was Doctor Tarr being so cautious? Craig then had his interview with
+    Professor Fether, which went as follows:
+
+    *Craig:* Doctor Tarr said that at least one patient here is insane. Surely that
+    is true, isn't it?
+
+    *Professor Fether:* Of course it is true! All the patients in this asylum
+    are insane! What kind of asylum do you think we are running?
+
+    *Craig:* What about Doctor Tarr? Is he sane?
+
+    *Professor Fether:* Of course he is! How dare you ask me such a question?
+
+    At this point, Craig realized the full horror of the situation! What was it?
+
+In the solutions, Smullyan provides a proof that, under these hypotheses,
+all the patients are sane and all the doctors are insane.
+Formalizing the hypotheses, we were able to use Vampire to show something stronger,
+namely, that the hypotheses themselves are inconsistent. In other words, no such asylum
+can possibly exist!
+
+We encourage you to formalize the problem, and see if you can get Vampire
+to find a contradiction.
+We are grateful to Alexander Bentkamp for working out a pen-and-paper proof.
+See if you can find one as well, perhaps using Smullyan's solution as a starting point.
