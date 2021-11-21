@@ -108,7 +108,7 @@ you can update it by typing the following commands from inside the repository fo
   lake build
 ```
 You will then have to manually copy new files from the `LAMR/Examples`
-folder to the `User/Examples` folder. 
+folder to the `User/Examples` folder.
 You may have to type `elan update` if you installed Lean a while ago.
 
 If you have forked the repository on Github, you can update the fork by clicking the "fetch upstream"
@@ -116,13 +116,20 @@ button.
 
 ## To use automated reasoning tools
 
-There is a Linux CaDiCaL binary in the `LAMR/bin` folder in the repository. If you are running the repository
-from Gitpod or from a computer using Linux, the instructions in the textbook should work right out of the box.
-If you are using OS/X or Windows, however, you will have to build CaDiCaL on your own.
-You can find instructions on how to obtain CaDiCaL [here](https://github.com/arminbiere/cadical).
-It is straightforward on OS/X. We are still working out instructions for how to do it on Windows with WSL.
+The `LAMR/bin` folder in the repository contains Linux binaries for CaDiCaL, Z3, CVC4, CVC5, and Vampire.
+We provide procedures for calling them from Lean, and the `LAMR/Examples` folder has some examples.
+If you are using the course with Gitpod or locally with Linux, the external tools will hopefully work
+out of the box. If you are using OS/X or Windows, however, you will have to obtain or build the relevant
+binaries on your own and replace the ones in `LAMR/bin`. You can find information how to do that here:
 
-We will later provide instructions as to how to use Z3 and Vampire.
+- [CaDiCaL](https://github.com/arminbiere/cadical).
+- [Z3](https://github.com/Z3Prover/z3)
+- [CVC4](https://cvc4.github.io/)
+- [CVC5](https://github.com/cvc5/cvc5)
+- [Vampire](https://vprover.github.io/)
+
+Building CaDiCaL for Windows seems difficult.
+You do not need all three SMT solvers; any one of Z3, CVC4, or CVC5 will do.
 
 
 
