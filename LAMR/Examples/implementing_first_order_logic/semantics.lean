@@ -87,14 +87,9 @@ def TermFnInterp : FnInterp FOTerm := FOTerm.app
 
 def FOTerm.subst' := eval TermFnInterp
 
-def arith_ex4 := (arith_ex1.subst
-        assign!{ x ↦ arith_ex2, y ↦ arith_ex3 }).eval
-        arithFnInterp assign!{z ↦ 7}
-
-def arith_ex4' := arith_ex1.subst' assign!{ x ↦ arith_ex2, y ↦ arith_ex3  }
-
-#eval arith_ex4
-#eval arith_ex4'  -- the same!
+-- the same!
+#eval arith_ex1.subst assign!{ x ↦ arith_ex2, y ↦ arith_ex3 }
+#eval arith_ex1.subst' assign!{ x ↦ arith_ex2, y ↦ arith_ex3  }
 -- end
 
 /-
