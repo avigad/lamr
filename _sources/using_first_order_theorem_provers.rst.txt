@@ -75,10 +75,10 @@ in the *American Mathematical Monthly* and later in a collection *The Lady or th
 Raymond Smullyan tells of an investigation of 11 insane asylums by Inspector Craig of Scotland Yard.
 In each of these asylums, every inhabitant is either a doctor or a patient,
 and every inhabitant is
-either sane or insane. The sane patients are totally sane: everything they believe is true. The insane
-patients are totally insane, in that everything they believe is false.
+either sane or insane. The sane inhabitants are totally sane: everything they believe is true. The insane
+inhabitants are totally insane, in that everything they believe is false.
 
-The eight asylum is described as follows:
+The eighth asylum is described as follows:
 
   The next asylum proved to be quite a puzzler, but Craig
   finally managed to get to the bottom of things. He found out that the following
@@ -97,7 +97,7 @@ The eight asylum is described as follows:
      the doctors.
 
   Inspector Craig thought this over for a long time and was finally able to prove that
-  either one of the the patients was sane or one of doctors was insane. Can you
+  either one of the patients was sane or one of doctors was insane. Can you
   find the proof?
 
 Given the instructions, we can represent the fact that :math:`x` is insane
@@ -176,5 +176,5 @@ can possibly exist!
 
 We encourage you to formalize the problem, and see if you can get Vampire
 to find a contradiction.
-We are grateful to Alexander Bentkamp for working out a pen-and-paper proof.
+We are grateful to Alexander Bentkamp and Seulkee Baek for working out pen-and-paper proofs.
 See if you can find one as well, perhaps using Smullyan's solution as a starting point.
