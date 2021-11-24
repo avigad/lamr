@@ -75,8 +75,10 @@ in the *American Mathematical Monthly* and later in a collection *The Lady or th
 Raymond Smullyan tells of an investigation of 11 insane asylums by Inspector Craig of Scotland Yard.
 In each of these asylums, every inhabitant is either a doctor or a patient,
 and every inhabitant is
-either sane or insane. The sane inhabitants are totally sane: everything they believe is true. The insane
-inhabitants are totally insane, in that everything they believe is false.
+either sane or insane. The sane inhabitants are totally sane and the insane inhabitants are
+totally insane, in the following sense: for any proposition :math:`P`,
+a sane inhabitant believes :math:`P` if and only if :math:`P` is true,
+and an insane inhabitant believes :math:`P` if and only if :math:`P` is false.
 
 The eighth asylum is described as follows:
 
