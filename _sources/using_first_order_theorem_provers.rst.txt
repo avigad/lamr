@@ -164,6 +164,10 @@ The last puzzle in the chapter reads as follows:
     *Professor Fether:* Of course it is true! All the patients in this asylum
     are insane! What kind of asylum do you think we are running?
 
+    *Craig:* What about the doctors? Are they all sane?
+
+    *Professor Fether:* At least one of them is.
+
     *Craig:* What about Doctor Tarr? Is he sane?
 
     *Professor Fether:* Of course he is! How dare you ask me such a question?
@@ -176,7 +180,7 @@ Formalizing the hypotheses, we were able to use Vampire to show something strong
 namely, that the hypotheses themselves are inconsistent. In other words, no such asylum
 can possibly exist!
 
-We encourage you to formalize the problem, and see if you can get Vampire
+We encourage you to formalize the problem and see if you can get Vampire
 to find a contradiction.
 We are grateful to Alexander Bentkamp and Seulkee Baek for working out pen-and-paper proofs.
 See if you can find one as well, perhaps using Smullyan's solution as a starting point.
