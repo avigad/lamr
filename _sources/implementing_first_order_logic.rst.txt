@@ -279,6 +279,8 @@ You can then evaluate statements about the world:
 
 The file `TWExamples` provides two puzzles, taken from *Tarski's World*, for you to try.
 
+.. _section_unification:
+
 Unification
 -----------
 

@@ -27,7 +27,7 @@ Logic and Mechanized Reasoning
    deduction_for_first_order_logic
    using_first_order_theorem_provers
    first_order_logic_in_lean
-   simple_type_theory
+   beyond_first_order_logic
 
 .. * :ref:`genindex`
    * :ref:`modindex`

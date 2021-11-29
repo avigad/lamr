@@ -11,6 +11,12 @@ Equational reasoning
 --------------------
 
 
+.. _section_quantifiers_in_lean:
+
+Quantifiers
+-----------
+
+
 .. _section_structural_induction_in_lean:
 
 Structural induction
@@ -131,6 +137,3 @@ With those facts in hand, we have the identity we are after:
    Add more exercises.
    (For example, use extended binary trees and formalize proofs from previous chapter.)
 
-
-Quantifiers
------------

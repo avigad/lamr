@@ -1,0 +1,38 @@
+.. _chapter_beyond_first_order_logic:
+
+Beyond First-Order Logic
+========================
+
+
+Sorts
+-----
+
+
+
+Function types
+--------------
+
+.. function types and lambda
+
+   introduce terminology, simple type theory
+
+   mention untyped lambda calculus.
+
+Higher-order logic
+------------------
+
+.. Can define quantifiers as functions to `Bool`. Often called `Prop` instead.
+
+   Example: induction axiom
+
+   Higher-order unification is undecidable.
+
+   No system that is sound and complete for full second-order semantics.
+
+
+Type theory
+-----------
+
+.. Inductive types
+
+   Dependent types

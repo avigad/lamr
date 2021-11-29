@@ -700,7 +700,7 @@ The same is true in the when we talk about provability of :math:`A`
 from a set of hypotheses :math:`\Gamma`.
 Now, in the case of provability, it is clear that for any set :math:`\Gamma`,
 finite or infinite, :math:`\Gamma \proves A` if and only if there is a finite
-subset :math:`\Gamma' \subseteq \Gamma` such that :math:`\Gamma \proves A`.
+subset :math:`\Gamma' \subseteq \Gamma` such that :math:`\Gamma' \proves A`.
 The corresponding fact about the entailment relation is also true:
 
 .. Admonition:: Theorem (the compactness theorem for propositional logic)

@@ -136,13 +136,246 @@ is not free in the formula :math:`B` in the generalization rule.
 You can think of it as saying that :math:`x` is really arbitrary.
 
 As in :numref:`section_propositional_sequent_calculus`, we can add the cut rule, which represents
-a form of modus ponents. In class, we will sketch a proof that this system is complete even
+a form of modus ponens. In class, we will sketch a proof that this system is complete even
 without the cut rule.
+
 
 Resolution
 ----------
 
+We now explain how to extend propositional resolution to the first-order setting.
+As with propositional resolution, first-order resolution is a refutational proof system:
+to prove :math:`A`, we assume :math:`\lnot A` and derive a contradiction.
+Remember that propositional resolution required us to put formulas in conjunctive
+normal form.
+Having quantifiers complicates things.
+One option is to put :math:`\lnot A` in prenex form, with all the quantifiers in front,
+and then put the quantifier-free part of the formula in CNF.
+This is a step in the right direction,
+but the presence of existential quantifiers makes automated reasoning more difficult,
+so we introduce a method, *Skolemization*, to get rid of them.
+
+Here is the idea. Suppose we are trying to refute a formula of the form
+:math:`\fa x \ex y A(x, y)`.
+From a semantic point of view, we are trying to show that this formula is unsatisfiable.
+Let :math:`f(x)` be a new function symbol.
+We claim that :math:`\fa x \ex y A(x, y)` is equisatisfiable with
+:math:`\fa x A(x, f(x))`.
+One direction is easy: any model of :math:`\fa x A(x, f(x))` is a model of
+:math:`\fa x \ex y A(x, y)`. To see this, notice that
+if :math:`\mdl M` satisfies :math:`\fa x A(x, f(x))`,
+then it also satisfies :math:`\fa x \ex y A(x, y)`: given any value :math:`a` in the universe
+of :math:`\mdl M`, if we set :math:`b` equal to :math:`f^{\mdl M}(a)`, then :math:`A` holds
+of :math:`a` and `b` in :math:`\mdl M`.
+For the other direction, suppose :math:`\mdl M` is a model of :math:`\fa x \ex y A(x, y)`.
+That means that for every value :math:`a` in the universe
+of :math:`\mdl M`, there is a value :math:`b` such that :math:`A` holds
+of :math:`a` and `b`. We can then interpret :math:`f` as any function
+that, for any :math:`a`, returns such a value :math:`b`.
+Abstractly, think of :math:`f(x)` as a function that, whenever there is a :math:`y`
+satisfying :math:`A(x, y)`, returns such a value of :math:`y`.
+Such a function is known as a *Skolem function* for :math:`\fa x \ex y A(x, y)`,
+and the process of replacing :math:`\fa x \ex y A(x, y)` by :math:`\fa x A(x, f(x))`
+is known as *Skolemization*. More generally, we may have multiple universally quantified
+variables in front of :math:`y`, in which case, they are all arguments to :math:`f`.
+
+Eliminating all the existential quantifiers in this way results in a formula in *Skolem
+normal form*. It helps to put the sentence in negation-normal form first, because existential
+quantifiers under negations or on the left side of an implication act like universal quantifiers
+and vice versa. For example, suppose we are given the sentence
+
+.. math::
+
+  \fa {u, x} \ex y (\fa v Q(x, y, u, v)) \to \fa z \ex w R(x, y, z, w)
+
+where :math:`Q` and :math:`R` are relation symbols.
+First, we rewrite the sentence as
+
+.. math::
+
+  \fa {u, x} \ex y (\ex v \lnot Q(x, y, u, v)) \lor \fa z \ex w B(x, y, z, w).
+
+First, we replace :math:`y` by a Skolem function that depends on :math:`u` and :math:`x`:
+
+.. math::
+
+  \fa {u, x} (\ex v \lnot Q(x, y, u, f(u, x))) \lor \fa z \ex w B(x, f(u, x), z, w).
+
+Then we replace :math:`v`:
+
+.. math::
+
+  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, v)) \lor \fa z \ex w B(x, f(u, x), z, w).
+
+Finally, we replace :math:`z`:
+
+.. math::
+
+  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, v)) \lor \fa z B(x, f(u, x), z, h(u, x, z)).
+
+We are now left with only universal quantifiers.
+
+In this example, if we bring :math:`z` to the front, we get a universally quantified clause:
+
+.. math::
+
+  \fa {u, x, z} \lnot Q(x, f(u, x), u, g(u, v)) \lor B(x, f(u, x), z, h(u, x, z)).
+
+More generally, we can always bring the
+universal quantifiers to the front and put the rest of the formula in conjunctive normal form.
+Using the identity :math:`(\fa x A \land B) \liff (\fa x A) \land (\fa x B)`,
+we can then reduce the original sentence to a conjunction of universally quantified clauses.
+
+A *resolution proof* is designed to refute a set of universally quantified clauses.
+The *resolution rule* from first-order logic is now generalized as follows:
+given two universally quantified clauses, instantiate the universal quantifiers to
+obtain a complementary literal, resolve, and then generalize.
+For example, given
+
+- :math:`\fa {x, y} A(f(x),y)` and
+- :math:`\fa {w, z} \lnot A(w, g(z)) \lor B(w, z)`,
+
+we can do the following:
+
+- instantiate :math:`x` to :math:`u` and :math:`y` to :math:`g(v)` in the
+  first to get :math:`A(f(u),g(v))`,
+- instantiate :math:`w` to :math:`f(u)` and :math:`z` to :math:`v` in the
+  second to get :math:`\lnot A(f(u), g(v)) \lor B(f(u), v)`,
+- resolve, to get :math:`B(f(u), v)`, and then
+- generalize, to get :math:`\fa {u, v} B(f(u), v)`.
+
+We then say that :math:`\fa {u, v} B(f(u), v)` has been obtained by resolution from
+the two hypotheses.
+
+As with propositional logic, a first-order resolution refutation is a proof of the empty clause
+using the resolution rule. For example, suppose we have the following hypotheses:
+
+- Every smart and motivated student likes logic.
+- Every student at Carnegie Mellon is smart.
+- At least one student at Carnegie Mellon is motivated.
+
+Let us show that someone likes logic.
+We introduce predicates :math:`S(x)`, :math:`M(x)`, :math:`L(x)`, and :math:`C(x)` for
+"smart," "motivated," "likes logic", and "is at Carnegie Mellon."
+Negating the conclusion and expressing
+the statements as universally quantified clauses, we get:
+
+1. :math:`\fa x \lnot S(x) \lor \lnot M(x) \lor L(x)`.
+2. :math:`\fa x \lnot C(x) \lor S(x)`.
+3. :math:`C(a)`.
+4. :math:`M(a)`.
+5. :math:`\fa x \lnot L(x)`.
+
+Notice that the existential quantifier in the third hypothesis has been Skolemized to produce
+the constant :math:`a`,
+and that we split the resulting conjunction into two singleton clauses.
+We now refute the hypotheses as follows:
+
+6. :math:`\fa x \lnot C(x) \lor \lnot M(x) \lor L(x)`, from 1 and 2.
+7. :math:`\lnot M(a) \lor L(a)`, from 6 and 3.
+8. :math:`L(a)`, from 7 and 4.
+9. :math:`\bot` from 8 and 5.
+
+Another example (stolen from John Harrison's book) is the barber paradox.
+Suppose we are told that in a given town there is a male barber who shaves all and only
+those men who don't shave themselves.
+We obtain a contradiction by asking who shaves the barber.
+Formally, this amounts to a refutation of the sentence
+:math:`\ex x \fa y S(x, y) \liff \lnot S(y, y)`.
+Skolemizing and expressing this as a conjunction of clauses, we get:
+
+- :math:`\fa y \lnot S(a, y) \lor \lnot S(y,y)`.
+- :math:`\fa y S(y, y) \lor S(a, y)`.
+
+Instantiating :math:`y` to :math:`a` in both cases and resolving yields the empty clause.
+
+As you might have guessed,
+this is where *unification*, discussed in :numref:`section_unification`, comes in handy.
+When looking for resolvents, though, it's not always sufficient to look for most general unifiers
+of a literal from each clause; sometimes a resolution step has to unify two or more literals
+in the same clause as well.
+The example of the barber paradox illustrates this. You can check that in this
+case we are not forced to instantiate both instances of :math:`y` to :math:`a` unless
+we consider more than two literals,
+and anything short of that fails to produce a new clause.
+
+The proof system we have just described is sound and complete for first-order logic without
+equality. The general method of proof search is implicit in the presentation:
+systematically searching for substitutions that yield complementary literals and resolving
+on them is guaranteed to find a refutation if one exists.
+In general, if there is no refutation, the search may continue forever.
+We can prove that the calculus is complete, as usual,
+by arguing that if the search fails to terminate,
+the failure points the way to the existence of a countermodel.
+
+To handle equality, one option is simply to add equality axioms to the hypotheses.
+This is inefficient, however. Modern first-order provers use techniques based on
+*paramodulation* and *superposition*.
+
+It is worth mentioning that Skolemization can also be used for search in the cut-free sequent
+calculus described in the previous section, or, more or less equivalently, in a tableau search.
+In an ordinary proof system (rather than a refutation system), rather than an equisatisfiable
+formula, we want one that is *equivalid*.
+This requires replacing the universally quantified variables rather than the existentially
+quantified variables, resulting in *Herbrand normal form* instead of
+*Skolem normal form*. Tableau systems are usually presented, instead, as refutation calculi,
+in which case Skolem normal form is appropriate.
 
 
 Natural deduction
 -----------------
+
+Finally, we can extend the system of natural deduction of :numref:`section_natural_deduction`.
+The quantifier rules are as follows:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$\Gamma, A[t/x] \fCenter B$}
+      \UIC{$\Gamma, \fa x A \fCenter B$}
+      \end{prooftree}
+      \quad \quad
+      \begin{prooftree}
+      \AXC{$\Gamma \fCenter A$}
+      \UIC{$\Gamma \fCenter \fa x A$}
+      \end{prooftree}
+      \]
+      \[\begin{prooftree}
+      \AXC{$\Gamma, A \fCenter B$}
+      \UIC{$\Gamma, \ex x A \fCenter B$}
+      \end{prooftree}
+      \quad \quad
+      \begin{prooftree}
+      \AXC{$\Gamma \fCenter A[t/x]$}
+      \UIC{$\Gamma \fCenter \ex x A$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AX$\Gamma, A[t/x] \fCenter B$
+      \UI$\Gamma, \fa x A \fCenter B$
+      \DP
+      \quad \quad
+      \AX$\Gamma \fCenter A$
+      \UI$\Gamma \fCenter \fa x A$
+      \DP \\
+      \ \\
+      \AX$\Gamma, A \fCenter B$
+      \UI$\Gamma \ex x A \fCenter B$
+      \DP
+      \quad \quad
+      \AX$\Gamma \fCenter A[t/x]$
+      \UI$\Gamma \fCenter \ex x A$
+      \DP
+      \end{center}
+
+In the right rule for :math:`\forall` and the left rule for :math:`\exists`, the eigenvariable
+condition amounts to the requirement that :math:`x` is not free in any formula other than
+:math:`A`. The rules for equality are the same as in :numref:`section_equality`,
+except that in all the rules, we allow a set :math:`\Gamma` of formulas on the left side
+of the sequent.
+
+.. TODO: give examples of natural deduction proofs.
