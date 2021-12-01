@@ -161,7 +161,8 @@ From a semantic point of view, we are trying to show that this formula is unsati
 Let :math:`f(x)` be a new function symbol.
 We claim that :math:`\fa x \ex y A(x, y)` is equisatisfiable with
 :math:`\fa x A(x, f(x))`.
-One direction is easy: any model of :math:`\fa x A(x, f(x))` is a model of
+As a result, we can refute :math:`\fa x \ex y A(x, y)` by refuting :math:`\fa x A(x, f(x))`.
+One direction of the claim is easy: any model of :math:`\fa x A(x, f(x))` is a model of
 :math:`\fa x \ex y A(x, y)`. To see this, notice that
 if :math:`\mdl M` satisfies :math:`\fa x A(x, f(x))`,
 then it also satisfies :math:`\fa x \ex y A(x, y)`: given any value :math:`a` in the universe
@@ -172,14 +173,22 @@ That means that for every value :math:`a` in the universe
 of :math:`\mdl M`, there is a value :math:`b` such that :math:`A` holds
 of :math:`a` and `b`. We can then interpret :math:`f` as any function
 that, for any :math:`a`, returns such a value :math:`b`.
-Abstractly, think of :math:`f(x)` as a function that, whenever there is a :math:`y`
-satisfying :math:`A(x, y)`, returns such a value of :math:`y`.
-Such a function is known as a *Skolem function* for :math:`\fa x \ex y A(x, y)`,
-and the process of replacing :math:`\fa x \ex y A(x, y)` by :math:`\fa x A(x, f(x))`
-is known as *Skolemization*. More generally, we may have multiple universally quantified
-variables in front of :math:`y`, in which case, they are all arguments to :math:`f`.
 
-Eliminating all the existential quantifiers in this way results in a formula in *Skolem
+More generally, given any formula :math:`A(x, y)` and a new function symbol :math:`f(x)`,
+we can expand any model for the language of :math:`A` with an interpretation of :math:`f(x)`
+satisfying :math:`\fa x (\ex y A(x, y)) \liff A(x, f(x))`.
+We simply interpret :math:`f(x)` as a function that, whenever there is a :math:`y` in the model
+satisfying :math:`A(x, y)`, returns such a :math:`y`.
+Such a function is known as a *Skolem function* for :math:`\ex y A(x, y)`,
+and the process of replacing :math:`\fa x \ex y A(x, y)` by :math:`\fa x A(x, f(x))`
+is known as *Skolemization*. The equivalence :math:`\fa x (\ex y A(x, y)) \liff A(x, f(x))`
+is known as the corresponding *Skolem axiom*.
+Because we can always choose :math:`f` to satisfy the Skolem axiom, we can replace
+:math:`\ex y A(x, y)` with :math:`A(x, f(x))` in a set of hypotheses and preserve satisfiability.
+In general, a formula :math:`\ex y A(y)` may have more than one free variable, in which case they should
+all be arguments to :math:`f`.
+
+Iteratively eliminating all the existential quantifiers in this way results in a formula in *Skolem
 normal form*. It helps to put the sentence in negation-normal form first, because existential
 quantifiers under negations or on the left side of an implication act like universal quantifiers
 and vice versa. For example, suppose we are given the sentence
@@ -193,25 +202,25 @@ First, we rewrite the sentence as
 
 .. math::
 
-  \fa {u, x} \ex y (\ex v \lnot Q(x, y, u, v)) \lor \fa z \ex w B(x, y, z, w).
+  \fa {u, x} \ex y (\ex v \lnot Q(x, y, u, v)) \lor \fa z \ex w R(x, y, z, w).
 
 First, we replace :math:`y` by a Skolem function that depends on :math:`u` and :math:`x`:
 
 .. math::
 
-  \fa {u, x} (\ex v \lnot Q(x, y, u, f(u, x))) \lor \fa z \ex w B(x, f(u, x), z, w).
+  \fa {u, x} (\ex v \lnot Q(x, y, u, f(u, x))) \lor \fa z \ex w R(x, f(u, x), z, w).
 
 Then we replace :math:`v`:
 
 .. math::
 
-  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, v)) \lor \fa z \ex w B(x, f(u, x), z, w).
+  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, v)) \lor \fa z \ex w R(x, f(u, x), z, w).
 
 Finally, we replace :math:`z`:
 
 .. math::
 
-  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, v)) \lor \fa z B(x, f(u, x), z, h(u, x, z)).
+  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, v)) \lor \fa z R(x, f(u, x), z, h(u, x, z)).
 
 We are now left with only universal quantifiers.
 
@@ -219,7 +228,7 @@ In this example, if we bring :math:`z` to the front, we get a universally quanti
 
 .. math::
 
-  \fa {u, x, z} \lnot Q(x, f(u, x), u, g(u, v)) \lor B(x, f(u, x), z, h(u, x, z)).
+  \fa {u, x, z} \lnot Q(x, f(u, x), u, g(u, v)) \lor R(x, f(u, x), z, h(u, x, z)).
 
 More generally, we can always bring the
 universal quantifiers to the front and put the rest of the formula in conjunctive normal form.
@@ -320,6 +329,39 @@ This requires replacing the universally quantified variables rather than the exi
 quantified variables, resulting in *Herbrand normal form* instead of
 *Skolem normal form*. Tableau systems are usually presented, instead, as refutation calculi,
 in which case Skolem normal form is appropriate.
+
+We close this section with one more example. Consider the following hypotheses:
+
+#. Every students owns either an iphone or a laptop.
+#. Every student who owns a laptop also owns a pair of bluetooth headphones.
+#. Every iphone is buggy.
+#. Every pair of bluetooth headphones is buggy.
+#. Every student who owns something buggy is sad.
+
+From these we should be able to conclude that every student is sad.
+We can formalize the hypotheses as follows:
+
+#. :math:`\fa x \fn{Student}(x) \to \ex y \fn{Owns}(x, y) \land (\fn{Iphone}(y) \lor \fn{Laptop}(y))`
+#. :math:`\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x,y) \land \fn{Laptop}(y) \to \ex z \fn{Owns}(x, z) \land \fn{Headphones}(x, z)`
+#. :math:`\fa y \fn{Iphone}(y) \to \fn{Buggy}(y)`
+#. :math:`\fa y \fn{Headphones}(y) \to \fn{Buggy}(y)`
+#. :math:`\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x, y) \land \fn{Buggy}(y) \to \fn{Sad}(x)`
+
+The desired conclusion is :math:`\fa x \fn{Student}(x) \to \fn{Sad}(x)`.
+You can check that if we negate the conclusion, Skolemize, put the results in CNF,
+and move universal quantifiers through the hypotheses, we get the following:
+
+#. :math:`\fa x \lnot \fn{Student}(x) \lor \fn{Owns}(x, f(x))`
+#. :math:`\fa x \lnot \fn{Student}(x) \lor \fn{Iphone}(x, f(x)) \lor \fn{Laptop}(f(x))`
+#. :math:`\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Laptop}(y) \lor \fn{Headphones}(g(x,y))`
+#. :math:`\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Laptop}(y) \lor \fn{Owns}(g(x,y))`
+#. :math:`\fa y \lnot \fn{Iphone}(y) \lor \fn{Buggy}(y)`
+#. :math:`\fa y \lnot \fn{Headphones}(y) \lor \fn{Buggy}(y)`
+#. :math:`\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Buggy}(y) \lor \fn{Sad}(x)`
+#. :math:`\fn{Student}(a)`
+#. :math:`\lnot \fn{Sad}(a)`
+
+We leave it to you to construct a resolution proof of the empty clause from these.
 
 
 Natural deduction

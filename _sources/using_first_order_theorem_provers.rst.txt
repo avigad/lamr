@@ -113,7 +113,7 @@ doesn't hold. We can therefore formalize the hypotheses as follows:
    :start-after: -- textbook: asylum eight hypotheses
    :end-before: -- end
 
-It then takes Lean only a few seconds to draw the relevant conclusion.
+It then takes Vampire only a fraction of a second to draw the relevant conclusion.
 
 .. literalinclude:: ../../LAMR/Examples/using_first_order_theorem_provers/asylum_eight.lean
    :start-after: -- textbook: asylum eight conclusion
