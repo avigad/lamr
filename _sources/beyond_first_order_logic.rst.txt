@@ -30,9 +30,9 @@ Higher-order logic
    No system that is sound and complete for full second-order semantics.
 
 
-Type theory
------------
+Inductive Types
+---------------
 
-.. Inductive types
 
-   Dependent types
+Dependent Types
+---------------

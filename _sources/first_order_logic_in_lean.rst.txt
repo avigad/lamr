@@ -5,16 +5,18 @@
 First-Order Logic in Lean
 =========================
 
-.. _section_equational_reasoning_in_lean:
-
-Equational reasoning
---------------------
-
 
 .. _section_quantifiers_in_lean:
 
 Quantifiers
 -----------
+
+
+.. _section_equational_reasoning_in_lean:
+
+Equational reasoning
+--------------------
+
 
 
 .. _section_structural_induction_in_lean:
