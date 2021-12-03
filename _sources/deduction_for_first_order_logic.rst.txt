@@ -208,19 +208,19 @@ First, we replace :math:`y` by a Skolem function that depends on :math:`u` and :
 
 .. math::
 
-  \fa {u, x} (\ex v \lnot Q(x, y, u, f(u, x))) \lor \fa z \ex w R(x, f(u, x), z, w).
+  \fa {u, x} (\ex v \lnot Q(x, f(u, x), u, v)) \lor \fa z \ex w R(x, f(u, x), z, w).
 
 Then we replace :math:`v`:
 
 .. math::
 
-  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, v)) \lor \fa z \ex w R(x, f(u, x), z, w).
+  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, x)) \lor \fa z \ex w R(x, f(u, x), z, w).
 
-Finally, we replace :math:`z`:
+Finally, we replace :math:`w`:
 
 .. math::
 
-  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, v)) \lor \fa z R(x, f(u, x), z, h(u, x, z)).
+  \fa {u, x} \lnot Q(x, f(u, x), u, g(u, x)) \lor \fa z R(x, f(u, x), z, h(u, x, z)).
 
 We are now left with only universal quantifiers.
 
@@ -228,7 +228,7 @@ In this example, if we bring :math:`z` to the front, we get a universally quanti
 
 .. math::
 
-  \fa {u, x, z} \lnot Q(x, f(u, x), u, g(u, v)) \lor R(x, f(u, x), z, h(u, x, z)).
+  \fa {u, x, z} \lnot Q(x, f(u, x), u, g(u, x)) \lor R(x, f(u, x), z, h(u, x, z)).
 
 More generally, we can always bring the
 universal quantifiers to the front and put the rest of the formula in conjunctive normal form.
@@ -342,7 +342,7 @@ From these we should be able to conclude that every student is sad.
 We can formalize the hypotheses as follows:
 
 #. :math:`\fa x \fn{Student}(x) \to \ex y \fn{Owns}(x, y) \land (\fn{Iphone}(y) \lor \fn{Laptop}(y))`
-#. :math:`\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x,y) \land \fn{Laptop}(y) \to \ex z \fn{Owns}(x, z) \land \fn{Headphones}(x, z)`
+#. :math:`\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x,y) \land \fn{Laptop}(y) \to \ex z \fn{Owns}(x, z) \land \fn{Headphones}(z)`
 #. :math:`\fa y \fn{Iphone}(y) \to \fn{Buggy}(y)`
 #. :math:`\fa y \fn{Headphones}(y) \to \fn{Buggy}(y)`
 #. :math:`\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x, y) \land \fn{Buggy}(y) \to \fn{Sad}(x)`
@@ -352,9 +352,9 @@ You can check that if we negate the conclusion, Skolemize, put the results in CN
 and move universal quantifiers through the hypotheses, we get the following:
 
 #. :math:`\fa x \lnot \fn{Student}(x) \lor \fn{Owns}(x, f(x))`
-#. :math:`\fa x \lnot \fn{Student}(x) \lor \fn{Iphone}(x, f(x)) \lor \fn{Laptop}(f(x))`
+#. :math:`\fa x \lnot \fn{Student}(x) \lor \fn{Iphone}(f(x)) \lor \fn{Laptop}(f(x))`
 #. :math:`\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Laptop}(y) \lor \fn{Headphones}(g(x,y))`
-#. :math:`\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Laptop}(y) \lor \fn{Owns}(g(x,y))`
+#. :math:`\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Laptop}(y) \lor \fn{Owns}(x,g(x,y))`
 #. :math:`\fa y \lnot \fn{Iphone}(y) \lor \fn{Buggy}(y)`
 #. :math:`\fa y \lnot \fn{Headphones}(y) \lor \fn{Buggy}(y)`
 #. :math:`\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Buggy}(y) \lor \fn{Sad}(x)`
