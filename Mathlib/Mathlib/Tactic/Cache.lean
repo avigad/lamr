@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Author: Gabriel Ebner
 -/
 import Lean
+import Mathlib.Logic.Nonempty
 
 /-!
 # Once-per-file cache for tactics
@@ -47,10 +48,10 @@ namespace Tactic
 /-- Once-per-file cache. -/
 def Cache (α : Type) :=
   IO.Ref <| Sum (MetaM α) <|
-    Task <| Except IO.Error <| Except Exception α
+    Task <| Except Exception α
 
-instance : Inhabited (Cache α) :=
-  inferInstanceAs <| Inhabited (IO.Ref _)
+instance : Nonempty (Cache α) :=
+  inferInstanceAs <| Nonempty (IO.Ref _)
 
 /-- Creates a cache with an initialization function. -/
 def Cache.mk (init : MetaM α) : IO (Cache α) :=
@@ -62,25 +63,29 @@ Calling this function for the first time
 will initialize the cache with the function
 provided in the constructor.
 -/
-def Cache.get [Monad m] [MonadEnv m] [MonadOptions m] [MonadLiftT IO m] [MonadExcept Exception m]
+def Cache.get [Monad m] [MonadEnv m] [MonadOptions m] [MonadLiftT BaseIO m] [MonadExcept Exception m]
     (cache : Cache α) : m α := do
-  let t ← match ← show IO _ from ST.Ref.get cache with
+  let t ← match ← show BaseIO _ from ST.Ref.get cache with
     | Sum.inr t => t
     | Sum.inl init =>
       let env ← getEnv
       let options ← getOptions -- TODO: sanitize options?
-      let res ← IO.asTask do EIO.toIO' do
+      -- Default heartbeats to a reasonable value.
+      -- otherwise librarySearch times out on mathlib
+      -- TODO: add customization option
+      let options := Core.maxHeartbeats.set options <|
+        options.get? Core.maxHeartbeats.name |>.getD 1000000
+      let res ← EIO.asTask do
         let metaCtx : Meta.Context := {}
         let metaState : Meta.State := {}
         let coreCtx : Core.Context := {options}
         let coreState : Core.State := {env}
         (← ((init ‹_›).run ‹_› ‹_›).run ‹_›).1.1
-      show IO _ from cache.set (Sum.inr res)
+      show BaseIO _ from cache.set (Sum.inr res)
       pure res
   match t.get with
-    | Except.ok (Except.ok res) => return res
-    | Except.error err => show IO _ from throw err
-    | Except.ok (Except.error err) => throw err
+    | Except.ok res => pure res
+    | Except.error err => throw err
 
 /--
 Cached fold over the environment's declarations,
@@ -89,8 +94,8 @@ where a given function is applied to `α` for every constant.
 def DeclCache (α : Type) :=
   Cache α × (Name → ConstantInfo → α → MetaM α)
 
-instance : Inhabited (DeclCache α) :=
-  inferInstanceAs <| Inhabited (_ × _)
+instance : Nonempty (DeclCache α) :=
+  inferInstanceAs <| Nonempty (_ × _)
 
 /--
 Creates a `DeclCache`.

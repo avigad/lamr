@@ -11,8 +11,6 @@ import Mathlib.Data.List.Basic
 
 namespace List
 
-def disjoint (as bs : List α) := ∀ {x}, x ∈ as → x ∈ bs → False
-
 def inj_on (f : α → β) (as : List α) := ∀ {x y}, x ∈ as → y ∈ as → f x = f y → x = y
 
 theorem inj_on_of_subset {f : α → β} {as bs : List α} (h : inj_on f bs) (hsub : as ⊆ bs) :
@@ -28,8 +26,8 @@ Iff.intro
 theorem insert_equiv_cons [DecidableEq α] (a : α) (as : List α) : (insert a as).equiv (a :: as) :=
   fun x => by simp
 
--- theorem union_equiv_append [DecidableEq α] (as bs : List α) : (as.union bs).equiv (as ++ bs) :=
---   fun x => by simp
+theorem union_equiv_append [DecidableEq α] (as bs : List α) : (as.union bs).equiv (as ++ bs) :=
+  fun x => by simp
 
 section decidable_eq
 variable [DecidableEq α] [DecidableEq β]
@@ -176,7 +174,7 @@ theorem card_append_disjoint : ∀ {as bs : List α},
     disjoint as bs → card (as ++ bs) = card as + card bs
   | [], bs, disj => by simp
   | a :: as, bs, disj => by
-    have disj' : disjoint as bs := fun h1 h2 => disj (mem_cons_of_mem a h1) h2
+    have disj' : disjoint as bs := fun _ h1 h2 => disj (mem_cons_of_mem a h1) h2
     cases Decidable.em (a ∈ as) with
     | inl h =>
       simp [h, card_append_disjoint disj']
@@ -184,9 +182,9 @@ theorem card_append_disjoint : ∀ {as bs : List α},
       have h1 : a ∉ bs := fun h' => disj (mem_cons_self a as) h'
       simp [h, h1, card_append_disjoint disj', Nat.add_right_comm]
 
--- theorem card_union_disjoint {as bs : List α} (h : disjoint as bs) :
---     card (as.union bs) = card as + card bs := by
---   rw [card_eq_of_equiv (union_equiv_append as bs), card_append_disjoint h]
+theorem card_union_disjoint {as bs : List α} (h : disjoint as bs) :
+    card (as.union bs) = card as + card bs := by
+  rw [card_eq_of_equiv (union_equiv_append as bs), card_append_disjoint h]
 
 end decidable_eq
 

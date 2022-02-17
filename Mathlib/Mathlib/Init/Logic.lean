@@ -11,10 +11,13 @@ import Mathlib.Tactic.Ext
 @[ext] private def funext' := @funext
 @[ext] private def propext' := @propext
 
-@[ext] protected lemma Unit.ext (x y : Unit) : x = y := Subsingleton.allEq _ _
-@[ext] protected lemma PUnit.ext (x y : Unit) : x = y := Subsingleton.allEq _ _
+@[ext] protected lemma Unit.ext (x y : Unit) : x = y := rfl
+@[ext] protected lemma PUnit.ext (x y : Unit) : x = y := rfl
 
-@[simp] theorem opt_param_eq (α : Sort u) (default : α) : optParam α default = α := optParam_eq α default
+instance {f : α → β} [DecidablePred p] : DecidablePred (p ∘ f) :=
+  inferInstanceAs <| DecidablePred fun x => p (f x)
+
+theorem opt_param_eq (α : Sort u) (default : α) : optParam α default = α := optParam_eq α default
 
 theorem Not.intro {a : Prop} (h : a → False) : ¬ a := h
 
@@ -24,6 +27,12 @@ def non_contradictory (a : Prop) : Prop := ¬¬a
 
 theorem non_contradictory_intro {a : Prop} (ha : a) : ¬¬a :=
 λ hna : ¬a => absurd ha hna
+
+/-- Ex falso for negation. From `¬ a` and `a` anything follows. This is the same as `absurd` with
+the arguments flipped, but it is in the `not` namespace so that projection notation can be used. -/
+def Not.elim {α : Sort _} (H1 : ¬a) (H2 : a) : α := absurd H2 H1
+
+@[reducible] theorem Not.imp {a b : Prop} (H2 : ¬b) (H1 : a → b) : ¬a := mt H1 H2
 
 /- eq -/
 
@@ -45,7 +54,7 @@ lemma cast_proof_irrel (h₁ h₂ : α = β) (a : α) : cast h₁ a = cast h₂ 
 
 /- ne -/
 
-@[simp] lemma Ne.def {α : Sort u} (a b : α) : (a ≠ b) = ¬ (a = b) := rfl
+lemma Ne.def {α : Sort u} (a b : α) : (a ≠ b) = ¬ (a = b) := rfl
 
 def eq_rec_heq := @eqRec_heq
 
@@ -132,17 +141,19 @@ lemma imp_congr (h₁ : a ↔ c) (h₂ : b ↔ d) : (a → b) ↔ (c → d) := i
 lemma not_of_not_not_not (h : ¬¬¬a) : ¬a :=
 λ ha => absurd (not_not_intro ha) h
 
-@[simp] lemma not_true : (¬ True) ↔ False :=
+-- @[simp] -- Lean 4 has this built-in because it simplifies using decidable instances
+lemma not_true : (¬ True) ↔ False :=
 iff_false_intro (not_not_intro trivial)
 
-@[simp] lemma not_false_iff : (¬ False) ↔ True :=
+-- @[simp] -- Lean 4 has this built-in because it simplifies using decidable instances
+lemma not_false_iff : (¬ False) ↔ True :=
 iff_true_intro not_false
 
 lemma not_congr (h : a ↔ b) : ¬a ↔ ¬b := ⟨mt h.2, mt h.1⟩
 
 lemma ne_self_iff_false (a : α) : a ≠ a ↔ False := not_iff_false_intro rfl
 
-@[simp] lemma eq_self_iff_true (a : α) : a = a ↔ True := iff_true_intro rfl
+lemma eq_self_iff_true (a : α) : a = a ↔ True := iff_true_intro rfl
 
 lemma heq_self_iff_true (a : α) : HEq a a ↔ True := iff_true_intro HEq.rfl
 
@@ -253,7 +264,8 @@ lemma iff_congr (h₁ : a ↔ c) (h₂ : b ↔ d) : (a ↔ b) ↔ (c ↔ d) :=
 ⟨fun h => h₁.symm.trans $ h.trans h₂, fun h => h₁.trans $ h.trans h₂.symm⟩
 
 /- implies simp rule -/
-@[simp] lemma implies_true_iff (α : Sort u) : (α → True) ↔ True :=
+-- This is not marked `@[simp]` because we have `implies_true : (α → True) = True` in core.
+lemma implies_true_iff (α : Sort u) : (α → True) ↔ True :=
 Iff.intro (λ h => trivial) (λ ha h => trivial)
 
 lemma false_implies_iff (a : Prop) : (False → a) ↔ True :=
@@ -294,8 +306,12 @@ let ⟨x, hx, hy⟩ := h; (hy _ py₁).trans (hy _ py₂).symm
 lemma forall_congr' {p q : α → Prop} (h : ∀ a, p a ↔ q a) : (∀ a, p a) ↔ ∀ a, q a :=
 ⟨fun H a => (h a).1 (H a), fun H a => (h a).2 (H a)⟩
 
-lemma exists_imp_exists {α : Sort u} {p q : α → Prop} (h : ∀ a, (p a → q a)) (p : ∃ a, p a) : ∃ a, q a :=
+lemma exists_imp_exists {α : Sort u} {p q : α → Prop}
+  (h : ∀ a, (p a → q a)) (p : ∃ a, p a) : ∃ a, q a :=
 Exists.elim p (λ a hp => ⟨a, h a hp⟩)
+
+lemma Exists.imp {α : Sort u} {p q : α → Prop}
+  (h : ∀ a, (p a → q a)) (p : ∃ a, p a) : ∃ a, q a := exists_imp_exists h p
 
 lemma exists_congr {p q : α → Prop} (h : ∀ a, p a ↔ q a) : (∃ a, p a) ↔ ∃ a, q a :=
 ⟨exists_imp_exists fun x => (h x).1, exists_imp_exists fun x => (h x).2⟩
@@ -306,18 +322,6 @@ exists_congr fun x => and_congr (h _) $ forall_congr' fun y => imp_congr_left (h
 lemma forall_not_of_not_exists {p : α → Prop} (hne : ¬∃ x, p x) (x) : ¬p x | hp => hne ⟨x, hp⟩
 
 /- decidable -/
-
-def Decidable.to_bool (p : Prop) [h : Decidable p] : Bool := @Decidable.decide p h
-
-@[simp] lemma to_bool_true_eq_tt (h : Decidable True) : @Decidable.to_bool True h = true :=
-match h with
-| isFalse hf => False.elim (Iff.mp not_true hf)
-| isTrue _ => rfl
-
-@[simp] lemma to_bool_false_eq_ff (h : Decidable False) : @Decidable.to_bool False h = false :=
-match h with
-| isFalse _ => rfl
-| isTrue ht => False.elim ht
 
 namespace Decidable
   variable {p q : Prop}

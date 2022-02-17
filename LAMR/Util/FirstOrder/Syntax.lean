@@ -66,6 +66,14 @@ instance : ToString FOTerm := ⟨toString⟩
 instance : Repr FOTerm where
   reprPrec l _ := s!"term!\{{toString l}}"
 
+partial def hash : FOTerm → UInt64
+  | app fn args =>
+    let _ : Hashable FOTerm := ⟨hash⟩
+    mixHash 2 <| mixHash (Hashable.hash fn) (Hashable.hash args)
+  | var x => mixHash 3 (Hashable.hash x)
+
+instance : Hashable FOTerm := ⟨hash⟩
+
 /-- Returns a list of all free variable occurrences in the term. -/ 
 partial def freeVars : FOTerm → List String :=
   go []

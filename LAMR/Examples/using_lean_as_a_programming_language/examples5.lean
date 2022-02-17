@@ -12,7 +12,7 @@ def showSums : IO Unit := do
 
 
 -- textbook: isPrime
-def isPrime (n : Nat) : Bool := do
+def isPrime (n : Nat) : Bool := Id.run do
   if n < 2 then false else
     for i in [2:n] do
       if n % i = 0 then
@@ -29,7 +29,7 @@ def isPrime (n : Nat) : Bool := do
 
 
 -- textbook: primes
-def primes (n : Nat) : Array Nat := do
+def primes (n : Nat) : Array Nat := Id.run do
   let mut result := #[]
   for i in [2:n] do
     if isPrime i then
@@ -40,7 +40,7 @@ def primes (n : Nat) : Array Nat := do
 -- end textbook: primes
 
 -- textbook: mulTable
-def mulTable : Array (Array Nat) := do
+def mulTable : Array (Array Nat) := Id.run do
   let mut table := #[]
   for i in [:10] do
     let mut row := #[]
@@ -53,7 +53,7 @@ def mulTable : Array (Array Nat) := do
 -- end textbook: mulTable
 
 -- textbook: mulTable'
-def mulTable' : Array (Array Nat) := do
+def mulTable' : Array (Array Nat) := Id.run do
   let mut s : Array (Array Nat) := mkArray 10 (mkArray 10 0)
   for i in [:10] do
     for j in [:10] do

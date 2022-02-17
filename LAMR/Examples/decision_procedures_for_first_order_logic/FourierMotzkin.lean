@@ -46,7 +46,7 @@ Computes `a * u + b * v` .
 Assumes `a` and `b` are not zero.
 Note that this might result in an empty HashMap, which represents the expression `0`.
 -/
-def linearCombination (a : Int) (u : LinearExp) (b : Int) (v : LinearExp) : LinearExp := do
+def linearCombination (a : Int) (u : LinearExp) (b : Int) (v : LinearExp) : LinearExp := Id.run do
   let mut result := HashMap.empty
   for (s, i) in u.toList do
     let j := v.findD s 0    -- if not there, return 0
@@ -124,7 +124,7 @@ Eliminates the equality constraint `a * x + u = 0` from a list of equations,
 throwing away any equations that reduce to `0 = 0`.
 -/
 def substituteEqConstraints (a : Int) (x : String) (u : LinearExp) (eqs : List LinearExp) :
-    List LinearExp := do
+    List LinearExp := Id.run do
   let mut result : List LinearExp := []
   for eq in eqs do
     let newEq := elimEq a x u eq
@@ -137,7 +137,7 @@ Eliminates the equality constraint `a * x + u = 0` from a list of constraints `v
 returning `none` if we ever find a constraint `0 > 0`
 -/
 def substituteGtConstraints (a : Int) (x : String) (u : LinearExp) (eqs : List LinearExp) :
-    Option (List LinearExp) := do
+    Option (List LinearExp) := Id.run do
   let mut result : List LinearExp := []
   let elim := if a > 0 then elimEq else elimEq'
   for eq in eqs do
@@ -202,7 +202,7 @@ satisfiable.
 -- first, eliminate all the equations
 partial def elimEqConstraints : List LinearExp → List LinearExp → Option (List LinearExp)
   | []       , gts => some gts
-  | eq :: eqs, gts => do
+  | eq :: eqs, gts => Id.run do
     let (x, a) := eq.getTerm
     let u      := eq.erase x
     let newEqs := substituteEqConstraints a x u eqs
@@ -213,7 +213,7 @@ partial def elimEqConstraints : List LinearExp → List LinearExp → Option (Li
 -- then eliminate variables from the `e > 0` constraints
 partial def elimGtConstraints : List LinearExp → Bool
   | []        => true
-  | gt :: gts => do
+  | gt :: gts => Id.run do
       let x := gt.getTerm.1
       match elimVarGtConstraints x (gt :: gts) with
         | some gts => elimGtConstraints gts

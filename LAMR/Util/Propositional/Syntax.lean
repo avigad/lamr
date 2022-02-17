@@ -310,7 +310,7 @@ def PropAssignment.withLit (τ : PropAssignment) : Lit → PropAssignment
   | _ => panic! "cannot extend assignment with constant"
 
 /-- Return the truth value of `x` at `τ` if assigned, otherwise `none`. -/
-def PropAssignment.eval? (τ : PropAssignment) (x : String) : Option Bool := do
+def PropAssignment.eval? (τ : PropAssignment) (x : String) : Option Bool := Id.run do
   let τ : List _ := τ
   for (y, v) in τ do
     if y == x then return some v

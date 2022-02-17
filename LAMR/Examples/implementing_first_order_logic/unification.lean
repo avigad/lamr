@@ -41,7 +41,7 @@ partial def unify? (env : AssocList String FOTerm) : List (FOTerm × FOTerm) →
 -- end
 
 -- textbook: fullUnify
-partial def usolve (env : AssocList String FOTerm) : AssocList String FOTerm := do
+partial def usolve (env : AssocList String FOTerm) : AssocList String FOTerm := Id.run do
   let env' := env.mapVal (subst env)
   if env' == env then env else usolve env'
 

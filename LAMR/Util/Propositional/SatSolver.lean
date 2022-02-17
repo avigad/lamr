@@ -174,7 +174,7 @@ def clausify (h : NSH) : Clause → List Nat → Option CnfForm
   match clausify h [] ns with
   | some m => some (c.reverse :: m)
   | none => none
-| c, n :: ns => do
+| c, n :: ns => Id.run do
   match natToLit h n with
   | some l => clausify h (l :: c) ns
   | none => none

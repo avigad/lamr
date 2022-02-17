@@ -14,7 +14,7 @@ open BinTree
 
 #eval empty == node empty empty  -- evaluates to false
 
-#eval (arbitrary : BinTree)  -- BinTree.empty
+#eval (default : BinTree)  -- BinTree.empty
 -- end textbook: deriving
 
 -- textbook: recursion on BinTree

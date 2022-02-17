@@ -81,6 +81,9 @@ Nat.lt_of_le_of_ne (Nat.le_of_add_le_add_left (Nat.le_of_lt h)) fun heq =>
 protected lemma lt_of_add_lt_add_right {a b c : ℕ} (h : a + b < c + b) : a < c :=
   Nat.lt_of_add_lt_add_left ((by rwa [Nat.add_comm b a, Nat.add_comm b c]): b + a < b + c)
 
+protected lemma lt_add_right (a b c : Nat) : a < b -> a < b + c :=
+  fun h => lt_of_lt_of_le h (Nat.le_add_right _ _)
+
 protected lemma lt_add_of_pos_right {n k : ℕ} (h : 0 < k) : n < n + k :=
 Nat.add_lt_add_left h n
 
@@ -182,6 +185,10 @@ protected theorem le_of_sub_eq_zero : ∀{n m : ℕ}, n - m = 0 → n ≤ m
 | n+1, m+1, H => Nat.add_le_add_right
   (Nat.le_of_sub_eq_zero (by simp [Nat.add_sub_add_right] at H; exact H)) _
 
+protected theorem eq_zero_of_nonpos : ∀ (n : Nat), ¬0 < n -> n = 0
+| 0 => fun _ => rfl
+| n+1 => fun h => absurd (Nat.zero_lt_succ n) h
+
 protected lemma sub_eq_zero_iff_le : n - m = 0 ↔ n ≤ m :=
 ⟨Nat.le_of_sub_eq_zero, Nat.sub_eq_zero_of_le⟩
 
@@ -202,10 +209,12 @@ protected lemma sub_eq_iff_eq_add {a b c : ℕ} (ab : b ≤ a) : a - b = c ↔ a
 protected lemma lt_of_sub_eq_succ (H : m - n = succ l) : n < m :=
 not_le.1 fun H' => by simp [Nat.sub_eq_zero_of_le H'] at H
 
-protected lemma zero_min (a : ℕ) : Nat.min 0 a = 0 :=
+@[simp] protected lemma min_eq_min (a : ℕ) : Nat.min a b = min a b := rfl
+
+protected lemma zero_min (a : ℕ) : min 0 a = 0 :=
 min_eq_left (zero_le a)
 
-protected lemma min_zero (a : ℕ) : Nat.min a 0 = 0 :=
+protected lemma min_zero (a : ℕ) : min a 0 = 0 :=
 min_eq_right (zero_le a)
 
 -- Distribute succ over min
@@ -340,7 +349,7 @@ def discriminate (H1: n = 0 → α) (H2 : ∀m, n = succ m → α) : α :=
   | 0 => H1 e
   | succ m => H2 m e
 
-lemma one_succ_zero : 1 = succ 0 := rfl
+lemma one_eq_succ_zero : 1 = succ 0 := rfl
 
 def two_step_induction {P : ℕ → Sort u} (H1 : P 0) (H2 : P 1)
     (H3 : ∀ (n : ℕ) (IH1 : P n) (IH2 : P (succ n)), P (succ (succ n))) : (a : ℕ) → P a
@@ -519,6 +528,12 @@ not_lt.1 fun l => Nat.find_min p H l h
 end find
 
 /- mod -/
+
+lemma le_of_mod_lt {a b : Nat} (h : a % b < a) : b <= a :=
+  Decidable.byContradiction $ fun hf =>
+  have h0 : a % b = a := Nat.mod_eq_of_lt ((Nat.lt_or_ge a b).resolve_right hf)
+  have h1 : a % b ≠ a := ne_of_lt h
+  False.elim (h1 h0)
 
 @[simp] theorem add_mod_right (x z : ℕ) : (x + z) % z = x % z :=
 by rw [mod_eq_sub_mod (Nat.le_add_left _ _), Nat.add_sub_cancel]
@@ -777,12 +792,12 @@ by rw [Nat.mul_comm m k, Nat.mul_comm n k] at H; exact Nat.dvd_of_mul_dvd_mul_le
 /- --- -/
 
 protected lemma mul_le_mul_of_nonneg_left {a b c : ℕ} (h₁ : a ≤ b) : c * a ≤ c * b := by
-  by_cases hba: b ≤ a; { simp [Nat.le_antisymm hba h₁]; apply Nat.le_refl }
+  by_cases hba: b ≤ a; { simp [Nat.le_antisymm hba h₁] }
   by_cases hc0 : c ≤ 0; { simp [Nat.le_antisymm hc0 (zero_le c), Nat.zero_mul] }
   exact Nat.le_of_lt (Nat.mul_lt_mul_of_pos_left (not_le.1 hba) (not_le.1 hc0))
 
 protected lemma mul_le_mul_of_nonneg_right {a b c : ℕ} (h₁ : a ≤ b) : a * c ≤ b * c := by
-  by_cases hba : b ≤ a; { simp [Nat.le_antisymm hba h₁]; apply Nat.le_refl }
+  by_cases hba : b ≤ a; { simp [Nat.le_antisymm hba h₁] }
   by_cases hc0 : c ≤ 0; { simp [Nat.le_antisymm hc0 (zero_le c), Nat.mul_zero] }
   exact Nat.le_of_lt (Nat.mul_lt_mul_of_pos_right (not_le.1 hba) (not_le.1 hc0))
 
@@ -798,5 +813,104 @@ lemma div_lt_self (h₁ : 0 < n) (h₂ : 1 < m) : n / m < n := by
     rw [Nat.one_mul, Nat.mul_comm] at this
     exact (Nat.div_lt_iff_lt_mul m_pos).2 this
   exact Nat.mul_lt_mul h₂ (Nat.le_refl _) h₁
+
+@[simp] theorem mod_mod (a n : ℕ) : (a % n) % n = a % n :=
+(eq_zero_or_pos n).elim
+  (λ n0 => by simp [n0, mod_zero])
+  (λ npos => Nat.mod_eq_of_lt (mod_lt _ npos))
+
+
+lemma mul_mod (a b n : ℕ) : (a * b) % n = ((a % n) * (b % n)) % n := by
+    let hy := (a * b) % n
+    have hx : (a * b) % n = hy := rfl
+    rw [←mod_add_div a n, ←mod_add_div b n, Nat.right_distrib, Nat.left_distrib, Nat.left_distrib,
+        Nat.mul_assoc, Nat.mul_assoc, ←Nat.left_distrib n _ _, add_mul_mod_self_left,
+        Nat.mul_comm _ (n * (b / n)), Nat.mul_assoc, add_mul_mod_self_left] at hx
+    rw [hx]
+    done
+
+@[simp] theorem mod_add_mod (m n k : ℕ) : (m % n + k) % n = (m + k) % n := by
+   have := (add_mul_mod_self_left (m % n + k) n (m / n)).symm
+   rwa [Nat.add_right_comm, mod_add_div] at this
+
+@[simp] theorem add_mod_mod (m n k : ℕ) : (m + n % k) % k = (m + n) % k :=
+by rw [Nat.add_comm, mod_add_mod, Nat.add_comm]
+
+lemma add_mod (a b n : ℕ) : (a + b) % n = ((a % n) + (b % n)) % n :=
+by rw [add_mod_mod, mod_add_mod]
+
+lemma to_digits_core_lens_eq_aux (b f : Nat)
+  : ∀ (n : Nat) (l1 l2 : List Char) (h0 : l1.length = l2.length), (Nat.toDigitsCore b f n l1).length = (Nat.toDigitsCore b f n l2).length := by
+induction f with
+  simp only [Nat.toDigitsCore, List.length] <;> intro n l1 l2 hlen
+| zero => assumption
+| succ f ih =>
+  byCases hx : n / b = 0
+  case inl => simp only [hx, if_true, List.length, congrArg (fun l => l + 1) hlen]
+  case inr =>
+    simp only [hx, if_false]
+    specialize ih (n / b) (Nat.digitChar (n % b) :: l1) (Nat.digitChar (n % b) :: l2)
+    simp only [List.length, congrArg (fun l => l + 1) hlen] at ih
+    exact ih trivial
+
+lemma to_digits_core_lens_eq (b f : Nat) : ∀ (n : Nat) (c : Char) (tl : List Char), (Nat.toDigitsCore b f n (c :: tl)).length = (Nat.toDigitsCore b f n tl).length + 1 := by
+induction f with
+  intro n c tl <;> simp only [Nat.toDigitsCore, List.length]
+| succ f ih =>
+  byCases hnb : (n / b) = 0
+  case inl => simp only [hnb, if_true, List.length]
+  case inr =>
+    generalize hx: Nat.digitChar (n % b) = x
+    simp only [hx, hnb, if_false] at ih
+    simp only [hnb, if_false]
+    specialize ih (n / b) c (x :: tl)
+    rw [<- ih]
+    have lens_eq : (x :: (c :: tl)).length = (c :: x :: tl).length := by simp
+    apply to_digits_core_lens_eq_aux
+    exact lens_eq
+
+lemma nat_repr_len_aux (n b e : Nat) (h_b_pos : 0 < b) :  n < b ^ e.succ -> n / b < b ^ e := by
+simp only [Nat.pow_succ]
+exact (@Nat.div_lt_iff_lt_mul b n (b ^ e) h_b_pos).mpr
+
+/-- The String representation produced by toDigitsCore has the proper length relative to
+the number of digits in `n < e` for some base `b`. Since this works with any base greater
+than one, it can be used for binary, decimal, and hex. -/
+lemma to_digits_core_length (b : Nat) (h : 2 <= b) (f n e : Nat) (hlt : n < b ^ e) (h_e_pos: 0 < e) : (Nat.toDigitsCore b f n []).length <= e := by
+induction f generalizing n e hlt h_e_pos with
+  simp only [Nat.toDigitsCore, List.length, Nat.zero_le]
+| succ f ih =>
+  cases e with
+  | zero => exact False.elim (Nat.lt_irrefl 0 h_e_pos)
+  | succ e =>
+    byCases h_pred_pos : 0 < e
+    case inl =>
+      have _ : 0 < b := Nat.lt_trans (by decide) h
+      specialize ih (n / b) e (nat_repr_len_aux n b e ‹0 < b› hlt) h_pred_pos
+      byCases hdiv_ten : n / b = 0
+      case inl => simp only [hdiv_ten]; exact Nat.le.step h_pred_pos
+      case inr =>
+        simp only [hdiv_ten, to_digits_core_lens_eq b f (n / b) (Nat.digitChar $ n % b), if_false]
+        exact Nat.succ_le_succ ih
+    case inr =>
+      have _ : e = 0 := Nat.eq_zero_of_nonpos e h_pred_pos
+      rw [‹e = 0›]
+      have _ : b ^ 1 = b := by simp only [pow_succ, pow_zero, Nat.one_mul]
+      have _ : n < b := ‹b ^ 1 = b› ▸ (‹e = 0› ▸ hlt : n < b ^ Nat.succ 0)
+      simp only [(@Nat.div_eq_of_lt n b ‹n < b› : n / b = 0), if_true, List.length]
+
+/-- The core implementation of `Nat.repr` returns a String with length less than or equal to the
+number of digits in the decimal number (represented by `e`). For example, the decimal string
+representation of any number less than 1000 (10 ^ 3) has a length less than or equal to 3. -/
+lemma repr_length (n e : Nat) : 0 < e -> n < 10 ^ e -> (Nat.repr n).length <= e := by
+cases n with
+  intro _ _ <;> simp only [Nat.repr, Nat.toDigits, String.length, List.asString]
+| zero => assumption
+| succ n =>
+  byCases hterm : n.succ / 10 = 0
+  case inl => simp only [hterm, Nat.toDigitsCore]; assumption
+  case inr =>
+    simp only [hterm]
+    exact to_digits_core_length 10 (by decide) (Nat.succ n + 1) (Nat.succ n) e ‹n.succ < 10 ^ e› ‹0 < e›
 
 end Nat

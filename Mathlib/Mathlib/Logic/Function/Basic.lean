@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Johannes Hölzl, Mario Carneiro
 -/
 import Mathlib.Logic.Basic
-import Mathlib.Function
-import Mathlib.Set
-import Mathlib.SetNotation
+import Mathlib.Init.Data.Nat.Lemmas
+import Mathlib.Init.Function
+import Mathlib.Init.Set
+import Mathlib.Init.SetNotation
+import Mathlib.Tactic.Lint.Basic
 
 universe u v w
 
@@ -17,16 +19,9 @@ variable {α β γ : Sort _} {f : α → β}
 
 /-- Evaluate a function at an argument. Useful if you want to talk about the partially applied
   `Function.eval x : (∀ x, β x) → β x`. -/
-@[reducible] def eval {β : α → Sort _} (x : α) (f : ∀ x, β x) : β x := f x
-
-@[simp] lemma eval_apply {β : α → Sort _} (x : α) (f : ∀ x, β x) : eval x f = f x := rfl
-
-lemma comp_apply {α : Sort u} {β : Sort v} {φ : Sort w} (f : β → φ) (g : α → β) (a : α) :
-  (f ∘ g) a = f (g a) := rfl
+@[reducible, simp] def eval {β : α → Sort _} (x : α) (f : ∀ x, β x) : β x := f x
 
 lemma const_def {y : β} : (λ x : α => y) = const α y := rfl
-
-@[simp] lemma const_apply {y : β} {x : α} : const α y x = y := rfl
 
 @[simp] lemma const_comp {f : α → β} {c : γ} : const β c ∘ f = const α c := rfl
 
@@ -591,7 +586,8 @@ end uncurry
 /-- A function is involutive, if `f ∘ f = id`. -/
 def involutive {α} (f : α → α) : Prop := ∀ x, f (f x) = x
 
--- TODO: involutive_iff_iter_2_eq_id
+lemma involutive_iff_iter_2_eq_id {α} {f : α → α} : involutive f ↔ (f^[2] = id) :=
+funext_iff.symm
 
 namespace involutive
 variable {α : Sort u} {f : α → α} (h : involutive f)

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Johannes Hölzl
 -/
 
-import Mathlib.Function
+import Mathlib.Init.Function
 import Mathlib.Logic.Function.Basic
 import Mathlib.Tactic.Basic
 import Mathlib.Tactic.Coe
@@ -61,10 +61,9 @@ lemma ext_iff_val {a1 a2 : {x // p x}} : a1 = a2 ↔ a1.1 = a2.1 :=
 ext_iff
 
 @[simp] theorem coe_eta (a : {a // p a}) (h : p (a : α)) : mk (a : α) h = a := Subtype.ext rfl
-  
-@[simp] theorem coe_mk (a h) : (@mk α p a h : α) = a := rfl
 
-@[simp]
+theorem coe_mk (a h) : (@mk α p a h : α) = a := rfl
+
 theorem mk_eq_mk {a h a' h'} : @mk α p a h = @mk α p a' h' ↔ a = a' :=
 ext_iff
 
@@ -171,6 +170,7 @@ namespace Subtype
 /-! Some facts about sets, which require that `α` is a type. -/
 variable {α : Type _} {β : Type _} {γ : Type _} {p : α → Prop}
 
-@[simp] lemma val_prop {S : Set α} (a : {a // a ∈ S}) : a.val ∈ S := a.property
+-- ∈-notation is reducible in Lean 4, so this won't trigger as a simp-lemma
+lemma val_prop {S : Set α} (a : {a // a ∈ S}) : a.val ∈ S := a.property
 
 end Subtype

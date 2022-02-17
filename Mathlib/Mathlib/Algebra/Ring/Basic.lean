@@ -1,3 +1,4 @@
+import Mathlib.Init.Data.Int.Basic
 import Mathlib.Algebra.GroupWithZero.Defs
 import Mathlib.Algebra.Group.Basic
 import Mathlib.Tactic.Spread
@@ -11,7 +12,7 @@ class Numeric (α : Type u) where
   ofNat : Nat → α
 
 instance Numeric.OfNat [Numeric α] : OfNat α n := ⟨Numeric.ofNat n⟩
-instance [Numeric α] : Coe ℕ α := ⟨Numeric.ofNat⟩
+instance [Numeric α] : CoeTail ℕ α := ⟨Numeric.ofNat⟩
 
 theorem ofNat_eq_ofNat (α) (n : ℕ) [Numeric α] : Numeric.ofNat (α := α) n = OfNat.ofNat n := rfl
 
@@ -106,7 +107,7 @@ instance : Numeric Nat := ⟨id⟩
 
 @[simp] theorem ofNat_eq_Nat (n : Nat) : Numeric.ofNat n = n := rfl
 
-instance : CommSemiring Nat where
+instance : CommSemiring ℕ where
   mul_comm := Nat.mul_comm
   mul_add := Nat.left_distrib
   add_mul := Nat.right_distrib

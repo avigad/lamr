@@ -58,7 +58,7 @@ private def mkLit (row col val : Nat) :=
 
 /-- Encodes the non-empty tiles as unit clauses. -/
 def cnfEncodeTiles : Sudoku → CnfForm
-  | { dim, rows : Sudoku} => do
+  | { dim, rows : Sudoku} => Id.run do
     let mut cnf : CnfForm := []
     for (i, row) in rows.enum do
       for (j, t) in row.enum do
@@ -68,7 +68,7 @@ def cnfEncodeTiles : Sudoku → CnfForm
 
 /-- Encodes the given Sudoku as CNF. -/
 def cnfEncode : Sudoku → CnfForm
-  | s@{ dim, rows : Sudoku } => do
+  | s@{ dim, rows : Sudoku } => Id.run do
     let mut cnf : CnfForm := []
     let sz := dim*dim
 

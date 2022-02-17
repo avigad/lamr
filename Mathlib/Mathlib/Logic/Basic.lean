@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jeremy Avigad, Leonardo de Moura
 -/
 import Mathlib.Init.Logic
-import Mathlib.Function
+import Mathlib.Init.Function
 import Mathlib.Tactic.Basic
 
 section needs_better_home
@@ -110,12 +110,6 @@ theorem imp_iff_right (ha : a) : (a → b) ↔ b :=
 
 /-! ### Declarations about `not` -/
 
-/-- Ex falso for negation. From `¬ a` and `a` anything follows. This is the same as `absurd` with
-the arguments flipped, but it is in the `not` namespace so that projection notation can be used. -/
-def Not.elim {α : Sort _} (H1 : ¬a) (H2 : a) : α := absurd H2 H1
-
-@[reducible] theorem Not.imp {a b : Prop} (H2 : ¬b) (H1 : a → b) : ¬a := mt H1 H2
-
 theorem not_not_of_not_imp : ¬(a → b) → ¬¬a :=
 mt Not.elim
 
@@ -216,6 +210,9 @@ theorem imp.swap : (a → b → c) ↔ (b → a → c) :=
 
 theorem imp_not_comm : (a → ¬b) ↔ (b → ¬a) :=
 imp.swap
+
+instance Decidable.predToBool {α : Type u} (p : α → Prop) [DecidablePred p] : CoeDep (α → Prop) p (α → Bool) where
+  coe := fun b => decide $ p b
 
 /-! ### Declarations about `xor` -/
 
@@ -397,7 +394,6 @@ theorem iff_false_left (ha : ¬a) : (a ↔ b) ↔ ¬b :=
 theorem iff_false_right (ha : ¬a) : (b ↔ a) ↔ ¬b :=
 Iff.comm.trans (iff_false_left ha)
 
-@[simp]
 lemma iff_mpr_iff_true_intro {P : Prop} (h : P) : Iff.mpr (iff_true_intro h) True.intro = h := rfl
 
 -- See Note [decidable namespace]
@@ -414,7 +410,7 @@ theorem imp_iff_not_or : (a → b) ↔ (¬ a ∨ b) := Decidable.imp_iff_not_or
 
 -- See Note [decidable namespace]
 protected theorem Decidable.imp_or_distrib [Decidable a] : (a → b ∨ c) ↔ (a → b) ∨ (a → c) :=
-by simp [Decidable.imp_iff_not_or, Or.comm, Or.left_comm]
+by by_cases a <;> simp_all
 
 theorem imp_or_distrib : (a → b ∨ c) ↔ (a → b) ∨ (a → c) := Decidable.imp_or_distrib
 
@@ -616,8 +612,6 @@ lemma forall₄_congr {γ δ : Sort _} {p q : α → β → γ → δ → Prop}
   (∀ a b c d, p a b c d) ↔ (∀ a b c d, q a b c d) :=
 forall_congr' (λ a => forall₃_congr (h a))
 
-lemma Exists.imp (h : ∀ a, (p a → q a)) (p : ∃ a, p a) : ∃ a, q a := exists_imp_exists h p
-
 lemma exists_imp_exists' {p : α → Prop} {q : β → Prop} (f : α → β) (hpq : ∀ a, p a → q (f a))
   (hp : ∃ a, p a) : ∃ b, q b :=
 Exists.elim hp (λ a hp' => ⟨_, hpq _ hp'⟩)
@@ -674,13 +668,16 @@ protected theorem Decidable.not_forall {p : α → Prop}
 theorem forall_and_distrib {p q : α → Prop} : (∀ x, p x ∧ q x) ↔ (∀ x, p x) ∧ (∀ x, q x) :=
 ⟨λ h => ⟨λ x => (h x).left, λ x => (h x).right⟩, λ ⟨h₁, h₂⟩ x => ⟨h₁ x, h₂ x⟩⟩
 
-@[simp] theorem forall_eq {p : α → Prop} {a' : α} : (∀a, a = a' → p a) ↔ p a' :=
+@[simp] theorem forall_eq {p : α → Prop} {a' : α} : (∀ a, a = a' → p a) ↔ p a' :=
 ⟨λ h => h a' rfl, λ h a e => e.symm ▸ h⟩
 
-@[simp] theorem exists_false : ¬ (∃a:α, False) := fun ⟨a, h⟩ => h
+@[simp] theorem forall_eq' {a' : α} : (∀ a, a' = a → p a) ↔ p a' :=
+by simp [@eq_comm _ a']
+
+@[simp] theorem exists_false : ¬ (∃ a : α, False) := fun ⟨a, h⟩ => h
 
 @[simp] theorem exists_and_distrib_left {q : Prop} {p : α → Prop} :
-  (∃x, q ∧ p x) ↔ q ∧ (∃x, p x) :=
+  (∃ x, q ∧ p x) ↔ q ∧ (∃ x, p x) :=
 ⟨λ ⟨x, hq, hp⟩ => ⟨hq, x, hp⟩, λ ⟨hq, x, hp⟩ => ⟨x, hq, hp⟩⟩
 
 @[simp] theorem exists_and_distrib_right {q : Prop} {p : α → Prop} :

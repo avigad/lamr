@@ -24,7 +24,7 @@ def arithFnInterp : FnInterp Nat
   | "one"   => fun l => 1
   | "two"   => fun l => 2
   | "three" => fun l => 3
-  | _       => fun l => arbitrary
+  | _       => fun l => default
 -- end
 
 -- textbook: arithFnInterp'

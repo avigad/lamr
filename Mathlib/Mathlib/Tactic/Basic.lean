@@ -25,11 +25,12 @@ macro "_" : tactic => `({})
 
 macro_rules | `(tactic| rfl) => `(tactic| exact Iff.rfl)
 
+/-- `change` is a synonym for `show`,
+and can be used to replace a goal with a definitionally equal one. -/
 macro_rules
   | `(tactic| change $e:term) => `(tactic| show $e)
 
-macro "sorry" : tactic => `(tactic| admit)
-
+/-- `rwa` calls `rw`, then closes any remaining goals using `assumption`. -/
 syntax "rwa " rwRuleSeq (location)? : tactic
 
 macro_rules
@@ -43,6 +44,9 @@ set_option hygiene false in
 macro "by_cases " e:term : tactic =>
   `(cases Decidable.em $e with | inl h => ?pos | inr h => ?neg)
 
+macro (name := classical) "classical" : tactic =>
+  `(have em := Classical.propDecidable)
+
 syntax "transitivity" (colGt term)? : tactic
 set_option hygiene false in
 macro_rules
@@ -53,11 +57,46 @@ macro_rules
   | `(tactic| transitivity) => `(tactic| apply Nat.lt_trans)
   | `(tactic| transitivity $e) => `(tactic| apply Nat.lt_trans (m := $e))
 
-syntax (name := introv) "introv " (colGt ident)* : tactic
+/--
+The tactic `introv` allows the user to automatically introduce the variables of a theorem and
+explicitly name the non-dependent hypotheses.
+Any dependent hypotheses are assigned their default names.
+
+Examples:
+```
+example : ∀ a b : Nat, a = b → b = a := by
+  introv h,
+  exact h.symm
+```
+The state after `introv h` is
+```
+a b : ℕ,
+h : a = b
+⊢ b = a
+```
+
+```
+example : ∀ a b : Nat, a = b → ∀ c, b = c → a = c := by
+  introv h₁ h₂,
+  exact h₁.trans h₂
+```
+The state after `introv h₁ h₂` is
+```
+a b : ℕ,
+h₁ : a = b,
+c : ℕ,
+h₂ : b = c
+⊢ a = c
+```
+-/
+syntax (name := introv) "introv " (colGt binderIdent)* : tactic
 @[tactic introv] partial def evalIntrov : Tactic := fun stx => do
   match stx with
   | `(tactic| introv)                     => introsDep
-  | `(tactic| introv $h:ident $hs:ident*) => evalTactic (← `(tactic| introv; intro $h:ident; introv $hs:ident*))
+  | `(tactic| introv $h:ident $hs:binderIdent*) =>
+    evalTactic (← `(tactic| introv; intro $h:ident; introv $hs:binderIdent*))
+  | `(tactic| introv _%$tk $hs:binderIdent*) =>
+    evalTactic (← `(tactic| introv; intro _%$tk; introv $hs:binderIdent*))
   | _ => throwUnsupportedSyntax
 where
   introsDep : TacticM Unit := do
@@ -73,29 +112,47 @@ where
       let (_, mvarId) ← Meta.intro1P mvarId
       pure [mvarId]
 
-macro "assumption'" : tactic => `(all_goals assumption)
+/-- Try calling `assumption` on all goals; succeeds if it closes at least one goal. -/
+macro "assumption'" : tactic => `(any_goals assumption)
 
-elab "exacts" "[" hs:term,* "]" : tactic => do
+/--
+Like `exact`, but takes a list of terms and checks that all goals are discharged after the tactic.
+-/
+elab (name := exacts) "exacts" "[" hs:term,* "]" : tactic => do
   for stx in hs.getElems do
     evalTactic (← `(tactic| exact $stx))
   evalTactic (← `(tactic| done))
 
---TODO : which expr equality to use?
-elab "guardExprEq " r:term " := " p:term : tactic => withMainContext do
+/-- Check syntactic equality of two expressions.
+See also `guardExprEq` and `guardExprEq'` for testing
+up to alpha equality and definitional equality. -/
+elab (name := guardExprStrict) "guard_expr " r:term:51 " == " p:term : tactic => withMainContext do
   let r ← elabTerm r none
   let p ← elabTerm p none
   if not (r == p) then throwError "failed: {r} != {p}"
 
-elab "guardTarget" r:term : tactic => withMainContext do
+/-- Check the target agrees (syntactically) with a given expression.
+See also `guardTarget` and `guardTarget'` for testing
+up to alpha equality and definitional equality. -/
+elab (name := guardTargetStrict) "guard_target" " == " r:term : tactic => withMainContext do
   let r ← elabTerm r none
   let t ← getMainTarget
   let t ← t.consumeMData
   if not (r == t) then throwError m!"target of main goal is {t}, not {r}"
 
-syntax (name := guardHyp) "guardHyp " ident (" : " term)? (" := " term)? : tactic
+syntax (name := guardHyp) "guard_hyp " ident
+  ((" : " <|> " :ₐ ") term)? ((" := " <|> " :=ₐ ") term)? : tactic
+
+/-- Check that a named hypothesis has a given type and/or value.
+
+`guardHyp h : t` checks the type up to syntactic equality,
+while `guardHyp h :ₐ t` checks the type up to alpha equality.
+`guardHyp h := v` checks value up to syntactic equality,
+while `guardHyp h :=ₐ v` checks the value up to alpha equality. -/
+-- TODO implement checking type or value up to alpha equality.
 @[tactic guardHyp] def evalGuardHyp : Lean.Elab.Tactic.Tactic := fun stx =>
   match stx with
-  | `(tactic| guardHyp $h $[: $ty]? $[:= $val]?) => do
+  | `(tactic| guard_hyp $h $[: $ty]? $[:= $val]?) => do
     withMainContext do
       let fvarid ← getFVarId h
       let lDecl ←
@@ -118,28 +175,35 @@ syntax (name := guardHyp) "guardHyp " ident (" : " term)? (" := " term)? : tacti
       | none, none          => ()
   | _ => throwUnsupportedSyntax
 
-elab "matchTarget" t:term : tactic  => do
+elab "match_target" t:term : tactic  => do
   withMainContext do
     let (val) ← elabTerm t (← inferType (← getMainTarget))
     if not (← isDefEq val (← getMainTarget)) then
       throwError "failed"
 
-syntax (name := byContra) "byContra " (colGt ident)? : tactic
+syntax (name := byContra) "by_contra" (ppSpace colGt ident)? : tactic
 macro_rules
-  | `(tactic| byContra) => `(tactic| (matchTarget Not _; intro))
-  | `(tactic| byContra $e) => `(tactic| (matchTarget Not _; intro $e))
+  | `(tactic| by_contra) => `(tactic| (match_target Not _; intro))
+  | `(tactic| by_contra $e) => `(tactic| (match_target Not _; intro $e))
 macro_rules
-  | `(tactic| byContra) => `(tactic| (apply Decidable.byContradiction; intro))
-  | `(tactic| byContra $e) => `(tactic| (apply Decidable.byContradiction; intro $e))
+  | `(tactic| by_contra) => `(tactic| (apply Decidable.byContradiction; intro))
+  | `(tactic| by_contra $e) => `(tactic| (apply Decidable.byContradiction; intro $e))
 macro_rules
-  | `(tactic| byContra) => `(tactic| (apply Classical.byContradiction; intro))
-  | `(tactic| byContra $e) => `(tactic| (apply Classical.byContradiction; intro $e))
+  | `(tactic| by_contra) => `(tactic| (apply Classical.byContradiction; intro))
+  | `(tactic| by_contra $e) => `(tactic| (apply Classical.byContradiction; intro $e))
 
-macro "sorry" : tactic => `(exact sorry)
-
-elab "iterate " n:num seq:tacticSeq : tactic => do
-  for i in [:n.toNat] do
-    evalTactic seq
+/--
+`iterate n { ... }` runs the tactic block exactly `n` times.
+`iterate { ... }` runs the tactic block repeatedly until failure.
+-/
+syntax "iterate" (ppSpace num)? ppSpace tacticSeq : tactic
+macro_rules
+  | `(tactic|iterate $seq:tacticSeq) =>
+    `(tactic|try ($seq:tacticSeq); iterate $seq:tacticSeq)
+  | `(tactic|iterate $n $seq:tacticSeq) =>
+    match n.toNat with
+    | 0 => `(tactic| skip)
+    | n+1 => `(tactic|($seq:tacticSeq); iterate $(quote n) $seq:tacticSeq)
 
 partial def repeat'Aux (seq : Syntax) : List MVarId → TacticM Unit
 | []    => ()
@@ -155,7 +219,7 @@ elab "repeat' " seq:tacticSeq : tactic => do
   let gs ← getGoals
   repeat'Aux seq gs
 
-elab "anyGoals " seq:tacticSeq : tactic => do
+elab "any_goals " seq:tacticSeq : tactic => do
   let mvarIds ← getGoals
   let mut mvarIdsNew := #[]
   let mut anySuccess := false
@@ -171,3 +235,18 @@ elab "anyGoals " seq:tacticSeq : tactic => do
   if not anySuccess then
     throwError "failed on all goals"
   setGoals mvarIdsNew.toList
+
+/--
+`work_on_goal n { tac }` creates a block scope for the `n`-th goal (indexed from zero),
+but does not require that the goal be solved at the end of the block
+(any resulting subgoals are inserted back into the list of goals, replacing the `n`-th goal).
+-/
+elab (name := workOnGoal) "work_on_goal " n:num ppSpace seq:tacticSeq : tactic => do
+  let goals ← getGoals
+  let n := n.toNat
+  if h : n < goals.length then
+    setGoals [goals.get n h]
+    evalTactic seq
+    setGoals (goals.take n ++ (← getUnsolvedGoals) ++ goals.drop (n+1))
+  else
+    throwError "not enough goals"

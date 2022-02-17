@@ -2,7 +2,7 @@ import LAMR.Util.FirstOrder.Smt
 open Std
 
 /-- Encode the magic square of size `n` as a SMT-LIB problem in the QF_BV logic. -/
-def magicSquareToBvSmt (n : Nat) : List Sexp := do
+def magicSquareToBvSmt (n : Nat) : List Sexp := Id.run do
   let sq := toBVConst 32 (n^2)
   -- https://en.wikipedia.org/wiki/Magic_constant
   let magic := toBVConst 32 ((n^3 + n) / 2)

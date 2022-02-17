@@ -39,7 +39,7 @@ def readEdgeFile (graphFname : String) : IO Graph := do
   | Except.ok g => g
 
 /-- Encodes the proposition "`g` is `nColours`-colourable" as CNF. -/
-def graphColourable (g : Graph) (nColours : Nat) : CnfForm := do
+def graphColourable (g : Graph) (nColours : Nat) : CnfForm := Id.run do
   let mut cnf : CnfForm := []
   for i in [0:g.nVerts] do
     let clause : Clause :=
