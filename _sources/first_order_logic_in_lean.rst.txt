@@ -43,7 +43,7 @@ open the namespace, declare some variables, and try out the notation.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
    :start-after: -- textbook: List
-   :end-before: -- end textbook: List
+   :end-before: -- end: List
 
 The `variable` command does not do anything substantive.
 It tells Lean that when the corresponding identifiers are used
@@ -71,7 +71,7 @@ under the name `append_nil'`.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
    :start-after: -- textbook: append_nil'
-   :end-before: -- end textbook: append_nil'
+   :end-before: -- end: append_nil'
 
 In class, we will help you make sense of this.
 The `by` command tell Lean that we are going to write
@@ -93,7 +93,7 @@ goals at the corresponding state of the proof.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
    :start-after: -- textbook: append_assoc'
-   :end-before: -- end textbook: append_assoc'
+   :end-before: -- end: append_assoc'
 
 Here is a similar proof of the associativity of the `append` function.
 Note that the left arrow in the expression `←cons_append`
@@ -104,7 +104,7 @@ Now let us consider Lean's definition of the `reverse` function:
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
    :start-after: -- textbook: reverse
-   :end-before: -- end textbook: reverse
+   :end-before: -- end: reverse
 
 We will use these identities in the proofs that follow.
 Let's think about what it would take to prove the identity
@@ -118,7 +118,7 @@ These are the two identities we need:
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
    :start-after: -- textbook: reverse identities
-   :end-before: -- end textbook: reverse identities
+   :end-before: -- end: reverse identities
 
 Note the `generalizing` clause in the induction. What it means is that
 what we are proving by induction on `as` is that the identity holds
@@ -132,7 +132,7 @@ With those facts in hand, we have the identity we are after:
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/examples4.lean
    :start-after: -- textbook: reverse_append
-   :end-before: -- end textbook: reverse_append
+   :end-before: -- end: reverse_append
 
 .. TODO:
    Expand these explanations.

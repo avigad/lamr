@@ -1,74 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>9. Propositional Logic in Lean &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="10. First-Order Logic" href="first_order_logic.html" />
     <link rel="prev" title="8. Deduction for Propositional Logic" href="deduction_for_propositional_logic.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
@@ -116,73 +67,32 @@
 <li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Logic and Mechanized Reasoning</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li><span class="section-number">9. </span>Propositional Logic in Lean</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/propositional_logic_in_lean.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="propositional-logic-in-lean">
-<span id="chapter-propositional-logic-in-lean"></span><h1><span class="section-number">9. </span>Propositional Logic in Lean<a class="headerlink" href="#propositional-logic-in-lean" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="propositional-logic-in-lean">
+<span id="chapter-propositional-logic-in-lean"></span><h1><span class="section-number">9. </span>Propositional Logic in Lean<a class="headerlink" href="#propositional-logic-in-lean" title="Permalink to this heading"></a></h1>
 <p>In <a class="reference internal" href="using_lean_as_a_programming_language.html#chapter-lean-as-a-programming-language"><span class="std std-numref">Chapter 3</span></a>,
 we considered the use of Lean as a programming
 language, and in <a class="reference internal" href="implementing_propositional_logic.html#chapter-implementing-propositional-logic"><span class="std std-numref">Chapter 5</span></a>
@@ -221,8 +131,8 @@ language</em>, which means that we can use Lean to develop automation that can h
 programs and proofs.
 In that way, Lean becomes a self-extending system, meaning that we can
 improve its support for programming and theorem proving using the system itself.</p>
-<div class="section" id="implication">
-<span id="section-implication"></span><h2><span class="section-number">9.1. </span>Implication<a class="headerlink" href="#implication" title="Permalink to this headline">¶</a></h2>
+<section id="implication">
+<span id="section-implication"></span><h2><span class="section-number">9.1. </span>Implication<a class="headerlink" href="#implication" title="Permalink to this heading"></a></h2>
 <p>In Lean, we can declare variables that range over propositions, and then
 use them to build more complicated propositions.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">p</span> <span class="n">q</span> <span class="n">r</span> <span class="n">s</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span>
@@ -323,9 +233,9 @@ amounts to constructing the proof <cite>h1 h2</cite>.</p>
 <span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h2</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="conjunction">
-<h2><span class="section-number">9.2. </span>Conjunction<a class="headerlink" href="#conjunction" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="conjunction">
+<h2><span class="section-number">9.2. </span>Conjunction<a class="headerlink" href="#conjunction" title="Permalink to this heading"></a></h2>
 <p>There is a theorem in the library called <cite>And.intro</cite> that encodes the and-introduction
 rule in the natural deduction calculus, telling us that we can prove <cite>p ∧ q</cite> by proving
 each of <cite>p</cite> and <cite>q</cite> in turn.</p>
@@ -441,9 +351,9 @@ a <cite>have</cite> only records the existence of an expression of the correspon
 When we use a <cite>have</cite>, typically we only care that the corresponding fact has been proved,
 and the specifics of the proof are irrelevant. For that reason,
 <cite>have</cite> is more appropriate for proofs.</p>
-</div>
-<div class="section" id="disjunction">
-<h2><span class="section-number">9.3. </span>Disjunction<a class="headerlink" href="#disjunction" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="disjunction">
+<h2><span class="section-number">9.3. </span>Disjunction<a class="headerlink" href="#disjunction" title="Permalink to this heading"></a></h2>
 <p>The theorem <cite>Or.inr</cite> in the library corresponds to the
 right introduction rule, which proves <cite>p ∨ q</cite> from <cite>p</cite>.
 The left introduction rule is given by <cite>Or.inl</cite>.
@@ -479,9 +389,9 @@ using either the theorem <cite>Or.elim</cite> or the <cite>cases</cite> tactic.<
 <p>Notice that in contrast to casing on a conjunction, which results in one new goal and
 two new hypotheses,
 casing on a disjunction results in two new goals, each with one new hypothesis.</p>
-</div>
-<div class="section" id="negation">
-<h2><span class="section-number">9.4. </span>Negation<a class="headerlink" href="#negation" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="negation">
+<h2><span class="section-number">9.4. </span>Negation<a class="headerlink" href="#negation" title="Permalink to this heading"></a></h2>
 <p>In Lean, <cite>¬ p</cite> is defined to be <cite>p → False</cite>. For most purposes, the two
 expressions are interchangeable. This means that you can prove <cite>¬ p</cite>
 by assuming <cite>p</cite> and deriving <cite>False</cite>, and if you have <cite>hp : p</cite> and <cite>hnp : ¬ p</cite>,
@@ -574,12 +484,12 @@ allowing proof by cases and proof by contradiction.</p>
   <span class="n">exact</span> <span class="n">hnnp</span> <span class="n">hnp</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="miscellany">
-<h2><span class="section-number">9.5. </span>Miscellany<a class="headerlink" href="#miscellany" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="miscellany">
+<h2><span class="section-number">9.5. </span>Miscellany<a class="headerlink" href="#miscellany" title="Permalink to this heading"></a></h2>
 <p>The rules for bi-implication are illustrated by the next two examples.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">↔</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
-  <span class="k">have</span> <span class="o">⟨</span><span class="n">h3</span><span class="o">,</span> <span class="n">h4</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
+  <span class="k">have</span> <span class="o">⟨</span><span class="n">h3</span><span class="o">,</span> <span class="n">_</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
   <span class="n">apply</span> <span class="n">h3</span>
   <span class="n">exact</span> <span class="n">h2</span>
 
@@ -604,55 +514,38 @@ as in the following examples.</p>
 One strategy for learning how to write proof terms is to name
 the theorems that you prove with tactics, and then use the <cite>#print</cite>
 command to print them out.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="first_order_logic.html" class="btn btn-neutral float-right" title="10. First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="deduction_for_propositional_logic.html" class="btn btn-neutral float-left" title="8. Deduction for Propositional Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="first_order_logic.html" class="btn btn-neutral float-right" title="10. First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.
-
-    </p>
+    <p>&#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

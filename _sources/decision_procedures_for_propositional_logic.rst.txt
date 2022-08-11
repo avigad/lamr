@@ -95,7 +95,7 @@ numbering high enough to avoid a clash.)
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
   :start-after: -- textbook: mkDefs
-  :end-before: -- end textbook: mkDefs
+  :end-before: -- end: mkDefs
 
 The keyword `where` is used to define an auxiliary function that is not
 meant to be used anywhere else.
@@ -126,7 +126,7 @@ in negation normal form.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
   :start-after: -- textbook: ex1
-  :end-before: -- end textbook: ex1
+  :end-before: -- end: ex1
 
 Removing extraneous parentheses, we get
 
@@ -141,7 +141,7 @@ pleasant form.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
   :start-after: -- textbook: ex1 defs
-  :end-before: -- end textbook: ex1 defs
+  :end-before: -- end: ex1 defs
 
 We can obtain an equisatisfiable version of the formula by putting
 all the definitions into conjunctive normal form, collecting them all
@@ -176,7 +176,7 @@ and another one that turns the entire list of definitions returned by
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
   :start-after: -- textbook: implToCnf
-  :end-before: -- end textbook: implToCnf
+  :end-before: -- end: implToCnf
 
 If we take the resulting formula and add a conjunct for the
 variable representing the top level, we have an equisatisfiable CNF formula,
@@ -196,7 +196,7 @@ and the function `NnfForm.toCnf` puts it all together.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
   :start-after: -- textbook: toCnf
-  :end-before: -- end textbook: toCnf
+  :end-before: -- end: toCnf
 
 The following example tests it out on `ex1.toCnf`.
 The comment afterward shows the resulting CNF formula
@@ -205,7 +205,7 @@ to the original formula.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
   :start-after: -- textbook: ex1.toCnf
-  :end-before: -- end textbook: ex1.toCnf
+  :end-before: -- end: ex1.toCnf
 
 There is one additional optimization that we have not implemented in the library:
 we can be more efficient with iterated conjunctions and disjunctions.
@@ -342,7 +342,7 @@ We use the keyword `partial` to allow for an arbitrary recursive call.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
   :start-after: -- textbook: dpllSat
-  :end-before: -- end textbook: dpllSat
+  :end-before: -- end: dpllSat
 
 The function `pickSplit?` naively chooses the first variable it finds.
 It follows the Lean convention of using a question mark for a function that
@@ -350,7 +350,7 @@ returns an element of an option type.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
   :start-after: -- textbook: pickSplit?
-  :end-before: -- end textbook: pickSplit?
+  :end-before: -- end: pickSplit?
 
 The function `propagateUnits` performs unit propagation and returns the resulting
 formula and the augmented truth assignment.
@@ -359,21 +359,21 @@ literal to the assignment.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
   :start-after: -- textbook: propagateUnits
-  :end-before: -- end textbook: propagateUnits
+  :end-before: -- end: propagateUnits
 
 The function `propagateWithNew` is used to peform a split on the literal `x`.
 It assigns the value of `x` and then does unit propagation.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
   :start-after: -- textbook: propagateWithNew
-  :end-before: -- end textbook: propagateWithNew
+  :end-before: -- end: propagateWithNew
 
 Finally, the function `simplify` simplifies a CNF formula by assigning the literal `x`
 to true, assuming `x` is not one of the constants `⊥` or `⊤`.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
   :start-after: -- textbook: simplify
-  :end-before: -- end textbook: simplify
+  :end-before: -- end: simplify
 
 
 .. _section_autarkies_and_2_sat:

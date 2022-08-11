@@ -1,76 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>2. Mathematical Background &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="3. Lean as a Programming Language" href="using_lean_as_a_programming_language.html" />
     <link rel="prev" title="1. Introduction" href="introduction.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
@@ -118,75 +69,34 @@
 <li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Logic and Mechanized Reasoning</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li><span class="section-number">2. </span>Mathematical Background</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/mathematical_background.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <span class="target" id="chapter-mathematical-background"></span><div class="section" id="mathematical-background">
-<h1><span class="section-number">2. </span>Mathematical Background<a class="headerlink" href="#mathematical-background" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="induction-and-recursion-on-the-natural-numbers">
-<span id="section-induction-and-recursion-on-the-natural-numbers"></span><h2><span class="section-number">2.1. </span>Induction and recursion on the natural numbers<a class="headerlink" href="#induction-and-recursion-on-the-natural-numbers" title="Permalink to this headline">¶</a></h2>
+             
+  <span class="target" id="chapter-mathematical-background"></span><section id="mathematical-background">
+<h1><span class="section-number">2. </span>Mathematical Background<a class="headerlink" href="#mathematical-background" title="Permalink to this heading"></a></h1>
+<section id="induction-and-recursion-on-the-natural-numbers">
+<span id="section-induction-and-recursion-on-the-natural-numbers"></span><h2><span class="section-number">2.1. </span>Induction and recursion on the natural numbers<a class="headerlink" href="#induction-and-recursion-on-the-natural-numbers" title="Permalink to this heading"></a></h2>
 <p>In its most basic form, the principle of induction on the natural numbers
 says that if you want to prove that every natural number has some property,
 it suffices to show that zero has the property,
@@ -204,7 +114,7 @@ assuming <span class="math notranslate nohighlight">\(\sum_{i \le n} i = n (n + 
 <div class="math notranslate nohighlight">
 \[\begin{split}\sum_{i \le n + 1} i &amp; = \sum_{i \le n} i + (n + 1) \\
   &amp;= n (n + 1) / 2 + 2 (n + 1) / 2 \\
-  &amp;= (n + 1) (n + 2) / 2\end{split}\]</div>
+  &amp;= (n + 1) (n + 2) / 2.\end{split}\]</div>
 </div>
 <p>The story is often told that Gauss, as a schoolchild,
 discovered this formula by writing</p>
@@ -258,7 +168,7 @@ that meets that description.</p>
 \[\begin{split}\sum_{i \le n+1} i \cdot i! &amp;= \sum_{i \le n} i \cdot i! + (n+1) \cdot (n+1)! \\
   &amp;= (n + 1)! + (n+1) \cdot (n+1)! - 1 \\
   &amp;= (n + 1)! (1 + (n + 1)) - 1 \\
-  &amp;= (n + 2)! - 1\end{split}\]</div>
+  &amp;= (n + 2)! - 1.\end{split}\]</div>
 </div>
 <p>This is a pattern found throughout mathematics and computer science:
 define functions and operations using recursion, and then use induction
@@ -281,12 +191,13 @@ with the constraint that a larger disk is never placed on top of a smaller one.<
         move n - 1 disks from peg C to peg B using auxiliary peg A
 </pre></div>
 </div>
-<p>We will show in class that this requires <span class="math notranslate nohighlight">\(2^n - 1\)</span> moves.
+<p>It is not hard to show, by induction,
+that this requires <span class="math notranslate nohighlight">\(2^n - 1\)</span> moves.
 The exercises below ask you to show that <em>any</em> solution requires
 at least this many moves.</p>
-</div>
-<div class="section" id="complete-induction">
-<span id="section-complete-induction"></span><h2><span class="section-number">2.2. </span>Complete induction<a class="headerlink" href="#complete-induction" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="complete-induction">
+<span id="section-complete-induction"></span><h2><span class="section-number">2.2. </span>Complete induction<a class="headerlink" href="#complete-induction" title="Permalink to this heading"></a></h2>
 <p>As we have described it, the principle of induction is pretty rigid:
 in the inductive step, to show that <span class="math notranslate nohighlight">\(n+1\)</span> has some property,
 we can only use the corresponding property of <span class="math notranslate nohighlight">\(n\)</span>.
@@ -310,7 +221,7 @@ By the inductive hypothesis, <span class="math notranslate nohighlight">\(m\)</s
 can each be factored into prime numbers, and combining
 these yields a factorization of <span class="math notranslate nohighlight">\(n\)</span>.</p>
 </div>
-<p>Here is another example we will discuss in class:</p>
+<p>Here is another example of a fact that can be proved using induction:</p>
 <div class="admonition-theorem admonition">
 <p class="admonition-title">Theorem</p>
 <p>For any <span class="math notranslate nohighlight">\(n \ge 3\)</span>, the sum of the angles in any
@@ -350,10 +261,12 @@ divisor of two nonnegative integers:</p>
         x &amp; \text{if $y = 0$} \\
         \fn{gcd}(y, \fn{mod}(x, y)) &amp; \text{otherwise}
     \end{cases}\end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\fn{mod}(x, y)\)</span> is the remainder when dividing <span class="math notranslate nohighlight">\(x\)</span> by <span class="math notranslate nohighlight">\(y\)</span>.</p>
-</div>
-<div class="section" id="generalized-induction-and-recursion">
-<span id="section-generalized-induction-and-recursion"></span><h2><span class="section-number">2.3. </span>Generalized induction and recursion<a class="headerlink" href="#generalized-induction-and-recursion" title="Permalink to this headline">¶</a></h2>
+<p>where <span class="math notranslate nohighlight">\(\fn{mod}(x, y)\)</span> is the remainder when dividing <span class="math notranslate nohighlight">\(x\)</span> by <span class="math notranslate nohighlight">\(y\)</span>.
+The easiest way to see that the recursion is well founded is
+to notice that the second argument decreases with each recursive call.</p>
+</section>
+<section id="generalized-induction-and-recursion">
+<span id="section-generalized-induction-and-recursion"></span><h2><span class="section-number">2.3. </span>Generalized induction and recursion<a class="headerlink" href="#generalized-induction-and-recursion" title="Permalink to this heading"></a></h2>
 <p>The natural numbers are characterized inductively by the following clauses:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(0\)</span> is a natural number.</p></li>
@@ -498,11 +411,11 @@ numbers.</p>
 defined inductively as follows:</p>
 <ul class="simple">
 <li><p>The element <span class="math notranslate nohighlight">\(\fn{empty}\)</span> is a binary tree.</p></li>
-<li><p>If <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are finite binary trees, so is the
+<li><p>If <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are finite binary trees, so is
 <span class="math notranslate nohighlight">\(\fn{node}(s, t)\)</span>.</p></li>
 </ul>
 <p>In this definition, <span class="math notranslate nohighlight">\(\fn{empty}\)</span> is intended to denote the empty
-tree, and <span class="math notranslate nohighlight">\(\fn{node}(s, t)\)</span> is intended to denote the
+tree and <span class="math notranslate nohighlight">\(\fn{node}(s, t)\)</span> is intended to denote the
 binary tree that consists of a node at the top and has <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span>
 as the left and right subtrees, respectively.</p>
 <p>Be careful: it is more common to take the set of binary trees to consist of
@@ -518,18 +431,18 @@ and one with a node with both left and right subtrees.</p>
 the following recursive definition:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\fn{size}(\fn{empty}) &amp;= 0 \\
-\fn{size}(\fn{node}(s, t)) &amp;= 1 + \fn{size}(s) + \fn{size}(t)\end{split}\]</div>
+\fn{size}(\fn{node}(s, t)) &amp;= 1 + \fn{size}(s) + \fn{size}(t).\end{split}\]</div>
 <p>We can compute the depth of an extended binary tree as follows:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\fn{depth}(\fn{empty}) &amp;= 0 \\
-\fn{depth}(\fn{node}(s, t)) &amp;= 1 + \max(\fn{depth}(s), \fn{depth}(t))\end{split}\]</div>
+\fn{depth}(\fn{node}(s, t)) &amp;= 1 + \max(\fn{depth}(s), \fn{depth}(t)).\end{split}\]</div>
 <p>Again, be careful: many authors take the depth of a tree to be the
 length of the longest path from the root to a leaf,
 in which case, what we have defined here computes the depth <em>plus one</em>
 for nonempty trees.</p>
-</div>
-<div class="section" id="invariants">
-<span id="section-invariants"></span><h2><span class="section-number">2.4. </span>Invariants<a class="headerlink" href="#invariants" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="invariants">
+<span id="section-invariants"></span><h2><span class="section-number">2.4. </span>Invariants<a class="headerlink" href="#invariants" title="Permalink to this heading"></a></h2>
 <p>The <em>mutilated chessboard</em> problems involves an <span class="math notranslate nohighlight">\(8 \times 8\)</span> chessboard with the
 top right and bottom left corners removed.
 Imagine you are given a set of dominoes, each of which can cover exactly two squares.
@@ -568,10 +481,17 @@ Try the “if” part if you like a challenge.</p>
 <p>As a final example, in class we’ll discuss the Golomb <em>tromino theorem</em>. A <em>tromino</em>
 is an L-shaped configuration of three squares. Golomb’s theorem says that any
 <span class="math notranslate nohighlight">\(2^n \times 2^n\)</span> chessboard with one square removed can be tiled with trominoes.
-We’ll prove this together in class.</p>
-</div>
-<div class="section" id="exercises">
-<span id="section-mathematical-background-exercises"></span><h2><span class="section-number">2.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+This is clear for a <span class="math notranslate nohighlight">\(2 \times 2\)</span> chessboard with one
+square removed, and trivially even for a <span class="math notranslate nohighlight">\(1 \times 1\)</span> chessboard
+with one square removed.
+In the inductive step, divide an <span class="math notranslate nohighlight">\(2^{n+1} \times 2^{n+1}\)</span> chessboard
+with one square removed into four <span class="math notranslate nohighlight">\(2^n \times 2^n\)</span> chessboards,
+one of which has one square removed.
+Then put one tromino in the middle so that the other three chessboard also
+have one square removed, and apply the inductive hypothesis.</p>
+</section>
+<section id="exercises">
+<span id="section-mathematical-background-exercises"></span><h2><span class="section-number">2.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <ol class="arabic">
 <li><p>Prove the formula for the sum of a geometric series:</p>
 <blockquote>
@@ -580,6 +500,13 @@ We’ll prove this together in class.</p>
 </div></blockquote>
 </li>
 <li><p>Prove that for every <span class="math notranslate nohighlight">\(n &gt; 4\)</span>, <span class="math notranslate nohighlight">\(n! &gt; 2^n\)</span>.</p></li>
+<li><p>Express the following using summation notation, and prove it by induction:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\frac{1}{1\cdot 2} + \frac{1}{2 \cdot 3} + \cdots + \frac{1}{n \cdot (n + 1)} = \frac{n}{n+1}.\]</div>
+<p>You can use notation like $sum_{i le n}$ or $sum_{i = 1}^n$, as you prefer.</p>
+</div></blockquote>
+</li>
 <li><p>Show that the solution to the towers of Hanoi given in
 <a class="reference internal" href="#section-induction-and-recursion-on-the-natural-numbers"><span class="std std-numref">Section 2.1</span></a> is optimal: for every <span class="math notranslate nohighlight">\(n\)</span>,
 it takes at least <cite>2^n - 1</cite> moves to move all the disks from one peg to another.</p></li>
@@ -606,7 +533,11 @@ recursive procedure to solve this problem.</p></li>
 </ol>
 </div></blockquote>
 </li>
+<li><p>Let <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> be the two roots of <span class="math notranslate nohighlight">\(x^2 = x + 1\)</span>.
+Show that for every <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(F_n = (\alpha^n - \beta^n) / \sqrt 5\)</span>.</p></li>
 <li><p>Show that with <cite>n</cite> straight lines we can divide the plane into at most <span class="math notranslate nohighlight">\(n^2 + n + 2\)</span> regions, and that this is sharp.</p></li>
+<li><p>Prove that for <span class="math notranslate nohighlight">\(n \ge 3\)</span> a convex <span class="math notranslate nohighlight">\(n\)</span>-gon has
+<span class="math notranslate nohighlight">\(n(n-3)/2\)</span> diagonals.</p></li>
 <li><p>Show that the recursive description of <span class="math notranslate nohighlight">\(\fn{gcd}(x,y)\)</span> presented in
 <a class="reference internal" href="#section-generalized-induction-and-recursion"><span class="std std-numref">Section 2.3</span></a> correctly computes the greatest
 common divisor of <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, where we define <span class="math notranslate nohighlight">\(\fn{gcd}(0,0)\)</span>
@@ -615,11 +546,20 @@ equal to 0. You can restrict attention to nonnegative values of <span class="mat
 we can write <span class="math notranslate nohighlight">\(x = \fn{div}(x, y) \cdot y + \fn{mod}(x, y)\)</span>,
 where <span class="math notranslate nohighlight">\(\fn{div}(x, y)\)</span> is the integer part of <span class="math notranslate nohighlight">\(x\)</span> divided by <span class="math notranslate nohighlight">\(y\)</span>.
 First show that for every <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(\fn{gcd}(x, y) = \fn{gcd}(x + ky, y)\)</span>,
-and use that fact.</p></li>
+and use that fact.)</p></li>
+<li><p>Use the recursive description of <span class="math notranslate nohighlight">\(\fn{gcd}(x,y)\)</span> to show that for
+every nonnegative <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, there are integers <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> such that
+<span class="math notranslate nohighlight">\(\fn{gcd}(x, y) = a x + b y\)</span>.</p></li>
 <li><p>Use structural induction to prove</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\fn{reverse}(\ell \append m) = \fn{reverse}(m) \append \fn{reverse}(\ell).\]</div>
+</div></blockquote>
+</li>
+<li><p>Use structural induction to prove</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\fn{length}(\fn{reverse}(\ell)) = \fn{length}(\ell).\]</div>
 </div></blockquote>
 </li>
 <li><p>Use structural induction to prove</p>
@@ -640,60 +580,50 @@ and use that fact.</p></li>
 \[\fn{length}(\ell \append m) = \fn{length}(\ell) + \fn{length}(m).\]</div>
 </div></blockquote>
 </li>
-<li><p>How many binary trees of depth <span class="math notranslate nohighlight">\(n\)</span> are there? Prove your answer is correct.</p></li>
+<li><p>How many binary trees of depth <span class="math notranslate nohighlight">\(n\)</span> are there? Prove that your answer is correct.</p></li>
+</ol>
+<p>#. Prove by structural recursion that for any (extended) binary tree $t$, we have
+$fn{size}(t) le 2^{fn{depth}(t)} - 1$.</p>
+<ol class="arabic simple">
 <li><p>Show that a string is derivable in the MU puzzle if and only if it consists
 of an M followed by any number of Is and Us, as long as the number of Is is
-not divisible by 3.</p></li>
+not divisible by 3. (Hint: it helps to show that, when starting with the
+string MI, you can produce any string
+MI…I, that is, M followed by only Is, if the number
+of Is is not equal to zero modulo 3.)</p></li>
 </ol>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="using_lean_as_a_programming_language.html" class="btn btn-neutral float-right" title="3. Lean as a Programming Language" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="introduction.html" class="btn btn-neutral float-left" title="1. Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="using_lean_as_a_programming_language.html" class="btn btn-neutral float-right" title="3. Lean as a Programming Language" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.
-
-    </p>
+    <p>&#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,76 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>3. Lean as a Programming Language &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4. Propositional Logic" href="propositional_logic.html" />
     <link rel="prev" title="2. Mathematical Background" href="mathematical_background.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
@@ -118,82 +69,40 @@
 <li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Logic and Mechanized Reasoning</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li><span class="section-number">3. </span>Lean as a Programming Language</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/using_lean_as_a_programming_language.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="lean-as-a-programming-language">
-<span id="chapter-lean-as-a-programming-language"></span><h1><span class="section-number">3. </span>Lean as a Programming Language<a class="headerlink" href="#lean-as-a-programming-language" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="about-lean">
-<span id="section-about-lean"></span><h2><span class="section-number">3.1. </span>About Lean<a class="headerlink" href="#about-lean" title="Permalink to this headline">¶</a></h2>
+             
+  <section id="lean-as-a-programming-language">
+<span id="chapter-lean-as-a-programming-language"></span><h1><span class="section-number">3. </span>Lean as a Programming Language<a class="headerlink" href="#lean-as-a-programming-language" title="Permalink to this heading"></a></h1>
+<section id="about-lean">
+<span id="section-about-lean"></span><h2><span class="section-number">3.1. </span>About Lean<a class="headerlink" href="#about-lean" title="Permalink to this heading"></a></h2>
 <p><em>Lean</em> is a new programming language and interactive proof assistant being developed
 at Microsoft Research.
-It is currently in an experimental, development stage, which makes it
-a risky choice for this course.
+It is still in its early stages, and not well documented yet.
 But in many ways it is an ideal system for working with logical syntax
 and putting logic to use.
-Lean is an exciting project, and the system fun to use.
+Lean is an exciting project, and the system is fun to use.
 So please bear with us.
 Using Lean puts us out on the frontier,
 but if you adopt a pioneering attitude,
@@ -205,27 +114,31 @@ and by asking questions on the <a class="reference external" href="https://leanp
 which you are heartily encouraged to join.
 To be more precise, there are currently two versions of Lean:</p>
 <ul class="simple">
-<li><p>Lean 3 is reasonably stable, and primarily an interactive proof assistant.
+<li><p>Lean 3 is stable, and is primarily an interactive proof assistant.
 It has a very large mathematical library, known as <a class="reference external" href="https://github.com/leanprover-community/mathlib">mathlib</a>.</p></li>
-<li><p>Lean 4 is being designed as a performant programming language, and it is still under
-development.
+<li><p>Lean 4 is still evolving and is designed as a performant programming language.
 It can also be used as a proof assistant, though it does not yet have a
 substantial library.
 Its language and syntax are similar to that of Lean 3,
 but it is not backward compatible.</p></li>
 </ul>
-<p>In this course, we will use Lean 4, even though it is still under development.
-It has the rough beginnings of a <a class="reference external" href="https://leanprover.github.io/lean4/doc/">user manual</a>
-and there is a <a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">tutorial</a> on
-the underlying foundation.
-As we will see, Lean has a lot of features that make that
+<p>In this course, we will use Lean 4.
+The following documentation is available:</p>
+<ul class="simple">
+<li><p>a <a class="reference external" href="https://leanprover.github.io/lean4/doc/">user manual</a></p></li>
+<li><p>the beginning of an <a class="reference external" href="https://leanprover.github.io/functional_programming_in_lean/">introduction to functional programming in Lean</a></p></li>
+<li><p>a <a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">tutorial on theorem proving in Lean</a>.</p></li>
+</ul>
+<p>If you are new to functional programming, you might also find it helpful to consult an
+<a class="reference external" href="http://learnyouahaskell.com/">introduction to functional programming in Haskell</a>.</p>
+<p>As we will see, Lean has a lot of features that make that
 worthwhile. In particular, Lean 4 is designed to be an ideal language for implementing
 powerful logic-based systems, as evidenced by the fact that most of Lean 4 is implemented
 in Lean 4 itself.</p>
 <p>The goal of this section is to give you a better sense of what Lean is, how it can
 possibly be a programming language and proof assistant at the same time,
 and why that makes sense.
-The rest of the introduction will give you a quick tour of some of its features,
+The rest of this section will give you a quick tour of some of its features,
 and we will learn more about them as the course progresses.</p>
 <p>At the core, Lean is an implementation of a formal logical foundation known as <em>type theory</em>.
 More specifically, it is an implementation of <em>dependent type theory</em>, and even
@@ -246,14 +159,15 @@ In Lean, every well-formed expression has a type.</p>
 </div>
 <p>You can find this example in the file <cite>using_lean_as_a_programming_language/examples1.lean</cite> in the
 <cite>LAMR/Examples</cite> folder of the course repository.
-We recommend copying that entire folder in the <cite>User</cite> folder,
+We strongly recommend copying that entire folder into the <code class="docutils literal notranslate"><span class="pre">User</span></code> folder,
 so you can edit the files and try examples of your own.
-You can always find the original file in the folder <cite>LAMR/Examples</cite>,
-which you should not edit.</p>
-<p>If you hover over the <cite>#check</cite> statements or move your cursor to one
+That way, you can always find the original file in the folder <code class="docutils literal notranslate"><span class="pre">LAMR/Examples</span></code>,
+which you should not edit.
+It will also make it easier to update your copy when we make changes.</p>
+<p>If you hover over the <code class="docutils literal notranslate"><span class="pre">#check</span></code> statements or move your cursor to one
 of these lines and check the information window,
 Lean reports the result of the command.
-It tells you that <cite>2 + 2</cite> has type <cite>Nat</cite>, <cite>-5</cite> has type <cite>Int</cite>, and so on.
+It tells you that <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">+</span> <span class="pre">2</span></code> has type <code class="docutils literal notranslate"><span class="pre">Nat</span></code>, <code class="docutils literal notranslate"><span class="pre">-5</span></code> has type <code class="docutils literal notranslate"><span class="pre">Int</span></code>, and so on.
 In fact, in the formal foundation, types are expressions as well.
 The types of all the expressions above are listed below:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#check</span> <span class="n">Nat</span>
@@ -267,7 +181,7 @@ The types of all the expressions above are listed below:</p>
 <span class="k">#check</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">String</span>
 </pre></div>
 </div>
-<p>Now Lean tells you each of these has type <cite>Type</cite>, indicating that they are
+<p>Now Lean tells you each of these has type <code class="docutils literal notranslate"><span class="pre">Type</span></code>, indicating that they are
 all data types. If you know the type of an expression, you can ask Lean to confirm it:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#check</span> <span class="o">(</span><span class="mi">2</span> <span class="bp">+</span> <span class="mi">2</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span>
 <span class="k">#check</span> <span class="o">([</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">]</span> <span class="o">:</span> <span class="n">List</span> <span class="n">Nat</span><span class="o">)</span>
@@ -275,9 +189,9 @@ all data types. If you know the type of an expression, you can ask Lean to confi
 </div>
 <p>Lean will report an error if it cannot construe the expression as
 having the indicated type.</p>
-<p>In Lean, you can define new objects with the <cite>def</cite> command.
+<p>In Lean, you can define new objects with the <code class="docutils literal notranslate"><span class="pre">def</span></code> command.
 The new definition becomes part of the <em>environment</em>: the defined expression
-is associated with the identifier that appears after the word <cite>def</cite>.</p>
+is associated with the identifier that appears after the word <code class="docutils literal notranslate"><span class="pre">def</span></code>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">four</span> <span class="o">:</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="mi">2</span> <span class="bp">+</span> <span class="mi">2</span>
 
 <span class="kd">def</span> <span class="n">isOne</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">String</span> <span class="o">:=</span> <span class="k">if</span> <span class="n">x</span> <span class="bp">=</span> <span class="mi">1</span> <span class="k">then</span> <span class="s2">&quot;yes&quot;</span> <span class="k">else</span> <span class="s2">&quot;no&quot;</span>
@@ -304,7 +218,7 @@ a computational semantics, under which expressions can be <em>evaluated</em>.</p
 <span class="k">#eval</span> <span class="n">isOne</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>The <cite>#eval</cite> command evaluates the expression and then
+<p>The <code class="docutils literal notranslate"><span class="pre">#eval</span></code> command evaluates the expression and then
 displays the return value.
 Evaluation can also have <em>side effects</em>,
 which are generally related to system IO.
@@ -330,7 +244,7 @@ express propositions:</p>
 </pre></div>
 </div>
 <p>Lean confirms that each of these is a proposition
-by reporting that each of them has type <cite>Prop</cite>.
+by reporting that each of them has type <code class="docutils literal notranslate"><span class="pre">Prop</span></code>.
 Notice that they do not all express <em>true</em> propositions;
 theorem proving is about certifying the ones that are.
 But the language of Lean is flexible enough to express just about
@@ -340,15 +254,15 @@ here is the statement of Fermat’s last theorem:</p>
 <span class="bp">∀</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span> <span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">,</span> <span class="n">a</span> <span class="bp">*</span> <span class="n">b</span> <span class="bp">*</span> <span class="n">c</span> <span class="bp">≠</span> <span class="mi">0</span> <span class="bp">∧</span> <span class="n">n</span> <span class="bp">&gt;</span> <span class="mi">2</span> <span class="bp">→</span> <span class="n">a</span><span class="bp">^</span><span class="n">n</span> <span class="bp">+</span> <span class="n">b</span><span class="bp">^</span><span class="n">n</span> <span class="bp">≠</span> <span class="n">c</span><span class="bp">^</span><span class="n">n</span>
 </pre></div>
 </div>
-<p>In Lean’s formal system, data types are expressions of type <cite>Type</cite>,
-and if <cite>T</cite> is a type, an expression of type <cite>T</cite> denotes an object
+<p>In Lean’s formal system, data types are expressions of type <code class="docutils literal notranslate"><span class="pre">Type</span></code>,
+and if <code class="docutils literal notranslate"><span class="pre">T</span></code> is a type, an expression of type <code class="docutils literal notranslate"><span class="pre">T</span></code> denotes an object
 of that type. We have also seen that propositions are expressions
-of type <cite>Prop</cite>. In the formal system, if <cite>P</cite> is a proposition,
-a proof of <cite>P</cite> is just an expression of type <cite>P</cite>.
+of type <code class="docutils literal notranslate"><span class="pre">Prop</span></code>. In the formal system, if <code class="docutils literal notranslate"><span class="pre">P</span></code> is a proposition,
+a proof of <code class="docutils literal notranslate"><span class="pre">P</span></code> is just an expression of type <code class="docutils literal notranslate"><span class="pre">P</span></code>.
 This is the final piece of the puzzle:
-we use Lean as a proof assistant by writing down a proposition <cite>P</cite>,
-writing down an expression <cite>p</cite>, and asking Lean to confirm that
-<cite>p</cite> has type <cite>P</cite>. The fact that <cite>2 + 2 = 4</cite> has an easy proof,
+we use Lean as a proof assistant by writing down a proposition <code class="docutils literal notranslate"><span class="pre">P</span></code>,
+writing down an expression <code class="docutils literal notranslate"><span class="pre">p</span></code>, and asking Lean to confirm that
+<code class="docutils literal notranslate"><span class="pre">p</span></code> has type <code class="docutils literal notranslate"><span class="pre">P</span></code>. The fact that <cite>2 + 2 = 4</cite> has an easy proof,
 that we will explain later:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">two_plus_two_is_four</span> <span class="o">:</span> <span class="mi">2</span> <span class="bp">+</span> <span class="mi">2</span> <span class="bp">=</span> <span class="mi">4</span> <span class="o">:=</span> <span class="n">rfl</span>
 </pre></div>
@@ -357,8 +271,8 @@ that we will explain later:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">Fermat_last_theorem</span> <span class="o">:</span> <span class="n">Fermat_statement</span> <span class="o">:=</span> <span class="gr">sorry</span>
 </pre></div>
 </div>
-<p>Lean knows that <cite>sorry</cite> is not a real proof, and it flags a warning there.
-If you manage to replace <cite>sorry</cite> by a real Lean expression, please let us know.
+<p>Lean knows that <code class="docutils literal notranslate"><span class="pre">sorry</span></code> is not a real proof, and it flags a warning there.
+If you manage to replace <code class="docutils literal notranslate"><span class="pre">sorry</span></code> by a real Lean expression, please let us know.
 We will be very impressed.</p>
 <p>So, in Lean, one can write programs and execute them, and one can state
 propositions and prove them.
@@ -380,11 +294,10 @@ that animates this course:
 knowing how to work with formally specified expressions and rules
 opens up a world of opportunity.
 It is the key to unlocking the secrets of the universe.</p>
-</div>
-<div class="section" id="using-lean-as-a-functional-programming-language">
-<span id="section-using-lean-as-a-functional-programming-language"></span><h2><span class="section-number">3.2. </span>Using Lean as a functional programming language<a class="headerlink" href="#using-lean-as-a-functional-programming-language" title="Permalink to this headline">¶</a></h2>
-<p>There is a preliminary user’s manual for Lean,
-still a work in progress, <a class="reference external" href="https://leanprover.github.io/lean4/doc/">here</a>. The fact that Lean is a functional programming language means
+</section>
+<section id="using-lean-as-a-functional-programming-language">
+<span id="section-using-lean-as-a-functional-programming-language"></span><h2><span class="section-number">3.2. </span>Using Lean as a functional programming language<a class="headerlink" href="#using-lean-as-a-functional-programming-language" title="Permalink to this heading"></a></h2>
+<p>The fact that Lean is a functional programming language means
 that instead of presenting a program as a list of instructions,
 you simply <em>define</em> functions and ask Lean to evaluate them.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">foo</span> <span class="n">n</span> <span class="o">:=</span> <span class="mi">3</span> <span class="bp">*</span> <span class="n">n</span> <span class="bp">+</span> <span class="mi">7</span>
@@ -441,11 +354,11 @@ and can accommodate an imperative style of programming using <em>do notation</em
 </pre></div>
 </div>
 <p>In fact, there are a number of useful functions built
-into Lean’s library. The function <cite>List.range n</cite> returns the list
-<cite>[0, 1, …, n-1]</cite>, and the functions <cite>List.map</cite> and <cite>List.foldl</cite>
-and <cite>List.foldr</cite> implement the usual map and fold functions for lists.
-By opening the <cite>List</cite> namespace, we can refer to these as <cite>range</cite>, <cite>map</cite>,
-<cite>foldl</cite>, and <cite>foldr</cite>. In the examples below,
+into Lean’s library. The function <code class="docutils literal notranslate"><span class="pre">List.range</span> <span class="pre">n</span></code> returns the list
+<code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">...,</span> <span class="pre">n-1]</span></code>, and the functions <code class="docutils literal notranslate"><span class="pre">List.map</span></code> and <code class="docutils literal notranslate"><span class="pre">List.foldl</span></code>
+and <code class="docutils literal notranslate"><span class="pre">List.foldr</span></code> implement the usual map and fold functions for lists.
+By opening the <code class="docutils literal notranslate"><span class="pre">List</span></code> namespace, we can refer to these as <code class="docutils literal notranslate"><span class="pre">range</span></code>, <code class="docutils literal notranslate"><span class="pre">map</span></code>,
+<code class="docutils literal notranslate"><span class="pre">foldl</span></code>, and <code class="docutils literal notranslate"><span class="pre">foldr</span></code>. In the examples below,
 the dollar sign has the same effect as putting parentheses around
 everything that appears afterward.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">List.range</span> <span class="mi">7</span>
@@ -461,27 +374,22 @@ everything that appears afterward.</p>
 <span class="kd">end</span>
 </pre></div>
 </div>
-<p>The scope of the <cite>open</cite> command is limited to the section,
-and the cryptic inscription <cite>(. + .)</cite> is notation for the
+<p>The scope of the <code class="docutils literal notranslate"><span class="pre">open</span></code> command is limited to the section,
+and the cryptic inscription <code class="docutils literal notranslate"><span class="pre">(.</span> <span class="pre">+</span> <span class="pre">.)</span></code> is notation for the
 addition function. Lean also supports projection notation
 that is useful when the corresponding namespace is not open:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">myRange</span> <span class="o">:=</span> <span class="n">List.range</span> <span class="mi">7</span>
 <span class="k">#eval</span> <span class="n">myRange.map</span> <span class="k">fun</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="n">x</span> <span class="bp">+</span> <span class="mi">3</span>
 </pre></div>
 </div>
-<p>Because <cite>myRange</cite> has type <cite>List Nat</cite>, Lean interprets
-<cite>myrange.map fun x =&gt; x + 3</cite> as <cite>List.map (fun x =&gt; x + 3) myrange</cite>.
-In other words, it automatically interprets <cite>map</cite> as being
-in the <cite>List</cite> namespace,
-and then it interprets <cite>myrange</cite> as the first <cite>List</cite> argument.</p>
+<p>Because <code class="docutils literal notranslate"><span class="pre">myRange</span></code> has type <code class="docutils literal notranslate"><span class="pre">List</span> <span class="pre">Nat</span></code>, Lean interprets
+<code class="docutils literal notranslate"><span class="pre">myrange.map</span> <span class="pre">fun</span> <span class="pre">x</span> <span class="pre">=&gt;</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">3</span></code> as <code class="docutils literal notranslate"><span class="pre">List.map</span> <span class="pre">(fun</span> <span class="pre">x</span> <span class="pre">=&gt;</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">3)</span> <span class="pre">myrange</span></code>.
+In other words, it automatically interprets <code class="docutils literal notranslate"><span class="pre">map</span></code> as being
+in the <code class="docutils literal notranslate"><span class="pre">List</span></code> namespace,
+and then it interprets <code class="docutils literal notranslate"><span class="pre">myrange</span></code> as the first <code class="docutils literal notranslate"><span class="pre">List</span></code> argument.</p>
 <p>This course assumes you have some familiarity with functional programming.
-There is a free online textbook, <a class="reference external" href="http://learnyouahaskell.com/">Learn You a Haskell for Great Good</a> that you might find helpful;
-porting some of the examples there to Lean is a good exercise.
-We will all suffer from the fact that documentation for Lean 4
-barely exists at the moment,
-but we will do our best to provide you with enough examples
-for you to be able to figure out how to do what you need to do.
-One trick is to nose around the Lean code base itself.
+One way to cope with the fact that there is not yet much documentation
+for Lean is to nose around the Lean code base itself.
 If you ctrl-click on the name of a function in the Lean library,
 the editor will jump to the definition, and you can look around
 and see what else is there.
@@ -492,7 +400,7 @@ We are all in this together.</p>
 there are often clever tricks for doing things that you
 may be more comfortable doing in an imperative programming language.
 For example, as explained in <a class="reference internal" href="mathematical_background.html#section-generalized-induction-and-recursion"><span class="std std-numref">Section 2.3</span></a>,
-here are Lean’s definitions of the <cite>reverse</cite> and <cite>append</cite> functions for lists:</p>
+here are Lean’s definitions of the <code class="docutils literal notranslate"><span class="pre">reverse</span></code> and <code class="docutils literal notranslate"><span class="pre">append</span></code> functions for lists:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">namespace</span> <span class="n">hidden</span>
 
 <span class="kd">def</span> <span class="n">reverseAux</span> <span class="o">:</span> <span class="n">List</span> <span class="n">α</span> <span class="bp">→</span> <span class="n">List</span> <span class="n">α</span> <span class="bp">→</span> <span class="n">List</span> <span class="n">α</span>
@@ -508,21 +416,21 @@ here are Lean’s definitions of the <cite>reverse</cite> and <cite>append</cite
 <span class="kd">end</span> <span class="n">hidden</span>
 </pre></div>
 </div>
-<p>The function <cite>reverseAux l r</cite> reverses the elements of list <cite>l</cite>
-and adds them to the front of <cite>r</cite>. When called from <cite>reverse l</cite>,
-the argument <cite>r</cite> acts as an <em>accumulator</em>, storing the partial result.
-Because <cite>reverseAux</cite> is tail recursive, Lean’s compiler
+<p>The function <code class="docutils literal notranslate"><span class="pre">reverseAux</span> <span class="pre">l</span> <span class="pre">r</span></code> reverses the elements of list <code class="docutils literal notranslate"><span class="pre">l</span></code>
+and adds them to the front of <code class="docutils literal notranslate"><span class="pre">r</span></code>. When called from <code class="docutils literal notranslate"><span class="pre">reverse</span> <span class="pre">l</span></code>,
+the argument <code class="docutils literal notranslate"><span class="pre">r</span></code> acts as an <em>accumulator</em>, storing the partial result.
+Because <code class="docutils literal notranslate"><span class="pre">reverseAux</span></code> is tail recursive, Lean’s compiler
 can implement it efficiently as a loop rather than a recursive function.
-We have defined these functions in a namespace named <cite>hidden</cite>
+We have defined these functions in a namespace named <code class="docutils literal notranslate"><span class="pre">hidden</span></code>
 so that they don’t conflict with the ones in Lean’s library
-if you open the <cite>List</cite> namespace.</p>
+if you open the <code class="docutils literal notranslate"><span class="pre">List</span></code> namespace.</p>
 <p>In Lean’s foundation, every function is totally defined.
 In particular, every function that Lean computes has to
 terminates (in principle) on every input.
 Lean 4 will eventually support arbitrary recursive definitions in which
 the arguments in a recursive call decrease by some measure,
 but some work is needed to justify these calls in the underlying
-foundation. In the meanwhile, we can always cheat by using the <cite>partial</cite> keyword,
+foundation. In the meanwhile, we can always cheat by using the <code class="docutils literal notranslate"><span class="pre">partial</span></code> keyword,
 which will let us perform arbitrary recursive calls.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">gcd</span> <span class="n">m</span> <span class="n">n</span> <span class="o">:=</span>
   <span class="k">if</span> <span class="n">n</span> <span class="bp">=</span> <span class="mi">0</span> <span class="k">then</span> <span class="n">m</span> <span class="k">else</span> <span class="n">gcd</span> <span class="n">n</span> <span class="o">(</span><span class="n">m</span> <span class="bp">%</span> <span class="n">n</span><span class="o">)</span>
@@ -531,19 +439,19 @@ which will let us perform arbitrary recursive calls.</p>
 <span class="k">#eval</span> <span class="n">gcd</span> <span class="mi">37252</span> <span class="mi">49824</span>
 </pre></div>
 </div>
-<p>Using <cite>partial</cite> takes us outside the formal foundation; Lean
-will not let us prove anything about <cite>gcd</cite> when we define it this way.
-Using <cite>partial</cite> also makes it easy for us to shoot ourselves in the foot:</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">partial</span></code> takes us outside the formal foundation; Lean
+will not let us prove anything about <code class="docutils literal notranslate"><span class="pre">gcd</span></code> when we define it this way.
+Using <code class="docutils literal notranslate"><span class="pre">partial</span></code> also makes it easy for us to shoot ourselves in the foot:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">bad</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="n">bad</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span>
 </pre></div>
 </div>
 <p>On homework exercises, you should try to use structural recursion
 when you can,
-but don’t hesitate to use <cite>partial</cite> whenever Lean complains
+but don’t hesitate to use <code class="docutils literal notranslate"><span class="pre">partial</span></code> whenever Lean complains
 about a recursive definition.
 We will not penalize you for it.</p>
 <p>The following definition of the Fibonacci numbers does not require
-the <cite>partial</cite> keyword:</p>
+the <code class="docutils literal notranslate"><span class="pre">partial</span></code> keyword:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">fib&#39;</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span>
   <span class="bp">|</span> <span class="mi">0</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
   <span class="bp">|</span> <span class="mi">1</span> <span class="bp">=&gt;</span> <span class="mi">1</span>
@@ -569,9 +477,9 @@ time is quadratic.
 In the exercises, we ask you to define a function that computes
 a list of Fibonacci values with running time linear in the
 length of the list.</p>
-</div>
-<div class="section" id="inductive-data-types-in-lean">
-<span id="section-inductive-data-types-in-lean"></span><h2><span class="section-number">3.3. </span>Inductive data types in Lean<a class="headerlink" href="#inductive-data-types-in-lean" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="inductive-data-types-in-lean">
+<span id="section-inductive-data-types-in-lean"></span><h2><span class="section-number">3.3. </span>Inductive data types in Lean<a class="headerlink" href="#inductive-data-types-in-lean" title="Permalink to this heading"></a></h2>
 <p>One reason that computer scientists and logicians tend to like
 functional programming languages is that they often provide
 good support for defining inductive data types and then
@@ -589,28 +497,28 @@ binary trees that we defined in mathematical terms in
 <span class="kn">open</span> <span class="n">BinTree</span>
 </pre></div>
 </div>
-<p>The command <cite>import Init</cite> imports a part of the initial library for us to use.
-The command <cite>open BinTree</cite> allows us to write <cite>empty</cite> and <cite>node</cite> instead of
-<cite>BinTree.empty</cite> and <cite>BinTree.node</cite>.
+<p>The command <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">Init</span></code> imports a part of the initial library for us to use.
+The command <code class="docutils literal notranslate"><span class="pre">open</span> <span class="pre">BinTree</span></code> allows us to write <code class="docutils literal notranslate"><span class="pre">empty</span></code> and <code class="docutils literal notranslate"><span class="pre">node</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">BinTree.empty</span></code> and <code class="docutils literal notranslate"><span class="pre">BinTree.node</span></code>.
 Note the Lean convention of capitalizing the names of data types.</p>
-<p>The last line of the definition, the one that begins with the word <cite>deriving</cite>,
+<p>The last line of the definition, the one that begins with the word <code class="docutils literal notranslate"><span class="pre">deriving</span></code>,
 is boilerplate.
 It tells Lean to automatically generate a few additional functions that are
-useful. The directive <cite>deriving Repr</cite> tells Lean to define an internal function
-that can be used to represent any <cite>BinTree</cite> as a string.
-This is the string that is printed out by any <cite>#eval</cite> command whose argument
-evaluates to a <cite>BinTree</cite>.
-Adding <cite>DecidableEq</cite> defines a function that tests whether two <cite>BinTrees</cite> are equal,
-and adding <cite>Inhabited</cite> defines an arbitrary value of the data type to serve as
+useful. The directive <code class="docutils literal notranslate"><span class="pre">deriving</span> <span class="pre">Repr</span></code> tells Lean to define an internal function
+that can be used to represent any <code class="docutils literal notranslate"><span class="pre">BinTree</span></code> as a string.
+This is the string that is printed out by any <code class="docutils literal notranslate"><span class="pre">#eval</span></code> command whose argument
+evaluates to a <code class="docutils literal notranslate"><span class="pre">BinTree</span></code>.
+Adding <code class="docutils literal notranslate"><span class="pre">DecidableEq</span></code> defines a function that tests whether two <code class="docutils literal notranslate"><span class="pre">BinTrees</span></code> are equal,
+and adding <code class="docutils literal notranslate"><span class="pre">Inhabited</span></code> defines an arbitrary value of the data type to serve as
 a default value for function that need one. The following illustrates their use.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">node</span> <span class="n">empty</span> <span class="o">(</span><span class="n">node</span> <span class="n">empty</span> <span class="n">empty</span><span class="o">)</span>
 
 <span class="k">#eval</span> <span class="n">empty</span> <span class="bp">==</span> <span class="n">node</span> <span class="n">empty</span> <span class="n">empty</span>  <span class="c1">-- evaluates to false</span>
 
-<span class="k">#eval</span> <span class="o">(</span><span class="n">arbitrary</span> <span class="o">:</span> <span class="n">BinTree</span><span class="o">)</span>  <span class="c1">-- BinTree.empty</span>
+<span class="k">#eval</span> <span class="o">(</span><span class="n">default</span> <span class="o">:</span> <span class="n">BinTree</span><span class="o">)</span>  <span class="c1">-- BinTree.empty</span>
 </pre></div>
 </div>
-<p>We can now define the functions <cite>size</cite> and <cite>depth</cite> by structural recursion:</p>
+<p>We can now define the functions <code class="docutils literal notranslate"><span class="pre">size</span></code> and <code class="docutils literal notranslate"><span class="pre">depth</span></code> by structural recursion:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">size</span> <span class="o">:</span> <span class="n">BinTree</span> <span class="bp">→</span> <span class="n">Nat</span>
   <span class="bp">|</span> <span class="n">empty</span>    <span class="bp">=&gt;</span> <span class="mi">0</span>
   <span class="bp">|</span> <span class="n">node</span> <span class="n">a</span> <span class="n">b</span> <span class="bp">=&gt;</span> <span class="mi">1</span> <span class="bp">+</span> <span class="n">size</span> <span class="n">a</span> <span class="bp">+</span> <span class="n">size</span> <span class="n">b</span>
@@ -625,15 +533,50 @@ a default value for function that need one. The following illustrates their use.
 <span class="k">#eval</span> <span class="n">depth</span> <span class="n">example_tree</span>
 </pre></div>
 </div>
-<p>In fact, the <cite>List</cite> data type is also inductively defined.</p>
+<p>Lean also supports <code class="docutils literal notranslate"><span class="pre">match</span></code> syntax.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">foo</span> <span class="o">(</span><span class="n">b</span> <span class="o">:</span> <span class="n">BinTree</span><span class="o">)</span> <span class="o">:</span> <span class="n">Nat</span> <span class="o">:=</span>
+  <span class="k">match</span> <span class="n">b</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">empty</span>    <span class="bp">=&gt;</span> <span class="mi">0</span>
+  <span class="bp">|</span> <span class="n">node</span> <span class="n">_</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">1</span>
+
+<span class="k">#eval</span> <span class="n">foo</span> <span class="o">(</span><span class="n">node</span> <span class="n">empty</span> <span class="n">empty</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In fact, the <code class="docutils literal notranslate"><span class="pre">List</span></code> data type is also inductively defined.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#print</span> <span class="n">List</span>
 </pre></div>
 </div>
 <p>You should try writing the inductive definition on your own. Call
-it <cite>MyList</cite>, and then try <cite>#print MyList</cite> to see how it compares.</p>
+it <code class="docutils literal notranslate"><span class="pre">MyList</span></code>, and then try <code class="docutils literal notranslate"><span class="pre">#print</span> <span class="pre">MyList</span></code> to see how it compares.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Option</span></code> types are commonly used in functional programming to
+represent functions that might fail to return a value.
+For any type <code class="docutils literal notranslate"><span class="pre">α</span></code>, and element of type <code class="docutils literal notranslate"><span class="pre">Option</span> <span class="pre">α</span></code> is either
+of the form <code class="docutils literal notranslate"><span class="pre">some</span> <span class="pre">a</span></code>, where <code class="docutils literal notranslate"><span class="pre">a</span></code> is an element of <code class="docutils literal notranslate"><span class="pre">α</span></code>, or <code class="docutils literal notranslate"><span class="pre">none</span></code>.
+You can use a <code class="docutils literal notranslate"><span class="pre">match</span></code> to determine which case we are in.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#print</span> <span class="n">Option</span>
+
+<span class="kd">def</span> <span class="n">bar</span> <span class="o">(</span><span class="n">n</span><span class="bp">?</span> <span class="o">:</span> <span class="n">Option</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">Nat</span> <span class="o">:=</span>
+  <span class="k">match</span> <span class="n">n</span><span class="bp">?</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">some</span> <span class="n">n</span> <span class="bp">=&gt;</span> <span class="n">n</span>
+  <span class="bp">|</span> <span class="n">none</span>   <span class="bp">=&gt;</span> <span class="mi">0</span>
+
+<span class="k">#eval</span> <span class="n">bar</span> <span class="o">(</span><span class="n">some</span> <span class="mi">5</span><span class="o">)</span>
+<span class="k">#eval</span> <span class="n">bar</span> <span class="n">none</span>
+</pre></div>
 </div>
-<div class="section" id="using-lean-as-an-imperative-programming-language">
-<span id="section-using-lean-as-an-imperative-programming-language"></span><h2><span class="section-number">3.4. </span>Using Lean as an imperative programming language<a class="headerlink" href="#using-lean-as-an-imperative-programming-language" title="Permalink to this headline">¶</a></h2>
+<p>It is a Lean convention to use variable names like <code class="docutils literal notranslate"><span class="pre">n?</span></code>
+to range over an option type.
+Similarly, functions that return an element of an option type
+usually have names that end with a question mark.
+The function <code class="docutils literal notranslate"><span class="pre">Option.getD</span></code> can be used to return a default
+value in case the input is none.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="o">(</span><span class="n">some</span> <span class="mi">5</span><span class="o">)</span><span class="bp">.</span><span class="n">getD</span> <span class="mi">0</span>
+<span class="k">#eval</span> <span class="n">none.getD</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</section>
+<section id="using-lean-as-an-imperative-programming-language">
+<span id="section-using-lean-as-an-imperative-programming-language"></span><h2><span class="section-number">3.4. </span>Using Lean as an imperative programming language<a class="headerlink" href="#using-lean-as-an-imperative-programming-language" title="Permalink to this heading"></a></h2>
 <p>The fact that Lean is a functional programming language means that there
 is no global notion of <em>state</em>.
 Functions take values as input and return values as output;
@@ -654,7 +597,7 @@ less than 100, the the sum of the numbers up to <span class="math notranslate no
 </div>
 <p>You can use a loop not just to print values, but also to compute values.
 The following is a boolean test for primality:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">isPrime</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">Bool</span> <span class="o">:=</span> <span class="k">do</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">isPrime</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">Bool</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
   <span class="k">if</span> <span class="n">n</span> <span class="bp">&lt;</span> <span class="mi">2</span> <span class="k">then</span> <span class="n">false</span> <span class="k">else</span>
     <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
       <span class="k">if</span> <span class="n">n</span> <span class="bp">%</span> <span class="n">i</span> <span class="bp">=</span> <span class="mi">0</span> <span class="k">then</span>
@@ -666,15 +609,38 @@ The following is a boolean test for primality:</p>
 </div>
 <p>You can use such a function with the list primitives to construct a list of the
 first 10,000 prime numbers.</p>
+<p>Note that in both cases, the program begins with the special
+identifier <code class="docutils literal notranslate"><span class="pre">do</span></code>,
+which invokes notation that makes sense when the return type is what
+is known as a <em>monad</em>.
+In the first case, the return value is in the <code class="docutils literal notranslate"><span class="pre">IO</span></code> monad.
+You can think of the fact that <code class="docutils literal notranslate"><span class="pre">showSums</span></code> has type <code class="docutils literal notranslate"><span class="pre">IO</span> <span class="pre">Unit</span></code>
+as saying that it doesn’t return any data but has <em>side effects</em>, namely, sending output to the standard output channel.
+In the second case, <code class="docutils literal notranslate"><span class="pre">Bool</span></code> is not a monad, but Lean allows us
+to treat it as one by inserting the prefix <code class="docutils literal notranslate"><span class="pre">Id.run</span></code>.
+Technically, it is reinterpreting <code class="docutils literal notranslate"><span class="pre">Bool</span></code> as <code class="docutils literal notranslate"><span class="pre">Id</span> <span class="pre">Bool</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">Id</span></code> is the <em>identity monad</em>.
+Don’t worry about the details, though.
+For the most part, you can treat <code class="docutils literal notranslate"><span class="pre">do</span></code> notation as a magical black box.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="o">(</span><span class="n">List.range</span> <span class="mi">10000</span><span class="o">)</span><span class="bp">.</span><span class="n">filter</span> <span class="n">isPrime</span>
 </pre></div>
 </div>
-<p>But you can also use it with Lean’s support for <em>arrays</em>.
+<p>Within a <code class="docutils literal notranslate"><span class="pre">do</span></code> block, there is nice syntax for handling option types.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">bar</span> <span class="o">(</span><span class="n">n</span><span class="bp">?</span> <span class="o">:</span> <span class="n">Option</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="o">:=</span> <span class="k">do</span>
+  <span class="k">let</span> <span class="n">some</span> <span class="n">n</span> <span class="o">:=</span> <span class="n">n</span><span class="bp">?</span> <span class="bp">|</span>
+    <span class="n">IO.println</span> <span class="s2">&quot;oops&quot;</span>
+  <span class="n">IO.println</span> <span class="n">n</span>
+
+<span class="k">#eval</span> <span class="n">bar</span> <span class="o">(</span><span class="n">some</span> <span class="mi">2</span><span class="o">)</span>
+<span class="k">#eval</span> <span class="n">bar</span> <span class="n">none</span>
+</pre></div>
+</div>
+<p>You can also combine <code class="docutils literal notranslate"><span class="pre">do</span></code> blocks with Lean’s support for <em>arrays</em>.
 Within the formal foundation these are modeled as lists,
 but the compiler implements them as dynamic arrays, and for efficiency
 it will modify values rather than copy them whenever the old value is
 not referred to by another part of an expression.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">primes</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">Array</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="k">do</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">primes</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">Array</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
   <span class="k">let</span> <span class="n">mut</span> <span class="n">result</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
   <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[</span><span class="mi">2</span><span class="o">:</span><span class="n">n</span><span class="o">]</span> <span class="k">do</span>
     <span class="k">if</span> <span class="n">isPrime</span> <span class="n">i</span> <span class="k">then</span>
@@ -684,11 +650,11 @@ not referred to by another part of an expression.</p>
 <span class="k">#eval</span> <span class="o">(</span><span class="n">primes</span> <span class="mi">10000</span><span class="o">)</span><span class="bp">.</span><span class="n">size</span>
 </pre></div>
 </div>
-<p>Notice the notation: <cite>#[]</cite> denotes a fresh array (Lean infers the type from context),
-and the <cite>Array.push</cite> function adds a new element at the end of the array.</p>
+<p>Notice the notation: <code class="docutils literal notranslate"><span class="pre">#[]</span></code> denotes a fresh array (Lean infers the type from context),
+and the <code class="docutils literal notranslate"><span class="pre">Array.push</span></code> function adds a new element at the end of the array.</p>
 <p>The following example shows how to compute a two-dimensional array, a ten by ten
 multiplication table.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="k">do</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
   <span class="k">let</span> <span class="n">mut</span> <span class="n">table</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
   <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
     <span class="k">let</span> <span class="n">mut</span> <span class="n">row</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
@@ -703,36 +669,41 @@ multiplication table.</p>
 <p>Alternatively, you can use the function <cite>Array.mkArray</cite> to initialize an array
 (in this case, to the values 0), and then use the <cite>Array.set!</cite> function
 to replace the elements later one.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable&#39;</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="k">do</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable&#39;</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
   <span class="k">let</span> <span class="n">mut</span> <span class="n">s</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">mkArray</span> <span class="mi">10</span> <span class="o">(</span><span class="n">mkArray</span> <span class="mi">10</span> <span class="mi">0</span><span class="o">)</span>
   <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
     <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
-      <span class="n">s</span> <span class="o">:=</span> <span class="n">s.set</span><span class="bp">!</span> <span class="n">i</span> <span class="bp">$</span> <span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">.</span><span class="n">set</span><span class="bp">!</span> <span class="n">j</span> <span class="o">((</span><span class="n">i</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">j</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">))</span>
+      <span class="n">s</span> <span class="o">:=</span> <span class="n">s.set</span><span class="bp">!</span> <span class="n">i</span> <span class="bp">$</span> <span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">!.</span><span class="n">set</span><span class="bp">!</span> <span class="n">j</span> <span class="o">((</span><span class="n">i</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">j</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">))</span>
   <span class="n">s</span>
 </pre></div>
 </div>
-<p>Here we replace the ith row by the previous ith row, with the jth column updated.</p>
-<p>The following snippet prints out the table. The idiom <cite>show T from t</cite>
-is a way of telling Lean that term <cite>t</cite> should have type <cite>T</cite>.
-Writing <cite>&#64;id T t</cite> has a similar effect, as does writing <cite>(t : T)</cite>.
-(A difference is that the first two expressions have type <cite>T</cite> exactly,
-whereas <cite>(t : T)</cite> ensures that <cite>t</cite> has a type that Lean recognizes as being
-equivalent to <cite>T</cite>.)</p>
+<p>Here we replace the ith row by the previous ith row, with the jth column updated.
+The notation <code class="docutils literal notranslate"><span class="pre">s[i]!</span></code> asks Lean’s type checker to trust that the array access is
+within bounds. If it isn’t, Lean will throw an error at runtime.
+Lean also provides mechanisms by which we can provide a <em>static</em> guarantee
+that the array access is in bounds by providing a proof. But talking about how to do that
+now would take us too far afield.</p>
+<p>The following snippet prints out the table. The idiom <code class="docutils literal notranslate"><span class="pre">show</span> <span class="pre">T</span> <span class="pre">from</span> <span class="pre">t</span></code>
+is a way of telling Lean that term <code class="docutils literal notranslate"><span class="pre">t</span></code> should have type <code class="docutils literal notranslate"><span class="pre">T</span></code>.
+Writing <code class="docutils literal notranslate"><span class="pre">&#64;id</span> <span class="pre">T</span> <span class="pre">t</span></code> has a similar effect, as does writing <code class="docutils literal notranslate"><span class="pre">(t</span> <span class="pre">:</span> <span class="pre">T)</span></code>.
+(A difference is that the first two expressions have type <code class="docutils literal notranslate"><span class="pre">T</span></code> exactly,
+whereas <code class="docutils literal notranslate"><span class="pre">(t</span> <span class="pre">:</span> <span class="pre">T)</span></code> only ensures that <code class="docutils literal notranslate"><span class="pre">t</span></code> has a type that Lean recognizes as being
+equivalent to <code class="docutils literal notranslate"><span class="pre">T</span></code>.)</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="k">show</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="k">from</span> <span class="k">do</span>
   <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
     <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
-      <span class="k">let</span> <span class="n">numstr</span> <span class="o">:=</span> <span class="n">toString</span> <span class="n">mulTable</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span>
+      <span class="k">let</span> <span class="n">numstr</span> <span class="o">:=</span> <span class="n">toString</span> <span class="n">mulTable</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">!</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="bp">!</span>
       <span class="c1">-- print 1-3 spaces</span>
       <span class="n">IO.print</span> <span class="bp">$</span> <span class="s2">&quot; &quot;</span><span class="bp">.</span><span class="n">pushn</span> <span class="sc">&#39; &#39;</span> <span class="o">(</span><span class="mi">3</span> <span class="bp">-</span> <span class="n">numstr.length</span><span class="o">)</span>
       <span class="n">IO.print</span> <span class="n">numstr</span>
     <span class="n">IO.println</span> <span class="s2">&quot;&quot;</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="exercises">
-<h2><span class="section-number">3.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="exercises">
+<h2><span class="section-number">3.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <ol class="arabic">
-<li><p>Using operations on <cite>List</cite>, write a Lean function that for every <span class="math notranslate nohighlight">\(n\)</span> returns
+<li><p>Using operations on <code class="docutils literal notranslate"><span class="pre">List</span></code>, write a Lean function that for every <span class="math notranslate nohighlight">\(n\)</span> returns
 the list of all the divisors of <span class="math notranslate nohighlight">\(n\)</span> that are less than <span class="math notranslate nohighlight">\(n\)</span>.</p></li>
 <li><p>A natural number <span class="math notranslate nohighlight">\(n\)</span> is <em>perfect</em> if it is equal to the sum of the divisors less
 than <span class="math notranslate nohighlight">\(n.\)</span> Write a Lean function (with return type <cite>Bool</cite>) that determines
@@ -764,56 +735,41 @@ on the assumption that disks can only be moved clockwise.
 by a label. Define a Lean function to compute the sum of the nodes in such
 a tree. Also write functions to list the elements in a preorder, postorder,
 and inorder traversal.</p></li>
+<li><p>Write a Lean function <code class="docutils literal notranslate"><span class="pre">pascal</span></code> which, on input <code class="docutils literal notranslate"><span class="pre">n</span></code>, outputs
+the first <code class="docutils literal notranslate"><span class="pre">n</span></code> rows of Pascal’s triangle.</p></li>
 </ol>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="propositional_logic.html" class="btn btn-neutral float-right" title="4. Propositional Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="mathematical_background.html" class="btn btn-neutral float-left" title="2. Mathematical Background" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="propositional_logic.html" class="btn btn-neutral float-right" title="4. Propositional Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.
-
-    </p>
+    <p>&#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

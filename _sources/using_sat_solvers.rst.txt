@@ -25,7 +25,7 @@ The following can be found in `Examples/using_sat_solver/examples.lean`:
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/examples.lean
   :start-after: -- textbook: SAT example
-  :end-before: -- end textbook: SAT example
+  :end-before: -- end: SAT example
 
 It uses the same example CNF formulas defined in :numref:`section_implementing_propositional_normal_forms`.
 You can change `exCnf0` to `exCnf1` or `exCnf2`,

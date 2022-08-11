@@ -137,8 +137,8 @@ interacting strands in parallel:
   will understand what all these terms mean).
 
 The first strand will be an instance of pure mathematics. We will
-build on the skills you have learned in Mathematical Foundations of
-Computer Science (15-151). The goal is to teach you to think about and talk about logic
+build on the skills you have learned in a course on the mathematical foundations of
+computer science. The goal is to teach you to think about and talk about logic
 in a mathematically rigorous way.
 
 The second strand will give you an opportunity to code up some of what

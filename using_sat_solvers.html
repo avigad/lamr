@@ -1,76 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>7. Using SAT Solvers &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="8. Deduction for Propositional Logic" href="deduction_for_propositional_logic.html" />
     <link rel="prev" title="6. Decision Procedures for Propositional Logic" href="decision_procedures_for_propositional_logic.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
@@ -117,88 +68,47 @@
 <li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Logic and Mechanized Reasoning</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li><span class="section-number">7. </span>Using SAT Solvers</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/using_sat_solvers.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="using-sat-solvers">
-<span id="chapter-using-sat-solvers"></span><h1><span class="section-number">7. </span>Using SAT Solvers<a class="headerlink" href="#using-sat-solvers" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="using-sat-solvers">
+<span id="chapter-using-sat-solvers"></span><h1><span class="section-number">7. </span>Using SAT Solvers<a class="headerlink" href="#using-sat-solvers" title="Permalink to this heading"></a></h1>
 <p>A satisfiability (SAT) solver determines whether a propositional formula has a satisfying assignment.
 The performance of SAT solvers has improved significantly in the last two decades. In the late 1990s,
 only formulas with thousands of variables and thousands of clauses could be solved. Today,
 many propositional formulas with millions of variables and millions of clauses can be solved.
 In this chapter, we will explain how to use SAT solvers and how to encode problems into
 propositional logic.</p>
-<div class="section" id="first-examples">
-<span id="section-first-examples"></span><h2><span class="section-number">7.1. </span>First examples<a class="headerlink" href="#first-examples" title="Permalink to this headline">¶</a></h2>
+<section id="first-examples">
+<span id="section-first-examples"></span><h2><span class="section-number">7.1. </span>First examples<a class="headerlink" href="#first-examples" title="Permalink to this heading"></a></h2>
 <p>Remember that contemporary SAT solvers determine that satisfiability of propositional formulas
 in conjunctive normal form. Specifically, they use a format for specifying such formulas known
 as the <em>DIMACS</em> format. Our <em>LAMR</em> library proves a function that converts any CNF formula
 to that format, sends it to a SAT solver called <em>CaDiCaL</em>, and parses the answer.
 The following can be found in <cite>Examples/using_sat_solver/examples.lean</cite>:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">cadicalExample</span> <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="o">:=</span> <span class="k">do</span>
-  <span class="k">let</span> <span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">result</span><span class="o">)</span> <span class="bp">←</span> <span class="n">callCadical</span> <span class="n">exCnf0</span>
+  <span class="k">let</span> <span class="o">(</span><span class="n">_</span><span class="o">,</span> <span class="n">result</span><span class="o">)</span> <span class="bp">←</span> <span class="n">callCadical</span> <span class="n">exCnf0</span>
   <span class="n">IO.println</span> <span class="s2">&quot;Output from CaDiCaL :</span><span class="se">\n</span><span class="s2">&quot;</span>
   <span class="c1">--IO.println s</span>
   <span class="c1">--IO.println &quot;\n\n&quot;</span>
@@ -213,9 +123,9 @@ You can change <cite>exCnf0</cite> to <cite>exCnf1</cite> or <cite>exCnf2</cite>
 or use any other CNF formula you want.
 If you uncomment the two lines that begin <cite>IO.println</cite>,
 the Lean output will show you the raw output from CaDiCaL.</p>
-</div>
-<div class="section" id="encoding-problems">
-<span id="section-encoding-problems"></span><h2><span class="section-number">7.2. </span>Encoding problems<a class="headerlink" href="#encoding-problems" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="encoding-problems">
+<span id="section-encoding-problems"></span><h2><span class="section-number">7.2. </span>Encoding problems<a class="headerlink" href="#encoding-problems" title="Permalink to this heading"></a></h2>
 <p>All NP-complete problems can be transformed in polynomial time into a SAT problem
 (i.e., into a propositional formula). For many problems, such a transformation
 is quite natural. For some other problems, the transformation can be complicated.
@@ -296,9 +206,9 @@ the the same horizontal line, vertical line, or square. Below is one of the hard
 <a class="reference internal image-reference" href="_images/sudoku.png"><img alt="sudoku puzzle" class="align-center" src="_images/sudoku.png" style="width: 200px;" /></a>
 <p>If you take a look at the file <cite>sudoku.lean</cite> in the <cite>Examples</cite> folder,
 you will see that it is easily solved by a SAT solver.</p>
-</div>
-<div class="section" id="exercise-grid-coloring">
-<h2><span class="section-number">7.3. </span>Exercise: grid coloring<a class="headerlink" href="#exercise-grid-coloring" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="exercise-grid-coloring">
+<h2><span class="section-number">7.3. </span>Exercise: grid coloring<a class="headerlink" href="#exercise-grid-coloring" title="Permalink to this heading"></a></h2>
 <p>Ramsey Theory deals with patterns that cannot be avoided indefinitely. In
 this exercise we focus on a pattern of coloring a <span class="math notranslate nohighlight">\(n \times m\)</span> grid with <span class="math notranslate nohighlight">\(k\)</span> colors:
 Consider all possible rectangles within the grid whose length and width are
@@ -333,9 +243,9 @@ isomorphic.</p>
 <p>Step 3. Use the tool Shatter to (partially) break the symmetries of the
 encoding in Step 1 and count the number of solutions of the resulting
 formula.</p>
-</div>
-<div class="section" id="exercise-numbermind">
-<h2><span class="section-number">7.4. </span>Exercise: NumberMind<a class="headerlink" href="#exercise-numbermind" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="exercise-numbermind">
+<h2><span class="section-number">7.4. </span>Exercise: NumberMind<a class="headerlink" href="#exercise-numbermind" title="Permalink to this heading"></a></h2>
 <p>The game Number Mind is a variant of the well known game Master Mind.</p>
 <p>Instead of colored pegs, you have to guess a secret sequence of digits.
 After each guess you’re only told in how many places you’ve guessed the
@@ -389,55 +299,38 @@ do you need to add to the encoding of Step 1?</p>
 <p>Step 3. Reduce the size of the encoding by replacing the
 cardinality constraints from ii) in Step 1 by using the
 Sinz encoding.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="deduction_for_propositional_logic.html" class="btn btn-neutral float-right" title="8. Deduction for Propositional Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="decision_procedures_for_propositional_logic.html" class="btn btn-neutral float-left" title="6. Decision Procedures for Propositional Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="deduction_for_propositional_logic.html" class="btn btn-neutral float-right" title="8. Deduction for Propositional Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.
-
-    </p>
+    <p>&#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

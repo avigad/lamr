@@ -1,76 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>6. Decision Procedures for Propositional Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="7. Using SAT Solvers" href="using_sat_solvers.html" />
     <link rel="prev" title="5. Implementing Propositional Logic" href="implementing_propositional_logic.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
@@ -118,73 +69,32 @@
 <li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Logic and Mechanized Reasoning</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li><span class="section-number">6. </span>Decision Procedures for Propositional Logic</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/decision_procedures_for_propositional_logic.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="decision-procedures-for-propositional-logic">
-<span id="chapter-decision-procedures-for-propositional-logic"></span><h1><span class="section-number">6. </span>Decision Procedures for Propositional Logic<a class="headerlink" href="#decision-procedures-for-propositional-logic" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="decision-procedures-for-propositional-logic">
+<span id="chapter-decision-procedures-for-propositional-logic"></span><h1><span class="section-number">6. </span>Decision Procedures for Propositional Logic<a class="headerlink" href="#decision-procedures-for-propositional-logic" title="Permalink to this heading"></a></h1>
 <p>We have seen that it is possible to determine whether or not a propositional formula is valid
 by writing out its entire truth table.
 This seems pretty inefficient; if a formula <span class="math notranslate nohighlight">\(A\)</span> has <span class="math notranslate nohighlight">\(n\)</span> variables,
@@ -223,8 +133,8 @@ is unsatisfiable.
 This provides a recipe for determining the validity of <span class="math notranslate nohighlight">\(A\)</span>,
 namely, use a SAT solver to determine whether <span class="math notranslate nohighlight">\(\lnot A\)</span>
 is satisfiable, and then change a “yes” answer to a “no” and vice-versa.</p>
-<div class="section" id="the-tseitin-transformation">
-<span id="section-the-tseitin-transformation"></span><h2><span class="section-number">6.1. </span>The Tseitin transformation<a class="headerlink" href="#the-tseitin-transformation" title="Permalink to this headline">¶</a></h2>
+<section id="the-tseitin-transformation">
+<span id="section-the-tseitin-transformation"></span><h2><span class="section-number">6.1. </span>The Tseitin transformation<a class="headerlink" href="#the-tseitin-transformation" title="Permalink to this heading"></a></h2>
 <p>We have seen that if <span class="math notranslate nohighlight">\(A\)</span> is a propositional formula, the smallest CNF equivalent
 may be exponentially longer.
 The Tseitin transformation provides an elegant workaround:
@@ -319,7 +229,7 @@ pleasant form.</p>
   <span class="k">let</span> <span class="o">⟨</span><span class="n">fm</span><span class="o">,</span> <span class="n">defs</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">A.mkDefs</span> <span class="bp">#</span><span class="o">[]</span>
   <span class="n">IO.println</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;{fm}, where&quot;</span>
   <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="n">defs.size</span><span class="o">]</span> <span class="k">do</span>
-    <span class="n">IO.println</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;def_{i} := {defs[i]}&quot;</span>
+    <span class="n">IO.println</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;def_{i} := {defs[i]!}&quot;</span>
 
 <span class="k">#eval</span> <span class="n">printDefs</span> <span class="n">ex1</span>
 
@@ -462,9 +372,9 @@ For example, you can check that <span class="math notranslate nohighlight">\(d \
 can be represented by the conjunction of the clauses <span class="math notranslate nohighlight">\(\lnot d \lor \ell_1\)</span> to
 <span class="math notranslate nohighlight">\(\lnot d \lor \ell_n\)</span>, and <span class="math notranslate nohighlight">\(d \limplies \ell_1 \lor \cdots \lor \ell_n\)</span>
 can be represented by the single clause <span class="math notranslate nohighlight">\(\lnot d \lor \ell_1 \lor \cdots \lor \ell_n\)</span>.</p>
-</div>
-<div class="section" id="unit-propagation-and-the-pure-literal-rule">
-<span id="section-unit-propagation-and-the-pure-literal-rule"></span><h2><span class="section-number">6.2. </span>Unit propagation and the pure literal rule<a class="headerlink" href="#unit-propagation-and-the-pure-literal-rule" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="unit-propagation-and-the-pure-literal-rule">
+<span id="section-unit-propagation-and-the-pure-literal-rule"></span><h2><span class="section-number">6.2. </span>Unit propagation and the pure literal rule<a class="headerlink" href="#unit-propagation-and-the-pure-literal-rule" title="Permalink to this heading"></a></h2>
 <p>In earlier chapters, we considered only truth assignments that assign a truth value to all propositional
 variables. However, complete search methods for SAT like DPLL use <em>partial assignments</em>, which assign truth
 values to some subset of the variables. For a clause <span class="math notranslate nohighlight">\(C\)</span> and partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
@@ -525,9 +435,9 @@ clause in <span class="math notranslate nohighlight">\(\Gamma\)</span> contains 
 example for the formula <span class="math notranslate nohighlight">\(\Gamma = (p \lor q) \land (\lnot q \lor r) \land (q \lor \lnot r)\)</span>. The literal <span class="math notranslate nohighlight">\(p\)</span> is pure,
 so the pure literal rule will assign it to <span class="math notranslate nohighlight">\(\tau(p) = \top\)</span>. We leave it to you to check that <span class="math notranslate nohighlight">\(\Gamma\)</span> has
 three satisfying assignments, while <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau}\)</span> has only two satisfying assignments.</p>
-</div>
-<div class="section" id="dpll">
-<span id="section-dpll"></span><h2><span class="section-number">6.3. </span>DPLL<a class="headerlink" href="#dpll" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="dpll">
+<span id="section-dpll"></span><h2><span class="section-number">6.3. </span>DPLL<a class="headerlink" href="#dpll" title="Permalink to this heading"></a></h2>
 <p>One of the first and most well-known decision procedures for SAT problems is the Davis-Putnam-Logemann-Loveland
 (DPLL) algorithm, which was invented by Davis, Logemann, and Loveland in 1962,
 based on
@@ -640,9 +550,9 @@ to true, assuming <cite>x</cite> is not one of the constants <cite>⊥</cite> or
 <span class="k">#eval</span> <span class="n">toString</span> <span class="bp">&lt;|</span> <span class="n">simplify</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span><span class="o">}</span> <span class="n">cnf</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span> <span class="bp">-</span><span class="n">q</span> <span class="n">p</span> <span class="bp">-</span><span class="n">p</span><span class="o">,</span> <span class="n">p</span><span class="o">,</span> <span class="n">q</span> <span class="n">q</span><span class="o">,</span> <span class="bp">-</span><span class="n">q</span> <span class="bp">-</span><span class="n">p</span><span class="o">,</span> <span class="bp">-</span><span class="n">p</span><span class="o">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="autarkies-and-2-sat">
-<span id="section-autarkies-and-2-sat"></span><h2><span class="section-number">6.4. </span>Autarkies and 2-SAT<a class="headerlink" href="#autarkies-and-2-sat" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="autarkies-and-2-sat">
+<span id="section-autarkies-and-2-sat"></span><h2><span class="section-number">6.4. </span>Autarkies and 2-SAT<a class="headerlink" href="#autarkies-and-2-sat" title="Permalink to this heading"></a></h2>
 <p>Unit propagation and the pure literal rule form the core of the DPLL algorithm.
 In this section, we present a generalization of the pure literal rule,
 and we illustrate its use by providing an efficient algorithm for a restricted version of SAT.</p>
@@ -699,9 +609,9 @@ with <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau'}\)</span>
 which indicates that the original formula is satisfiable,
 or contains the empty clause,
 which indicates that the original clause is unsatisfiable.</p>
-</div>
-<div class="section" id="cdcl">
-<span id="section-cdcl"></span><h2><span class="section-number">6.5. </span>CDCL<a class="headerlink" href="#cdcl" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="cdcl">
+<span id="section-cdcl"></span><h2><span class="section-number">6.5. </span>CDCL<a class="headerlink" href="#cdcl" title="Permalink to this heading"></a></h2>
 <p>The Conflict-Driven Clause-Learning (CDCL) decision procedure is the most successful SAT solving
 paradigm. Although it evolved from DPLL, modern implementations of CDCL have hardly any resemblance
 with the classic decision procedure. The algorithms differ in core algorithmic choices.
@@ -755,55 +665,38 @@ delete them to reduce the impact on unit propagation. Also, CDCL solvers
 use techniques to rewrite the formula, so called inprocessing techniques.
 In top-tier solvers, about half the runtime can be devoted to such
 techniques.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="using_sat_solvers.html" class="btn btn-neutral float-right" title="7. Using SAT Solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="implementing_propositional_logic.html" class="btn btn-neutral float-left" title="5. Implementing Propositional Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="using_sat_solvers.html" class="btn btn-neutral float-right" title="7. Using SAT Solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.
-
-    </p>
+    <p>&#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

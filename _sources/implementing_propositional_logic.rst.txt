@@ -19,7 +19,7 @@ use in this course:
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: PropForm
-   :end-before: -- end textbook: PropForm
+   :end-before: -- end: PropForm
 
 You can find this example in the file `implementing_propositional_logic/examples.lean` in the `User` folder of the course repository.
 
@@ -61,7 +61,7 @@ to implement nicer syntax.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: prop!
-   :end-before: -- end textbook: prop!
+   :end-before: -- end: prop!
 
 You can get the symbols by typing `\\and`, `\\to`, `\\or`, `\\not`, and `\\iff`
 in VS Code. And, in general, when you see a symbol in VSCode,
@@ -77,7 +77,7 @@ functions using structural recursion.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: PropForm rec
-   :end-before: -- end textbook: PropForm rec
+   :end-before: -- end: PropForm rec
 
 The function `List.union` returns concatenation of the two lists with
 duplicates removed, assuming that the original two lists had no duplicate elements.
@@ -96,7 +96,7 @@ formula under assignment `v`:
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: PropForm.eval
-   :end-before: -- end textbook: PropForm.eval
+   :end-before: -- end: PropForm.eval
 
 The example at the end defines `v` to be the assignment that
 assigns the value `true` to the strings `"p"`, `"q"`, and `"r"`
@@ -106,7 +106,7 @@ so the library provides a function `PropAssignment.mk` and notation `propassign!
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: propassign
-   :end-before: -- end textbook: propassign
+   :end-before: -- end: propassign
 
 You should think about how the next function manages to compute a list
 of all the sublists of a given list.
@@ -114,7 +114,7 @@ It is analogous to the power set operation in set theory.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: allSublists
-   :end-before: -- end textbook: allSublists
+   :end-before: -- end: allSublists
 
 With that in hand, here is a function that computes the truth table of a
 propositional formula.
@@ -125,14 +125,14 @@ is the truth value of `A` under that assignment.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: truthTable
-   :end-before: -- end textbook: truthTable
+   :end-before: -- end: truthTable
 
 We can now use the list operation `List.all` to test whether a formula is valid,
 and we can use `List.some` to test whether it is satisfiable.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: isValid
-   :end-before: -- end textbook: isValid
+   :end-before: -- end: isValid
 
 
 .. _section_implementing_propositional_normal_forms:
@@ -144,7 +144,7 @@ The library defines an inductive type of negation-normal form formulas:
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: NnfForm
-   :end-before: -- end textbook: NnfForm
+   :end-before: -- end: NnfForm
 
 It is then straightforward to define the negation operation for formulas in
 negation normal form, and a translation from propositional formulas
@@ -152,7 +152,7 @@ to formulas in negation normal form.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: toNnfForm
-   :end-before: -- end textbook: toNnfForm
+   :end-before: -- end: toNnfForm
 
 Putting the first in the namespace `NnfForm` has the effect that given `A : NnfForm`,
 we can write `A.neg` instead of `NnfForm.neg A`.
@@ -163,14 +163,14 @@ We can try them out on the example defined above:
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: toNnfForm test
-   :end-before: -- end textbook: toNnfForm test
+   :end-before: -- end: toNnfForm test
 
 To handle conjunctive normal form, the library defines a type `Lit` of literals.
 A `Clause` is then a list of literals, and a `CnfForm` is a list of clauses.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: Clause and CnfForm
-   :end-before: -- end textbook: Clause and CnfForm
+   :end-before: -- end: Clause and CnfForm
 
 As usual, you can use `#check` and `#print` to find information about them, and ctrl-click
 to see the definitions in the library.
@@ -179,7 +179,7 @@ the library defines syntax for writing expressions of these types.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: syntax for literals, etc.
-   :end-before: -- end textbook: syntax for literals, etc.
+   :end-before: -- end: syntax for literals, etc.
 
 Let us now consider what is needed to put an arbitrary propositional formula in
 conjunctive normal form. In :numref:`section_normal_forms`, we saw that the key
@@ -193,7 +193,7 @@ Since clauses are lists, we can use them on clauses:
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: operations on clauses
-   :end-before: -- end textbook: operations on clauses
+   :end-before: -- end: operations on clauses
 
 We can now take the disjunction of a single clause and a CNF formula by taking
 the union of the clause with each element of the CNF formula.
@@ -201,7 +201,7 @@ We can implement that with the function `List.map`:
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: disjunction of a clause and a CNF formula
-   :end-before: -- end textbook: disjunction of a clause and a CNF formula
+   :end-before: -- end: disjunction of a clause and a CNF formula
 
 This applied the function "take the union with `exClause0`" to each element of `exCnf1`,
 and returns the resulting list.
@@ -213,7 +213,7 @@ of the CNFs. Here is the library definition, and an example:
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: CNF disjunction
-   :end-before: -- end textbook: CNF disjunction
+   :end-before: -- end: CNF disjunction
 
 Functional programmers like this sort of definition; it's short, clever,
 and inscrutable.
@@ -229,13 +229,13 @@ CNF.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: toCnfForm
-   :end-before: -- end textbook: toCnfForm
+   :end-before: -- end: toCnfForm
 
 We can try them out:
 
 .. literalinclude:: ../../LAMR/Examples/implementing_propositional_logic/examples.lean
    :start-after: -- textbook: CnfForm test
-   :end-before: -- end textbook: CnfForm test
+   :end-before: -- end: CnfForm test
 
 
 Exercises

@@ -32,7 +32,7 @@ Here is an example.
 
         \sum_{i \le n + 1} i & = \sum_{i \le n} i + (n + 1) \\
           &= n (n + 1) / 2 + 2 (n + 1) / 2 \\
-          &= (n + 1) (n + 2) / 2
+          &= (n + 1) (n + 2) / 2.
 
 The story is often told that Gauss, as a schoolchild,
 discovered this formula by writing
@@ -100,7 +100,7 @@ Here is an identity involving the factorial function:
         \sum_{i \le n+1} i \cdot i! &= \sum_{i \le n} i \cdot i! + (n+1) \cdot (n+1)! \\
           &= (n + 1)! + (n+1) \cdot (n+1)! - 1 \\
           &= (n + 1)! (1 + (n + 1)) - 1 \\
-          &= (n + 2)! - 1
+          &= (n + 2)! - 1.
 
 This is a pattern found throughout mathematics and computer science:
 define functions and operations using recursion, and then use induction
@@ -126,7 +126,8 @@ with the constraint that a larger disk is never placed on top of a smaller one.
             move 1 disk from peg A to peg B
             move n - 1 disks from peg C to peg B using auxiliary peg A
 
-We will show in class that this requires :math:`2^n - 1` moves.
+It is not hard to show, by induction,
+that this requires :math:`2^n - 1` moves.
 The exercises below ask you to show that *any* solution requires
 at least this many moves.
 
@@ -161,7 +162,7 @@ As an exercise, we ask you to prove the principle of complete induction using th
     can each be factored into prime numbers, and combining
     these yields a factorization of :math:`n`.
 
-Here is another example we will discuss in class:
+Here is another example of a fact that can be proved using induction:
 
 .. admonition:: Theorem
 
@@ -217,6 +218,8 @@ divisor of two nonnegative integers:
         \end{cases}
 
 where :math:`\fn{mod}(x, y)` is the remainder when dividing :math:`x` by :math:`y`.
+The easiest way to see that the recursion is well founded is
+to notice that the second argument decreases with each recursive call.
 
 .. _section_generalized_induction_and_recursion:
 
@@ -404,11 +407,11 @@ defined inductively as follows:
 
 - The element :math:`\fn{empty}` is a binary tree.
 
-- If :math:`s` and :math:`t` are finite binary trees, so is the
+- If :math:`s` and :math:`t` are finite binary trees, so is
   :math:`\fn{node}(s, t)`.
 
 In this definition, :math:`\fn{empty}` is intended to denote the empty
-tree, and :math:`\fn{node}(s, t)` is intended to denote the
+tree and :math:`\fn{node}(s, t)` is intended to denote the
 binary tree that consists of a node at the top and has :math:`s` and :math:`t`
 as the left and right subtrees, respectively.
 
@@ -428,14 +431,14 @@ the following recursive definition:
 .. math::
 
     \fn{size}(\fn{empty}) &= 0 \\
-    \fn{size}(\fn{node}(s, t)) &= 1 + \fn{size}(s) + \fn{size}(t)
+    \fn{size}(\fn{node}(s, t)) &= 1 + \fn{size}(s) + \fn{size}(t).
 
 We can compute the depth of an extended binary tree as follows:
 
 .. math::
 
     \fn{depth}(\fn{empty}) &= 0 \\
-    \fn{depth}(\fn{node}(s, t)) &= 1 + \max(\fn{depth}(s), \fn{depth}(t))
+    \fn{depth}(\fn{node}(s, t)) &= 1 + \max(\fn{depth}(s), \fn{depth}(t)).
 
 Again, be careful: many authors take the depth of a tree to be the
 length of the longest path from the root to a leaf,
@@ -494,7 +497,14 @@ Try the "if" part if you like a challenge.
 As a final example, in class we'll discuss the Golomb *tromino theorem*. A *tromino*
 is an L-shaped configuration of three squares. Golomb's theorem says that any
 :math:`2^n \times 2^n` chessboard with one square removed can be tiled with trominoes.
-We'll prove this together in class.
+This is clear for a :math:`2 \times 2` chessboard with one
+square removed, and trivially even for a :math:`1 \times 1` chessboard
+with one square removed.
+In the inductive step, divide an :math:`2^{n+1} \times 2^{n+1}` chessboard
+with one square removed into four :math:`2^n \times 2^n` chessboards,
+one of which has one square removed.
+Then put one tromino in the middle so that the other three chessboard also
+have one square removed, and apply the inductive hypothesis.
 
 .. _section_mathematical_background_exercises:
 
@@ -508,6 +518,14 @@ Exercises
         \sum_{i < n} a r^i = \frac{a(r^n - 1)}{r - 1}
 
 #. Prove that for every :math:`n > 4`, :math:`n! > 2^n`.
+
+#. Express the following using summation notation, and prove it by induction:
+
+    .. math::
+
+      \frac{1}{1\cdot 2} + \frac{1}{2 \cdot 3} + \cdots + \frac{1}{n \cdot (n + 1)} = \frac{n}{n+1}.
+
+    You can use notation like $\sum_{i \le n}$ or $\sum_{i = 1}^n$, as you prefer.
 
 #. Show that the solution to the towers of Hanoi given in
    :numref:`section_induction_and_recursion_on_the_natural_numbers` is optimal: for every :math:`n`,
@@ -538,7 +556,13 @@ Exercises
 
     #. Show :math:`\sum_{i \le n} F_i^2 = F_n F_{n+1}`.
 
+#. Let :math:`\alpha` and :math:`\beta` be the two roots of :math:`x^2 = x + 1`.
+   Show that for every :math:`n`, :math:`F_n = (\alpha^n - \beta^n) / \sqrt 5`.
+
 #. Show that with `n` straight lines we can divide the plane into at most :math:`n^2 + n + 2` regions, and that this is sharp.
+
+#. Prove that for :math:`n \ge 3` a convex :math:`n`-gon has
+   :math:`n(n-3)/2` diagonals.
 
 #. Show that the recursive description of :math:`\fn{gcd}(x,y)` presented in
    :numref:`section_generalized_induction_and_recursion` correctly computes the greatest
@@ -548,13 +572,23 @@ Exercises
    we can write :math:`x = \fn{div}(x, y) \cdot y + \fn{mod}(x, y)`,
    where :math:`\fn{div}(x, y)` is the integer part of :math:`x` divided by :math:`y`.
    First show that for every :math:`k`, :math:`\fn{gcd}(x, y) = \fn{gcd}(x + ky, y)`,
-   and use that fact.
+   and use that fact.)
+
+#. Use the recursive description of :math:`\fn{gcd}(x,y)` to show that for
+   every nonnegative :math:`x` and :math:`y`, there are integers :math:`a` and :math:`b`` such that
+   :math:`\fn{gcd}(x, y) = a x + b y`.
 
 #. Use structural induction to prove
 
     .. math::
 
         \fn{reverse}(\ell \append m) = \fn{reverse}(m) \append \fn{reverse}(\ell).
+
+#. Use structural induction to prove
+
+    .. math::
+
+        \fn{length}(\fn{reverse}(\ell)) = \fn{length}(\ell).
 
 #. Use structural induction to prove
 
@@ -574,11 +608,19 @@ Exercises
 
         \fn{length}(\ell \append m) = \fn{length}(\ell) + \fn{length}(m).
 
-#. How many binary trees of depth :math:`n` are there? Prove your answer is correct.
+#. How many binary trees of depth :math:`n` are there? Prove that your answer is correct.
+
+#. Prove by structural recursion that for any (extended) binary tree $t$, we have
+$\fn{size}(t) \le 2^{\fn{depth}(t)} - 1$.
+
 
 #. Show that a string is derivable in the MU puzzle if and only if it consists
    of an M followed by any number of Is and Us, as long as the number of Is is
-   not divisible by 3.
+   not divisible by 3. (Hint: it helps to show that, when starting with the
+   string MI, you can produce any string
+   MI...I, that is, M followed by only Is, if the number
+   of Is is not equal to zero modulo 3.)
+
 
 
 

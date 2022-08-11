@@ -1,76 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>11. Implementing First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="12. Decision Procedures for First-Order Logic" href="decision_procedures_for_first_order_logic.html" />
     <link rel="prev" title="10. First-Order Logic" href="first_order_logic.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,18 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
@@ -117,80 +68,39 @@
 <li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">Logic and Mechanized Reasoning</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li><span class="section-number">11. </span>Implementing First-Order Logic</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/implementing_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="implementing-first-order-logic">
-<span id="chapter-implementing-first-order-logic"></span><h1><span class="section-number">11. </span>Implementing First-Order Logic<a class="headerlink" href="#implementing-first-order-logic" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="implementing-first-order-logic">
+<span id="chapter-implementing-first-order-logic"></span><h1><span class="section-number">11. </span>Implementing First-Order Logic<a class="headerlink" href="#implementing-first-order-logic" title="Permalink to this heading"></a></h1>
 <p>Our implementation of first-order logic in Lean is similar to our implementation of
 propositional logic in Lean,
 covering both the syntax and the semantics.
 We will also show how to implement <em>unification</em>, and algorithm that is fundamental
 to the mechanization of first-order reasoning.</p>
-<div class="section" id="terms">
-<h2><span class="section-number">11.1. </span>Terms<a class="headerlink" href="#terms" title="Permalink to this headline">¶</a></h2>
+<section id="terms">
+<h2><span class="section-number">11.1. </span>Terms<a class="headerlink" href="#terms" title="Permalink to this heading"></a></h2>
 <p>Our implementation of terms is straightforward.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">FOTerm</span>
   <span class="bp">|</span> <span class="n">var</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">FOTerm</span>
@@ -281,9 +191,9 @@ assigned terms.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">ex3.subst</span> <span class="n">assign</span><span class="bp">!</span><span class="o">{</span><span class="n">x</span> <span class="bp">↦</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span><span class="n">h</span><span class="o">(</span><span class="n">a</span><span class="o">)},</span> <span class="n">y</span> <span class="bp">↦</span> <span class="n">term</span><span class="bp">!</span><span class="o">{</span><span class="n">f</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">h</span><span class="o">(</span><span class="n">a</span><span class="o">),</span> <span class="n">d</span><span class="o">)}}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="evaluating-terms">
-<h2><span class="section-number">11.2. </span>Evaluating terms<a class="headerlink" href="#evaluating-terms" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="evaluating-terms">
+<h2><span class="section-number">11.2. </span>Evaluating terms<a class="headerlink" href="#evaluating-terms" title="Permalink to this heading"></a></h2>
 <p>To evaluate a term, we need not only an assignment of values to the variables
 occurring in the term, but also an interpretation of all the function symbols.
 Setting aside concerns about arities, we can interpret any
@@ -307,11 +217,11 @@ as follows:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">arithFnInterp</span> <span class="o">:</span> <span class="n">FnInterp</span> <span class="n">Nat</span>
   <span class="bp">|</span> <span class="s2">&quot;plus&quot;</span>  <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">+</span> <span class="n">l.getA</span> <span class="mi">1</span>
   <span class="bp">|</span> <span class="s2">&quot;times&quot;</span> <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">*</span> <span class="n">l.getA</span> <span class="mi">1</span>
-  <span class="bp">|</span> <span class="s2">&quot;zero&quot;</span>  <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
-  <span class="bp">|</span> <span class="s2">&quot;one&quot;</span>   <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">1</span>
-  <span class="bp">|</span> <span class="s2">&quot;two&quot;</span>   <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">2</span>
-  <span class="bp">|</span> <span class="s2">&quot;three&quot;</span> <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">3</span>
-  <span class="bp">|</span> <span class="n">_</span>       <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">arbitrary</span>
+  <span class="bp">|</span> <span class="s2">&quot;zero&quot;</span>  <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
+  <span class="bp">|</span> <span class="s2">&quot;one&quot;</span>   <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">1</span>
+  <span class="bp">|</span> <span class="s2">&quot;two&quot;</span>   <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">2</span>
+  <span class="bp">|</span> <span class="s2">&quot;three&quot;</span> <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">3</span>
+  <span class="bp">|</span> <span class="n">_</span>       <span class="bp">=&gt;</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="n">default</span>
 </pre></div>
 </div>
 <p>Or, alternatively:</p>
@@ -319,10 +229,10 @@ as follows:</p>
 <span class="n">assign</span><span class="bp">!</span><span class="o">{</span>
   <span class="n">plus</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="o">:</span> <span class="n">List</span> <span class="n">Nat</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">+</span> <span class="n">l.getA</span> <span class="mi">1</span><span class="o">,</span>
   <span class="n">times</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">*</span> <span class="n">l.getA</span> <span class="mi">1</span><span class="o">,</span>
-  <span class="n">zero</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">0</span><span class="o">,</span>
-  <span class="n">one</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">1</span><span class="o">,</span>
-  <span class="n">two</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">2</span><span class="o">,</span>
-  <span class="n">three</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="mi">3</span> <span class="o">}</span>
+  <span class="n">zero</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">0</span><span class="o">,</span>
+  <span class="n">one</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">1</span><span class="o">,</span>
+  <span class="n">two</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">2</span><span class="o">,</span>
+  <span class="n">three</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">3</span> <span class="o">}</span>
 </pre></div>
 </div>
 <p>With <cite>FnInterp</cite> in place, it is easy to define a function that evaluates terms:</p>
@@ -382,9 +292,9 @@ as the function “build a term by applying <cite>f</cite>.”</p>
 </div>
 <p>You should think about what is going on here. Such a model is known as a
 <em>term model</em>.</p>
-</div>
-<div class="section" id="formulas">
-<h2><span class="section-number">11.3. </span>Formulas<a class="headerlink" href="#formulas" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="formulas">
+<h2><span class="section-number">11.3. </span>Formulas<a class="headerlink" href="#formulas" title="Permalink to this heading"></a></h2>
 <p>Since the universe of a first-order model may be infinite, we would not
 expect to be able to evaluate arbitrary first-order formulas in
 an arbitrary model.
@@ -457,7 +367,7 @@ We also define the trivial assignment which assigns 0 to all the variables.</p>
             <span class="n">lt</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="o">:</span> <span class="n">List</span> <span class="n">Nat</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">&lt;</span> <span class="n">l.getA</span> <span class="mi">1</span> <span class="k">then</span> <span class="n">true</span> <span class="k">else</span> <span class="n">false</span><span class="o">,</span>
             <span class="n">even</span> <span class="bp">↦</span> <span class="k">fun</span> <span class="n">l</span> <span class="o">:</span> <span class="n">List</span> <span class="n">Nat</span> <span class="bp">=&gt;</span> <span class="n">l.getA</span> <span class="mi">0</span> <span class="bp">%</span> <span class="mi">2</span> <span class="bp">==</span> <span class="mi">0</span> <span class="o">}</span>
 
-<span class="kd">def</span> <span class="n">trivAssignment</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="k">fun</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
+<span class="kd">def</span> <span class="n">trivAssignment</span> <span class="o">:</span> <span class="n">FOAssignment</span> <span class="n">Nat</span> <span class="o">:=</span> <span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
 </pre></div>
 </div>
 <p>We can try it out:</p>
@@ -546,9 +456,9 @@ You can then evaluate statements about the world:</p>
 </pre></div>
 </div>
 <p>The file <cite>TWExamples</cite> provides two puzzles, taken from <em>Tarski’s World</em>, for you to try.</p>
-</div>
-<div class="section" id="unification">
-<span id="section-unification"></span><h2><span class="section-number">11.4. </span>Unification<a class="headerlink" href="#unification" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="unification">
+<span id="section-unification"></span><h2><span class="section-number">11.4. </span>Unification<a class="headerlink" href="#unification" title="Permalink to this heading"></a></h2>
 <p>Suppose we are working with a language that is meant to describe the real
 numbers and we have either proved or assumed the following sentence:</p>
 <div class="math notranslate nohighlight">
@@ -660,7 +570,7 @@ it detects a cycle, in which case it returns <cite>none</cite> to indicate failu
   <span class="bp">|</span> <span class="n">var</span> <span class="n">y</span>      <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">y</span> <span class="bp">=</span> <span class="n">x</span> <span class="k">then</span> <span class="n">true</span>
                    <span class="k">else</span> <span class="k">if</span> <span class="bp">!</span><span class="n">env.contains</span> <span class="n">y</span> <span class="k">then</span> <span class="n">false</span>
                    <span class="k">else</span> <span class="n">isTriv</span><span class="bp">?</span> <span class="n">env</span> <span class="n">x</span> <span class="o">(</span><span class="n">env.getA</span> <span class="n">y</span><span class="o">)</span>
-  <span class="bp">|</span> <span class="n">app</span> <span class="n">f</span> <span class="n">l</span>    <span class="bp">=&gt;</span> <span class="n">loop</span> <span class="n">l</span>
+  <span class="bp">|</span> <span class="n">app</span> <span class="n">_</span> <span class="n">l</span>    <span class="bp">=&gt;</span> <span class="n">loop</span> <span class="n">l</span>
 <span class="n">where</span>
   <span class="n">loop</span> <span class="o">:</span> <span class="n">List</span> <span class="n">FOTerm</span> <span class="bp">→</span> <span class="n">Option</span> <span class="n">Bool</span>
     <span class="bp">|</span> <span class="o">[]</span>    <span class="bp">=&gt;</span> <span class="n">false</span>
@@ -727,7 +637,7 @@ The function after that, <cite>fullUnify</cite>, puts it all together:
 given a list of pairs of terms to unify,
 it computes the association list and uses <cite>usolve</cite> to turn it into a
 substitution.</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">usolve</span> <span class="o">(</span><span class="n">env</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span> <span class="o">:=</span> <span class="k">do</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">usolve</span> <span class="o">(</span><span class="n">env</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
   <span class="k">let</span> <span class="n">env&#39;</span> <span class="o">:=</span> <span class="n">env.mapVal</span> <span class="o">(</span><span class="n">subst</span> <span class="n">env</span><span class="o">)</span>
   <span class="k">if</span> <span class="n">env&#39;</span> <span class="bp">==</span> <span class="n">env</span> <span class="k">then</span> <span class="n">env</span> <span class="k">else</span> <span class="n">usolve</span> <span class="n">env&#39;</span>
 
@@ -768,55 +678,38 @@ to the original pairs to make sure that the pairs are indeed unified.</p>
 <span class="k">#eval</span> <span class="n">toString</span> <span class="bp">$</span> <span class="n">unifyAndApply</span> <span class="n">unify_ex4</span>
 </pre></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="decision_procedures_for_first_order_logic.html" class="btn btn-neutral float-right" title="12. Decision Procedures for First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="first_order_logic.html" class="btn btn-neutral float-left" title="10. First-Order Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="decision_procedures_for_first_order_logic.html" class="btn btn-neutral float-right" title="12. Decision Procedures for First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.
-
-    </p>
+    <p>&#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
