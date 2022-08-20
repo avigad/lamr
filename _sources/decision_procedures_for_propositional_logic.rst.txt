@@ -11,7 +11,7 @@ This seems pretty inefficient; if a formula :math:`A` has :math:`n` variables,
 the truth table has :math:`2^n` lines, and hence checking it requires at least that many lines.
 It is still an open question, however, whether one can do substantially better.
 If :math:`P \ne NP`, there is no polynomial algorithm to determine satisfiability (and hence
-validity.)
+validity).
 
 Nonetheless, there are procedures that seem to work better in practice.
 In fact, we can generally do *much* better in practice.
@@ -84,12 +84,12 @@ of definitions is bounded by the length of the original formula
 and the size of the CNF representation of each definition is bounded by a constant.
 So the length of the resulting formula is linear in the length of the original one.
 
-The following code, found in the `LAMR` library in the `NnfForm` namespace,
+The following code, found in the ``LAMR`` library in the ``NnfForm`` namespace,
 runs through a formula in
-negation normal form and produces a list of definitions `def_0`, `def_1`, `def_2`, and so on,
+negation normal form and produces a list of definitions ``def_0``, ``def_1``, ``def_2``, and so on,
 each of which represents a conjunction or disjunction of
 two variables.
-We assume that none these `def` variables are found in the original formula.
+We assume that none these ``def`` variables are found in the original formula.
 (A more sophisticated implementation would check the original formula and start the
 numbering high enough to avoid a clash.)
 
@@ -97,23 +97,23 @@ numbering high enough to avoid a clash.)
   :start-after: -- textbook: mkDefs
   :end-before: -- end: mkDefs
 
-The keyword `where` is used to define an auxiliary function that is not
+The keyword ``where`` is used to define an auxiliary function that is not
 meant to be used anywhere else.
-The function `mkDefs` takes an NNF formula and a list of definitions,
+The function ``mkDefs`` takes an NNF formula and a list of definitions,
 and it returns an augmented list of definitions and a literal
 representing the original formula.
-More precisely, the list `defs` is an array of disjunctions and conjunctions
+More precisely, the list ``defs`` is an array of disjunctions and conjunctions
 of variables,
-where the first one corresponds to `def_0`, the next one corresponds to `def_1`,
+where the first one corresponds to ``def_0``, the next one corresponds to ``def_1``,
 and so on.
 In the cases where the original formula is a conjunction or a disjunction,
 the function first recursively creates definitions for the
 component formulas and then adds a new definition for the original formula.
-The auxiliary function `add_def` first checks to see whether
+The auxiliary function ``add_def`` first checks to see whether
 the formula to be added is already found in the array.
-For example, when passed a conjunction `p ∧ def_0`,
+For example, when passed a conjunction ``p ∧ def_0``,
 if that formula is already in the list of definitions in position 7,
-`add_def` returns `def_7` as the definition of the formula and leaves the array
+``add_def`` returns ``def_7`` as the definition of the formula and leaves the array
 unchanged.
 
 To illustrate, we start by putting the formula
@@ -136,7 +136,7 @@ Removing extraneous parentheses, we get
     (\lnot s \lor (p \land t)).
 
 In the following, we compute the list of definitions corresponding
-to `ex1`, and then we use a little program to print them out in a more
+to ``ex1``, and then we use a little program to print them out in a more
 pleasant form.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
@@ -145,7 +145,7 @@ pleasant form.
 
 We can obtain an equisatisfiable version of the formula by putting
 all the definitions into conjunctive normal form, collecting them all
-together, and adding one more conjunct with the variable `d` corresponding
+together, and adding one more conjunct with the variable ``d`` corresponding
 to the definition of the top level formula. There is a constant bound
 on the size of each CNF definition, which corresponds to a single conjunction
 or disjunction. (This would still be true if we added other binary connectives,
@@ -172,7 +172,7 @@ entails :math:`(p \land q) \lor r`.
 It isn't hard to put a implication of the form :math:`(A \limplies B)` into
 conjunctive normal form. The LAMR library defines a function to do that,
 and another one that turns the entire list of definitions returned by
-`mkDefs` into a single CNF formula.
+``mkDefs`` into a single CNF formula.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
   :start-after: -- textbook: implToCnf
@@ -187,18 +187,18 @@ the formula :math:`A` is already in CNF, we don't have to introduce
 any definitions at all. The following functions from the library
 do their best to interpret an NNF formula as a CNF formula,
 introducing definitions only when necessary. The first function,
-`NnfForm.orToCnf`, interprets a formula as a clause.
+``NnfForm.orToCnf``, interprets a formula as a clause.
 For example, given the formula :math:`p \lor (q \land \lnot r) \lor \lnot s`
 and a list of definitions, it adds a definition :math:`d` for :math:`q \land \lnot r` and
 returns the clause :math:`p \lor d \lor \lnot s`.
-The function `NnfForm.andToCnf` does the analogous thing for conjunctions,
-and the function `NnfForm.toCnf` puts it all together.
+The function ``NnfForm.andToCnf`` does the analogous thing for conjunctions,
+and the function ``NnfForm.toCnf`` puts it all together.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/tseitin.lean
   :start-after: -- textbook: toCnf
   :end-before: -- end: toCnf
 
-The following example tests it out on `ex1.toCnf`.
+The following example tests it out on ``ex1.toCnf``.
 The comment afterward shows the resulting CNF formula
 and then reconstructs the definitions to show that the result is equivalent
 to the original formula.
@@ -322,7 +322,7 @@ Consider the following CNF formula:
 
   \Gamma_\mathrm{DPLL} :=  (p_1 \lor p_2 \lor \lnot p_3) \land (\lnot p_1 \lor p_2 \lor p_3) \land (\lnot p_1 \lor \lnot p_2 \lor p_3) \land (p_1 \lor p_3) \land (\lnot p_1 \lor \lnot p_3)
 
-Selecting :math:`p_3` as decision variable in the root node, results in a DPLL tree with two leaf nodes. However, when selecting :math:`p_2` as decision variable in the root node,
+Selecting :math:`p_3` as decision variable in the root node results in a DPLL tree with two leaf nodes. However, when selecting :math:`p_2` as decision variable in the root node,
 the DPLL tree consists of four leaf nodes. The figure below shows the DPLL trees with green nodes denoting satisfying assignments, while black nodes denote falsifying assignments.
 
   .. image:: ../figures/dpll.*
@@ -331,20 +331,20 @@ the DPLL tree consists of four leaf nodes. The figure below shows the DPLL trees
    :align: center
 
 We have implemented a basic version of the DPLL procedure in Lean,
-which can be found in the `Examples` folder.
+which can be found in the ``Examples`` folder.
 We will start at the top level and work our way down.
-The function `dpllSat` accepts a CNF formula and returns either a satisfying
-assignment or `none` if there aren't any.
-It calls `propagateUnits` to perform unit propagation,
-and then calls `dpllSatAux` to iteratively pick an unassigned variable
+The function ``dpllSat`` accepts a CNF formula and returns either a satisfying
+assignment or ``none`` if there aren't any.
+It calls ``propagateUnits`` to perform unit propagation,
+and then calls ``dpllSatAux`` to iteratively pick an unassigned variable
 and split on that variable.
-We use the keyword `partial` to allow for an arbitrary recursive call.
+We use the keyword ``partial`` to allow for an arbitrary recursive call.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
   :start-after: -- textbook: dpllSat
   :end-before: -- end: dpllSat
 
-The function `pickSplit?` naively chooses the first variable it finds.
+The function ``pickSplit?`` naively chooses the first variable it finds.
 It follows the Lean convention of using a question mark for a function that
 returns an element of an option type.
 
@@ -352,7 +352,7 @@ returns an element of an option type.
   :start-after: -- textbook: pickSplit?
   :end-before: -- end: pickSplit?
 
-The function `propagateUnits` performs unit propagation and returns the resulting
+The function ``propagateUnits`` performs unit propagation and returns the resulting
 formula and the augmented truth assignment.
 As long as there is a unit clause, it simplifies the formula and adds the new
 literal to the assignment.
@@ -361,15 +361,15 @@ literal to the assignment.
   :start-after: -- textbook: propagateUnits
   :end-before: -- end: propagateUnits
 
-The function `propagateWithNew` is used to peform a split on the literal `x`.
-It assigns the value of `x` and then does unit propagation.
+The function ``propagateWithNew`` is used to peform a split on the literal ``x``.
+It assigns the value of ``x`` and then does unit propagation.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
   :start-after: -- textbook: propagateWithNew
   :end-before: -- end: propagateWithNew
 
-Finally, the function `simplify` simplifies a CNF formula by assigning the literal `x`
-to true, assuming `x` is not one of the constants `⊥` or `⊤`.
+Finally, the function ``simplify`` simplifies a CNF formula by assigning the literal ``x``
+to true, assuming ``x`` is not one of the constants ``⊥`` or ``⊤``.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean
   :start-after: -- textbook: simplify
@@ -461,7 +461,7 @@ more complicated heuristics. Another important design decision for SAT solving a
 determining whether you plan to find a satisfying assignment or prove that none exists. DPLL
 focuses on finding a satisfying assignment by picking the most satisfiable branch first, while
 CDCL, as the name suggests, prefers conflicts and wants to find a short refutation. A
-satisfying assignment is a counterexample to no refutation exists.
+satisfying assignment is a counterexample to the claim that no refutation exists.
 
 The early development of CDCL is four decades later than DPLL. While DPLL simply backtracks
 when a conflict (leaf node) is reached, CDCL turns this conflict into a conflict clause that is
@@ -474,7 +474,7 @@ The best decision heuristic for CDCL selects the unassigned variable that occurs
 most frequently in recently learned conflict clauses. This heuristic, called
 Variable-State Independent Decaying Sum (VSIDS in short), was introduced
 in the zChaff SAT solver by Moskewicz and co-authors (2001). The heuristic
-was been improved over the years, in particular by E\'en and S\"orensson (2003)
+was been improved over the years, in particular by Eén and Sörensson (2003)
 in their solver MiniSAT. In recent years some other advances have been made as well.
 However, selecting variables in recent conflict clauses is still the foundation.
 
@@ -494,7 +494,7 @@ the solver.
 Another key difference between CDCL and DPLL is that the former restarts very
 frequently. Restarting sounds drastic, but simply means that all variables are
 unassigned. The remainder of the solver state, such as the heuristics and the
-learned clauses, are not altered. Modern SAT solver restart often: say roughly
+learned clauses, are not altered. Modern SAT solver restart often, roughly
 a thousand times per second (although this depends on the size of the formula).
 As a consequence, no binary search tree is constructed. Instead, CDCL might
 be best viewed a conflict-clause generator without any systematic search.
@@ -507,4 +507,16 @@ use techniques to rewrite the formula, so called inprocessing techniques.
 In top-tier solvers, about half the runtime can be devoted to such
 techniques.
 
+Exercises
+---------
+
+#. Write, in Lean, a predicate ``isAutarky`` that takes an assignment
+   :math:`\tau` (of type ``PropAssignment``) and a CNF formula :math:`\Gamma`
+   (of type ``CnfForm``) and returns true or false depending on whether :math:`\tau`
+   is an autarky for :math:`\Gamma`.
+
+#. Write in Lean a function ``getPure`` that takes a CNF formula :math:`\Gamma`
+   and returns a ``List Lit`` of all pure literals in :math:`\Gamma`.
+   The function does not need to find all pure literals on pure literal
+   assignment until fixpoint, only the literals the are pure in :math:`\Gamma`.
 

@@ -55,6 +55,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#disjunction">9.3. Disjunction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#negation">9.4. Negation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#miscellany">9.5. Miscellany</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">9.6. Exercises</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
@@ -146,12 +147,12 @@ use them to build more complicated propositions.</p>
 <span class="k">#check</span> <span class="bp">¬</span> <span class="n">p</span>
 </pre></div>
 </div>
-<p>Hovering over the symbols will give you options for typing them. Using <cite>\and</cite>, <cite>\or</cite>, <cite>\to</cite>,
-<cite>\iff</cite>, and <cite>\not</cite> will work.</p>
-<p>In Lean, if <cite>p</cite> has type <cite>Prop</cite>, then a term <cite>t</cite> of type <cite>p</cite> is a proof of <cite>p</cite>.
+<p>Hovering over the symbols will give you options for typing them. Using <code class="docutils literal notranslate"><span class="pre">\\and</span></code>, <code class="docutils literal notranslate"><span class="pre">\\or</span></code>, <code class="docutils literal notranslate"><span class="pre">\\to</span></code>,
+<code class="docutils literal notranslate"><span class="pre">\\iff</span></code>, and <code class="docutils literal notranslate"><span class="pre">\\not</span></code> will work.</p>
+<p>In Lean, if <code class="docutils literal notranslate"><span class="pre">p</span></code> has type <code class="docutils literal notranslate"><span class="pre">Prop</span></code>, then a term <code class="docutils literal notranslate"><span class="pre">t</span></code> of type <code class="docutils literal notranslate"><span class="pre">p</span></code> is a proof of <code class="docutils literal notranslate"><span class="pre">p</span></code>.
 Lean’s proof language is essentially the same as its programming language, which means that
 we can write proofs the same way we write programs.
-Instead of using the identifier <cite>def</cite>, it is conventional to use the word <cite>theorem</cite>
+Instead of using the identifier <code class="docutils literal notranslate"><span class="pre">def</span></code>, it is conventional to use the word <code class="docutils literal notranslate"><span class="pre">theorem</span></code>
 to name the proof of a proposition.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">foo</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="o">:=</span>
   <span class="k">fun</span> <span class="n">hp</span> <span class="n">hq</span> <span class="bp">=&gt;</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hq</span>
@@ -160,20 +161,20 @@ to name the proof of a proposition.</p>
   <span class="k">fun</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">hq</span><span class="o">,</span> <span class="n">hp</span><span class="o">⟩</span>
 </pre></div>
 </div>
-<p>The expression after the <cite>:=</cite> is sometimes called a <em>proof term</em>.</p>
+<p>The expression after the <code class="docutils literal notranslate"><span class="pre">:=</span></code> is sometimes called a <em>proof term</em>.</p>
 <p>You can read more about writing proof terms in
 <a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">Theorem Proving in Lean 4</a>.
 In this chapter, we will describe an alternative method of writing proofs, using <em>tactics</em>.
 A tactic proof is essentially a piece of metacode, a list of instructions that tells
-Lean how to construct the proof term. In Lean, we enter tactic mode with the keyword <cite>by</cite>.</p>
+Lean how to construct the proof term. In Lean, we enter tactic mode with the keyword <code class="docutils literal notranslate"><span class="pre">by</span></code>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">intro</span> <span class="n">h</span>
   <span class="n">apply</span> <span class="n">h</span>
 </pre></div>
 </div>
-<p>Here the keyword <cite>example</cite> simply introduces an unnamed theorem (or definition).
-The <cite>intro</cite> tactic introduces the hypothesis and names it <cite>h</cite>.
-If you put the cursor on that line and check the <cite>Lean infoview</cite> in the editor,
+<p>Here the keyword <code class="docutils literal notranslate"><span class="pre">example</span></code> simply introduces an unnamed theorem (or definition).
+The <code class="docutils literal notranslate"><span class="pre">intro</span></code> tactic introduces the hypothesis and names it <code class="docutils literal notranslate"><span class="pre">h</span></code>.
+If you put the cursor on that line and check the <code class="docutils literal notranslate"><span class="pre">Lean</span> <span class="pre">infoview</span></code> in the editor,
 you will see the current state of the proof, that looks like this:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="n">q</span> <span class="n">r</span> <span class="n">s</span> <span class="o">:</span> <span class="kt">Prop</span>
 <span class="n">h</span> <span class="o">:</span> <span class="n">p</span>
@@ -181,52 +182,52 @@ you will see the current state of the proof, that looks like this:</p>
 </pre></div>
 </div>
 <p>Think of this as a <em>sequent</em>, as described in the last chapter:
-it expresses that the current goal is to prove <cite>p</cite>,
-using the assumption <cite>h : p</cite>.
+it expresses that the current goal is to prove <code class="docutils literal notranslate"><span class="pre">p</span></code>,
+using the assumption <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">p</span></code>.
 In contrast to the sequent calculus we considered for natural deduction,
-here the hypothesis that <cite>p</cite> holds is labeled with the identifier <cite>h</cite>.
+here the hypothesis that <code class="docutils literal notranslate"><span class="pre">p</span></code> holds is labeled with the identifier <code class="docutils literal notranslate"><span class="pre">h</span></code>.
 You can use any identifier as a label.
 Also, in contrast with the sequent calculus for natural deduction,
-the variables <cite>p</cite>, <cite>q</cite>, <cite>r</cite>, and <cite>s</cite> are included, together with their type.
+the variables <code class="docutils literal notranslate"><span class="pre">p</span></code>, <code class="docutils literal notranslate"><span class="pre">q</span></code>, <code class="docutils literal notranslate"><span class="pre">r</span></code>, and <code class="docutils literal notranslate"><span class="pre">s</span></code> are included, together with their type.
 Later on we will see that other kinds of data, like natural numbers,
 can be included as variables in the context.
-Notice also that in Lean, hypotheses like <cite>α : Type</cite>, <cite>p : Prop</cite>, <cite>n : Nat</cite>, and
-<cite>h : p</cite> are all possible, so the context can include variables ranging over data types,
+Notice also that in Lean, hypotheses like <code class="docutils literal notranslate"><span class="pre">α</span> <span class="pre">:</span> <span class="pre">Type</span></code>, <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">:</span> <span class="pre">Prop</span></code>, <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">:</span> <span class="pre">Nat</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">p</span></code> are all possible, so the context can include variables ranging over data types,
 propositions, elements of the data types, and proofs (or assumptions) that the propositions hold.</p>
-<p>In <cite>intro</cite> tactic implements the implication introduction rule of the natural deduction calculus.
-The <cite>apply</cite> tactic in the proof applies the hypothesis <cite>h</cite> to solve the goal.
-In this case, since <cite>h</cite> solves the goal exactly, we could write <cite>exact h</cite> instead.
-We could also write <cite>assumption</cite>, which tells Lean to look for any assumption in the
+<p>In <code class="docutils literal notranslate"><span class="pre">intro</span></code> tactic implements the implication introduction rule of the natural deduction calculus.
+The <code class="docutils literal notranslate"><span class="pre">apply</span></code> tactic in the proof applies the hypothesis <code class="docutils literal notranslate"><span class="pre">h</span></code> to solve the goal.
+In this case, since <code class="docutils literal notranslate"><span class="pre">h</span></code> solves the goal exactly, we could write <code class="docutils literal notranslate"><span class="pre">exact</span> <span class="pre">h</span></code> instead.
+We could also write <code class="docutils literal notranslate"><span class="pre">assumption</span></code>, which tells Lean to look for any assumption in the
 context that solves the goal.
 This corresponds to the assumption rule in the natural deduction calculus.</p>
-<p>The <cite>apply</cite> tactic can also be used to apply an implication.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">apply</span></code> tactic can also be used to apply an implication.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">apply</span> <span class="n">h1</span>
   <span class="n">exact</span> <span class="n">h2</span>
 </pre></div>
 </div>
-<p>In this example, applying <cite>p → q</cite> to the goal reduces the task of
-proving <cite>q</cite> to the task of proving <cite>p</cite>.
+<p>In this example, applying <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">→</span> <span class="pre">q</span></code> to the goal reduces the task of
+proving <code class="docutils literal notranslate"><span class="pre">q</span></code> to the task of proving <code class="docutils literal notranslate"><span class="pre">p</span></code>.
 Lean also provides a means of reasoning forward from hypotheses,
-using the <cite>have</cite> tactic:</p>
+using the <code class="docutils literal notranslate"><span class="pre">have</span></code> tactic:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="k">have</span> <span class="n">h3</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h2</span>
   <span class="n">exact</span> <span class="n">h3</span>
 </pre></div>
 </div>
 <p>Here the first line of the proof states an intermediate goal of proving
-<cite>q</cite>, which is achieved by applying <cite>h1</cite> to <cite>h2</cite>.
-The result is named <cite>h3</cite>, which we can then use in the next line.
-We can leave out the information that <cite>h3</cite> is a proof of <cite>q</cite>,
+<code class="docutils literal notranslate"><span class="pre">q</span></code>, which is achieved by applying <code class="docutils literal notranslate"><span class="pre">h1</span></code> to <code class="docutils literal notranslate"><span class="pre">h2</span></code>.
+The result is named <code class="docutils literal notranslate"><span class="pre">h3</span></code>, which we can then use in the next line.
+We can leave out the information that <code class="docutils literal notranslate"><span class="pre">h3</span></code> is a proof of <code class="docutils literal notranslate"><span class="pre">q</span></code>,
 because Lean can figure that out:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="k">have</span> <span class="n">h3</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h2</span>
   <span class="n">exact</span> <span class="n">h3</span>
 </pre></div>
 </div>
-<p>Defining <cite>h3</cite> to be <cite>h1 h2</cite> and then applying it is just the same
-as using <cite>exact h1 h2</cite> directly to solve the goal, and that, in turn,
-amounts to constructing the proof <cite>h1 h2</cite>.</p>
+<p>Defining <code class="docutils literal notranslate"><span class="pre">h3</span></code> to be <code class="docutils literal notranslate"><span class="pre">h1</span> <span class="pre">h2</span></code> and then applying it is just the same
+as using <code class="docutils literal notranslate"><span class="pre">exact</span> <span class="pre">h1</span> <span class="pre">h2</span></code> directly to solve the goal, and that, in turn,
+amounts to constructing the proof <code class="docutils literal notranslate"><span class="pre">h1</span> <span class="pre">h2</span></code>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">exact</span> <span class="n">h1</span> <span class="n">h2</span>
 
@@ -236,9 +237,9 @@ amounts to constructing the proof <cite>h1 h2</cite>.</p>
 </section>
 <section id="conjunction">
 <h2><span class="section-number">9.2. </span>Conjunction<a class="headerlink" href="#conjunction" title="Permalink to this heading"></a></h2>
-<p>There is a theorem in the library called <cite>And.intro</cite> that encodes the and-introduction
-rule in the natural deduction calculus, telling us that we can prove <cite>p ∧ q</cite> by proving
-each of <cite>p</cite> and <cite>q</cite> in turn.</p>
+<p>There is a theorem in the library called <code class="docutils literal notranslate"><span class="pre">And.intro</span></code> that encodes the and-introduction
+rule in the natural deduction calculus, telling us that we can prove <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">∧</span> <span class="pre">q</span></code> by proving
+each of <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code> in turn.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">and_example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">intro</span> <span class="n">hp</span>
   <span class="n">intro</span> <span class="n">hq</span>
@@ -252,9 +253,9 @@ each of <cite>p</cite> and <cite>q</cite> in turn.</p>
   <span class="k">fun</span> <span class="n">hp</span> <span class="n">hq</span> <span class="bp">=&gt;</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="n">hq</span>
 </pre></div>
 </div>
-<p>After applying <cite>And.intro</cite>, the goal is split into two goals, one which requires
-us to prove <cite>p</cite>, and the other which requires us to prove <cite>q</cite>.
-Each of these is accomplished with the <cite>exact</cite> tactic.
+<p>After applying <code class="docutils literal notranslate"><span class="pre">And.intro</span></code>, the goal is split into two goals, one which requires
+us to prove <code class="docutils literal notranslate"><span class="pre">p</span></code>, and the other which requires us to prove <code class="docutils literal notranslate"><span class="pre">q</span></code>.
+Each of these is accomplished with the <code class="docutils literal notranslate"><span class="pre">exact</span></code> tactic.
 As you step through the proof, you can see the state change.
 The periods in each case serve to <em>focus</em> on the next goal, so that only that goal
 is visible in that part of the proof.
@@ -262,30 +263,30 @@ Strictly speaking, they are not necessary; try deleting them to confirm that the
 still goes through.
 Still, they provide a nice way of making the structure of the proof manifest,
 and this, in turn, results in more robust proof scripts.
-The <cite>#print</cite> statement shows that the tactics have the effect of constructing a proof term.
+The <code class="docutils literal notranslate"><span class="pre">#print</span></code> statement shows that the tactics have the effect of constructing a proof term.
 The subsequent example provides the proof term explicitly.
-In fact, the term makes it clear that introducing <cite>hp</cite> and <cite>hq</cite> and then applying
-<cite>And.intro</cite> is an unnecessary detour. The theorem we have proved is exactly <cite>And.intro</cite>.</p>
+In fact, the term makes it clear that introducing <code class="docutils literal notranslate"><span class="pre">hp</span></code> and <code class="docutils literal notranslate"><span class="pre">hq</span></code> and then applying
+<code class="docutils literal notranslate"><span class="pre">And.intro</span></code> is an unnecessary detour. The theorem we have proved is exactly <code class="docutils literal notranslate"><span class="pre">And.intro</span></code>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="o">:=</span> <span class="n">And.intro</span>
 </pre></div>
 </div>
 <p>At this point, there are two tricks that are worth mentioning.
-First, at any point in a proof, you can solve the current goal with the <cite>admit</cite> tactic.
-You can prove any theorem at all using <cite>admit</cite>.
+First, at any point in a proof, you can solve the current goal with the <code class="docutils literal notranslate"><span class="pre">admit</span></code> tactic.
+You can prove any theorem at all using <code class="docutils literal notranslate"><span class="pre">admit</span></code>.
 It’s cheating, and the squiggly line the editor puts underneath the word tells you as much.
 But it is often a useful device when writing proofs, because it means you can temporarily
 close a goal to work on others, and then come back to it.</p>
-<p>The other trick is to use the <cite>done</cite> tactic. The <cite>done</cite> tactic doesn’t do anything;
+<p>The other trick is to use the <code class="docutils literal notranslate"><span class="pre">done</span></code> tactic. The <code class="docutils literal notranslate"><span class="pre">done</span></code> tactic doesn’t do anything;
 it just declares that the proof is over.
 If the proof isn’t over, Lean gives you an error message, and the error message tells you
 exactly the remaining goals.
 So this gives you a way to mark the end of a proof in progress, so that you can easily
 monitor what is left to be done.</p>
-<p>The natural way to <em>use</em> a conjunction <cite>h : p ∧ q</cite> in a hypothesis is to split it
-to the hypotheses <cite>hp : p</cite> and <cite>hq : q</cite>.
+<p>The natural way to <em>use</em> a conjunction <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">p</span> <span class="pre">∧</span> <span class="pre">q</span></code> in a hypothesis is to split it
+to the hypotheses <code class="docutils literal notranslate"><span class="pre">hp</span> <span class="pre">:</span> <span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">hq</span> <span class="pre">:</span> <span class="pre">q</span></code>.
 This rule is commonly used in sequent calculi.
 There are various ways to do it.
-One is to use a destructuring <cite>have</cite>:</p>
+One is to use a destructuring <code class="docutils literal notranslate"><span class="pre">have</span></code>:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∧</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">intro</span> <span class="n">h</span>
   <span class="k">have</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h</span>
@@ -295,11 +296,11 @@ One is to use a destructuring <cite>have</cite>:</p>
 </pre></div>
 </div>
 <p>Here the angle brackets are Lean’s <em>anonymous constructor</em> notation.
-You can type them with <cite>\&lt;</cite> and <cite>\&gt;</cite>.
-In this case, the <cite>have</cite> command tells Lean to match against
+You can type them with <code class="docutils literal notranslate"><span class="pre">\\&lt;</span></code> and <code class="docutils literal notranslate"><span class="pre">\\&gt;</span></code>.
+In this case, the <code class="docutils literal notranslate"><span class="pre">have</span></code> command tells Lean to match against
 whatever constructor matches the proposition,
-in this case, <cite>And.intro</cite>.
-Another option is to use the <cite>cases</cite> tactic, which matches the cases against the constructor:</p>
+in this case, <code class="docutils literal notranslate"><span class="pre">And.intro</span></code>.
+Another option is to use the <code class="docutils literal notranslate"><span class="pre">cases</span></code> tactic, which matches the cases against the constructor:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∧</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">intro</span> <span class="n">h</span>
   <span class="n">cases</span> <span class="n">h</span> <span class="k">with</span>
@@ -314,22 +315,22 @@ Another option is to use the <cite>cases</cite> tactic, which matches the cases 
 </pre></div>
 </div>
 <p>These are two slightly different formulations of the same proof.
-Notice that in the second variation we drop the keyword <cite>with</cite>
-and use the <cite>case</cite> tactic instead of the vertical bar.</p>
-<p>Here are some examples of using the pattern-matching <cite>have</cite> with
+Notice that in the second variation we drop the keyword <code class="docutils literal notranslate"><span class="pre">with</span></code>
+and use the <code class="docutils literal notranslate"><span class="pre">case</span></code> tactic instead of the vertical bar.</p>
+<p>Here are some examples of using the pattern-matching <code class="docutils literal notranslate"><span class="pre">have</span></code> with
 the ordinary one.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="k">have</span> <span class="n">h3</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h2</span>
   <span class="n">exact</span> <span class="n">h3</span>
 </pre></div>
 </div>
-<p>In the first example, the second <cite>have</cite> claims an auxiliary statement, <cite>r</cite>,
-and proves it with the term <cite>h2 hq</cite>.
+<p>In the first example, the second <code class="docutils literal notranslate"><span class="pre">have</span></code> claims an auxiliary statement, <code class="docutils literal notranslate"><span class="pre">r</span></code>,
+and proves it with the term <code class="docutils literal notranslate"><span class="pre">h2</span> <span class="pre">hq</span></code>.
 The third example shows that we can also prove the intermediate claim in tactic mode,
-using the keyword <cite>by</cite>.</p>
-<p>The <cite>have</cite> statement is similar to a <cite>let</cite> statement that we have already seen when
+using the keyword <code class="docutils literal notranslate"><span class="pre">by</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">have</span></code> statement is similar to a <code class="docutils literal notranslate"><span class="pre">let</span></code> statement that we have already seen when
 we used Lean as a programming language.
-In fact, using a <cite>let</cite> also works:</p>
+In fact, using a <code class="docutils literal notranslate"><span class="pre">let</span></code> also works:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="k">let</span> <span class="o">⟨</span><span class="n">hp</span><span class="o">,</span> <span class="n">hq</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">h1</span>
   <span class="k">let</span> <span class="n">hr</span> <span class="o">:</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
@@ -342,23 +343,23 @@ In fact, using a <cite>let</cite> also works:</p>
   <span class="n">exact</span> <span class="n">And.intro</span> <span class="n">hp</span> <span class="o">(</span><span class="n">h2</span> <span class="n">hq</span><span class="o">)</span>
 </pre></div>
 </div>
-<p>With both <cite>have</cite> and <cite>let</cite>, we can take the proofs to
-abbreviate the result of substituting the proof of <cite>r</cite> where we used <cite>hr</cite>,
+<p>With both <code class="docutils literal notranslate"><span class="pre">have</span></code> and <code class="docutils literal notranslate"><span class="pre">let</span></code>, we can take the proofs to
+abbreviate the result of substituting the proof of <code class="docutils literal notranslate"><span class="pre">r</span></code> where we used <code class="docutils literal notranslate"><span class="pre">hr</span></code>,
 as in the last example above.
-There is a subtle difference between <cite>have</cite> and <cite>let</cite>: while the
-data in the <cite>let</cite> statement is available in the body of the statement after the <cite>let</cite>,
-a <cite>have</cite> only records the existence of an expression of the corresponding type.
-When we use a <cite>have</cite>, typically we only care that the corresponding fact has been proved,
+There is a subtle difference between <code class="docutils literal notranslate"><span class="pre">have</span></code> and <code class="docutils literal notranslate"><span class="pre">let</span></code>: while the
+data in the <code class="docutils literal notranslate"><span class="pre">let</span></code> statement is available in the body of the statement after the <code class="docutils literal notranslate"><span class="pre">let</span></code>,
+a <code class="docutils literal notranslate"><span class="pre">have</span></code> only records the existence of an expression of the corresponding type.
+When we use a <code class="docutils literal notranslate"><span class="pre">have</span></code>, typically we only care that the corresponding fact has been proved,
 and the specifics of the proof are irrelevant. For that reason,
-<cite>have</cite> is more appropriate for proofs.</p>
+<code class="docutils literal notranslate"><span class="pre">have</span></code> is more appropriate for proofs.</p>
 </section>
 <section id="disjunction">
 <h2><span class="section-number">9.3. </span>Disjunction<a class="headerlink" href="#disjunction" title="Permalink to this heading"></a></h2>
-<p>The theorem <cite>Or.inr</cite> in the library corresponds to the
-right introduction rule, which proves <cite>p ∨ q</cite> from <cite>p</cite>.
-The left introduction rule is given by <cite>Or.inl</cite>.
+<p>The theorem <code class="docutils literal notranslate"><span class="pre">Or.inr</span></code> in the library corresponds to the
+right introduction rule, which proves <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">∨</span> <span class="pre">q</span></code> from <code class="docutils literal notranslate"><span class="pre">p</span></code>.
+The left introduction rule is given by <code class="docutils literal notranslate"><span class="pre">Or.inl</span></code>.
 We can carry out a proof by cases
-using either the theorem <cite>Or.elim</cite> or the <cite>cases</cite> tactic.</p>
+using either the theorem <code class="docutils literal notranslate"><span class="pre">Or.elim</span></code> or the <code class="docutils literal notranslate"><span class="pre">cases</span></code> tactic.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">q</span> <span class="bp">∨</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">intro</span> <span class="n">h</span>
   <span class="n">apply</span> <span class="n">Or.elim</span> <span class="n">h</span>
@@ -392,10 +393,10 @@ casing on a disjunction results in two new goals, each with one new hypothesis.<
 </section>
 <section id="negation">
 <h2><span class="section-number">9.4. </span>Negation<a class="headerlink" href="#negation" title="Permalink to this heading"></a></h2>
-<p>In Lean, <cite>¬ p</cite> is defined to be <cite>p → False</cite>. For most purposes, the two
-expressions are interchangeable. This means that you can prove <cite>¬ p</cite>
-by assuming <cite>p</cite> and deriving <cite>False</cite>, and if you have <cite>hp : p</cite> and <cite>hnp : ¬ p</cite>,
-then the result <cite>hnp hp</cite> of applying the first to the second is a proof of <cite>False</cite>.
+<p>In Lean, <code class="docutils literal notranslate"><span class="pre">¬</span> <span class="pre">p</span></code> is defined to be <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">→</span> <span class="pre">False</span></code>. For most purposes, the two
+expressions are interchangeable. This means that you can prove <code class="docutils literal notranslate"><span class="pre">¬</span> <span class="pre">p</span></code>
+by assuming <code class="docutils literal notranslate"><span class="pre">p</span></code> and deriving <code class="docutils literal notranslate"><span class="pre">False</span></code>, and if you have <code class="docutils literal notranslate"><span class="pre">hp</span> <span class="pre">:</span> <span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">hnp</span> <span class="pre">:</span> <span class="pre">¬</span> <span class="pre">p</span></code>,
+then the result <code class="docutils literal notranslate"><span class="pre">hnp</span> <span class="pre">hp</span></code> of applying the first to the second is a proof of <code class="docutils literal notranslate"><span class="pre">False</span></code>.
 The following illustrates these ideas in action.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">q</span> <span class="bp">→</span> <span class="bp">¬</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">intro</span> <span class="n">hnq</span> <span class="n">hp</span>
@@ -404,9 +405,9 @@ The following illustrates these ideas in action.</p>
   <span class="n">apply</span> <span class="n">hp</span>
 </pre></div>
 </div>
-<p>Here, <cite>intro hnp hp</cite> is equivalent to writing <cite>intro hnp</cite> followed by <cite>intro hp</cite>.
+<p>Here, <code class="docutils literal notranslate"><span class="pre">intro</span> <span class="pre">hnp</span> <span class="pre">hp</span></code> is equivalent to writing <code class="docutils literal notranslate"><span class="pre">intro</span> <span class="pre">hnp</span></code> followed by <code class="docutils literal notranslate"><span class="pre">intro</span> <span class="pre">hp</span></code>.
 Lean provides other means of dealing with negations.
-For example, the <cite>contradiction</cite> tactic finishes off a goal whenever the context
+For example, the <code class="docutils literal notranslate"><span class="pre">contradiction</span></code> tactic finishes off a goal whenever the context
 contains a statement and its negation.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">contradiction</span>
@@ -419,9 +420,9 @@ contains a statement and its negation.</p>
     <span class="n">exact</span> <span class="n">hq</span>
 </pre></div>
 </div>
-<p>In a similar way, the theorem <cite>absurd</cite> shows that anything follows from a statement and
+<p>In a similar way, the theorem <code class="docutils literal notranslate"><span class="pre">absurd</span></code> shows that anything follows from a statement and
 its negation. The first and second examples below are really the same:
-writing <cite>by exact t</cite> simply constructs the proof <cite>t</cite>.</p>
+writing <code class="docutils literal notranslate"><span class="pre">by</span> <span class="pre">exact</span> <span class="pre">t</span></code> simply constructs the proof <code class="docutils literal notranslate"><span class="pre">t</span></code>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">exact</span> <span class="n">absurd</span> <span class="n">h1</span> <span class="n">h2</span>
 
@@ -435,8 +436,8 @@ writing <cite>by exact t</cite> simply constructs the proof <cite>t</cite>.</p>
     <span class="n">exact</span> <span class="n">hq</span>
 </pre></div>
 </div>
-<p>The <cite>contradiction</cite> tactic also works if the context contains <cite>False</cite>.
-Alternatively, casing on <cite>h : False</cite> finishes off a proof.
+<p>The <code class="docutils literal notranslate"><span class="pre">contradiction</span></code> tactic also works if the context contains <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+Alternatively, casing on <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">False</span></code> finishes off a proof.
 Intuitively, there are no cases!</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">False</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">contradiction</span>
@@ -448,7 +449,7 @@ Intuitively, there are no cases!</p>
 <p>The principles we have used before all fall within what is known as
 <em>intuitionistic</em> logic. Many mathematical arguments require <em>classical</em> logic,
 which is embodied in the <em>law of the excluded middle</em>.
-In Lean, if <cite>p</cite> is a proposition, <cite>em p</cite> is the principal <cite>p ∨ ¬ p</cite>.</p>
+In Lean, if <code class="docutils literal notranslate"><span class="pre">p</span></code> is a proposition, <code class="docutils literal notranslate"><span class="pre">em</span> <span class="pre">p</span></code> is the principal <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">∨</span> <span class="pre">¬</span> <span class="pre">p</span></code>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
   <span class="n">apply</span> <span class="n">Or.elim</span> <span class="o">(</span><span class="n">Classical.em</span> <span class="n">p</span><span class="o">)</span>
   <span class="bp">.</span> <span class="n">intro</span> <span class="n">hp</span>
@@ -512,8 +513,58 @@ as in the following examples.</p>
 </div>
 <p>You should think about these examples and how they work.
 One strategy for learning how to write proof terms is to name
-the theorems that you prove with tactics, and then use the <cite>#print</cite>
+the theorems that you prove with tactics, and then use the <code class="docutils literal notranslate"><span class="pre">#print</span></code>
 command to print them out.</p>
+</section>
+<section id="exercises">
+<h2><span class="section-number">9.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<p>Complete the following proofs in Lean.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="n">Init</span>
+
+<span class="kd">variable</span> <span class="o">(</span><span class="n">p</span> <span class="n">q</span> <span class="n">r</span> <span class="n">s</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span> <span class="bp">∧</span> <span class="o">(</span><span class="n">p</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="bp">→</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="bp">∧</span> <span class="o">(</span><span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="bp">→</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">))</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="bp">¬</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">))</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∧</span> <span class="bp">¬</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">r</span> <span class="bp">∨</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="o">(</span><span class="n">p</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="bp">∧</span> <span class="o">(</span><span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span><span class="o">)</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span><span class="o">))</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">∧</span> <span class="bp">¬</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">∧</span> <span class="bp">¬</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="c1">-- this one requires classical logic!</span>
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">p</span> <span class="bp">∧</span> <span class="n">q</span><span class="o">))</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">∨</span> <span class="bp">¬</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+
+<span class="c1">-- this one too</span>
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">p</span> <span class="bp">→</span> <span class="n">q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">p</span> <span class="bp">∨</span> <span class="n">q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">admit</span>
+</pre></div>
+</div>
 </section>
 </section>
 

@@ -17,6 +17,8 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -122,36 +124,36 @@ use in this course:</p>
 <span class="k">#check</span> <span class="o">(</span><span class="n">impl</span> <span class="o">(</span><span class="n">conj</span> <span class="o">(</span><span class="n">var</span> <span class="s2">&quot;p&quot;</span><span class="o">)</span> <span class="o">(</span><span class="n">var</span> <span class="s2">&quot;q&quot;</span><span class="o">))</span> <span class="o">(</span><span class="n">var</span> <span class="s2">&quot;r&quot;</span><span class="o">))</span>
 </pre></div>
 </div>
-<p>You can find this example in the file <cite>implementing_propositional_logic/examples.lean</cite> in the <cite>User</cite> folder of the course repository.</p>
-<p>The command <cite>import LAMR.Util.Propositional</cite> at the top of the file
+<p>You can find this example in the file <code class="docutils literal notranslate"><span class="pre">implementing_propositional_logic/examples.lean</span></code> in the <code class="docutils literal notranslate"><span class="pre">User</span></code> folder of the course repository.</p>
+<p>The command <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">LAMR.Util.Propositional</span></code> at the top of the file
 imports the part of the library with functions that we provide for you
 to deal with propositional logic.
 We will often put a copy of a definition from the library in an
 examples file so you can experiment with it.
-Here we have put it in a namespace called <cite>hidden</cite> so that
-our copy’s full name is <cite>hidden.PropForm</cite>,
+Here we have put it in a namespace called <code class="docutils literal notranslate"><span class="pre">hidden</span></code> so that
+our copy’s full name is <code class="docutils literal notranslate"><span class="pre">hidden.PropForm</span></code>,
 which won’t conflict with the one in the library.
-Outside the <cite>hidden</cite> namespace, the command <cite>#print PropForm</cite>
+Outside the <code class="docutils literal notranslate"><span class="pre">hidden</span></code> namespace, the command <code class="docutils literal notranslate"><span class="pre">#print</span> <span class="pre">PropForm</span></code>
 refers to the real one, that is, the one in the library.
-The command <cite>open PropForm</cite> means that we can write, for example,
-<cite>tr</cite> for the first constructor instead of <cite>PropForm.tr</cite>.
+The command <code class="docutils literal notranslate"><span class="pre">open</span> <span class="pre">PropForm</span></code> means that we can write, for example,
+<code class="docutils literal notranslate"><span class="pre">tr</span></code> for the first constructor instead of <code class="docutils literal notranslate"><span class="pre">PropForm.tr</span></code>.
 Try writing some propositional formulas of your own.
-There should be squiggly blue lines under the the <cite>#print</cite>
-and <cite>#check</cite> commands in VSCode,
+There should be squiggly blue lines under the the <code class="docutils literal notranslate"><span class="pre">#print</span></code>
+and <code class="docutils literal notranslate"><span class="pre">#check</span></code> commands in VSCode,
 indicating that there is Lean output associated with these.
 You can see it by hovering over the commands,
 or by moving the caret to the command and checking the
-<cite>Lean infoview</cite> window.</p>
-<p>The phrase <cite>deriving Repr, DecidableEq</cite> tells Lean to automatically
+<code class="docutils literal notranslate"><span class="pre">Lean</span> <span class="pre">infoview</span></code> window.</p>
+<p>The phrase <code class="docutils literal notranslate"><span class="pre">deriving</span> <span class="pre">Repr,</span> <span class="pre">DecidableEq</span></code> tells Lean to automatically
 define functions to be used to test equality of two expressions
-of type <cite>PropForm</cite> and to display the result of an <cite>#eval</cite>.
+of type <code class="docutils literal notranslate"><span class="pre">PropForm</span></code> and to display the result of an <code class="docutils literal notranslate"><span class="pre">#eval</span></code>.
 We’ll generally leave these out of the display from now on.
-You an always use <cite>#check</cite> and <cite>#print</cite> to learn more about
-a definition in the library. If you hold down <cite>ctrl</cite> and click on an identifier,
+You an always use <code class="docutils literal notranslate"><span class="pre">#check</span></code> and <code class="docutils literal notranslate"><span class="pre">#print</span></code> to learn more about
+a definition in the library. If you hold down <code class="docutils literal notranslate"><span class="pre">ctrl</span></code> and click on an identifier,
 the VSCode Lean extension will take you to the definition in the library.
-Simply holding down <cite>ctrl</cite> and hovering over it will show you the
+Simply holding down <code class="docutils literal notranslate"><span class="pre">ctrl</span></code> and hovering over it will show you the
 definition in a pop-up window.
-Try taking a look at the definition of <cite>PropForm</cite> in the library.</p>
+Try taking a look at the definition of <code class="docutils literal notranslate"><span class="pre">PropForm</span></code> in the library.</p>
 <p>Writing propositional formulas using constructors can be a
 pain in the neck.
 In the library, we have used Lean’s mechanisms for defining new syntax
@@ -167,15 +169,15 @@ to implement nicer syntax.</p>
 <span class="k">#eval</span> <span class="n">toString</span> <span class="n">propExample</span>
 </pre></div>
 </div>
-<p>You can get the symbols by typing <cite>\and</cite>, <cite>\to</cite>, <cite>\or</cite>, <cite>\not</cite>, and <cite>\iff</cite>
+<p>You can get the symbols by typing <code class="docutils literal notranslate"><span class="pre">\\and</span></code>, <code class="docutils literal notranslate"><span class="pre">\\to</span></code>, <code class="docutils literal notranslate"><span class="pre">\\or</span></code>, <code class="docutils literal notranslate"><span class="pre">\\not</span></code>, and <code class="docutils literal notranslate"><span class="pre">\\iff</span></code>
 in VS Code. And, in general, when you see a symbol in VSCode,
 hovering over it with the mouse shows you how to type it.
 Once again, try typing some examples of your own.
-The library defines the function <cite>PropForm.toString</cite> that produces
+The library defines the function <code class="docutils literal notranslate"><span class="pre">PropForm.toString</span></code> that produces
 a more readable version of a propositional formula,
-one that, when inserted within the <cite>prop!{…}</cite> brackets,
+one that, when inserted within the <code class="docutils literal notranslate"><span class="pre">prop!{...}</span></code> brackets,
 should produce the same result.</p>
-<p>Because <cite>PropForm</cite> is inductively defined, we can easily define
+<p>Because <code class="docutils literal notranslate"><span class="pre">PropForm</span></code> is inductively defined, we can easily define
 functions using structural recursion.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">namespace</span> <span class="n">PropForm</span>
 
@@ -204,10 +206,10 @@ functions using structural recursion.</p>
   <span class="bp">|</span> <span class="n">tr</span> <span class="bp">=&gt;</span> <span class="o">[]</span>
   <span class="bp">|</span> <span class="n">fls</span> <span class="bp">=&gt;</span> <span class="o">[]</span>
   <span class="bp">|</span> <span class="n">neg</span> <span class="n">A</span> <span class="bp">=&gt;</span> <span class="n">vars</span> <span class="n">A</span>
-  <span class="bp">|</span> <span class="n">conj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">A</span><span class="o">)</span><span class="bp">.</span><span class="n">union</span> <span class="o">(</span><span class="n">vars</span> <span class="n">B</span><span class="o">)</span>
-  <span class="bp">|</span> <span class="n">disj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">A</span><span class="o">)</span><span class="bp">.</span><span class="n">union</span> <span class="o">(</span><span class="n">vars</span> <span class="n">B</span><span class="o">)</span>
-  <span class="bp">|</span> <span class="n">impl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">A</span><span class="o">)</span><span class="bp">.</span><span class="n">union</span> <span class="o">(</span><span class="n">vars</span> <span class="n">B</span><span class="o">)</span>
-  <span class="bp">|</span> <span class="n">biImpl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">A</span><span class="o">)</span><span class="bp">.</span><span class="n">union</span> <span class="o">(</span><span class="n">vars</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">conj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">A</span><span class="o">)</span><span class="bp">.</span><span class="n">union&#39;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">disj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">A</span><span class="o">)</span><span class="bp">.</span><span class="n">union&#39;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">impl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">A</span><span class="o">)</span><span class="bp">.</span><span class="n">union&#39;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">biImpl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">A</span><span class="o">)</span><span class="bp">.</span><span class="n">union&#39;</span> <span class="o">(</span><span class="n">vars</span> <span class="n">B</span><span class="o">)</span>
 
 <span class="k">#eval</span> <span class="n">complexity</span> <span class="n">propExample</span>
 <span class="k">#eval</span> <span class="n">depth</span> <span class="n">propExample</span>
@@ -219,16 +221,20 @@ functions using structural recursion.</p>
 <span class="k">#eval</span> <span class="n">propExample.complexity</span>
 </pre></div>
 </div>
-<p>The function <cite>List.union</cite> returns concatenation of the two lists with
-duplicates removed, assuming that the original two lists had no duplicate elements.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Mathlib</span></code> defines a function <code class="docutils literal notranslate"><span class="pre">List.union</span></code> that
+returns the concatenation of the two lists with
+duplicates removed, assuming that the original two lists had no duplicate elements.
+Unfortunately, that function has quadratic complexity.
+The file <code class="docutils literal notranslate"><span class="pre">LAMR/Util/Misc</span></code> defines a more efficient version,
+<code class="docutils literal notranslate"><span class="pre">List.union'</span></code>, that uses hash sets.</p>
 </section>
 <section id="semantics">
 <span id="implementing-propositional-semantics"></span><h2><span class="section-number">5.2. </span>Semantics<a class="headerlink" href="#semantics" title="Permalink to this heading"></a></h2>
-<p>The course library defines the type <cite>PropAssignment</cite> to be <cite>List (String × Bool)</cite>.
-If <cite>v</cite> has type <cite>PropAssignment</cite>, you should think of the expression <cite>v.eval s</cite> as
-assigning a truth value to the variable named <cite>s</cite>.
+<p>The course library defines the type <code class="docutils literal notranslate"><span class="pre">PropAssignment</span></code> to be <code class="docutils literal notranslate"><span class="pre">List</span> <span class="pre">(String</span> <span class="pre">×</span> <span class="pre">Bool)</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">v</span></code> has type <code class="docutils literal notranslate"><span class="pre">PropAssignment</span></code>, you should think of the expression <code class="docutils literal notranslate"><span class="pre">v.eval</span> <span class="pre">s</span></code> as
+assigning a truth value to the variable named <code class="docutils literal notranslate"><span class="pre">s</span></code>.
 The following function then evaluates the truth value of any propositional
-formula under assignment <cite>v</cite>:</p>
+formula under assignment <code class="docutils literal notranslate"><span class="pre">v</span></code>:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">PropForm.eval</span> <span class="o">(</span><span class="n">v</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">:</span> <span class="n">PropForm</span> <span class="bp">→</span> <span class="n">Bool</span>
   <span class="bp">|</span> <span class="n">var</span> <span class="n">s</span> <span class="bp">=&gt;</span> <span class="n">v.eval</span> <span class="n">s</span>
   <span class="bp">|</span> <span class="n">tr</span> <span class="bp">=&gt;</span> <span class="n">true</span>
@@ -244,11 +250,11 @@ formula under assignment <cite>v</cite>:</p>
       <span class="n">propExample.eval</span> <span class="n">v</span>
 </pre></div>
 </div>
-<p>The example at the end defines <cite>v</cite> to be the assignment that
-assigns the value <cite>true</cite> to the strings <cite>“p”</cite>, <cite>“q”</cite>, and <cite>“r”</cite>
+<p>The example at the end defines <code class="docutils literal notranslate"><span class="pre">v</span></code> to be the assignment that
+assigns the value <code class="docutils literal notranslate"><span class="pre">true</span></code> to the strings <code class="docutils literal notranslate"><span class="pre">&quot;p&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;q&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>
 and false to all the others.
 This is a reasonably convenient way to describe truth assignments manually,
-so the library provides a function <cite>PropAssignment.mk</cite> and notation <cite>propassign!{…}</cite> to support that.</p>
+so the library provides a function <code class="docutils literal notranslate"><span class="pre">PropAssignment.mk</span></code> and notation <code class="docutils literal notranslate"><span class="pre">propassign!{...}</span></code> to support that.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#check</span> <span class="n">propassign</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span><span class="o">,</span> <span class="n">q</span><span class="o">,</span> <span class="n">r</span><span class="o">}</span>
 
 <span class="k">#eval</span> <span class="n">propExample.eval</span> <span class="n">propassign</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span><span class="o">,</span> <span class="n">q</span><span class="o">,</span> <span class="n">r</span><span class="o">}</span>
@@ -268,10 +274,10 @@ It is analogous to the power set operation in set theory.</p>
 </div>
 <p>With that in hand, here is a function that computes the truth table of a
 propositional formula.
-The value of <cite>truthTable A</cite> is a list of pairs:
-the first element of the pair is the list of <cite>true</cite>/<cite>false</cite> values assigned
-to the elements of <cite>vars A</cite>, and the second element
-is the truth value of <cite>A</cite> under that assignment.</p>
+The value of <code class="docutils literal notranslate"><span class="pre">truthTable</span> <span class="pre">A</span></code> is a list of pairs:
+the first element of the pair is the list of <code class="docutils literal notranslate"><span class="pre">true</span></code>/<code class="docutils literal notranslate"><span class="pre">false</span></code> values assigned
+to the elements of <code class="docutils literal notranslate"><span class="pre">vars</span> <span class="pre">A</span></code>, and the second element
+is the truth value of <code class="docutils literal notranslate"><span class="pre">A</span></code> under that assignment.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">truthTable</span> <span class="o">(</span><span class="n">A</span> <span class="o">:</span> <span class="n">PropForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">List</span> <span class="o">(</span><span class="n">List</span> <span class="n">Bool</span> <span class="bp">×</span> <span class="n">Bool</span><span class="o">)</span> <span class="o">:=</span>
   <span class="k">let</span> <span class="n">vars</span> <span class="o">:=</span> <span class="n">A.vars</span>
   <span class="k">let</span> <span class="n">assignments</span> <span class="o">:=</span> <span class="o">(</span><span class="n">allSublists</span> <span class="n">vars</span><span class="o">)</span><span class="bp">.</span><span class="n">map</span> <span class="o">(</span><span class="k">fun</span> <span class="n">l</span> <span class="bp">=&gt;</span> <span class="n">PropAssignment.mk</span> <span class="o">(</span><span class="n">l.map</span> <span class="o">(</span><span class="bp">.</span><span class="o">,</span> <span class="n">true</span><span class="o">)))</span>
@@ -281,8 +287,8 @@ is the truth value of <cite>A</cite> under that assignment.</p>
 <span class="k">#eval</span> <span class="n">truthTable</span> <span class="n">propExample</span>
 </pre></div>
 </div>
-<p>We can now use the list operation <cite>List.all</cite> to test whether a formula is valid,
-and we can use <cite>List.some</cite> to test whether it is satisfiable.</p>
+<p>We can now use the list operation <code class="docutils literal notranslate"><span class="pre">List.all</span></code> to test whether a formula is valid,
+and we can use <code class="docutils literal notranslate"><span class="pre">List.some</span></code> to test whether it is satisfiable.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">PropForm.isValid</span> <span class="o">(</span><span class="n">A</span> <span class="o">:</span> <span class="n">PropForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Bool</span> <span class="o">:=</span> <span class="n">List.all</span> <span class="o">(</span><span class="n">truthTable</span> <span class="n">A</span><span class="o">)</span> <span class="n">Prod.snd</span>
 <span class="kd">def</span> <span class="n">PropForm.isSat</span><span class="o">(</span><span class="n">A</span> <span class="o">:</span> <span class="n">PropForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Bool</span> <span class="o">:=</span> <span class="n">List.any</span> <span class="o">(</span><span class="n">truthTable</span> <span class="n">A</span><span class="o">)</span> <span class="n">Prod.snd</span>
 
@@ -336,23 +342,23 @@ to formulas in negation normal form.</p>
 <span class="kd">end</span> <span class="n">PropForm</span>
 </pre></div>
 </div>
-<p>Putting the first in the namespace <cite>NnfForm</cite> has the effect that given <cite>A : NnfForm</cite>,
-we can write <cite>A.neg</cite> instead of <cite>NnfForm.neg A</cite>.
-Similarly, putting the second definition in the namespace <cite>PropForm</cite> means we can write
-<cite>A.toNnfForm</cite> to put a propositional formula in negation normal form.</p>
+<p>Putting the first in the namespace <code class="docutils literal notranslate"><span class="pre">NnfForm</span></code> has the effect that given <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">:</span> <span class="pre">NnfForm</span></code>,
+we can write <code class="docutils literal notranslate"><span class="pre">A.neg</span></code> instead of <code class="docutils literal notranslate"><span class="pre">NnfForm.neg</span> <span class="pre">A</span></code>.
+Similarly, putting the second definition in the namespace <code class="docutils literal notranslate"><span class="pre">PropForm</span></code> means we can write
+<code class="docutils literal notranslate"><span class="pre">A.toNnfForm</span></code> to put a propositional formula in negation normal form.</p>
 <p>We can try them out on the example defined above:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">propExample.toNnfForm</span>
 <span class="k">#eval</span> <span class="n">toString</span> <span class="n">propExample.toNnfForm</span>
 </pre></div>
 </div>
-<p>To handle conjunctive normal form, the library defines a type <cite>Lit</cite> of literals.
-A <cite>Clause</cite> is then a list of literals, and a <cite>CnfForm</cite> is a list of clauses.</p>
+<p>To handle conjunctive normal form, the library defines a type <code class="docutils literal notranslate"><span class="pre">Lit</span></code> of literals.
+A <code class="docutils literal notranslate"><span class="pre">Clause</span></code> is then a list of literals, and a <code class="docutils literal notranslate"><span class="pre">CnfForm</span></code> is a list of clauses.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">Clause</span> <span class="o">:=</span> <span class="n">List</span> <span class="n">Lit</span>
 
 <span class="kd">def</span> <span class="n">CnfForm</span> <span class="o">:=</span> <span class="n">List</span> <span class="n">Clause</span>
 </pre></div>
 </div>
-<p>As usual, you can use <cite>#check</cite> and <cite>#print</cite> to find information about them, and ctrl-click
+<p>As usual, you can use <code class="docutils literal notranslate"><span class="pre">#check</span></code> and <code class="docutils literal notranslate"><span class="pre">#print</span></code> to find information about them, and ctrl-click
 to see the definitions in the library.
 Since, as usual, defining things using constructors can be annoying,
 the library defines syntax for writing expressions of these types.</p>
@@ -400,26 +406,26 @@ the library defines syntax for writing expressions of these types.</p>
 <p>Let us now consider what is needed to put an arbitrary propositional formula in
 conjunctive normal form. In <a class="reference internal" href="propositional_logic.html#section-normal-forms"><span class="std std-numref">Section 4.5</span></a>, we saw that the key
 is to show that the disjunction of two CNF formulas is again CNF.
-Lean’s library has a function <cite>List.insert</cite>, which adds an element to a list;
+Lean’s library has a function <code class="docutils literal notranslate"><span class="pre">List.insert</span></code>, which adds an element to a list;
 if the element already appears in the list, it does nothing.
-It has a function <cite>List.union</cite> that will form the union of two lists;
+The file <code class="docutils literal notranslate"><span class="pre">LAMR/Util/Misc.lean</span></code> defines a function <code class="docutils literal notranslate"><span class="pre">List.union'</span></code> that forms the union of two lists;
 if the original two lists have no duplicates, the union won’t either.
-Finally, we have a function <cite>List.Union</cite> which takes the union of a list of lists.
+It also defines a function <code class="docutils literal notranslate"><span class="pre">List.Union</span></code> which takes the union of a list of lists.
 Since clauses are lists, we can use them on clauses:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">List.insert</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span> <span class="n">r</span> <span class="o">}</span> <span class="n">exClause0</span>
 
-<span class="k">#eval</span> <span class="n">exClause0.union</span> <span class="n">exClause1</span>
+<span class="k">#eval</span> <span class="n">exClause0.union&#39;</span> <span class="n">exClause1</span>
 
 <span class="k">#eval</span> <span class="n">List.Union</span> <span class="o">[</span><span class="n">exClause0</span><span class="o">,</span> <span class="n">exClause1</span><span class="o">,</span> <span class="n">exClause2</span><span class="o">]</span>
 </pre></div>
 </div>
 <p>We can now take the disjunction of a single clause and a CNF formula by taking
 the union of the clause with each element of the CNF formula.
-We can implement that with the function <cite>List.map</cite>:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">exCnf1.map</span> <span class="n">exClause0.union</span>
+We can implement that with the function <code class="docutils literal notranslate"><span class="pre">List.map</span></code>:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">exCnf1.map</span> <span class="n">exClause0.union&#39;</span>
 </pre></div>
 </div>
-<p>This applied the function “take the union with <cite>exClause0</cite>” to each element of <cite>exCnf1</cite>,
+<p>This applied the function “take the union with <code class="docutils literal notranslate"><span class="pre">exClause0</span></code>” to each element of <code class="docutils literal notranslate"><span class="pre">exCnf1</span></code>,
 and returns the resulting list.
 We can now define the disjunction of two CNF formulas by taking all the
 clauses in the first,
@@ -427,7 +433,7 @@ taking the disjunction of each clause with the second CNF,
 and then taking the union of all of those, corresponding to the conjunctions
 of the CNFs. Here is the library definition, and an example:</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">CnfForm.disj</span> <span class="o">(</span><span class="n">cnf1</span> <span class="n">cnf2</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
-<span class="o">(</span><span class="n">cnf1.map</span> <span class="o">(</span><span class="k">fun</span> <span class="n">cls</span> <span class="bp">=&gt;</span> <span class="n">cnf2.map</span> <span class="n">cls.union</span><span class="o">))</span><span class="bp">.</span><span class="n">Union</span>
+<span class="o">(</span><span class="n">cnf1.map</span> <span class="o">(</span><span class="k">fun</span> <span class="n">cls</span> <span class="bp">=&gt;</span> <span class="n">cnf2.map</span> <span class="n">cls.union&#39;</span><span class="o">))</span><span class="bp">.</span><span class="n">Union</span>
 
 <span class="k">#eval</span> <span class="n">cnf</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span><span class="o">,</span> <span class="n">q</span><span class="o">,</span> <span class="n">u</span> <span class="bp">-</span><span class="n">v</span><span class="o">}</span><span class="bp">.</span><span class="n">disj</span> <span class="n">cnf</span><span class="bp">!</span><span class="o">{</span><span class="n">r1</span> <span class="n">r2</span><span class="o">,</span> <span class="n">s1</span> <span class="n">s2</span><span class="o">,</span> <span class="n">t1</span> <span class="n">t2</span> <span class="n">t3</span><span class="o">}</span>
 <span class="k">#eval</span> <span class="n">toString</span> <span class="bp">$</span> <span class="n">cnf</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span><span class="o">,</span> <span class="n">q</span><span class="o">,</span> <span class="n">u</span> <span class="bp">-</span><span class="n">v</span><span class="o">}</span><span class="bp">.</span><span class="n">disj</span> <span class="n">cnf</span><span class="bp">!</span><span class="o">{</span><span class="n">r1</span> <span class="n">r2</span><span class="o">,</span> <span class="n">s1</span> <span class="n">s2</span><span class="o">,</span> <span class="n">t1</span> <span class="n">t2</span> <span class="n">t3</span><span class="o">}</span>
@@ -437,8 +443,8 @@ of the CNFs. Here is the library definition, and an example:</p>
 and inscrutable.
 You should think about defining the disjunction of two CNF formulas by hand,
 using recursions over clauses and CNF formulas.
-Your solution will most likely reconstruct the effect of the instance <cite>map</cite> and
-<cite>Union</cite> in the library definition,
+Your solution will most likely reconstruct the effect of the instance <code class="docutils literal notranslate"><span class="pre">map</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Union</span></code> in the library definition,
 and that will help you understand why they make sense.</p>
 <p>In any case, with this in hand, it is easy to define the translation from
 negation normal form formulas and arbitrary propositional formulas to
@@ -465,16 +471,30 @@ CNF.</p>
 </section>
 <section id="exercises">
 <h2><span class="section-number">5.4. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
-<ol class="arabic simple">
-<li><p>Write a Lean function that, given any element of <cite>PropForm</cite>, outputs a
+<ol class="arabic">
+<li><p>Write a Lean function that, given any element of <code class="docutils literal notranslate"><span class="pre">PropForm</span></code>, outputs a
 list of all the subformulas.</p></li>
+<li><p>Write a function in Lean that implements substitution for propositional formulas,
+and test it on one or two examples.</p></li>
 <li><p>Write a Lean function that, given a list of propositional formulas and another
 propositional formula, determines whether the second is a logical consequence
 of the first.</p></li>
-<li><p>Write a Lean function that, given a clause, tests whether any literal <cite>Lit.pos p</cite>
-appears together with its negation <cite>Lit.neg p</cite>.
+<li><p>Write a Lean function that, given a clause, tests whether any literal <code class="docutils literal notranslate"><span class="pre">Lit.pos</span> <span class="pre">p</span></code>
+appears together with its negation <code class="docutils literal notranslate"><span class="pre">Lit.neg</span> <span class="pre">p</span></code>.
 Write another Lean function that, given a formula in conjunctive normal form,
 deletes all these clauses.</p></li>
+<li><p>In <a class="reference internal" href="#implementing-propositional-semantics"><span class="std std-numref">Section 5.2</span></a>, we defined a Lean function
+<code class="docutils literal notranslate"><span class="pre">PropForm.eval</span></code> that evaluates a propositional formula with respect to a truth assignment.
+Define a similar function, <code class="docutils literal notranslate"><span class="pre">CnfForm.eval</span></code>, that evaluates a formula in conjunctive
+normal form. (Do it directly: don’t translate it to a propositional formula.)</p></li>
+<li><p>In <a class="reference internal" href="#section-implementing-propositional-normal-forms"><span class="std std-numref">Section 5.3</span></a>, we defined a Lean data type
+<code class="docutils literal notranslate"><span class="pre">NnfForm</span></code> for NNF formulas, and we defined a function <code class="docutils literal notranslate"><span class="pre">PropForm.toNnfForm</span></code> that converts a
+propositional formula to one in NNF. Notice that the method we used to expand
+<span class="math notranslate nohighlight">\(\liff\)</span> can lead to an exponential increase in length.</p>
+<p>Define a Lean data type <code class="docutils literal notranslate"><span class="pre">EnnfForm</span></code> for <em>extended</em> negation normal form formulas,
+which adds the <span class="math notranslate nohighlight">\(\liff\)</span> connective to ordinary NNF. Then define a function that
+translates any propositional formula to an extended NNF formula.</p>
+</li>
 </ol>
 </section>
 </section>

@@ -87,6 +87,7 @@ and *derivation* are often used interchangeably.
 The last two are sometimes useful to distinguish formal derivations from
 ordinary (informal) mathematical proofs.
 
+.. _section_axiomatic_systems:
 
 Axiomatic systems
 -----------------
@@ -294,8 +295,8 @@ of searching for proofs and people who like to think in terms of searching for m
 It is therefore important to learn how to speak both languages,
 and to be able to translate between them on the fly.
 
-.. _section_resolution:
 
+.. _section_resolution:
 
 Resolution
 ----------
@@ -733,3 +734,52 @@ such that adjacent edges have the same color.
     plane with tiles from :math:`S`.
 
 You should think about how this follows from the compactness theorem.
+
+Exercises
+---------
+
+#. Using only axioms 1 and 2 from :numref:`section_axiomatic_systems`
+   and modus ponens, show how to derive :math:`p \to p`. (It is surprisingly
+   tricky, but you can do it in 5 lines.)
+
+#. Using the cut-free sequent calculus described in :numref:`section_propositional_sequent_calculus`,
+   either construct a proof of the following sequent or use the methods described
+   in that section to find a counterexample:
+
+   .. math::
+
+     ((p \lor q) \to r) \lor ((r \to p) \land (r \to q)).
+
+#. Give a resolution refutation of the following list of clauses:
+
+   #. :math:`p \lor q \lor \lnot r`
+   #. :math:`\lnot p \lor \lnot q \lor r`
+   #. :math:`q \lor r  \lor \lnot s`
+   #. :math:`\lnot q \lor \lnot r \lor s`
+   #. :math:`p \lor r \lor s`
+   #. :math:`\lnot p \lor \lnot r \lor \lnot s`
+   #. :math:`\lnot p \lor q \lor s`
+   #. :math:`p \lor \lnot q \lor \lnot s`.
+
+   Present your solution as a list of clauses extending the list of starting
+   clauses, so the first one you derive is numbered 9. For each one,
+   specify the two clauses that serve as input to the resolution rule by indicating their numbers.
+   (There is a solution with 11 additional clauses, for a total of 19.)
+
+#. In :numref:`section_resolution`, we outline a method for extracting a resolution refutation
+   of a set of clauses, :math:`\Gamma`, from a failed search.
+   The method relies on the following claim:
+
+     If there are a resolution proof of a clause :math:`C` from :math:`\Gamma` such that
+     :math:`\tval{C}_{\tau[p \mapsto \top]} = \bot`
+     and a resolution proof of a clause :math:`D` from :math:`\Gamma` such that
+     :math:`\tval{D}_{\tau[p \mapsto \bot]} = \bot`,
+     then there is a resolution proof of a clause :math:`E` from :math:`\Gamma` such that
+     :math:`\tval{E}_\tau = \bot`.
+
+   Here :math:`\tau` is a partial truth assignment and the notation :math:`\tval{C}_\tau` refers to the simplification of the
+   clause :math:`C` with respect to assignment :math:`\tau` that is described in :numref:`section_unit_propagation_and_the_pure_literal_rule`.
+
+   Prove this claim.
+
+

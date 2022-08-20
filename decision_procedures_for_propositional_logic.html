@@ -54,6 +54,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#dpll">6.3. DPLL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#autarkies-and-2-sat">6.4. Autarkies and 2-SAT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cdcl">6.5. CDCL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">6.6. Exercises</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
@@ -101,7 +102,7 @@ This seems pretty inefficient; if a formula <span class="math notranslate nohigh
 the truth table has <span class="math notranslate nohighlight">\(2^n\)</span> lines, and hence checking it requires at least that many lines.
 It is still an open question, however, whether one can do substantially better.
 If <span class="math notranslate nohighlight">\(P \ne NP\)</span>, there is no polynomial algorithm to determine satisfiability (and hence
-validity.)</p>
+validity).</p>
 <p>Nonetheless, there are procedures that seem to work better in practice.
 In fact, we can generally do <em>much</em> better in practice.
 In the next chapter, we will discuss <em>SAT solvers</em>, which are pieces of software that are
@@ -161,12 +162,12 @@ This may seem to be a roundabout translation, but the point is that the number
 of definitions is bounded by the length of the original formula
 and the size of the CNF representation of each definition is bounded by a constant.
 So the length of the resulting formula is linear in the length of the original one.</p>
-<p>The following code, found in the <cite>LAMR</cite> library in the <cite>NnfForm</cite> namespace,
+<p>The following code, found in the <code class="docutils literal notranslate"><span class="pre">LAMR</span></code> library in the <code class="docutils literal notranslate"><span class="pre">NnfForm</span></code> namespace,
 runs through a formula in
-negation normal form and produces a list of definitions <cite>def_0</cite>, <cite>def_1</cite>, <cite>def_2</cite>, and so on,
+negation normal form and produces a list of definitions <code class="docutils literal notranslate"><span class="pre">def_0</span></code>, <code class="docutils literal notranslate"><span class="pre">def_1</span></code>, <code class="docutils literal notranslate"><span class="pre">def_2</span></code>, and so on,
 each of which represents a conjunction or disjunction of
 two variables.
-We assume that none these <cite>def</cite> variables are found in the original formula.
+We assume that none these <code class="docutils literal notranslate"><span class="pre">def</span></code> variables are found in the original formula.
 (A more sophisticated implementation would check the original formula and start the
 numbering high enough to avoid a clash.)</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">defLit</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">Lit.pos</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;def_{n}&quot;</span>
@@ -189,23 +190,23 @@ numbering high enough to avoid a clash.)</p>
                 <span class="o">(</span><span class="n">defLit</span> <span class="o">(</span><span class="n">newdefs.size</span> <span class="bp">-</span> <span class="mi">1</span><span class="o">),</span> <span class="n">newdefs</span><span class="o">)</span>
 </pre></div>
 </div>
-<p>The keyword <cite>where</cite> is used to define an auxiliary function that is not
+<p>The keyword <code class="docutils literal notranslate"><span class="pre">where</span></code> is used to define an auxiliary function that is not
 meant to be used anywhere else.
-The function <cite>mkDefs</cite> takes an NNF formula and a list of definitions,
+The function <code class="docutils literal notranslate"><span class="pre">mkDefs</span></code> takes an NNF formula and a list of definitions,
 and it returns an augmented list of definitions and a literal
 representing the original formula.
-More precisely, the list <cite>defs</cite> is an array of disjunctions and conjunctions
+More precisely, the list <code class="docutils literal notranslate"><span class="pre">defs</span></code> is an array of disjunctions and conjunctions
 of variables,
-where the first one corresponds to <cite>def_0</cite>, the next one corresponds to <cite>def_1</cite>,
+where the first one corresponds to <code class="docutils literal notranslate"><span class="pre">def_0</span></code>, the next one corresponds to <code class="docutils literal notranslate"><span class="pre">def_1</span></code>,
 and so on.
 In the cases where the original formula is a conjunction or a disjunction,
 the function first recursively creates definitions for the
 component formulas and then adds a new definition for the original formula.
-The auxiliary function <cite>add_def</cite> first checks to see whether
+The auxiliary function <code class="docutils literal notranslate"><span class="pre">add_def</span></code> first checks to see whether
 the formula to be added is already found in the array.
-For example, when passed a conjunction <cite>p ∧ def_0</cite>,
+For example, when passed a conjunction <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">∧</span> <span class="pre">def_0</span></code>,
 if that formula is already in the list of definitions in position 7,
-<cite>add_def</cite> returns <cite>def_7</cite> as the definition of the formula and leaves the array
+<code class="docutils literal notranslate"><span class="pre">add_def</span></code> returns <code class="docutils literal notranslate"><span class="pre">def_7</span></code> as the definition of the formula and leaves the array
 unchanged.</p>
 <p>To illustrate, we start by putting the formula</p>
 <div class="math notranslate nohighlight">
@@ -221,7 +222,7 @@ unchanged.</p>
 \[((p \land q \land \lnot r) \lor (r \land (\lnot p \lor \lnot q)) \land
 (\lnot s \lor (p \land t)).\]</div>
 <p>In the following, we compute the list of definitions corresponding
-to <cite>ex1</cite>, and then we use a little program to print them out in a more
+to <code class="docutils literal notranslate"><span class="pre">ex1</span></code>, and then we use a little program to print them out in a more
 pleasant form.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span>  <span class="n">ex1.mkDefs</span> <span class="bp">#</span><span class="o">[]</span>
 
@@ -250,7 +251,7 @@ pleasant form.</p>
 </div>
 <p>We can obtain an equisatisfiable version of the formula by putting
 all the definitions into conjunctive normal form, collecting them all
-together, and adding one more conjunct with the variable <cite>d</cite> corresponding
+together, and adding one more conjunct with the variable <code class="docutils literal notranslate"><span class="pre">d</span></code> corresponding
 to the definition of the top level formula. There is a constant bound
 on the size of each CNF definition, which corresponds to a single conjunction
 or disjunction. (This would still be true if we added other binary connectives,
@@ -275,7 +276,7 @@ entails <span class="math notranslate nohighlight">\((p \land q) \lor r\)</span>
 <p>It isn’t hard to put a implication of the form <span class="math notranslate nohighlight">\((A \limplies B)\)</span> into
 conjunctive normal form. The LAMR library defines a function to do that,
 and another one that turns the entire list of definitions returned by
-<cite>mkDefs</cite> into a single CNF formula.</p>
+<code class="docutils literal notranslate"><span class="pre">mkDefs</span></code> into a single CNF formula.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">implToCnf</span> <span class="o">(</span><span class="n">A</span> <span class="n">B</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
   <span class="o">(</span><span class="n">disj</span> <span class="n">A.neg</span> <span class="n">B</span><span class="o">)</span><span class="bp">.</span><span class="n">toCnfForm</span>
 
@@ -293,12 +294,12 @@ the formula <span class="math notranslate nohighlight">\(A\)</span> is already i
 any definitions at all. The following functions from the library
 do their best to interpret an NNF formula as a CNF formula,
 introducing definitions only when necessary. The first function,
-<cite>NnfForm.orToCnf</cite>, interprets a formula as a clause.
+<code class="docutils literal notranslate"><span class="pre">NnfForm.orToCnf</span></code>, interprets a formula as a clause.
 For example, given the formula <span class="math notranslate nohighlight">\(p \lor (q \land \lnot r) \lor \lnot s\)</span>
 and a list of definitions, it adds a definition <span class="math notranslate nohighlight">\(d\)</span> for <span class="math notranslate nohighlight">\(q \land \lnot r\)</span> and
 returns the clause <span class="math notranslate nohighlight">\(p \lor d \lor \lnot s\)</span>.
-The function <cite>NnfForm.andToCnf</cite> does the analogous thing for conjunctions,
-and the function <cite>NnfForm.toCnf</cite> puts it all together.</p>
+The function <code class="docutils literal notranslate"><span class="pre">NnfForm.andToCnf</span></code> does the analogous thing for conjunctions,
+and the function <code class="docutils literal notranslate"><span class="pre">NnfForm.toCnf</span></code> puts it all together.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">orToCnf</span> <span class="o">:</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">Clause</span> <span class="bp">→</span> <span class="n">Array</span> <span class="n">NnfForm</span> <span class="bp">→</span> <span class="n">Clause</span> <span class="bp">×</span> <span class="n">Array</span> <span class="n">NnfForm</span>
   <span class="bp">|</span> <span class="n">lit</span> <span class="n">Lit.tr</span><span class="o">,</span>  <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span>  <span class="bp">=&gt;</span> <span class="o">([</span><span class="n">Lit.tr</span><span class="o">],</span> <span class="n">defs</span><span class="o">)</span>
   <span class="bp">|</span> <span class="n">lit</span> <span class="n">Lit.fls</span><span class="o">,</span> <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span>  <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">cls</span><span class="o">,</span> <span class="n">defs</span><span class="o">)</span>
@@ -306,7 +307,7 @@ and the function <cite>NnfForm.toCnf</cite> puts it all together.</p>
   <span class="bp">|</span> <span class="n">disj</span> <span class="n">A</span> <span class="n">B</span><span class="o">,</span> <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
       <span class="k">let</span> <span class="o">⟨</span><span class="n">cls1</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">orToCnf</span> <span class="n">A</span> <span class="n">cls</span> <span class="n">defs</span>
       <span class="k">let</span> <span class="o">⟨</span><span class="n">cls2</span><span class="o">,</span> <span class="n">defs2</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">orToCnf</span> <span class="n">B</span> <span class="n">cls1</span> <span class="n">defs1</span>
-      <span class="o">(</span><span class="n">cls1.union</span> <span class="n">cls2</span><span class="o">,</span> <span class="n">defs2</span><span class="o">)</span>
+      <span class="o">(</span><span class="n">cls1.union&#39;</span> <span class="n">cls2</span><span class="o">,</span> <span class="n">defs2</span><span class="o">)</span>
   <span class="bp">|</span> <span class="n">A</span><span class="o">,</span> <span class="n">cls</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
       <span class="k">let</span> <span class="o">⟨</span><span class="n">l</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">A.mkDefs</span> <span class="n">defs</span>
       <span class="o">(</span><span class="n">l</span><span class="o">::</span><span class="n">cls</span><span class="o">,</span> <span class="n">defs1</span><span class="o">)</span>
@@ -315,17 +316,17 @@ and the function <cite>NnfForm.toCnf</cite> puts it all together.</p>
   <span class="bp">|</span> <span class="n">conj</span> <span class="n">A</span> <span class="n">B</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
     <span class="k">let</span> <span class="o">⟨</span><span class="n">fA</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">andToCnf</span> <span class="n">A</span> <span class="n">defs</span>
     <span class="k">let</span> <span class="o">⟨</span><span class="n">fB</span><span class="o">,</span> <span class="n">defs2</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">andToCnf</span> <span class="n">B</span> <span class="n">defs1</span>
-    <span class="o">(</span><span class="n">fA.union</span> <span class="n">fB</span><span class="o">,</span> <span class="n">defs2</span><span class="o">)</span>
+    <span class="o">(</span><span class="n">fA.union&#39;</span> <span class="n">fB</span><span class="o">,</span> <span class="n">defs2</span><span class="o">)</span>
   <span class="bp">|</span> <span class="n">A</span><span class="o">,</span> <span class="n">defs</span> <span class="bp">=&gt;</span>
     <span class="k">let</span> <span class="o">⟨</span><span class="n">cls</span><span class="o">,</span> <span class="n">defs1</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">orToCnf</span> <span class="n">A</span> <span class="o">[]</span> <span class="n">defs</span>
     <span class="o">([</span><span class="n">cls</span><span class="o">],</span> <span class="n">defs1</span><span class="o">)</span>
 
 <span class="kd">def</span> <span class="n">toCnf</span> <span class="o">(</span><span class="n">A</span> <span class="o">:</span> <span class="n">NnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
   <span class="k">let</span> <span class="o">⟨</span><span class="n">cnf</span><span class="o">,</span> <span class="n">defs</span><span class="o">⟩</span> <span class="o">:=</span> <span class="n">andToCnf</span> <span class="n">A</span> <span class="bp">#</span><span class="o">[]</span>
-  <span class="n">cnf.union</span> <span class="o">(</span><span class="n">defsImplToCnf</span> <span class="n">defs</span><span class="o">)</span>
+  <span class="n">cnf.union&#39;</span> <span class="o">(</span><span class="n">defsImplToCnf</span> <span class="n">defs</span><span class="o">)</span>
 </pre></div>
 </div>
-<p>The following example tests it out on <cite>ex1.toCnf</cite>.
+<p>The following example tests it out on <code class="docutils literal notranslate"><span class="pre">ex1.toCnf</span></code>.
 The comment afterward shows the resulting CNF formula
 and then reconstructs the definitions to show that the result is equivalent
 to the original formula.</p>
@@ -460,20 +461,20 @@ expensive heuristics are based on <em>lookaheads</em>, that is, assigning a vari
 <p>Consider the following CNF formula:</p>
 <div class="math notranslate nohighlight">
 \[\Gamma_\mathrm{DPLL} :=  (p_1 \lor p_2 \lor \lnot p_3) \land (\lnot p_1 \lor p_2 \lor p_3) \land (\lnot p_1 \lor \lnot p_2 \lor p_3) \land (p_1 \lor p_3) \land (\lnot p_1 \lor \lnot p_3)\]</div>
-<p>Selecting <span class="math notranslate nohighlight">\(p_3\)</span> as decision variable in the root node, results in a DPLL tree with two leaf nodes. However, when selecting <span class="math notranslate nohighlight">\(p_2\)</span> as decision variable in the root node,
+<p>Selecting <span class="math notranslate nohighlight">\(p_3\)</span> as decision variable in the root node results in a DPLL tree with two leaf nodes. However, when selecting <span class="math notranslate nohighlight">\(p_2\)</span> as decision variable in the root node,
 the DPLL tree consists of four leaf nodes. The figure below shows the DPLL trees with green nodes denoting satisfying assignments, while black nodes denote falsifying assignments.</p>
 <blockquote>
 <div><a class="reference internal image-reference" href="_images/dpll.png"><img alt="dpll example" class="align-center" src="_images/dpll.png" style="height: 150px;" /></a>
 </div></blockquote>
 <p>We have implemented a basic version of the DPLL procedure in Lean,
-which can be found in the <cite>Examples</cite> folder.
+which can be found in the <code class="docutils literal notranslate"><span class="pre">Examples</span></code> folder.
 We will start at the top level and work our way down.
-The function <cite>dpllSat</cite> accepts a CNF formula and returns either a satisfying
-assignment or <cite>none</cite> if there aren’t any.
-It calls <cite>propagateUnits</cite> to perform unit propagation,
-and then calls <cite>dpllSatAux</cite> to iteratively pick an unassigned variable
+The function <code class="docutils literal notranslate"><span class="pre">dpllSat</span></code> accepts a CNF formula and returns either a satisfying
+assignment or <code class="docutils literal notranslate"><span class="pre">none</span></code> if there aren’t any.
+It calls <code class="docutils literal notranslate"><span class="pre">propagateUnits</span></code> to perform unit propagation,
+and then calls <code class="docutils literal notranslate"><span class="pre">dpllSatAux</span></code> to iteratively pick an unassigned variable
 and split on that variable.
-We use the keyword <cite>partial</cite> to allow for an arbitrary recursive call.</p>
+We use the keyword <code class="docutils literal notranslate"><span class="pre">partial</span></code> to allow for an arbitrary recursive call.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">dpllSatAux</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span>
     <span class="n">Option</span> <span class="o">(</span><span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:=</span>
   <span class="k">if</span> <span class="n">φ.hasEmpty</span> <span class="k">then</span> <span class="n">none</span>
@@ -498,7 +499,7 @@ We use the keyword <cite>partial</cite> to allow for an arbitrary recursive call
   <span class="o">(</span><span class="n">dpllSatAux</span> <span class="n">τ</span> <span class="n">φ</span><span class="o">)</span><span class="bp">.</span><span class="n">map</span> <span class="k">fun</span> <span class="o">⟨</span><span class="n">τ</span><span class="o">,</span> <span class="n">_</span><span class="o">⟩</span> <span class="bp">=&gt;</span> <span class="n">τ</span>
 </pre></div>
 </div>
-<p>The function <cite>pickSplit?</cite> naively chooses the first variable it finds.
+<p>The function <code class="docutils literal notranslate"><span class="pre">pickSplit?</span></code> naively chooses the first variable it finds.
 It follows the Lean convention of using a question mark for a function that
 returns an element of an option type.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="bp">→</span> <span class="n">Option</span> <span class="n">Lit</span>
@@ -508,7 +509,7 @@ returns an element of an option type.</p>
     <span class="bp">|</span> <span class="n">_</span>       <span class="bp">=&gt;</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="n">cs</span>
 </pre></div>
 </div>
-<p>The function <cite>propagateUnits</cite> performs unit propagation and returns the resulting
+<p>The function <code class="docutils literal notranslate"><span class="pre">propagateUnits</span></code> performs unit propagation and returns the resulting
 formula and the augmented truth assignment.
 As long as there is a unit clause, it simplifies the formula and adds the new
 literal to the assignment.</p>
@@ -527,15 +528,15 @@ literal to the assignment.</p>
       <span class="k">else</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ.withLit</span> <span class="n">x</span><span class="o">)</span> <span class="n">φ&#39;</span>
 </pre></div>
 </div>
-<p>The function <cite>propagateWithNew</cite> is used to peform a split on the literal <cite>x</cite>.
-It assigns the value of <cite>x</cite> and then does unit propagation.</p>
+<p>The function <code class="docutils literal notranslate"><span class="pre">propagateWithNew</span></code> is used to peform a split on the literal <code class="docutils literal notranslate"><span class="pre">x</span></code>.
+It assigns the value of <code class="docutils literal notranslate"><span class="pre">x</span></code> and then does unit propagation.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">propagateWithNew</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span>
     <span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span> <span class="o">:=</span>
   <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ.withLit</span> <span class="n">x</span><span class="o">)</span> <span class="o">(</span><span class="n">simplify</span> <span class="n">x</span> <span class="n">φ</span><span class="o">)</span>
 </pre></div>
 </div>
-<p>Finally, the function <cite>simplify</cite> simplifies a CNF formula by assigning the literal <cite>x</cite>
-to true, assuming <cite>x</cite> is not one of the constants <cite>⊥</cite> or <cite>⊤</cite>.</p>
+<p>Finally, the function <code class="docutils literal notranslate"><span class="pre">simplify</span></code> simplifies a CNF formula by assigning the literal <code class="docutils literal notranslate"><span class="pre">x</span></code>
+to true, assuming <code class="docutils literal notranslate"><span class="pre">x</span></code> is not one of the constants <code class="docutils literal notranslate"><span class="pre">⊥</span></code> or <code class="docutils literal notranslate"><span class="pre">⊤</span></code>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">simplify</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="o">:=</span>
   <span class="n">assert</span><span class="bp">!</span> <span class="n">x</span> <span class="bp">!=</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="bp">⊥</span><span class="o">}</span> <span class="bp">&amp;&amp;</span> <span class="n">x</span> <span class="bp">!=</span> <span class="n">lit</span><span class="bp">!</span><span class="o">{</span><span class="bp">⊤</span><span class="o">}</span>
   <span class="k">match</span> <span class="n">φ</span> <span class="k">with</span>
@@ -625,7 +626,7 @@ more complicated heuristics. Another important design decision for SAT solving a
 determining whether you plan to find a satisfying assignment or prove that none exists. DPLL
 focuses on finding a satisfying assignment by picking the most satisfiable branch first, while
 CDCL, as the name suggests, prefers conflicts and wants to find a short refutation. A
-satisfying assignment is a counterexample to no refutation exists.</p>
+satisfying assignment is a counterexample to the claim that no refutation exists.</p>
 <p>The early development of CDCL is four decades later than DPLL. While DPLL simply backtracks
 when a conflict (leaf node) is reached, CDCL turns this conflict into a conflict clause that is
 added to the formula. The first and arguably most important step towards CDCL is the invention
@@ -636,7 +637,7 @@ solvers.</p>
 most frequently in recently learned conflict clauses. This heuristic, called
 Variable-State Independent Decaying Sum (VSIDS in short), was introduced
 in the zChaff SAT solver by Moskewicz and co-authors (2001). The heuristic
-was been improved over the years, in particular by E'en and S&quot;orensson (2003)
+was been improved over the years, in particular by Eén and Sörensson (2003)
 in their solver MiniSAT. In recent years some other advances have been made as well.
 However, selecting variables in recent conflict clauses is still the foundation.</p>
 <p>Adding clauses to the input formula could significantly increase the cost of unit propagation.
@@ -654,7 +655,7 @@ the solver.</p>
 <p>Another key difference between CDCL and DPLL is that the former restarts very
 frequently. Restarting sounds drastic, but simply means that all variables are
 unassigned. The remainder of the solver state, such as the heuristics and the
-learned clauses, are not altered. Modern SAT solver restart often: say roughly
+learned clauses, are not altered. Modern SAT solver restart often, roughly
 a thousand times per second (although this depends on the size of the formula).
 As a consequence, no binary search tree is constructed. Instead, CDCL might
 be best viewed a conflict-clause generator without any systematic search.</p>
@@ -665,6 +666,19 @@ delete them to reduce the impact on unit propagation. Also, CDCL solvers
 use techniques to rewrite the formula, so called inprocessing techniques.
 In top-tier solvers, about half the runtime can be devoted to such
 techniques.</p>
+</section>
+<section id="exercises">
+<h2><span class="section-number">6.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>Write, in Lean, a predicate <code class="docutils literal notranslate"><span class="pre">isAutarky</span></code> that takes an assignment
+<span class="math notranslate nohighlight">\(\tau\)</span> (of type <code class="docutils literal notranslate"><span class="pre">PropAssignment</span></code>) and a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>
+(of type <code class="docutils literal notranslate"><span class="pre">CnfForm</span></code>) and returns true or false depending on whether <span class="math notranslate nohighlight">\(\tau\)</span>
+is an autarky for <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p></li>
+<li><p>Write in Lean a function <code class="docutils literal notranslate"><span class="pre">getPure</span></code> that takes a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>
+and returns a <code class="docutils literal notranslate"><span class="pre">List</span> <span class="pre">Lit</span></code> of all pure literals in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+The function does not need to find all pure literals on pure literal
+assignment until fixpoint, only the literals the are pure in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p></li>
+</ol>
 </section>
 </section>
 

@@ -56,6 +56,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#resolution">8.3. Resolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#natural-deduction">8.4. Natural deduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#compactness">8.5. Compactness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">8.6. Exercises</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
@@ -171,7 +172,7 @@ and <em>derivation</em> are often used interchangeably.
 The last two are sometimes useful to distinguish formal derivations from
 ordinary (informal) mathematical proofs.</p>
 <section id="axiomatic-systems">
-<h2><span class="section-number">8.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Permalink to this heading"></a></h2>
+<span id="section-axiomatic-systems"></span><h2><span class="section-number">8.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Permalink to this heading"></a></h2>
 <p>Historically, one way of describing a proof system for propositional logic is to give a list
 of axioms, like this one:</p>
 <ol class="arabic simple">
@@ -631,6 +632,51 @@ tiling with tiles from <span class="math notranslate nohighlight">\(S\)</span>. 
 plane with tiles from <span class="math notranslate nohighlight">\(S\)</span>.</p>
 </div>
 <p>You should think about how this follows from the compactness theorem.</p>
+</section>
+<section id="exercises">
+<h2><span class="section-number">8.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Using only axioms 1 and 2 from <a class="reference internal" href="#section-axiomatic-systems"><span class="std std-numref">Section 8.1</span></a>
+and modus ponens, show how to derive <span class="math notranslate nohighlight">\(p \to p\)</span>. (It is surprisingly
+tricky, but you can do it in 5 lines.)</p></li>
+<li><p>Using the cut-free sequent calculus described in <a class="reference internal" href="#section-propositional-sequent-calculus"><span class="std std-numref">Section 8.2</span></a>,
+either construct a proof of the following sequent or use the methods described
+in that section to find a counterexample:</p>
+<div class="math notranslate nohighlight">
+\[((p \lor q) \to r) \lor ((r \to p) \land (r \to q)).\]</div>
+</li>
+<li><p>Give a resolution refutation of the following list of clauses:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(p \lor q \lor \lnot r\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot p \lor \lnot q \lor r\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(q \lor r  \lor \lnot s\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot q \lor \lnot r \lor s\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(p \lor r \lor s\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot p \lor \lnot r \lor \lnot s\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot p \lor q \lor s\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(p \lor \lnot q \lor \lnot s\)</span>.</p></li>
+</ol>
+<p>Present your solution as a list of clauses extending the list of starting
+clauses, so the first one you derive is numbered 9. For each one,
+specify the two clauses that serve as input to the resolution rule by indicating their numbers.
+(There is a solution with 11 additional clauses, for a total of 19.)</p>
+</li>
+<li><p>In <a class="reference internal" href="#section-resolution"><span class="std std-numref">Section 8.3</span></a>, we outline a method for extracting a resolution refutation
+of a set of clauses, <span class="math notranslate nohighlight">\(\Gamma\)</span>, from a failed search.
+The method relies on the following claim:</p>
+<blockquote>
+<div><p>If there are a resolution proof of a clause <span class="math notranslate nohighlight">\(C\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{C}_{\tau[p \mapsto \top]} = \bot\)</span>
+and a resolution proof of a clause <span class="math notranslate nohighlight">\(D\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{D}_{\tau[p \mapsto \bot]} = \bot\)</span>,
+then there is a resolution proof of a clause <span class="math notranslate nohighlight">\(E\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{E}_\tau = \bot\)</span>.</p>
+</div></blockquote>
+<p>Here <span class="math notranslate nohighlight">\(\tau\)</span> is a partial truth assignment and the notation <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> refers to the simplification of the
+clause <span class="math notranslate nohighlight">\(C\)</span> with respect to assignment <span class="math notranslate nohighlight">\(\tau\)</span> that is described in <a class="reference internal" href="decision_procedures_for_propositional_logic.html#section-unit-propagation-and-the-pure-literal-rule"><span class="std std-numref">Section 6.2</span></a>.</p>
+<p>Prove this claim.</p>
+</li>
+</ol>
 </section>
 </section>
 

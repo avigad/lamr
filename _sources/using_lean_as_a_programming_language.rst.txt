@@ -510,8 +510,8 @@ multiplication table.
    :start-after: -- textbook: mulTable
    :end-before: -- end: mulTable
 
-Alternatively, you can use the function `Array.mkArray` to initialize an array
-(in this case, to the values 0), and then use the `Array.set!` function
+Alternatively, you can use the function ``Array.mkArray`` to initialize an array
+(in this case, to the values 0), and then use the ``Array.set!`` function
 to replace the elements later one.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_programming_language/examples4.lean

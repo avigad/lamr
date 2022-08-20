@@ -15,7 +15,7 @@ Syntax
 
 We start with a stock of variables :math:`p_0, p_1, p_2, \ldots`
 that we take to range over propositions, like "the sky is blue"
-or "2 + 2 = 5".
+or "2 + 2 = 5."
 We'll make the interpretation of propositional logic explicit
 in the next section, but, intuitively,
 propositions are things that can be either true or false.
@@ -62,7 +62,7 @@ as follows:
     \mathit{complexity}(A \land B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
     \mathit{complexity}(A \lor B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
     \mathit{complexity}(A \to B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1 \\
-    \mathit{complexity}(A \liff B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1
+    \mathit{complexity}(A \liff B) & = \mathit{complexity}(A) + \mathit{complexity}(B) + 1.
 
 The function :math:`\mathit{complexity}(A)` counts the number of connectives.
 The function :math:`\mathit{depth}(A)`, defined in a similar way, computes the depth of the parse tree.
@@ -76,7 +76,7 @@ The function :math:`\mathit{depth}(A)`, defined in a similar way, computes the d
     \mathit{depth}(A \land B) & = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1 \\
     \mathit{depth}(A \lor B) & = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1 \\
     \mathit{depth}(A \to B) & = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1 \\
-    \mathit{depth}(A \liff B) & = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1
+    \mathit{depth}(A \liff B) & = \max(\mathit{depth}(A), \mathit{depth}(B)) + 1.
 
 Here's an example of a proof by induction:
 
@@ -196,7 +196,7 @@ It is defined recursively as follows:
     \bar v (A \liff B) & =
       \begin{cases}
         \top & \text{if $\bar v(A) = \bar v(B)$} \\
-        \bot & \text{otherwise}
+        \bot & \text{otherwise.}
       \end{cases}
 
 It is common to write :math:`[\![A]\!]_v` instead of :math:`\bar v(A)`.
@@ -221,7 +221,7 @@ If you get the terminology wrong, you'll be frowned upon.
   that satisfies it. A formula :math:`A` is *unsatisfiable* if it is not
   satisfiable.
 
-- A formula :math:`A` is *valid*, or a *tautology* if it is satisfied by *every*
+- A formula :math:`A` is *valid*, or a *tautology*, if it is satisfied by *every*
   truth assignment. In other words, :math:`A` is valid if
   :math:`[\![A]\!]_v = \top` for every truth assignment :math:`v`.
 
@@ -234,7 +234,7 @@ If you get the terminology wrong, you'll be frowned upon.
   truth assignment :math:`v`. Otherwise, it is *unsatisfiable*.
 
 - If :math:`\Gamma` is a set of propositional formulas and :math:`A` is a
-  propositional formula, we say :math:`\Gamma` entails :math:`A` if every
+  propositional formula, we say :math:`\Gamma` *entails* :math:`A` if every
   truth assignment that satisfies :math:`\Gamma` also satisfies :math:`A`.
   Roughly speaking, this says that whenever the formulas in :math:`\Gamma` are
   true, then :math:`A` is also true. In this case, :math:`A` is also said to be
@@ -294,7 +294,7 @@ Here are some of them:
 -  :math:`A \land (B \lor C) \equiv (A \land B) \lor (A \land C)`
 -  :math:`A \lor (B \land C) \equiv (A \lor B) \land (A \lor C)`
 -  :math:`A \land (A \lor B) \equiv A`
--  :math:`A \lor (A \land B) \equiv A`
+-  :math:`A \lor (A \land B) \equiv A`.
 
 The equivalences :math:`\lnot(A \land B) \equiv \lnot A \lor \lnot B` and
 :math:`\lnot(A \lor B) \equiv \lnot A \land \lnot B` are known as *De Morgan's laws*.
@@ -344,7 +344,7 @@ with :math:`\lnot`, :math:`\lor`, and :math:`\bot` alone:
     A \land B & \equiv \lnot (\lnot A \lor \lnot B) \\
     A \to B & \equiv \lnot A \lor B \\
     A \liff B & \equiv (A \to B) \land (B \to A) \\
-    \top & \equiv \lnot \bot
+    \top & \equiv \lnot \bot.
 
 We can even define :math:`\bot` as :math:`P \land \lnot P` for
 any propositional variable :math:`P`,
@@ -373,13 +373,13 @@ It is now straightforward to show that a certain set of connectives is
 complete: just show how to define :math:`\lor` and :math:`\lnot` in terms of them.
 Showing that a set of connectives is *not* complete typically requires some
 more ingenuity. One idea, as suggested in :numref:`section_invariants`,
-is to look for some invariant property of the formulas that *are* represented.
+is to look for some invariant property of the formulas that *are* represented. Here is an example.
 
-.. admonition: Proposition
+.. admonition:: Proposition
 
     :math:`\{ \liff \}` is not a complete set of connectives.
 
-.. admonition: Proof
+.. admonition:: Proof
 
     Show by induction on propositional formulas that any formula involving
     only :math:`\liff` and a single variable :math:`p` and the constant
@@ -454,7 +454,7 @@ of literals, in other words, if it can be written as a big "and" of "or" express
 
 .. math::
 
-  \bigwedge_{i < n} \left( \bigvee_{j < m_i} \pm \ell_j \right).
+  \bigwedge_{i < n} \left( \bigvee_{j < m_i} \ell_j \right)
 
 where each :math:`\ell_j` is a literal. Here is an example:
 
@@ -471,7 +471,7 @@ Dually, a formula is in disjunctive normal form if it is an "or" and "and" expre
 
 .. math::
 
-  \bigvee_{i < n} \left( \bigwedge_{j < m_i} \pm \ell_j \right).
+  \bigvee_{i < n} \left( \bigwedge_{j < m_i} \ell_j \right).
 
 If you switch :math:`\land` and :math:`\lor` in the previous example, you have a
 formula in disjunctive normal form.
@@ -556,6 +556,34 @@ Exercises
 
 #. Prove that :math:`A` and :math:`B` are logically equivalent if and only if
    the formula :math:`A \liff B` is valid.
+
+#. Using the definition of substitution for propositional formulas
+   in :numref:`section_syntax_propositional_logic`,
+   If :math:`\tau` is any truth assignment, :math:`p` is any variable,
+   and :math:`b` is a truth value, then :math:`\tau[p \mapsto b]` is
+   the function defined
+
+   .. math::
+
+      (\tau[p \mapsto b])(q) =
+          \begin{cases}
+              b & \text{if $q$ is $p$} \\
+              \tau(q) & \text{otherwise}
+          \end{cases}
+
+   In other words, :math:`\tau[p \mapsto b]`` is the (possible)
+   modification of :math:`\tau` that maps :math:`p` to
+   :math:`b`` and leaves the rest of the assignment the same.
+
+   Prove that for any :math:`A`, :math:`B`, :math:`p`, and :math:`\tau`,
+
+   .. math::
+
+      \tval{A[B/p]}_\tau = \tval{A}_{\tau[p \mapsto \tval{B}_\tau]}.
+
+   In other words, we can evaluate :math:`A[B/p]` at :math:`\tau`
+   by evaluating :math:`B` at :math:`\tau` and then evaluating
+   :math:`A` with :math:`p` replaced by that result.
 
 #. Use algebraic calculations to show that all of the following are tautologies:
 

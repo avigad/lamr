@@ -59,34 +59,34 @@ use them to build more complicated propositions.
    :start-after: -- textbook: Prop
    :end-before: -- end textbook
 
-Hovering over the symbols will give you options for typing them. Using `\\and`, `\\or`, `\\to`,
-`\\iff`, and `\\not` will work.
+Hovering over the symbols will give you options for typing them. Using ``\\and``, ``\\or``, ``\\to``,
+``\\iff``, and ``\\not`` will work.
 
-In Lean, if `p` has type `Prop`, then a term `t` of type `p` is a proof of `p`.
+In Lean, if ``p`` has type ``Prop``, then a term ``t`` of type ``p`` is a proof of ``p``.
 Lean's proof language is essentially the same as its programming language, which means that
 we can write proofs the same way we write programs.
-Instead of using the identifier `def`, it is conventional to use the word `theorem`
+Instead of using the identifier ``def``, it is conventional to use the word ``theorem``
 to name the proof of a proposition.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: proof terms
    :end-before: -- end textbook
 
-The expression after the `:=` is sometimes called a *proof term*.
+The expression after the ``:=`` is sometimes called a *proof term*.
 
 You can read more about writing proof terms in
 `Theorem Proving in Lean 4 <https://leanprover.github.io/theorem_proving_in_lean4/>`_.
 In this chapter, we will describe an alternative method of writing proofs, using *tactics*.
 A tactic proof is essentially a piece of metacode, a list of instructions that tells
-Lean how to construct the proof term. In Lean, we enter tactic mode with the keyword `by`.
+Lean how to construct the proof term. In Lean, we enter tactic mode with the keyword ``by``.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: id proof
    :end-before: -- end textbook
 
-Here the keyword `example` simply introduces an unnamed theorem (or definition).
-The `intro` tactic introduces the hypothesis and names it `h`.
-If you put the cursor on that line and check the `Lean infoview` in the editor,
+Here the keyword ``example`` simply introduces an unnamed theorem (or definition).
+The ``intro`` tactic introduces the hypothesis and names it ``h``.
+If you put the cursor on that line and check the ``Lean infoview`` in the editor,
 you will see the current state of the proof, that looks like this:
 
 .. code-block::
@@ -96,54 +96,54 @@ you will see the current state of the proof, that looks like this:
   ⊢ p
 
 Think of this as a *sequent*, as described in the last chapter:
-it expresses that the current goal is to prove `p`,
-using the assumption `h : p`.
+it expresses that the current goal is to prove ``p``,
+using the assumption ``h : p``.
 In contrast to the sequent calculus we considered for natural deduction,
-here the hypothesis that `p` holds is labeled with the identifier `h`.
+here the hypothesis that ``p`` holds is labeled with the identifier ``h``.
 You can use any identifier as a label.
 Also, in contrast with the sequent calculus for natural deduction,
-the variables `p`, `q`, `r`, and `s` are included, together with their type.
+the variables ``p``, ``q``, ``r``, and ``s`` are included, together with their type.
 Later on we will see that other kinds of data, like natural numbers,
 can be included as variables in the context.
-Notice also that in Lean, hypotheses like `α : Type`, `p : Prop`, `n : Nat`, and
-`h : p` are all possible, so the context can include variables ranging over data types,
+Notice also that in Lean, hypotheses like ``α : Type``, ``p : Prop``, ``n : Nat``, and
+``h : p`` are all possible, so the context can include variables ranging over data types,
 propositions, elements of the data types, and proofs (or assumptions) that the propositions hold.
 
-In `intro` tactic implements the implication introduction rule of the natural deduction calculus.
-The `apply` tactic in the proof applies the hypothesis `h` to solve the goal.
-In this case, since `h` solves the goal exactly, we could write `exact h` instead.
-We could also write `assumption`, which tells Lean to look for any assumption in the
+In ``intro`` tactic implements the implication introduction rule of the natural deduction calculus.
+The ``apply`` tactic in the proof applies the hypothesis ``h`` to solve the goal.
+In this case, since ``h`` solves the goal exactly, we could write ``exact h`` instead.
+We could also write ``assumption``, which tells Lean to look for any assumption in the
 context that solves the goal.
 This corresponds to the assumption rule in the natural deduction calculus.
 
-The `apply` tactic can also be used to apply an implication.
+The ``apply`` tactic can also be used to apply an implication.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: apply
    :end-before: -- end textbook
 
-In this example, applying `p → q` to the goal reduces the task of
-proving `q` to the task of proving `p`.
+In this example, applying ``p → q`` to the goal reduces the task of
+proving ``q`` to the task of proving ``p``.
 Lean also provides a means of reasoning forward from hypotheses,
-using the `have` tactic:
+using the ``have`` tactic:
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: have
    :end-before: -- end textbook
 
 Here the first line of the proof states an intermediate goal of proving
-`q`, which is achieved by applying `h1` to `h2`.
-The result is named `h3`, which we can then use in the next line.
-We can leave out the information that `h3` is a proof of `q`,
+``q``, which is achieved by applying ``h1`` to ``h2``.
+The result is named ``h3``, which we can then use in the next line.
+We can leave out the information that ``h3`` is a proof of ``q``,
 because Lean can figure that out:
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: have again
    :end-before: -- end textbook
 
-Defining `h3` to be `h1 h2` and then applying it is just the same
-as using `exact h1 h2` directly to solve the goal, and that, in turn,
-amounts to constructing the proof `h1 h2`.
+Defining ``h3`` to be ``h1 h2`` and then applying it is just the same
+as using ``exact h1 h2`` directly to solve the goal, and that, in turn,
+amounts to constructing the proof ``h1 h2``.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: application
@@ -153,17 +153,17 @@ amounts to constructing the proof `h1 h2`.
 Conjunction
 -----------
 
-There is a theorem in the library called `And.intro` that encodes the and-introduction
-rule in the natural deduction calculus, telling us that we can prove `p ∧ q` by proving
-each of `p` and `q` in turn.
+There is a theorem in the library called ``And.intro`` that encodes the and-introduction
+rule in the natural deduction calculus, telling us that we can prove ``p ∧ q`` by proving
+each of ``p`` and ``q`` in turn.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: and example
    :end-before: -- end textbook
 
-After applying `And.intro`, the goal is split into two goals, one which requires
-us to prove `p`, and the other which requires us to prove `q`.
-Each of these is accomplished with the `exact` tactic.
+After applying ``And.intro``, the goal is split into two goals, one which requires
+us to prove ``p``, and the other which requires us to prove ``q``.
+Each of these is accomplished with the ``exact`` tactic.
 As you step through the proof, you can see the state change.
 The periods in each case serve to *focus* on the next goal, so that only that goal
 is visible in that part of the proof.
@@ -171,93 +171,93 @@ Strictly speaking, they are not necessary; try deleting them to confirm that the
 still goes through.
 Still, they provide a nice way of making the structure of the proof manifest,
 and this, in turn, results in more robust proof scripts.
-The `#print` statement shows that the tactics have the effect of constructing a proof term.
+The ``#print`` statement shows that the tactics have the effect of constructing a proof term.
 The subsequent example provides the proof term explicitly.
-In fact, the term makes it clear that introducing `hp` and `hq` and then applying
-`And.intro` is an unnecessary detour. The theorem we have proved is exactly `And.intro`.
+In fact, the term makes it clear that introducing ``hp`` and ``hq`` and then applying
+``And.intro`` is an unnecessary detour. The theorem we have proved is exactly ``And.intro``.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: and intro
    :end-before: -- end textbook
 
 At this point, there are two tricks that are worth mentioning.
-First, at any point in a proof, you can solve the current goal with the `admit` tactic.
-You can prove any theorem at all using `admit`.
+First, at any point in a proof, you can solve the current goal with the ``admit`` tactic.
+You can prove any theorem at all using ``admit``.
 It's cheating, and the squiggly line the editor puts underneath the word tells you as much.
 But it is often a useful device when writing proofs, because it means you can temporarily
 close a goal to work on others, and then come back to it.
 
-The other trick is to use the `done` tactic. The `done` tactic doesn't do anything;
+The other trick is to use the ``done`` tactic. The ``done`` tactic doesn't do anything;
 it just declares that the proof is over.
 If the proof isn't over, Lean gives you an error message, and the error message tells you
 exactly the remaining goals.
 So this gives you a way to mark the end of a proof in progress, so that you can easily
 monitor what is left to be done.
 
-The natural way to *use* a conjunction `h : p ∧ q` in a hypothesis is to split it
-to the hypotheses `hp : p` and `hq : q`.
+The natural way to *use* a conjunction ``h : p ∧ q`` in a hypothesis is to split it
+to the hypotheses ``hp : p`` and ``hq : q``.
 This rule is commonly used in sequent calculi.
 There are various ways to do it.
-One is to use a destructuring `have`:
+One is to use a destructuring ``have``:
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: another and proof
    :end-before: -- end textbook
 
 Here the angle brackets are Lean's *anonymous constructor* notation.
-You can type them with `\\<` and `\\>`.
-In this case, the `have` command tells Lean to match against
+You can type them with ``\\<`` and ``\\>``.
+In this case, the ``have`` command tells Lean to match against
 whatever constructor matches the proposition,
-in this case, `And.intro`.
-Another option is to use the `cases` tactic, which matches the cases against the constructor:
+in this case, ``And.intro``.
+Another option is to use the ``cases`` tactic, which matches the cases against the constructor:
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: and proof with cases
    :end-before: -- end textbook
 
 These are two slightly different formulations of the same proof.
-Notice that in the second variation we drop the keyword `with`
-and use the `case` tactic instead of the vertical bar.
+Notice that in the second variation we drop the keyword ``with``
+and use the ``case`` tactic instead of the vertical bar.
 
-Here are some examples of using the pattern-matching `have` with
+Here are some examples of using the pattern-matching ``have`` with
 the ordinary one.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: have
    :end-before: -- end textbook
 
-In the first example, the second `have` claims an auxiliary statement, `r`,
-and proves it with the term `h2 hq`.
+In the first example, the second ``have`` claims an auxiliary statement, ``r``,
+and proves it with the term ``h2 hq``.
 The third example shows that we can also prove the intermediate claim in tactic mode,
-using the keyword `by`.
+using the keyword ``by``.
 
-The `have` statement is similar to a `let` statement that we have already seen when
+The ``have`` statement is similar to a ``let`` statement that we have already seen when
 we used Lean as a programming language.
-In fact, using a `let` also works:
+In fact, using a ``let`` also works:
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: have and let
    :end-before: -- end textbook
 
-With both `have` and `let`, we can take the proofs to
-abbreviate the result of substituting the proof of `r` where we used `hr`,
+With both ``have`` and ``let``, we can take the proofs to
+abbreviate the result of substituting the proof of ``r`` where we used ``hr``,
 as in the last example above.
-There is a subtle difference between `have` and `let`: while the
-data in the `let` statement is available in the body of the statement after the `let`,
-a `have` only records the existence of an expression of the corresponding type.
-When we use a `have`, typically we only care that the corresponding fact has been proved,
+There is a subtle difference between ``have`` and ``let``: while the
+data in the ``let`` statement is available in the body of the statement after the ``let``,
+a ``have`` only records the existence of an expression of the corresponding type.
+When we use a ``have``, typically we only care that the corresponding fact has been proved,
 and the specifics of the proof are irrelevant. For that reason,
-`have` is more appropriate for proofs.
+``have`` is more appropriate for proofs.
 
 
 Disjunction
 -----------
 
-The theorem `Or.inr` in the library corresponds to the
-right introduction rule, which proves `p ∨ q` from `p`.
-The left introduction rule is given by `Or.inl`.
+The theorem ``Or.inr`` in the library corresponds to the
+right introduction rule, which proves ``p ∨ q`` from ``p``.
+The left introduction rule is given by ``Or.inl``.
 We can carry out a proof by cases
-using either the theorem `Or.elim` or the `cases` tactic.
+using either the theorem ``Or.elim`` or the ``cases`` tactic.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: or proofs
@@ -271,35 +271,35 @@ casing on a disjunction results in two new goals, each with one new hypothesis.
 Negation
 --------
 
-In Lean, `¬ p` is defined to be `p → False`. For most purposes, the two
-expressions are interchangeable. This means that you can prove `¬ p`
-by assuming `p` and deriving `False`, and if you have `hp : p` and `hnp : ¬ p`,
-then the result `hnp hp` of applying the first to the second is a proof of `False`.
+In Lean, ``¬ p`` is defined to be ``p → False``. For most purposes, the two
+expressions are interchangeable. This means that you can prove ``¬ p``
+by assuming ``p`` and deriving ``False``, and if you have ``hp : p`` and ``hnp : ¬ p``,
+then the result ``hnp hp`` of applying the first to the second is a proof of ``False``.
 The following illustrates these ideas in action.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: negation
    :end-before: -- end textbook
 
-Here, `intro hnp hp` is equivalent to writing `intro hnp` followed by `intro hp`.
+Here, ``intro hnp hp`` is equivalent to writing ``intro hnp`` followed by ``intro hp``.
 Lean provides other means of dealing with negations.
-For example, the `contradiction` tactic finishes off a goal whenever the context
+For example, the ``contradiction`` tactic finishes off a goal whenever the context
 contains a statement and its negation.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: contradiction
    :end-before: -- end textbook
 
-In a similar way, the theorem `absurd` shows that anything follows from a statement and
+In a similar way, the theorem ``absurd`` shows that anything follows from a statement and
 its negation. The first and second examples below are really the same:
-writing `by exact t` simply constructs the proof `t`.
+writing ``by exact t`` simply constructs the proof ``t``.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: absurd
    :end-before: -- end textbook
 
-The `contradiction` tactic also works if the context contains `False`.
-Alternatively, casing on `h : False` finishes off a proof.
+The ``contradiction`` tactic also works if the context contains ``False``.
+Alternatively, casing on ``h : False`` finishes off a proof.
 Intuitively, there are no cases!
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
@@ -309,7 +309,7 @@ Intuitively, there are no cases!
 The principles we have used before all fall within what is known as
 *intuitionistic* logic. Many mathematical arguments require *classical* logic,
 which is embodied in the *law of the excluded middle*.
-In Lean, if `p` is a proposition, `em p` is the principal `p ∨ ¬ p`.
+In Lean, if ``p`` is a proposition, ``em p`` is the principal ``p ∨ ¬ p``.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
    :start-after: -- textbook: excluded middle
@@ -341,10 +341,58 @@ as in the following examples.
 
 You should think about these examples and how they work.
 One strategy for learning how to write proof terms is to name
-the theorems that you prove with tactics, and then use the `#print`
+the theorems that you prove with tactics, and then use the ``#print``
 command to print them out.
 
 
+Exercises
+---------
 
+Complete the following proofs in Lean.
 
+.. code-block:: lean
 
+   import Init
+
+   variable (p q r s : Prop)
+
+   example : p ∧ q ∧ (p → r) → r := by
+   admit
+
+   example : (p → q) ∧ (q → r) → p → r := by
+   admit
+
+   example (h : p → q) (h1 : p ∧ r) : q ∧ r := by
+   admit
+
+   example (h : ¬ (p ∧ q)) : p → ¬ q := by
+   admit
+
+   example (h : ¬ (p → q)) : ¬ q := by
+   admit
+
+   example (h : p ∧ ¬ q) : ¬ (p → q) := by
+   admit
+
+   example (h1 : p ∨ q) (h2 : p → r) : r ∨ q := by
+   admit
+
+   example (h1 : p ∨ q → r) : (p → r) ∧ (q → r) := by
+   admit
+
+   example (h1 : p → r) (h2 : q → r) : p ∨ q → r := by
+   admit
+
+   example (h : ¬ (p ∨ q)) : ¬ p ∧ ¬ q := by
+   admit
+
+   example (h : ¬ p ∧ ¬ q) : ¬ (p ∨ q) := by
+   admit
+
+   -- this one requires classical logic!
+   example (h : ¬ (p ∧ q)) : ¬ p ∨ ¬ q := by
+   admit
+
+   -- this one too
+   example (h : p → q) : ¬ p ∨ q := by
+   admit

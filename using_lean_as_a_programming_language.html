@@ -666,8 +666,8 @@ multiplication table.</p>
 <span class="k">#eval</span> <span class="n">mulTable</span>
 </pre></div>
 </div>
-<p>Alternatively, you can use the function <cite>Array.mkArray</cite> to initialize an array
-(in this case, to the values 0), and then use the <cite>Array.set!</cite> function
+<p>Alternatively, you can use the function <code class="docutils literal notranslate"><span class="pre">Array.mkArray</span></code> to initialize an array
+(in this case, to the values 0), and then use the <code class="docutils literal notranslate"><span class="pre">Array.set!</span></code> function
 to replace the elements later one.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable&#39;</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
   <span class="k">let</span> <span class="n">mut</span> <span class="n">s</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">mkArray</span> <span class="mi">10</span> <span class="o">(</span><span class="n">mkArray</span> <span class="mi">10</span> <span class="mi">0</span><span class="o">)</span>
