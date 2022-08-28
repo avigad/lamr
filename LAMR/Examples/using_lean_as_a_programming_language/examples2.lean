@@ -8,7 +8,7 @@ def bar n := foo (foo n) + 3
 
 #eval bar 3
 #eval bar (bar 3)
--- end textbook: defining functions
+-- end: defining functions
 
 -- textbook: hello world
 def printExample : IO Unit:= do
@@ -16,7 +16,7 @@ def printExample : IO Unit:= do
   IO.println "world"
 
 #eval printExample
--- end textbook: hello world
+-- end: hello world
 
 
 -- textbook: factorial
@@ -26,7 +26,7 @@ def factorial : Nat → Nat
 
 #eval factorial 10
 #eval factorial 100
--- end textbook: factorial
+-- end: factorial
 
 
 -- textbook: hanoi
@@ -39,7 +39,7 @@ def hanoi (numPegs start finish aux : Nat) : IO Unit :=
       hanoi n aux finish start
 
 #eval hanoi 7 1 2 3
--- end textbook: hanoi
+-- end: hanoi
 
 
 -- textbook: recursion on lists
@@ -48,7 +48,7 @@ def addNums : List Nat → Nat
   | a::as => a + addNums as
 
 #eval addNums [0, 1, 2, 3, 4, 5, 6]
--- end textbook: recursion on lists
+-- end: recursion on lists
 
 
 -- textbook: list functions
@@ -63,13 +63,13 @@ open List
 #eval foldl (. + .) 0 $ range 7
 
 end
--- end textbook: list functions
+-- end: list functions
 
 
 -- textbook: projection notation
 def myRange := List.range 7
 #eval myRange.map fun x => x + 3
--- end textbook: projection notation
+-- end: projection notation
 
 
 -- textbook: reverse and append
@@ -86,7 +86,7 @@ protected def append (as bs : List α) : List α :=
   reverseAux as.reverse bs
 
 end hidden
--- end textbook: reverse and append
+-- end: reverse and append
 
 
 -- textbook: gcd
@@ -95,12 +95,12 @@ partial def gcd m n :=
 
 #eval gcd 45 30
 #eval gcd 37252 49824
--- end textbook: gcd
+-- end: gcd
 
 
 -- textbook: bad definition
 partial def bad (n : Nat) : Nat := bad (n + 1)
--- end textbook: bad definition
+-- end: bad definition
 
 
 -- textbook: inefficient Fibonacci
@@ -108,7 +108,7 @@ def fib' : Nat → Nat
   | 0 => 0
   | 1 => 1
   | n + 2 => fib' (n + 1) + fib' n
--- end textbook: inefficient Fibonacci
+-- end: inefficient Fibonacci
 
 
 -- textbook: efficient Fibonacci
@@ -120,4 +120,4 @@ def fibAux : Nat → Nat × Nat
 def fib n := (fibAux n).1
 
 #eval (List.range 20).map fib
--- end textbook: efficient Fibonacci
+-- end: efficient Fibonacci

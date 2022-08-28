@@ -9,7 +9,7 @@
 #check true
 #check fun x => x + 1
 #check fun x => if x = 1 then "yes" else "no"
--- end textbook: expressions
+-- end: expressions
 
 
 -- textbook: types
@@ -22,13 +22,13 @@
 #check Bool
 #check Nat → Nat
 #check Nat → String
--- end textbook: types
+-- end: types
 
 
 -- textbook: asserting types
 #check (2 + 2 : Nat)
 #check ([1, 2, 3] : List Nat)
--- end textbook: asserting types
+-- end: asserting types
 
 
 -- textbook: some definitions
@@ -41,26 +41,26 @@ def isOne (x : Nat) : String := if x = 1 then "yes" else "no"
 
 #check isOne
 #print isOne
--- end textbook: some definitions
+-- end: some definitions
 
 
 -- textbook: definitions without type ascriptions
 def four' := 2 + 2
 
 def isOne' x := if x = 1 then "yes" else "no"
--- end textbook: definitions without type ascriptions
+-- end: definitions without type ascriptions
 
 
 -- textbook: evaluating expressions
 #eval four
 #eval isOne 3
 #eval isOne 1
--- end textbook: evaluating expressions
+-- end: evaluating expressions
 
 
 -- textbook: using IO
 #eval IO.println "Hello, world!"
--- end textbook: using IO
+-- end: using IO
 
 
 
@@ -69,22 +69,20 @@ def isOne' x := if x = 1 then "yes" else "no"
 #check 2 + 2 < 5
 #check isOne 3 = "no"
 #check 2 + 2 < 5 ∧ isOne 3 = "no"
--- end textbook: some propositions
+-- end: some propositions
 
 
 -- textbook: Fermat's last theorem
 def Fermat_statement : Prop :=
 ∀ a b c n : Nat, a * b * c ≠ 0 ∧ n > 2 → a^n + b^n ≠ c^n
--- end textbook: Fermat's last theorem
-
+-- end: Fermat's last theorem
 
 -- textbook: an easy proof
 theorem two_plus_two_is_four : 2 + 2 = 4 := rfl
--- end textbook: an easy proof
-
+-- end: an easy proof
 
 -- textbook: harder to prove
 theorem Fermat_last_theorem : Fermat_statement := sorry
--- end textbook: harder to prove
+-- end: harder to prove
 
 

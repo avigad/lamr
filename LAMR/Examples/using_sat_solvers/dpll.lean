@@ -30,7 +30,7 @@ def simplify (x : Lit) (φ : CnfForm) : CnfForm :=
                else c.eraseAll x.negate :: cs'
 
 #eval toString <| simplify lit!{p} cnf!{p -q p -p, p, q q, -q -p, -p}
--- end textbook: simplify
+-- end: simplify
 
 /-- Returns `true` iff the CNF contains an empty clause. -/
 def CnfForm.hasEmpty : CnfForm → Bool
@@ -63,14 +63,14 @@ partial def propagateUnits (τ : PropAssignment) (φ : CnfForm) : PropAssignment
       if τ.mem x.name
       then panic! s!"'{x}' has already been assigned and should not appear in the formula."
       else propagateUnits (τ.withLit x) φ'
--- end textbook: propagateUnits
+-- end: propagateUnits
 
 /-- Assign (previously unassigned) `x` to true and peform unit propagation. -/
 -- textbook: propagateWithNew
 def propagateWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) :
     PropAssignment × CnfForm :=
   propagateUnits (τ.withLit x) (simplify x φ)
--- end textbook: propagateWithNew
+-- end: propagateWithNew
 
 #eval toString <| propagateUnits [] cnf!{p, q, q -q}
 #eval toString <| propagateUnits [] cnf!{p, q, -q -q}
@@ -85,7 +85,7 @@ def pickSplit? : CnfForm → Option Lit
   | c :: cs => match c with
     | x :: xs => x
     | _       => pickSplit? cs
--- end textbook: pickSplit?
+-- end: pickSplit?
 
 -- textbook: dpllSat
 partial def dpllSatAux (τ : PropAssignment) (φ : CnfForm) :
@@ -110,7 +110,7 @@ where
 def dpllSat (φ : CnfForm) : Option PropAssignment :=
   let ⟨τ, φ⟩ := propagateUnits [] φ
   (dpllSatAux τ φ).map fun ⟨τ, _⟩ => τ
--- end textbook: dpllSat
+-- end: dpllSat
 
 namespace hidden
 
@@ -141,9 +141,9 @@ def readDimacs (fname : String) : IO CnfForm := do
   let lns ← IO.FS.lines fname
   let lns := lns.filter (fun ln => ln ≠ "" ∧ ln.front ≠ 'c')
   let header := (lns.get! 0).splitOn' " "
-  let ["p", "cnf", n, m] ← header
+  let ["p", "cnf", n, m] ← .ok header
     | throw <| IO.userError "Invalid DIMACS header."
-  let (some nVars, some nClauses) ← (n.toNat?, m.toNat?)
+  let (some nVars, some nClauses) ← .ok (n.toNat?, m.toNat?)
     | throw <| IO.userError "Invalid var/clause count in header."
 
   let lns := lns.extract 1 lns.size

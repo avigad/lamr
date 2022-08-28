@@ -240,7 +240,7 @@ example : ¬ ¬ p → p := by
 
 -- textbook: iff
 example (h1 : p ↔ q) (h2 : p) : q := by
-  have ⟨h3, h4⟩ := h1
+  have ⟨h3, _⟩ := h1
   apply h3
   exact h2
 

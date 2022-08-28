@@ -33,7 +33,7 @@ partial def decodeDrat (bs : ByteArray) : Except String Proof :=
   go 0 [] |>.map List.reverse
 where
   go (off : Nat) (acc : List Step) : Except String (List Step) :=
-    if off == bs.size then acc
+    if off == bs.size then .ok acc
     else
       let b := bs.get! off
       if b == 0x61 then do -- 'a', add clause
@@ -47,7 +47,7 @@ where
   goAdd (off : Nat) (acc : List Step) (accC : List Int) : Except String (List Step × Nat) :=
     let b := bs.get! off
     if b == 0 then -- last byte in clause
-      (Step.add accC.reverse :: acc, off + 1)
+      .ok (Step.add accC.reverse :: acc, off + 1)
     else
       let (v, off') := decodeUIntVarByte bs (off + 1)
       let v := UIntToLit v
@@ -55,10 +55,10 @@ where
   goDel (off : Nat) (acc : List Step) (accC : List Int) : Except String (List Step × Nat) :=
     let b := bs.get! off
     if b == 0 then
-      (Step.delete accC.reverse :: acc, off + 1)
+      .ok (Step.delete accC.reverse :: acc, off + 1)
     else
       let (v, off') := decodeUIntVarByte bs (off + 1)
-      let v := UIntToLit v 
+      let v := UIntToLit v
       goDel off' acc (v :: accC)
 
 end DRAT

@@ -20,11 +20,11 @@ instance [Inhabited α] : Coe (AssocList String (List α → α)) (FnInterp α) 
 def arithFnInterp : FnInterp Nat
   | "plus"  => fun l => l.getA 0 + l.getA 1
   | "times" => fun l => l.getA 0 * l.getA 1
-  | "zero"  => fun l => 0
-  | "one"   => fun l => 1
-  | "two"   => fun l => 2
-  | "three" => fun l => 3
-  | _       => fun l => arbitrary
+  | "zero"  => fun _ => 0
+  | "one"   => fun _ => 1
+  | "two"   => fun _ => 2
+  | "three" => fun _ => 3
+  | _       => fun _ => default
 -- end
 
 -- textbook: arithFnInterp'
@@ -32,10 +32,10 @@ def arithFnInterp' : FnInterp Nat :=
 assign!{
   plus ↦ fun l : List Nat => l.getA 0 + l.getA 1,
   times ↦ fun l => l.getA 0 * l.getA 1,
-  zero ↦ fun l => 0,
-  one ↦ fun l => 1,
-  two ↦ fun l => 2,
-  three ↦ fun l => 3 }
+  zero ↦ fun _ => 0,
+  one ↦ fun _ => 1,
+  two ↦ fun _ => 2,
+  three ↦ fun _ => 3 }
 -- end
 
 namespace FOTerm
@@ -142,7 +142,7 @@ def babyArithMdl : FOModel Nat where
             lt ↦ fun l : List Nat => if l.getA 0 < l.getA 1 then true else false,
             even ↦ fun l : List Nat => l.getA 0 % 2 == 0 }
 
-def trivAssignment : FOAssignment Nat := fun x => 0
+def trivAssignment : FOAssignment Nat := fun _ => 0
 -- end
 
 -- don't forget the % in front of variables!

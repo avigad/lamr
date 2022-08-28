@@ -110,7 +110,7 @@ where
       match ln.splitOn " " with
       | "v" :: litSs => do
         let (done, lits) ← goLits acc litSs
-        if done then lits
+        if done then .ok lits
         else go lits lns
       | _ => go acc lns
     | [] =>
@@ -121,12 +121,12 @@ where
   -- called on every literal in a line
   goLits (acc : List Lit) : List String → Except String (Bool × List Lit)
     | litS :: litSs =>
-      if litS == "0" then (true, acc) -- model ends at "0"
+      if litS == "0" then .ok (true, acc) -- model ends at "0"
       else do
-        let some lit ← String.toLit h litS
+        let some lit ← .ok <| String.toLit h litS
           | throw s!"expected literal, got '{litS}'"
         goLits (lit :: acc) litSs
-    | [] => (false, acc)
+    | [] => .ok (false, acc)
 
 def formatResult : SatResult → String
 | Sat ls => "Satisfying assignment : " ++ toString ls
@@ -174,7 +174,7 @@ def clausify (h : NSH) : Clause → List Nat → Option CnfForm
   match clausify h [] ns with
   | some m => some (c.reverse :: m)
   | none => none
-| c, n :: ns => do
+| c, n :: ns => Id.run do
   match natToLit h n with
   | some l => clausify h (l :: c) ns
   | none => none
@@ -185,9 +185,9 @@ See http://www.satcompetition.org/2004/format-solvers2004.html -/
 private def parseSatOutputAux (h : NSH) : List String → Except String (Option (List Lit))
   | ("s SATISFIABLE" :: lns) => do
     let lits ← parseModel h lns
-    some lits
-  | ("s UNSATISFIABLE" :: lns) => none
-  | ("s UNKNOWN" :: lns) =>
+    .ok <| some lits
+  | ("s UNSATISFIABLE" :: _) => .ok <| none
+  | ("s UNKNOWN" :: _) =>
     throw "solver returned 'UNKNOWN' satisfiability"
   | _ :: lns => parseSatOutputAux h lns
   | [] => throw "expected satisfiability status, saw none"
@@ -196,7 +196,7 @@ def parseSatOutput (h : NSH) (ss : List String) : IO SatResult :=
   match parseSatOutputAux h ss with
   | Except.error e =>
     throw <| IO.userError <| s!"{e}; CaDiCaL output:\n" ++ "\n".intercalate ss
-  | Except.ok (some lits) => SatResult.Sat lits
+  | Except.ok (some lits) => .ok <| SatResult.Sat lits
   | Except.ok none => do
     -- TODO(WN): convert DRAT ints to `Lit`s via NSH;
     -- also the DRAT decoder is slow and buggy
@@ -205,9 +205,9 @@ def parseSatOutput (h : NSH) (ss : List String) : IO SatResult :=
     -- match DRAT.decodeDrat bs with
 
 def callCadical (cnf : CnfForm) : IO (String × SatResult) := do
-  let (sn, ns, cnfs) ← CnfForm.toDimacs cnf
+  let (_, ns, cnfs) ← .ok <| CnfForm.toDimacs cnf
   IO.FS.writeFile "LAMR/bin/temp.cnf" cnfs
   let s ← run' runCadical
-  let ss ← String.splitOn s "\n"
+  let ss := String.splitOn s "\n"
   let rst ← parseSatOutput ns ss
   pure (s, rst)

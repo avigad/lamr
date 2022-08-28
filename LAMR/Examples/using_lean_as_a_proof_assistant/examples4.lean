@@ -14,7 +14,7 @@ variable (a b c : α)
 example : [] ++ as = as := nil_append as
 
 example : (a :: as) ++ bs = a :: (as ++ bs) := cons_append a as bs
--- end textbook: List
+-- end: List
 
 
 -- textbook: append_nil'
@@ -22,7 +22,7 @@ theorem append_nil' : as ++ [] = as := by
   induction as with
   | nil => rw [nil_append]
   | cons a as ih => rw [cons_append, ih]
--- end textbook: append_nil'
+-- end: append_nil'
 
 
 -- textbook: append_assoc'
@@ -30,7 +30,7 @@ theorem append_assoc' : as ++ bs ++ cs = as ++ (bs ++ cs) := by
   induction as with
   | nil => rw [nil_append, nil_append]
   | cons a as ih => rw [cons_append, cons_append, ih, ←cons_append]
--- end textbook: append_assoc'
+-- end: append_assoc'
 
 
 -- textbook: reverse
@@ -39,7 +39,7 @@ theorem reverse_def : reverse as = reverseAux as [] := rfl
 theorem reverseAux_nil : reverseAux [] as = as := rfl
 
 theorem reverseAux_cons : reverseAux (a :: as) bs = reverseAux as (a :: bs) := rfl
--- end textbook: reverse
+-- end: reverse
 
 theorem reverse_nil : reverse ([] : List α) = [] := rfl
 
@@ -54,11 +54,11 @@ theorem reverseAux_append' : reverseAux as (bs ++ cs) = reverseAux as bs ++ cs :
   induction as generalizing bs with
   | nil => rw [reverseAux_nil, reverseAux_nil]
   | cons a as ih => rw [reverseAux_cons, reverseAux_cons, ←cons_append, ih]
--- end textbook: reverse identities
+-- end: reverse identities
 
 
 -- textbook: reverse_append
 theorem reverse_append : reverse (as ++ bs) = reverse bs ++ reverse as := by
   rw [reverse_def, reverseAux_append, reverse_def, ←reverseAux_append', nil_append,
       reverse_def]
--- end textbook: reverse_append
+-- end: reverse_append

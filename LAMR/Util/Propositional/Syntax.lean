@@ -1,13 +1,5 @@
 import Mathlib
-
--- TODO: move to Mathlib
-
-def List.Union [Hashable α] [DecidableEq α]: List (List α) → List α
-  | [] => []
-  | (l ::ls) => l.union (ls.Union)
-
-instance [Hashable α] : Hashable (List α) :=
-  ⟨fun l => l.foldl (init := 42) fun acc x => mixHash acc (hash x)⟩
+import LAMR.Util.Misc
 
 /-
 Propositional formulas.
@@ -123,7 +115,7 @@ def name : Lit → String
 
 def ofDimacs? (s : String) : Option Lit :=
   if s.isEmpty then none
-  else if s[0] == '-' then neg (s.drop 1)
+  else if s.get! ⟨0⟩ == '-' then neg (s.drop 1)
   else pos s
 
 instance : Hashable Lit where
@@ -249,7 +241,7 @@ macro_rules
 instance : Repr CnfForm :=
   ⟨fun cnf _ => "cnf!{" ++ String.intercalate ", " (List.map (toString ∘ repr) cnf) ++ "}"⟩
 
-instance : ToString CnfForm := 
+instance : ToString CnfForm :=
   ⟨fun
     | [] => "⊤"
     | cs => " ∧ ".intercalate (cs.map toString)⟩
@@ -258,10 +250,10 @@ instance : Append CnfForm :=
   inferInstanceAs (Append (List Clause))
 
 def disj (cnf1 cnf2 : CnfForm) : CnfForm :=
-  (cnf1.map (fun cls => cnf2.map cls.union)).Union
+  (cnf1.map (fun cls => cnf2.map cls.union')).Union
 
 def conj (cnf1 cnf2 : CnfForm) : CnfForm :=
-  cnf1.union cnf2
+  cnf1.union' cnf2
 
 instance : ForIn m CnfForm (List Lit) :=
   inferInstanceAs (ForIn m (List (List Lit)) (List Lit))
@@ -302,7 +294,7 @@ instance : ToString PropAssignment where
     s!"\{{mapping}}"
 
 def PropAssignment.mem (τ : PropAssignment) (x : String) : Bool :=
-  List.any τ (fun (y, _) => x == y) 
+  List.any τ (fun (y, _) => x == y)
 
 def PropAssignment.withLit (τ : PropAssignment) : Lit → PropAssignment
   | Lit.pos x => (x, true) :: τ
@@ -310,7 +302,7 @@ def PropAssignment.withLit (τ : PropAssignment) : Lit → PropAssignment
   | _ => panic! "cannot extend assignment with constant"
 
 /-- Return the truth value of `x` at `τ` if assigned, otherwise `none`. -/
-def PropAssignment.eval? (τ : PropAssignment) (x : String) : Option Bool := do
+def PropAssignment.eval? (τ : PropAssignment) (x : String) : Option Bool := Id.run do
   let τ : List _ := τ
   for (y, v) in τ do
     if y == x then return some v

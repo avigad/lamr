@@ -13,7 +13,7 @@ partial def isTriv? (env : AssocList String FOTerm) (x : String) :
   | var y      => if y = x then true
                    else if !env.contains y then false
                    else isTriv? env x (env.getA y)
-  | app f l    => loop l
+  | app _ l    => loop l
 where
   loop : List FOTerm → Option Bool
     | []    => false
@@ -41,7 +41,7 @@ partial def unify? (env : AssocList String FOTerm) : List (FOTerm × FOTerm) →
 -- end
 
 -- textbook: fullUnify
-partial def usolve (env : AssocList String FOTerm) : AssocList String FOTerm := do
+partial def usolve (env : AssocList String FOTerm) : AssocList String FOTerm := Id.run do
   let env' := env.mapVal (subst env)
   if env' == env then env else usolve env'
 

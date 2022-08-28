@@ -8,11 +8,11 @@ def showSums : IO Unit := do
     IO.println s!"i: {i}, sum: {sum}"
 
 #eval showSums
--- end textbook: showSums
+-- end: showSums
 
 
 -- textbook: isPrime
-def isPrime (n : Nat) : Bool := do
+def isPrime (n : Nat) : Bool := Id.run do
   if n < 2 then false else
     for i in [2:n] do
       if n % i = 0 then
@@ -20,16 +20,16 @@ def isPrime (n : Nat) : Bool := do
       if i * i > n then
         return true
     true
--- end textbook: isPrime
+-- end: isPrime
 
 
 -- textbook: list of primes
 #eval (List.range 10000).filter isPrime
--- end textbook: list of primes
+-- end: list of primes
 
 
 -- textbook: primes
-def primes (n : Nat) : Array Nat := do
+def primes (n : Nat) : Array Nat := Id.run do
   let mut result := #[]
   for i in [2:n] do
     if isPrime i then
@@ -37,10 +37,22 @@ def primes (n : Nat) : Array Nat := do
   result
 
 #eval (primes 10000).size
--- end textbook: primes
+-- end: primes
+
+
+-- textbook: Option in do
+def bar (n? : Option Nat) : IO Unit := do
+  let some n := n? |
+    IO.println "oops"
+  IO.println n
+
+#eval bar (some 2)
+#eval bar none
+-- end: Option in do
+
 
 -- textbook: mulTable
-def mulTable : Array (Array Nat) := do
+def mulTable : Array (Array Nat) := Id.run do
   let mut table := #[]
   for i in [:10] do
     let mut row := #[]
@@ -50,16 +62,16 @@ def mulTable : Array (Array Nat) := do
   table
 
 #eval mulTable
--- end textbook: mulTable
+-- end: mulTable
 
 -- textbook: mulTable'
-def mulTable' : Array (Array Nat) := do
+def mulTable' : Array (Array Nat) := Id.run do
   let mut s : Array (Array Nat) := mkArray 10 (mkArray 10 0)
   for i in [:10] do
     for j in [:10] do
-      s := s.set! i $ s[i].set! j ((i + 1) * (j + 1))
+      s := s.set! i $ s[i]!.set! j ((i + 1) * (j + 1))
   s
--- end textbook: mulTable'
+-- end: mulTable'
 
 /-
 The `show T from t` declares the type.
@@ -70,9 +82,9 @@ Writing `@Id T t` has the same effect.
 #eval show IO Unit from do
   for i in [:10] do
     for j in [:10] do
-      let numstr := toString mulTable[i][j]
+      let numstr := toString mulTable[i]![j]!
       -- print 1-3 spaces
       IO.print $ " ".pushn ' ' (3 - numstr.length)
       IO.print numstr
     IO.println ""
--- end textbook: show mulTable
+-- end: show mulTable

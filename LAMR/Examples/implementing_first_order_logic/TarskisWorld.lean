@@ -128,23 +128,23 @@ instance : ToString (Option Object) :=
     | some obj => toString obj
     | none     => "  "⟩
 
-def World.toArray (world : World) : Array (Array (Option Object)) := do
+def World.toArray (world : World) : Array (Array (Option Object)) := Id.run do
   let mut arr : Array (Array (Option Object)) := mkArray 8 (mkArray 8 none)
   for obj in world do
     assert! obj.row < 8
     assert! obj.col < 8
-    arr := arr.set! obj.row $ arr[obj.row].set! obj.col (some obj)
+    arr := arr.set! obj.row $ arr[obj.row]!.set! obj.col (some obj)
   arr
 
 instance : ToString World :=
-  ⟨fun world => do
+  ⟨fun world => Id.run do
     let arr := world.toArray
     let rowDashes : String := "".pushn '-' 41
     let mut s := rowDashes ++ "\n"
     for i in [:8] do
       s := s ++ "| "
       for j in [:8] do
-        s := s ++ toString arr[7-i][j] ++ " | "
+        s := s ++ toString arr[7-i]![j]! ++ " | "
       s := s ++ "\n" ++ rowDashes ++ "\n"
     s⟩
 
@@ -178,7 +178,7 @@ assign!{
 }
 
 def World.eval (world : World) (A : FOForm) : Bool :=
-  A.eval { univ := world, fn := fun f l => arbitrary, rel := tWRelInterp } (fun x => arbitrary)
+  A.eval { univ := world, fn := fun _ _ => default, rel := tWRelInterp } (fun _ => default)
 
 /-
 Try it out.

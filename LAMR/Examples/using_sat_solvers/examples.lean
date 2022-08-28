@@ -25,7 +25,7 @@ Examples of use of Cadical.
 
 -- textbook: SAT example
 def cadicalExample : IO Unit := do
-  let (s, result) ← callCadical exCnf0
+  let (_, result) ← callCadical exCnf0
   IO.println "Output from CaDiCaL :\n"
   --IO.println s
   --IO.println "\n\n"
@@ -33,4 +33,4 @@ def cadicalExample : IO Unit := do
   pure ()
 
 #eval cadicalExample
--- end textbook: SAT example
+-- end: SAT example

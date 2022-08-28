@@ -41,7 +41,6 @@ where go (acc : List α) : Nat → List α → List (List α)
 instance : ToString Sudoku :=
   ⟨fun { dim, rows : Sudoku } =>
     assert! 0 < dim
-    let sz := dim*dim
     let dashes := "-".pushn '-' (2*dim)
     let spacer := "+" ++ "+".intercalate (List.replicate dim dashes) ++ "+"
     let border := "+" ++ "-".intercalate (List.replicate dim dashes) ++ "+"
@@ -58,7 +57,7 @@ private def mkLit (row col val : Nat) :=
 
 /-- Encodes the non-empty tiles as unit clauses. -/
 def cnfEncodeTiles : Sudoku → CnfForm
-  | { dim, rows : Sudoku} => do
+  | { dim, rows : Sudoku} => Id.run do
     let mut cnf : CnfForm := []
     for (i, row) in rows.enum do
       for (j, t) in row.enum do
@@ -68,7 +67,7 @@ def cnfEncodeTiles : Sudoku → CnfForm
 
 /-- Encodes the given Sudoku as CNF. -/
 def cnfEncode : Sudoku → CnfForm
-  | s@{ dim, rows : Sudoku } => do
+  | s@{ dim, rows : Sudoku } => Id.run do
     let mut cnf : CnfForm := []
     let sz := dim*dim
 
@@ -111,9 +110,9 @@ def decodeSolution (dim : Nat) (τ : List Lit) : Except String Sudoku := do
   let mut s := empty dim
   for l in τ do
     if let Lit.pos x := l then
-      let [_,i,j,k] ← x.splitOn "_"
+      let [_,i,j,k] := x.splitOn "_"
         | throw s!"unexpected variable {x}"
-      let [some i, some j, some k] ← [i,j,k].map String.toNat?
+      let [some i, some j, some k] := [i,j,k].map String.toNat?
         | throw s!"cannot decode numbers in {x}"
       let row := s.rows.get! i
       let row := row.take j ++ [SudokuTile.val k] ++ row.drop (j+1)
@@ -143,7 +142,7 @@ def units := [[(mkLit 0 1 3)],
   let dim := 3
   let cnf: List (List Lit) := empty dim |>.cnfEncode
   let cnf2 := cnf ++ units
-  let (out, result) ← callCadical cnf2
+  let (_, result) ← callCadical cnf2
   match result with
     | SatResult.Unsat _ => IO.println "Sudoku unsat."
     | SatResult.Sat τ  =>

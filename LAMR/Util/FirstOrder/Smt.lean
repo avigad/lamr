@@ -15,8 +15,8 @@ def generalIdent : Parser :=
       let s := takeWhile1Fn (fun c => !("(){}[].".contains c) ∧ !c.isWhitespace) "expected generalized identifier" c s
       mkNodeToken `generalIdent startPos c s }
 
-def Lean.Syntax.getGeneralId : Syntax → String
-  | Syntax.node _ `generalIdent args => args[0].getAtomVal!
+def Lean.TSyntax.getGeneralId : TSyntax `generalIdent → String
+  | ⟨Syntax.node _ `generalIdent args⟩ => args[0]!.getAtomVal!
   | s => panic! s!"unexpected syntax '{s}'"
 
 @[combinatorFormatter generalIdent] def generalIdent.formatter : Formatter := pure ()
@@ -39,6 +39,10 @@ syntax generalIdent : sexp
 syntax "(" sexp* ")" : sexp
 syntax "(" sexp* "...{" term "}" sexp* ")" : sexp
 syntax "{" term "}" : sexp
+
+-- This coercion is justified by the macro expansions below.
+instance : Coe (Lean.TSyntax `sexp) (Lean.TSyntax `term) where
+  coe a := ⟨a.raw⟩
 
 macro_rules
   | `(sexp| $a:generalIdent) => `(Sexp.atom $(Lean.quote a.getGeneralId))
@@ -85,7 +89,7 @@ where
       else if c.isWhitespace then tokenize stk (s.drop 1)
       else
         let tk := s.takeWhile fun c => !c.isWhitespace && c != '(' && c != ')'
-        if tk.bsize > 0 then tokenize (stk.push tk) (s.extract tk.bsize s.bsize)
+        if tk.bsize > 0 then tokenize (stk.push tk) (s.extract ⟨tk.bsize⟩ ⟨s.bsize⟩)
         else unreachable!
 
   parseOne : List Substring → Except String (Sexp × List Substring)
@@ -101,11 +105,11 @@ where
 
   parseMany (stk : Array Sexp) : List Substring → Except String (Array Sexp × List Substring)
     | tk :: tks => do
-      if tk.front == ')' then (stk, tks)
+      if tk.front == ')' then .ok (stk, tks)
       else
         let (e, tks) ← parseOne (tk :: tks)
         parseMany (stk.push e) tks
-    | [] => (stk, [])
+    | [] => .ok (stk, [])
 
 end Sexp
 
@@ -120,6 +124,10 @@ private def argsCvc5 : IO.Process.SpawnArgs := {
 private def argsZ3 : IO.Process.SpawnArgs := {
   cmd := "LAMR/bin/z3"
   args := #["-smt2", "LAMR/bin/temp.smt"] }
+
+private def argsBoolector : IO.Process.SpawnArgs := {
+  cmd := "LAMR/bin/boolector"
+  args := #["--smt2", "LAMR/bin/temp.smt"] }
 
 -- Same as IO.Process.run, but does not require exitcode = 0
 private def run' (args : IO.Process.SpawnArgs) : IO String := do
@@ -145,6 +153,7 @@ private def callSolver (args : IO.Process.SpawnArgs) (commands : List Sexp) (ver
 def callCvc4 := @callSolver argsCvc4
 def callCvc5 := @callSolver argsCvc5
 def callZ3 := @callSolver argsZ3
+def callBoolector := @callSolver argsBoolector
 
 private def hexdigits : Array Char :=
   #[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' ]

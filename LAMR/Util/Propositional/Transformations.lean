@@ -77,7 +77,7 @@ def orToCnf : NnfForm → Clause → Array NnfForm → Clause × Array NnfForm
   | disj A B, cls, defs =>
       let ⟨cls1, defs1⟩ := orToCnf A cls defs
       let ⟨cls2, defs2⟩ := orToCnf B cls1 defs1
-      (cls1.union cls2, defs2)
+      (cls1.union' cls2, defs2)
   | A, cls, defs =>
       let ⟨l, defs1⟩ := A.mkDefs defs
       (l::cls, defs1)
@@ -86,13 +86,13 @@ def andToCnf : NnfForm → Array NnfForm → CnfForm × Array NnfForm
   | conj A B, defs =>
     let ⟨fA, defs1⟩ := andToCnf A defs
     let ⟨fB, defs2⟩ := andToCnf B defs1
-    (fA.union fB, defs2)
+    (fA.union' fB, defs2)
   | A, defs =>
     let ⟨cls, defs1⟩ := orToCnf A [] defs
     ([cls], defs1)
 
 def toCnf (A : NnfForm) : CnfForm :=
   let ⟨cnf, defs⟩ := andToCnf A #[]
-  cnf.union (defsImplToCnf defs)
+  cnf.union' (defsImplToCnf defs)
 
 end NnfForm

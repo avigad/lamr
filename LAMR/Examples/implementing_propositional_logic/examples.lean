@@ -21,7 +21,7 @@ end hidden
 open PropForm
 
 #check (impl (conj (var "p") (var "q")) (var "r"))
--- end textbook: PropForm
+-- end: PropForm
 
 
 -- textbook: prop!
@@ -35,7 +35,7 @@ def propExample := prop!{p ∧ q → r ∧ p ∨ ¬ s1 → s2 }
 
 #eval toString propExample
 
--- end textbook: prop!
+-- end: prop!
 
 /-
 Some examples of structural recursion.
@@ -69,10 +69,10 @@ def vars : PropForm → List String
   | tr => []
   | fls => []
   | neg A => vars A
-  | conj A B => (vars A).union (vars B)
-  | disj A B => (vars A).union (vars B)
-  | impl A B => (vars A).union (vars B)
-  | biImpl A B => (vars A).union (vars B)
+  | conj A B => (vars A).union' (vars B)
+  | disj A B => (vars A).union' (vars B)
+  | impl A B => (vars A).union' (vars B)
+  | biImpl A B => (vars A).union' (vars B)
 
 #eval complexity propExample
 #eval depth propExample
@@ -82,7 +82,7 @@ end PropForm
 
 #eval PropForm.complexity propExample
 #eval propExample.complexity
--- end textbook: PropForm rec
+-- end: PropForm rec
 
 /-
 Truth table semantics.
@@ -102,14 +102,14 @@ def PropForm.eval (v : PropAssignment) : PropForm → Bool
 -- try it out
 #eval let v := PropAssignment.mk [("p", true), ("q", true), ("r", true)]
       propExample.eval v
--- end textbook: PropForm.eval
+-- end: PropForm.eval
 
 
 -- textbook: propassign
 #check propassign!{p, q, r}
 
 #eval propExample.eval propassign!{p, q, r}
--- end textbook: propassign
+-- end: propassign
 
 
 -- textbook: allSublists
@@ -120,7 +120,7 @@ def allSublists : List α → List (List α)
       recval.map (a :: .) ++ recval
 
 #eval allSublists propExample.vars
--- end textbook: allSublists
+-- end: allSublists
 
 
 -- textbook: truthTable
@@ -131,7 +131,7 @@ def truthTable (A : PropForm) : List (List Bool × Bool) :=
   assignments.map evalLine
 
 #eval truthTable propExample
--- end textbook: truthTable
+-- end: truthTable
 
 
 -- textbook: isValid
@@ -140,7 +140,7 @@ def PropForm.isSat(A : PropForm) : Bool := List.any (truthTable A) Prod.snd
 
 #eval propExample.isValid
 #eval propExample.isSat
--- end textbook: isValid
+-- end: isValid
 
 namespace hidden
 -- textbook: NnfForm
@@ -154,7 +154,7 @@ inductive NnfForm :=
   | lit  (l : Lit)       : NnfForm
   | conj (p q : NnfForm) : NnfForm
   | disj (p q : NnfForm) : NnfForm
--- end textbook: NnfForm
+-- end: NnfForm
 end hidden
 
 
@@ -186,14 +186,14 @@ def toNnfForm : PropForm → NnfForm
                                (NnfForm.disj q.toNnfForm.neg p.toNnfForm)
 
 end PropForm
--- end textbook: toNnfForm
+-- end: toNnfForm
 end hidden
 
 
 -- textbook: toNnfForm test
 #eval propExample.toNnfForm
 #eval toString propExample.toNnfForm
--- end textbook: toNnfForm test
+-- end: toNnfForm test
 
 
 namespace hidden₂
@@ -202,7 +202,7 @@ namespace hidden₂
 def Clause := List Lit
 
 def CnfForm := List Clause
--- end textbook: Clause and CnfForm
+-- end: Clause and CnfForm
 
 end hidden₂
 
@@ -252,30 +252,30 @@ def exCnf2 := cnf!{
 
 #eval toString exClause1
 #eval toString exCnf2
--- end textbook: syntax for literals, etc.
+-- end: syntax for literals, etc.
 
 -- textbook: operations on clauses
 #eval List.insert lit!{ r } exClause0
 
-#eval exClause0.union exClause1
+#eval exClause0.union' exClause1
 
 #eval List.Union [exClause0, exClause1, exClause2]
--- end textbook: operations on clauses
+-- end: operations on clauses
 
 
 -- textbook: disjunction of a clause and a CNF formula
-#eval exCnf1.map exClause0.union
--- end textbook: disjunction of a clause and a CNF formula
+#eval exCnf1.map exClause0.union'
+-- end: disjunction of a clause and a CNF formula
 
 namespace hidden₃
 
 -- textbook: CNF disjunction
 def CnfForm.disj (cnf1 cnf2 : CnfForm) : CnfForm :=
-(cnf1.map (fun cls => cnf2.map cls.union)).Union
+(cnf1.map (fun cls => cnf2.map cls.union')).Union
 
 #eval cnf!{p, q, u -v}.disj cnf!{r1 r2, s1 s2, t1 t2 t3}
 #eval toString $ cnf!{p, q, u -v}.disj cnf!{r1 r2, s1 s2, t1 t2 t3}
--- end textbook: CNF disjunction
+-- end: CNF disjunction
 
 -- textbook: toCnfForm
 def NnfForm.toCnfForm : NnfForm → CnfForm
@@ -287,7 +287,7 @@ def NnfForm.toCnfForm : NnfForm → CnfForm
   | NnfForm.disj A B        => A.toCnfForm.disj B.toCnfForm
 
 def PropForm.toCnfForm (A : PropForm) : CnfForm := A.toNnfForm.toCnfForm
--- end textbook: toCnfForm
+-- end: toCnfForm
 
 end hidden₃
 
@@ -297,4 +297,4 @@ end hidden₃
 #eval prop!{(p1 ∧ p2) ∨ (q1 ∧ q2)}.toCnfForm.toString
 
 #eval prop!{(p1 ∧ p2) ∨ (q1 ∧ q2) ∨ (r1 ∧ r2) ∨ (s1 ∧ s2)}.toCnfForm.toString
--- end textbook: CnfForm test
+-- end: CnfForm test

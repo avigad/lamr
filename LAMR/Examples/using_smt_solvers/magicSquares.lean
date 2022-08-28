@@ -2,7 +2,7 @@ import LAMR.Util.FirstOrder.Smt
 open Std
 
 /-- Encode the magic square of size `n` as a SMT-LIB problem in the QF_BV logic. -/
-def magicSquareToBvSmt (n : Nat) : List Sexp := do
+def magicSquareToBvSmt (n : Nat) : List Sexp := Id.run do
   let sq := toBVConst 32 (n^2)
   -- https://en.wikipedia.org/wiki/Magic_constant
   let magic := toBVConst 32 ((n^3 + n) / 2)
@@ -64,11 +64,11 @@ def magicSquareToBvSmt (n : Nat) : List Sexp := do
   -- end
 
 def decodeVar (x : String) : Except String (Nat × Nat) := do
-  let [_,i,j] ← x.splitOn "_"
+  let [_,i,j] := x.splitOn "_"
     | throw s!"unexpected variable {x}"
-  let [some i, some j] ← [i,j].map String.toNat?
+  let [some i, some j] := [i,j].map String.toNat?
     | throw s!"cannot decode numbers in {x}"
-  (i, j)
+  .ok (i, j)
 
 def String.ljust n s :=
   s ++ "".pushn ' ' (n - s.length)
@@ -77,7 +77,7 @@ def printMagicSquare (n : Nat) (model : Sexp) : IO Unit := do
   let mut grid := Array.mkArray n (Array.mkArray n 0)
   for (x, b) in decodeModelConsts model do
     let (i, j) ← IO.ofExcept (decodeVar x)
-    let some v ← evalNumConst b
+    let some v := evalNumConst b
       | throwThe IO.Error s!"unexpected value {b}"
     grid := grid.set! i (grid.get! i |>.set! j v)
 

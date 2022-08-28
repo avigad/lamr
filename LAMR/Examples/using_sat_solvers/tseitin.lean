@@ -25,7 +25,7 @@ where
     | none   => let newdefs := defs.push (op fA fB)
                 (defLit (newdefs.size - 1), newdefs)
 
--- end textbook: mkDefs
+-- end: mkDefs
 
 end hidden
 
@@ -33,7 +33,7 @@ end hidden
 def ex1 := prop!{¬ (p ∧ q ↔ r) ∧ (s → p ∧ t)}.toNnfForm
 
 #eval toString ex1
--- end textbook: ex1
+-- end: ex1
 
 /-
 removing extra parentheses, we get
@@ -48,7 +48,7 @@ def printDefs (A : NnfForm) : IO Unit := do
   let ⟨fm, defs⟩ := A.mkDefs #[]
   IO.println s!"{fm}, where"
   for i in [:defs.size] do
-    IO.println s!"def_{i} := {defs[i]}"
+    IO.println s!"def_{i} := {defs[i]!}"
 
 #eval printDefs ex1
 
@@ -65,7 +65,7 @@ def_5 := (p ∧ t)
 def_6 := ((¬ s) ∨ def_5)
 def_7 := (def_4 ∧ def_6)
 -/
--- end textbook: ex1 defs
+-- end: ex1 defs
 
 namespace hidden
 
@@ -91,7 +91,7 @@ def defsImplToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
   where aux : List NnfForm → Nat → CnfForm
   | [],          n => []
   | nnf :: nnfs, n => implToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
--- end textbook: implToCnf
+-- end: implToCnf
 
 -- textbook: toCnf
 def orToCnf : NnfForm → Clause → Array NnfForm → Clause × Array NnfForm
@@ -101,7 +101,7 @@ def orToCnf : NnfForm → Clause → Array NnfForm → Clause × Array NnfForm
   | disj A B, cls, defs =>
       let ⟨cls1, defs1⟩ := orToCnf A cls defs
       let ⟨cls2, defs2⟩ := orToCnf B cls1 defs1
-      (cls1.union cls2, defs2)
+      (cls1.union' cls2, defs2)
   | A, cls, defs =>
       let ⟨l, defs1⟩ := A.mkDefs defs
       (l::cls, defs1)
@@ -110,15 +110,15 @@ def andToCnf : NnfForm → Array NnfForm → CnfForm × Array NnfForm
   | conj A B, defs =>
     let ⟨fA, defs1⟩ := andToCnf A defs
     let ⟨fB, defs2⟩ := andToCnf B defs1
-    (fA.union fB, defs2)
+    (fA.union' fB, defs2)
   | A, defs =>
     let ⟨cls, defs1⟩ := orToCnf A [] defs
     ([cls], defs1)
 
 def toCnf (A : NnfForm) : CnfForm :=
   let ⟨cnf, defs⟩ := andToCnf A #[]
-  cnf.union (defsImplToCnf defs)
--- end textbook: toCnf
+  cnf.union' (defsImplToCnf defs)
+-- end: toCnf
 
 end hidden
 
@@ -158,4 +158,4 @@ def_4 -s    := ¬ s ∨ (p ∧ t)
 
 Each ':=' is really an implication.
 -/
--- end textbook: ex1.toCnf
+-- end: ex1.toCnf
