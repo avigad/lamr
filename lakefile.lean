@@ -9,3 +9,9 @@ require mathlib from git
 @[defaultTarget]
 lean_lib LAMR
 
+lean_exe dpll where
+  root := `LAMR.Examples.using_sat_solvers.dpll
+
+lean_exe colorEncode where
+  root := `LAMR.Examples.using_sat_solvers.colorEncode
+
