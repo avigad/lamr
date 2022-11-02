@@ -3,6 +3,7 @@ image:
 
 tasks:
   - init: |
+      elan self update
       lake build
 
 vscode:
