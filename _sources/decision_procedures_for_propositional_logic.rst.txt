@@ -281,11 +281,15 @@ is unit, which will further extend  :math:`\tau` by assigning :math:`p_3` to :ma
 clause :math:`(\lnot p_1 \lor \lnot p_3 \lor p_4)` becomes unit and thus assigns :math:`p_4` to :math:`\top`.
 Ultimately, no unit clauses remain and unit propagation terminates with :math:`\tau(p_1) = \tau(p_2) = \tau(p_3) = \tau(p_4) = \top`.
 
-Another important simplification technique is the *pure literal rule*. A literal :math:`l` is called pure in a formula :math:`\Gamma` if no
-clause in :math:`\Gamma` contains the literal :math:`\lnot l`. The pure literal rule sets pure literals to :math:`\top`.
+Another important simplification technique is the *pure literal rule*. A literal :math:`l` is called pure in a formula :math:`\Gamma` if
+it always occurs with the same polarity. If a pure literal :math:`l` only occurs positively (in other
+words, only :math:`l` occurs in the formula), the pure literal rule sets it to :math:`\top`.
+If it only occurs negatively (which is to say, :math:`\lnot l` occurs only positively), the pure
+literal rule sets it to :math:`\bot`.
 
 In contrast to unit propagation, the pure literal rule can reduce the number of satisfying assignments. Consider for
-example for the formula :math:`\Gamma = (p \lor q) \land (\lnot q \lor r) \land (q \lor \lnot r)`. The literal :math:`p` is pure,
+example for the formula :math:`\Gamma = (p \lor q) \land (\lnot q \lor r) \land (q \lor \lnot r)`. The literal :math:`p`
+occurs only positively,
 so the pure literal rule will assign it to :math:`\tau(p) = \top`. We leave it to you to check that :math:`\Gamma` has
 three satisfying assignments, while :math:`\tval{\Gamma}_{\tau}` has only two satisfying assignments.
 

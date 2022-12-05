@@ -109,7 +109,7 @@ The other rules of the system are as follows:
       \AXC{$\Gamma, A[t/x]$}
       \UIC{$\Gamma, \ex x A$}
       \end{prooftree}
-      \]</div>
+      \]
 
   .. raw:: latex
 

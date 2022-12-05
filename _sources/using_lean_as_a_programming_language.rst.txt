@@ -255,7 +255,7 @@ into Lean's library. The function ``List.range n`` returns the list
 and ``List.foldr`` implement the usual map and fold functions for lists.
 By opening the ``List`` namespace, we can refer to these as ``range``, ``map``,
 ``foldl``, and ``foldr``. In the examples below,
-the dollar sign has the same effect as putting parentheses around
+the operation ``<|`` has the same effect as putting parentheses around
 everything that appears afterward.
 
 .. literalinclude:: ../../LAMR/Examples/using_lean_as_a_programming_language/examples2.lean

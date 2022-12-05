@@ -430,10 +430,14 @@ assigning <span class="math notranslate nohighlight">\(p_2\)</span> to <span cla
 is unit, which will further extend  <span class="math notranslate nohighlight">\(\tau\)</span> by assigning <span class="math notranslate nohighlight">\(p_3\)</span> to <span class="math notranslate nohighlight">\(\top\)</span>. Now the
 clause <span class="math notranslate nohighlight">\((\lnot p_1 \lor \lnot p_3 \lor p_4)\)</span> becomes unit and thus assigns <span class="math notranslate nohighlight">\(p_4\)</span> to <span class="math notranslate nohighlight">\(\top\)</span>.
 Ultimately, no unit clauses remain and unit propagation terminates with <span class="math notranslate nohighlight">\(\tau(p_1) = \tau(p_2) = \tau(p_3) = \tau(p_4) = \top\)</span>.</p>
-<p>Another important simplification technique is the <em>pure literal rule</em>. A literal <span class="math notranslate nohighlight">\(l\)</span> is called pure in a formula <span class="math notranslate nohighlight">\(\Gamma\)</span> if no
-clause in <span class="math notranslate nohighlight">\(\Gamma\)</span> contains the literal <span class="math notranslate nohighlight">\(\lnot l\)</span>. The pure literal rule sets pure literals to <span class="math notranslate nohighlight">\(\top\)</span>.</p>
+<p>Another important simplification technique is the <em>pure literal rule</em>. A literal <span class="math notranslate nohighlight">\(l\)</span> is called pure in a formula <span class="math notranslate nohighlight">\(\Gamma\)</span> if
+it always occurs with the same polarity. If a pure literal <span class="math notranslate nohighlight">\(l\)</span> only occurs positively (in other
+words, only <span class="math notranslate nohighlight">\(l\)</span> occurs in the formula), the pure literal rule sets it to <span class="math notranslate nohighlight">\(\top\)</span>.
+If it only occurs negatively (which is to say, <span class="math notranslate nohighlight">\(\lnot l\)</span> occurs only positively), the pure
+literal rule sets it to <span class="math notranslate nohighlight">\(\bot\)</span>.</p>
 <p>In contrast to unit propagation, the pure literal rule can reduce the number of satisfying assignments. Consider for
-example for the formula <span class="math notranslate nohighlight">\(\Gamma = (p \lor q) \land (\lnot q \lor r) \land (q \lor \lnot r)\)</span>. The literal <span class="math notranslate nohighlight">\(p\)</span> is pure,
+example for the formula <span class="math notranslate nohighlight">\(\Gamma = (p \lor q) \land (\lnot q \lor r) \land (q \lor \lnot r)\)</span>. The literal <span class="math notranslate nohighlight">\(p\)</span>
+occurs only positively,
 so the pure literal rule will assign it to <span class="math notranslate nohighlight">\(\tau(p) = \top\)</span>. We leave it to you to check that <span class="math notranslate nohighlight">\(\Gamma\)</span> has
 three satisfying assignments, while <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau}\)</span> has only two satisfying assignments.</p>
 </section>
@@ -503,10 +507,10 @@ We use the keyword <code class="docutils literal notranslate"><span class="pre">
 It follows the Lean convention of using a question mark for a function that
 returns an element of an option type.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="o">:</span> <span class="n">CnfForm</span> <span class="bp">→</span> <span class="n">Option</span> <span class="n">Lit</span>
-  <span class="bp">|</span> <span class="o">[]</span>      <span class="bp">=&gt;</span> <span class="n">none</span>
-  <span class="bp">|</span> <span class="n">c</span> <span class="o">::</span> <span class="n">cs</span> <span class="bp">=&gt;</span> <span class="k">match</span> <span class="n">c</span> <span class="k">with</span>
-    <span class="bp">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">xs</span> <span class="bp">=&gt;</span> <span class="n">x</span>
-    <span class="bp">|</span> <span class="n">_</span>       <span class="bp">=&gt;</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="n">cs</span>
+  <span class="bp">|</span> <span class="o">[]</span>       <span class="bp">=&gt;</span> <span class="n">none</span>
+  <span class="bp">|</span> <span class="n">c</span> <span class="o">::</span> <span class="n">cs</span>  <span class="bp">=&gt;</span> <span class="k">match</span> <span class="n">c</span> <span class="k">with</span>
+    <span class="bp">|</span> <span class="n">x</span> <span class="o">::</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="n">x</span>
+    <span class="bp">|</span> <span class="n">_</span>      <span class="bp">=&gt;</span> <span class="n">pickSplit</span><span class="bp">?</span> <span class="n">cs</span>
 </pre></div>
 </div>
 <p>The function <code class="docutils literal notranslate"><span class="pre">propagateUnits</span></code> performs unit propagation and returns the resulting

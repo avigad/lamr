@@ -334,8 +334,8 @@ and can accommodate an imperative style of programming using <em>do notation</em
 </pre></div>
 </div>
 <p>Here is a solution to the Towers of Hanoi problem:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">hanoi</span> <span class="o">(</span><span class="n">numPegs</span> <span class="n">start</span> <span class="n">finish</span> <span class="n">aux</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="o">:=</span>
-  <span class="k">match</span> <span class="n">numPegs</span> <span class="k">with</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">hanoi</span> <span class="o">(</span><span class="n">numDisks</span> <span class="n">start</span> <span class="n">finish</span> <span class="n">aux</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="o">:=</span>
+  <span class="k">match</span> <span class="n">numDisks</span> <span class="k">with</span>
   <span class="bp">|</span> <span class="mi">0</span>     <span class="bp">=&gt;</span> <span class="n">pure</span> <span class="o">()</span>
   <span class="bp">|</span> <span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span> <span class="bp">=&gt;</span> <span class="k">do</span>
       <span class="n">hanoi</span> <span class="n">n</span> <span class="n">start</span> <span class="n">aux</span> <span class="n">finish</span>
@@ -359,7 +359,7 @@ into Lean’s library. The function <code class="docutils literal notranslate"><
 and <code class="docutils literal notranslate"><span class="pre">List.foldr</span></code> implement the usual map and fold functions for lists.
 By opening the <code class="docutils literal notranslate"><span class="pre">List</span></code> namespace, we can refer to these as <code class="docutils literal notranslate"><span class="pre">range</span></code>, <code class="docutils literal notranslate"><span class="pre">map</span></code>,
 <code class="docutils literal notranslate"><span class="pre">foldl</span></code>, and <code class="docutils literal notranslate"><span class="pre">foldr</span></code>. In the examples below,
-the dollar sign has the same effect as putting parentheses around
+the operation <code class="docutils literal notranslate"><span class="pre">&lt;|</span></code> has the same effect as putting parentheses around
 everything that appears afterward.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">List.range</span> <span class="mi">7</span>
 
@@ -367,9 +367,9 @@ everything that appears afterward.</p>
 <span class="kn">open</span> <span class="n">List</span>
 
 <span class="k">#eval</span> <span class="n">range</span> <span class="mi">7</span>
-<span class="k">#eval</span> <span class="n">addNums</span> <span class="bp">$</span> <span class="n">range</span> <span class="mi">7</span>
-<span class="k">#eval</span> <span class="n">map</span> <span class="o">(</span><span class="k">fun</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="n">x</span> <span class="bp">+</span> <span class="mi">3</span><span class="o">)</span> <span class="bp">$</span> <span class="n">range</span> <span class="mi">7</span>
-<span class="k">#eval</span> <span class="n">foldl</span> <span class="o">(</span><span class="bp">.</span> <span class="bp">+</span> <span class="bp">.</span><span class="o">)</span> <span class="mi">0</span> <span class="bp">$</span> <span class="n">range</span> <span class="mi">7</span>
+<span class="k">#eval</span> <span class="n">addNums</span> <span class="bp">&lt;|</span> <span class="n">range</span> <span class="mi">7</span>
+<span class="k">#eval</span> <span class="n">map</span> <span class="o">(</span><span class="k">fun</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="n">x</span> <span class="bp">+</span> <span class="mi">3</span><span class="o">)</span> <span class="bp">&lt;|</span> <span class="n">range</span> <span class="mi">7</span>
+<span class="k">#eval</span> <span class="n">foldl</span> <span class="o">(</span><span class="bp">.</span> <span class="bp">+</span> <span class="bp">.</span><span class="o">)</span> <span class="mi">0</span> <span class="bp">&lt;|</span> <span class="n">range</span> <span class="mi">7</span>
 
 <span class="kd">end</span>
 </pre></div>
@@ -673,7 +673,7 @@ to replace the elements later one.</p>
   <span class="k">let</span> <span class="n">mut</span> <span class="n">s</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">mkArray</span> <span class="mi">10</span> <span class="o">(</span><span class="n">mkArray</span> <span class="mi">10</span> <span class="mi">0</span><span class="o">)</span>
   <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
     <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
-      <span class="n">s</span> <span class="o">:=</span> <span class="n">s.set</span><span class="bp">!</span> <span class="n">i</span> <span class="bp">$</span> <span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">!.</span><span class="n">set</span><span class="bp">!</span> <span class="n">j</span> <span class="o">((</span><span class="n">i</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">j</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">))</span>
+      <span class="n">s</span> <span class="o">:=</span> <span class="n">s.set</span><span class="bp">!</span> <span class="n">i</span> <span class="bp">&lt;|</span> <span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">!.</span><span class="n">set</span><span class="bp">!</span> <span class="n">j</span> <span class="o">((</span><span class="n">i</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">j</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">))</span>
   <span class="n">s</span>
 </pre></div>
 </div>
@@ -694,7 +694,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">T</sp
     <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
       <span class="k">let</span> <span class="n">numstr</span> <span class="o">:=</span> <span class="n">toString</span> <span class="n">mulTable</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">!</span><span class="o">[</span><span class="n">j</span><span class="o">]</span><span class="bp">!</span>
       <span class="c1">-- print 1-3 spaces</span>
-      <span class="n">IO.print</span> <span class="bp">$</span> <span class="s2">&quot; &quot;</span><span class="bp">.</span><span class="n">pushn</span> <span class="sc">&#39; &#39;</span> <span class="o">(</span><span class="mi">3</span> <span class="bp">-</span> <span class="n">numstr.length</span><span class="o">)</span>
+      <span class="n">IO.print</span> <span class="bp">&lt;|</span> <span class="s2">&quot; &quot;</span><span class="bp">.</span><span class="n">pushn</span> <span class="sc">&#39; &#39;</span> <span class="o">(</span><span class="mi">3</span> <span class="bp">-</span> <span class="n">numstr.length</span><span class="o">)</span>
       <span class="n">IO.print</span> <span class="n">numstr</span>
     <span class="n">IO.println</span> <span class="s2">&quot;&quot;</span>
 </pre></div>
