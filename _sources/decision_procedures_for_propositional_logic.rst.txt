@@ -365,7 +365,7 @@ literal to the assignment.
   :start-after: -- textbook: propagateUnits
   :end-before: -- end: propagateUnits
 
-The function ``propagateWithNew`` is used to peform a split on the literal ``x``.
+The function ``propagateWithNew`` is used to perform a split on the literal ``x``.
 It assigns the value of ``x`` and then does unit propagation.
 
 .. literalinclude:: ../../LAMR/Examples/using_sat_solvers/dpll.lean

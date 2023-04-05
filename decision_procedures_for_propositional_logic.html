@@ -532,7 +532,7 @@ literal to the assignment.</p>
       <span class="k">else</span> <span class="n">propagateUnits</span> <span class="o">(</span><span class="n">τ.withLit</span> <span class="n">x</span><span class="o">)</span> <span class="n">φ&#39;</span>
 </pre></div>
 </div>
-<p>The function <code class="docutils literal notranslate"><span class="pre">propagateWithNew</span></code> is used to peform a split on the literal <code class="docutils literal notranslate"><span class="pre">x</span></code>.
+<p>The function <code class="docutils literal notranslate"><span class="pre">propagateWithNew</span></code> is used to perform a split on the literal <code class="docutils literal notranslate"><span class="pre">x</span></code>.
 It assigns the value of <code class="docutils literal notranslate"><span class="pre">x</span></code> and then does unit propagation.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">propagateWithNew</span> <span class="o">(</span><span class="n">x</span> <span class="o">:</span> <span class="n">Lit</span><span class="o">)</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">PropAssignment</span><span class="o">)</span> <span class="o">(</span><span class="n">φ</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span>
     <span class="n">PropAssignment</span> <span class="bp">×</span> <span class="n">CnfForm</span> <span class="o">:=</span>

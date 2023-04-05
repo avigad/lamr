@@ -53,7 +53,7 @@ The first two ideas go back to ancient times and can be found in the
 work of Aristotle. The third, however, is usually attributed to Lull,
 marking his work as the origin of mechanized reasoning.
 
-Four centuries later, Lull's work resonated with Gottfied Leibniz,
+Four centuries later, Lull's work resonated with Gottfried Leibniz,
 who invented calculus around the same time that Isaac Newton
 did so independently.
 Leibniz was also impressed by the possibility of symbolic representations

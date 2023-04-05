@@ -316,7 +316,7 @@ To make all this precise, we need a set of rules for deriving equations.
       \DP
       \end{center}
 
-The first three rules express the reflexivity, symmmetry, and transitivity of equality,
+The first three rules express the reflexivity, symmetry, and transitivity of equality,
 respectively.
 The last rule is called the *congruence* rule.
 You should convince yourself that using these rules we can derive
