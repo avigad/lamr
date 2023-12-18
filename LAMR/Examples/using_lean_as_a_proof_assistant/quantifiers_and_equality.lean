@@ -1,4 +1,4 @@
-import LAMR
+import Mathlib.Data.Int.Basic
 
 example (a b c : Int) : (a * b) * c = b * (a * c) := by
   rw [mul_comm a b, mul_assoc b a c]
@@ -10,6 +10,8 @@ example (a b c d e f : Int) (h : a * b = c * d) (h' : e = f) :
 example (a b c d e f : Int) (h : b * c = e * f) :
     a * b * c * d = a * e * f * d := by
   admit
+
+namespace ringExamples
 
 variable {R : Type} [CommRing R]
 
@@ -37,3 +39,5 @@ theorem sub_sub (a b c : R) : a - b - c = a - (b + c) := by
 example (P Q : α → Prop) (h : ∃ x, P x ∧ Q x) : (∃ x, P x) ∧ (∃ x, Q x) := by
   match h with
     | ⟨a, Pa, Qa⟩ => exact ⟨⟨a, Pa⟩, ⟨a, Qa⟩⟩
+
+end ringExamples

@@ -274,7 +274,7 @@ def CnfForm.disj (cnf1 cnf2 : CnfForm) : CnfForm :=
 (cnf1.map (fun cls => cnf2.map cls.union')).Union
 
 #eval cnf!{p, q, u -v}.disj cnf!{r1 r2, s1 s2, t1 t2 t3}
-#eval toString $ cnf!{p, q, u -v}.disj cnf!{r1 r2, s1 s2, t1 t2 t3}
+#eval toString <| cnf!{p, q, u -v}.disj cnf!{r1 r2, s1 s2, t1 t2 t3}
 -- end: CNF disjunction
 
 -- textbook: toCnfForm

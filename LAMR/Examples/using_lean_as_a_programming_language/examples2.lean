@@ -30,8 +30,8 @@ def factorial : Nat → Nat
 
 
 -- textbook: hanoi
-def hanoi (numPegs start finish aux : Nat) : IO Unit :=
-  match numPegs with
+def hanoi (numDisks start finish aux : Nat) : IO Unit :=
+  match numDisks with
   | 0     => pure ()
   | n + 1 => do
       hanoi n start aux finish
@@ -58,9 +58,9 @@ section
 open List
 
 #eval range 7
-#eval addNums $ range 7
-#eval map (fun x => x + 3) $ range 7
-#eval foldl (. + .) 0 $ range 7
+#eval addNums <| range 7
+#eval map (fun x => x + 3) <| range 7
+#eval foldl (. + .) 0 <| range 7
 
 end
 -- end: list functions

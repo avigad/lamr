@@ -1,7 +1,5 @@
 import LAMR.Util.Misc
-import Std.Data.HashSet
 open Std
-open Lean
 
 /-
 First-order terms.
@@ -32,6 +30,7 @@ syntax foterm " - " foterm : foterm
 syntax foterm " + " foterm : foterm
 syntax foterm " * " foterm : foterm
 
+open Lean in
 macro_rules
   | `(term!{ % $x:ident })              => `(var $(quote x.getId.toString))
   | `(term!{ $x:ident })                => `(mkConst $(quote x.getId.toString))
@@ -60,7 +59,7 @@ private partial def toString : FOTerm → String
   | app "-" [t, u] => s!"({toString t} - {toString u})"
   | app "+" [t, u] => s!"({toString t} + {toString u})"
   | app "*" [t, u] => s!"({toString t} * {toString u})"
-  | app f ts => f ++ "(" ++ (String.join $ (ts.map toString).intersperse ", ") ++ ")"
+  | app f ts => f ++ "(" ++ (String.join <| (ts.map toString).intersperse ", ") ++ ")"
 
 instance : ToString FOTerm := ⟨toString⟩
 
@@ -99,6 +98,7 @@ declare_syntax_cat assign
 
 syntax "assign!{" entry,* "}" : term
 
+open Lean in
 macro_rules
   | `( assign!{ $[$xs:ident ↦ $vs:term],* } ) =>
     let xs := xs.map fun x => quote x.getId.toString
@@ -162,6 +162,7 @@ syntax:50  foterm:51 " > "  foterm:50 : foform
 syntax:max "∀" ident "."  foform      : foform
 syntax:max "∃" ident "."  foform      : foform
 
+open Lean in
 macro_rules
   | `(fo!{⊤})              => `(FOForm.tr)
   | `(fo!{⊥})              => `(FOForm.fls)
@@ -194,7 +195,7 @@ private partial def toString : FOForm → String
   | rel "<" [t, u]  => s!"({FOTerm.toString t} < {FOTerm.toString u})"
   | rel ">=" [t, u] => s!"({FOTerm.toString t} >= {FOTerm.toString u})"
   | rel ">" [t, u]  => s!"({FOTerm.toString t} > {FOTerm.toString u})"
-  | rel r ts => r ++ "(" ++ (String.join $ (ts.map FOTerm.toString).intersperse ", ") ++ ")"
+  | rel r ts => r ++ "(" ++ (String.join <| (ts.map FOTerm.toString).intersperse ", ") ++ ")"
   | tr       => "⊤"
   | fls      => "⊥"
   | neg p    => "(¬" ++ toString p ++ ")"
@@ -212,12 +213,12 @@ instance : Repr FOForm where
 
 /-- Returns a list of all free variable occurrences in the formula. -/
 def freeVars : FOForm → List String :=
-  go HashSet.empty
-where go (bound : HashSet String) : FOForm → List String
+  go Lean.HashSet.empty
+where go (bound : Lean.HashSet String) : FOForm → List String
   | eq s t => (s.freeVars ++ t.freeVars).filter fun x => !bound.contains x
   | rel _ ts => ts.map FOTerm.freeVars |>.join.filter fun x => !bound.contains x
   | neg φ => go bound φ
-  | conj φ ψ => go bound φ
+  | conj φ ψ => go bound φ ++ go bound ψ
   | disj φ ψ => go bound φ ++ go bound ψ
   | impl φ ψ => go bound φ ++ go bound ψ
   | biImpl φ ψ => go bound φ ++ go bound ψ

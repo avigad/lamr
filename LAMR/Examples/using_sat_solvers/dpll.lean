@@ -11,7 +11,7 @@ def PropAssignment.evalCnf (τ : PropAssignment) (φ : CnfForm) : Bool :=
 
 /-- Erases all elements equal to the argument from the list. -/
 protected def List.eraseAll {α} [BEq α] : List α → α → List α
-  | [],    b => []
+  | [],    _ => []
   | a::as, b => match a == b with
     | true  => List.eraseAll as b
     | false => a :: List.eraseAll as b
@@ -34,15 +34,15 @@ def simplify (x : Lit) (φ : CnfForm) : CnfForm :=
 
 /-- Returns `true` iff the CNF contains an empty clause. -/
 def CnfForm.hasEmpty : CnfForm → Bool
-  | []       => false
-  | [] :: cs => true
-  | c :: cs  => hasEmpty cs
+  | []      => false
+  | [] :: _ => true
+  | _ :: cs => hasEmpty cs
 
 /-- Finds a unit clause, if there are any. -/
 def CnfForm.findUnit : CnfForm → Option Lit
-  | []        => none
-  | [x] :: cs => some x
-  | c :: cs   => findUnit cs
+  | []       => none
+  | [x] :: _ => some x
+  | _ :: cs  => findUnit cs
 
 /-- Performs a round of unit propagation on `φ` under the assignment `τ`.
 Returns an updated assignment and a simplified formula.
@@ -65,7 +65,7 @@ partial def propagateUnits (τ : PropAssignment) (φ : CnfForm) : PropAssignment
       else propagateUnits (τ.withLit x) φ'
 -- end: propagateUnits
 
-/-- Assign (previously unassigned) `x` to true and peform unit propagation. -/
+/-- Assign (previously unassigned) `x` to true and perform unit propagation. -/
 -- textbook: propagateWithNew
 def propagateWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) :
     PropAssignment × CnfForm :=
@@ -81,10 +81,10 @@ be tried first, and then the opposite. -/
 -- TODO which heuristics could be used here?
 -- textbook: pickSplit?
 def pickSplit? : CnfForm → Option Lit
-  | []      => none
-  | c :: cs => match c with
-    | x :: xs => x
-    | _       => pickSplit? cs
+  | []       => none
+  | c :: cs  => match c with
+    | x :: _ => x
+    | _      => pickSplit? cs
 -- end: pickSplit?
 
 -- textbook: dpllSat

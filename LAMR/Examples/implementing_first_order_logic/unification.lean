@@ -60,23 +60,23 @@ partial def unifyAndApply (eqs : List (FOTerm × FOTerm)) : Option (List (FOTerm
 
 def unify_ex1 := [ (term!{ f(%x, g(%y))}, term!{ f(f(%z), %w) }) ]
 
-#eval toString $ fullUnify unify_ex1
-#eval toString $ unifyAndApply unify_ex1
+#eval toString <| fullUnify unify_ex1
+#eval toString <| unifyAndApply unify_ex1
 
 def unify_ex2 := [ (term!{ f(%x, %y) }, term!{ f(%y, %x) }) ]
 
-#eval toString $ fullUnify unify_ex2
-#eval toString $ unifyAndApply unify_ex2
+#eval toString <| fullUnify unify_ex2
+#eval toString <| unifyAndApply unify_ex2
 
 def unify_ex3 := [ (term!{ f(%x, g(%y)) }, term!{ f(%y, %x) }) ]
 
-#eval toString $ fullUnify unify_ex3
+#eval toString <| fullUnify unify_ex3
 
 def unify_ex4 := [ (term!{ %x0 }, term!{ f(%x1, %x1) } ),
                    (term!{ %x1 }, term!{ f(%x2, %x2) } ),
                    (term!{ %x2 }, term!{ f(%x3, %x3) } ),
                    (term!{ %x3 }, term!{ f(%x4, %x4) } )]
 
-#eval toString $ fullUnify unify_ex4
-#eval toString $ unifyAndApply unify_ex4
+#eval toString <| fullUnify unify_ex4
+#eval toString <| unifyAndApply unify_ex4
 -- end

@@ -1,5 +1,3 @@
-import Init
-
 -- textbook: showSums
 def showSums : IO Unit := do
   let mut sum := 0
@@ -69,7 +67,7 @@ def mulTable' : Array (Array Nat) := Id.run do
   let mut s : Array (Array Nat) := mkArray 10 (mkArray 10 0)
   for i in [:10] do
     for j in [:10] do
-      s := s.set! i $ s[i]!.set! j ((i + 1) * (j + 1))
+      s := s.set! i <| s[i]!.set! j ((i + 1) * (j + 1))
   s
 -- end: mulTable'
 
@@ -84,7 +82,7 @@ Writing `@Id T t` has the same effect.
     for j in [:10] do
       let numstr := toString mulTable[i]![j]!
       -- print 1-3 spaces
-      IO.print $ " ".pushn ' ' (3 - numstr.length)
+      IO.print <| " ".pushn ' ' (3 - numstr.length)
       IO.print numstr
     IO.println ""
 -- end: show mulTable

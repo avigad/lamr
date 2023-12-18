@@ -59,7 +59,7 @@ def iffToCnf (A B : NnfForm) : CnfForm :=
 
 def defsToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
   where aux : List NnfForm → Nat → CnfForm
-  | [],          n => []
+  | [],          _ => []
   | nnf :: nnfs, n => iffToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
 
 def implToCnf (A B : NnfForm) : CnfForm :=
@@ -67,18 +67,18 @@ def implToCnf (A B : NnfForm) : CnfForm :=
 
 def defsImplToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
   where aux : List NnfForm → Nat → CnfForm
-  | [],          n => []
+  | [],          _ => []
   | nnf :: nnfs, n => implToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
 
 def orToCnf : NnfForm → Clause → Array NnfForm → Clause × Array NnfForm
-  | lit Lit.tr,  cls, defs  => ([Lit.tr], defs)
-  | lit Lit.fls, cls, defs  => (cls, defs)
-  | lit l, cls, defs        => (l :: cls, defs)
-  | disj A B, cls, defs =>
+  | lit Lit.tr,  _,   defs => ([Lit.tr], defs)
+  | lit Lit.fls, cls, defs => (cls, defs)
+  | lit l,       cls, defs => (l :: cls, defs)
+  | disj A B,    cls, defs =>
       let ⟨cls1, defs1⟩ := orToCnf A cls defs
       let ⟨cls2, defs2⟩ := orToCnf B cls1 defs1
       (cls1.union' cls2, defs2)
-  | A, cls, defs =>
+  | A,           cls, defs =>
       let ⟨l, defs1⟩ := A.mkDefs defs
       (l::cls, defs1)
 

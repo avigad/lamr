@@ -32,13 +32,13 @@ def List.toLinearExp (l : List (String × Int)) : LinearExp := l.toHashMap
 instance : Coe (List (String × Int)) LinearExp := ⟨List.toLinearExp⟩
 
 instance : ToString LinearExp := ⟨fun linexp =>
-  String.intercalate " + " $ linexp.toList.map (fun (s, i) => (ToString.toString i ++ "*" ++ s))⟩
+  String.intercalate " + " <| linexp.toList.map (fun (s, i) => (ToString.toString i ++ "*" ++ s))⟩
 
 def ex1 : LinearExp := [("x", 3), ("y", -2), ("z", 4)]
 def ex2 : LinearExp := [("x", 4), ("y", 2), ("w", -1), ("v", 3)]
 
-#eval toString $ ex1
-#eval toString $ ex2
+#eval toString ex1
+#eval toString ex2
 
 
 /--
@@ -59,13 +59,13 @@ def linearCombination (a : Int) (u : LinearExp) (b : Int) (v : LinearExp) : Line
       result := result.insert t (b * j)
   result
 
-#eval toString $ linearCombination 1 ex1 1 ex2
-#eval toString $ linearCombination 1 ex1 (-1) ex1
-#eval toString $ linearCombination 2 ex1 (-3) ex2
+#eval toString <| linearCombination 1 ex1 1 ex2
+#eval toString <| linearCombination 1 ex1 (-1) ex1
+#eval toString <| linearCombination 2 ex1 (-3) ex2
 
 -- checks whether an expression is empty
 #eval ex1.isEmpty
-#eval HashMap.isEmpty $ linearCombination 1 ex1 (-1) ex1
+#eval HashMap.isEmpty <| linearCombination 1 ex1 (-1) ex1
 
 -- you can erase a term from an expression
 #eval let ex' : LinearExp := ex1.erase "x"
@@ -191,8 +191,8 @@ def wikipedia_constraints : List LinearExp :=
     [("one", -7), ("x",  1), ("y", -5), ("z",  2)],
     [("one", 12), ("x",  3), ("y", -2), ("z", -6)] ]
 
-#eval toString $ sortGtConstraints "x" wikipedia_constraints
-#eval toString $ elimVarGtConstraints "x" wikipedia_constraints
+#eval toString <| sortGtConstraints "x" wikipedia_constraints
+#eval toString <| elimVarGtConstraints "x" wikipedia_constraints
 
 /-
 Given a pair `eq, gts`, we want to eliminate all the variables to determine whether it is

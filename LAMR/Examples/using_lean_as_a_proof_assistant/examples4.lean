@@ -1,7 +1,5 @@
 
 -- textbook: List
-import Init
-
 open List
 
 variable {α : Type}

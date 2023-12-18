@@ -1,4 +1,4 @@
-import Init
+import Std
 import Lean.Parser
 import Lean.PrettyPrinter
 
@@ -16,11 +16,11 @@ def generalIdent : Parser :=
       mkNodeToken `generalIdent startPos c s }
 
 def Lean.TSyntax.getGeneralId : TSyntax `generalIdent → String
-  | ⟨Syntax.node _ `generalIdent args⟩ => args[0]!.getAtomVal!
+  | ⟨.node _ `generalIdent args⟩ => args[0]!.getAtomVal
   | s => panic! s!"unexpected syntax '{s}'"
 
-@[combinatorFormatter generalIdent] def generalIdent.formatter : Formatter := pure ()
-@[combinatorParenthesizer generalIdent] def generalIdent.parenthesizer : Parenthesizer := pure ()
+@[combinator_formatter generalIdent] def generalIdent.formatter : Formatter := pure ()
+@[combinator_parenthesizer generalIdent] def generalIdent.parenthesizer : Parenthesizer := pure ()
 end
 
 inductive Sexp where
@@ -159,8 +159,8 @@ private def hexdigits : Array Char :=
   #[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' ]
 
 private def enhexByte (x : UInt8) : String :=
-  ⟨[hexdigits.get! $ UInt8.toNat $ (x.land 0xf0).shiftRight 4,
-    hexdigits.get! $ UInt8.toNat $ x.land 0xf ]⟩
+  ⟨[hexdigits.get! <| UInt8.toNat <| (x.land 0xf0).shiftRight 4,
+    hexdigits.get! <| UInt8.toNat <| x.land 0xf ]⟩
 
 /-- Convert a little-endian (LSB first) list of bytes to hexadecimal. -/
 private def enhexLE : List UInt8 → String
@@ -177,16 +177,17 @@ def toBVConst (nBits : Nat) (n : Nat) : String :=
 
 open Std (AssocList)
 
+#check Lean.AssocList.insert
 /-- Extracts constants assigned in a model returned from an SMT solver.
 The model is expected to be a single s-expression representing a list,
 with constant expressions represented by `(define-fun <name> () <type> <body>)`. -/
 def decodeModelConsts : Sexp → AssocList String Sexp
   | Sexp.expr ss =>
-    ss.foldl (init := AssocList.empty) fun
+    ss.foldl (init := {}) fun
       | acc, sexp!{(define-fun {Sexp.atom x} () {_} {body})} =>
-        acc.insert x body
+        acc.cons x body
       | acc, _ => acc
-  | _ => AssocList.empty
+  | _ => {}
 
 /-- Evaluates an SMT-LIB constant numeral such as `0` or `#b01` or `#x02`. -/
 def evalNumConst : Sexp → Option Nat

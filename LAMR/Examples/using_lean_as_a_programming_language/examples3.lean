@@ -1,6 +1,4 @@
 -- textbook: BinTree
-import Init
-
 inductive BinTree
   | empty : BinTree
   | node  : BinTree → BinTree → BinTree
@@ -61,5 +59,3 @@ def bar (n? : Option Nat) : Nat :=
 #eval (some 5).getD 0
 #eval none.getD 0
 -- end: more on Option
-
-

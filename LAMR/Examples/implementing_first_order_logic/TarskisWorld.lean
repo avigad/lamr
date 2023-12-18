@@ -133,7 +133,7 @@ def World.toArray (world : World) : Array (Array (Option Object)) := Id.run do
   for obj in world do
     assert! obj.row < 8
     assert! obj.col < 8
-    arr := arr.set! obj.row $ arr[obj.row]!.set! obj.col (some obj)
+    arr := arr.set! obj.row <| arr[obj.row]!.set! obj.col (some obj)
   arr
 
 instance : ToString World :=
@@ -148,7 +148,7 @@ instance : ToString World :=
       s := s ++ "\n" ++ rowDashes ++ "\n"
     s⟩
 
-def World.show (world : World) : IO Unit := do IO.print $ toString world
+def World.show (world : World) : IO Unit := do IO.print <| toString world
 
 /-
 Implement the language

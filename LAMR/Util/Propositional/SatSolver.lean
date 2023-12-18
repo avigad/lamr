@@ -2,7 +2,6 @@ import LAMR.Util.Propositional.Transformations
 import LAMR.Util.Propositional.DRAT
 import Std
 open Std
-open Lean
 open List
 open Nat
 open HashMap
@@ -142,9 +141,9 @@ if is_odd k
 then match k with
      | k' + 1 =>
        let k'' := k' / 2
-       some $ Lit.neg (h.findD k'' $ toString k'')
+       some <| Lit.neg (h.findD k'' <| toString k'')
      | _ => none
-else some $ Lit.pos (h.findD (k / 2) $ toString (k / 2))
+else some <| Lit.pos (h.findD (k / 2) <| toString (k / 2))
 
 def natsToLits (h : NSH) : List Nat → Option (List Lit)
 | [] => some []
@@ -162,7 +161,7 @@ def decode : Nat → Nat → List Nat → Option (List Nat)
 | k, o, (n :: ns) =>
   if n < 128
   then match decode 0 0 ns with
-       | some ks => some $ (((2 ^ o) * n) + k) :: ks
+       | some ks => some <| (((2 ^ o) * n) + k) :: ks
        | none => none
   else decode (((2 ^ o) * (n - 128)) + k) (o + 1) ns
 | 0, 0, [] => some []

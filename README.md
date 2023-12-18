@@ -2,9 +2,9 @@
 
 This repository is designed to accompany the course by the same name. See also:
 
-- the textbook (in progress): [https://avigad.github.io/lamr](https://avigad.github.io/lamr)
-- a PDF version of the textbook: [https://avigad.github.io/lamr/logic_and_mechanized_reasoning.pdf](https://avigad.github.io/lamr/logic_and_mechanized_reasoning.pdf)
-- the course home page: [https://www.cs.cmu.edu/~mheule/15217-f21/](https://www.cs.cmu.edu/~mheule/15217-f21/)
+- the textbook (in progress): <https://avigad.github.io/lamr>
+- a PDF version of the textbook: <https://avigad.github.io/lamr/logic_and_mechanized_reasoning.pdf>
+- the course home page: <https://www.cs.cmu.edu/~mheule/15311-s24/>
 
 This repository contains a supporting library
 and files containing examples from the textbook that you can edit and experiment with.
@@ -15,112 +15,96 @@ Vampire (a resolution theorem prover).
 
 There are three ways for you to use the software and supporting libraries.
 
-## Option 1: Use Gitpod and the source repository
+## Option 1: use this repository on your computer
 
-This is the easiest option. Gitpod will give you 50 free hours every month to run a virtual
-workspace through your browser.
+1. Install Lean 4 and VS Code following these
+   [instructions](https://leanprover-community.github.io/get_started.html).
 
-1. Register for Gitpod account at [https://gitpod.io/login/](https://gitpod.io/login/).
+2. Make sure you have [git](https://git-scm.com/) installed.
 
-2. Go to [https://gitpod.io/#/https://github.com/avigad/lamr](https://gitpod.io/#/https://github.com/avigad/lamr). In other words, preface the url of this repository with `https://gitpod.io/#`.
-This will start a new workspace based on this repository.
+3. If you have not logged in since you installed Lean and Mathlib, then you may need to first type
+   `source ~/.profile` or `source ~/.bash_profile` depending on your OS.
 
-3. It may take a little while for the workspace to start, but when it does, you will be looking
-at a VS Code editor window with a terminal at the bottom and a file browser on the left.
-If you open the file `User/Examples/hello_world.lean`, you should see output in a `Lean Infoview`
-window. Also, hovering over the `#eval` commands with the blue squiggly lines underneath should
-show you the output of those commands.
+4. Open a terminal, navigate to the directory where you want to clone the repository, and type:
+   ```
+   git clone git@github.com:avigad/lamr.git
+   cd lamr
+   lake exe cache get
+   lake build
+   ```
+   This fetches the repository and builds it.
 
-4. The `User` folder is a good place to put all your files.
-The folder `LAMR/Examples` contains all the examples in the textbook.
-We recommend copying the
-`LAMR/Examples` folder to the `User` folder so that you can edit those files
-and experiment with them to your heart's content.
-You should not edit anything in the `Mathlib` or `LAMR` folders, so `LAMR/Examples`
-will always contain the original copies.
+6. Launch VS Code by typing `code .` or start VS Code some other way and open the `lamr` folder.
+   Note that you have to open the top level `lamr` repository folder, not any other folder.
 
-5. When you are done, choose `Stop workspace` from the menu on the left. The workspace should also
-stop automatically 30 minutes after the last interaction or 3 minutes after closing the tab.
+From the file explorer on the left-hand side, you can now open `.lean` files such as the ones in
+the directory `LAMR/Examples`. We recommend putting your own files in the `User` folder
+and leaving the original content intact.
 
-If you have a local version of VS Code installed on your computer, you can even use that to work
-inside the virtual machine.
-From the menu icon with three lines at the left-hand side of the browser window for the virtual
-machine,
-click "open in VS Code" and follow the instructions.
+Note that the files in `LAMR/bin` are Linux binaries of automated reasoning tools. If you are
+using MacOS or Windows you need to replace these with appropriate versions. (See below.)
 
-Every time you return to the link in Step 2, Gitpod will start a fresh workspace. To restart a
-previous workspace, go to [https://gitpod.io/workspaces/](https://gitpod.io/workspaces/).
-If you change the filter from `Active` to `All`, you will see all your recent workspaces.
-You can pin a workspace to keep it on the list of active ones.
-
-With this method, you can save files on a virtual machine and start and stop it at will.
-There isn't an easy way to transfer files from the virtual machine to your own computer,
-but you can simply copy text from the editor in the browser and paste it anywhere you want.
-
-
-
-## Option 2: Use Gitpod and a forked repository
-
-Git is a powerful version control system and [Github](https://github.com/) allows you to share
-repositories in the cloud. If you are familiar with these or willing to
-[learn](https://guides.github.com/) how to use them, you can fork this repository to your
-github account and use the fork as a file system for the virtual machine.
-
-1. Create a fork of [https://github.com/avigad/lamr](https://github.com/avigad/lamr) by clicking
-the `Fork` button in the upper right corner.
-
-2. Follow the instructions above to start a virtual machine on your copy of the repository.
-
-You can merge updates from the master `lamr` repository clicking `Fetch upstream` from your
-repository page on Github. And now you can use the usual git commands from the terminal inside
-your virtual machine to synchronize with your copy of the repository. Use `git pull` to update the
-local copy in the virtual machine from your repository, and use `git commit` and `git push` to
-transfer changes from the virtual machine to your repository.
-
-
-## Option 3: Install Lean, the repository, and course software locally
-
-It should not be too hard to install Lean and all the course software on your own computer,
-on Windows, OS/X, or Linux.
-
-1. Install Lean and VS Code following the instructions [here](https://leanprover.github.io/lean4/doc/quickstart.html).
-
-2. Clone this repository, using `git clone` or the `Download ZIP` option on the `Code` button
-above.
-
-3. Inside the top folder of the repository, type `lake build` to compile the library files.
-Also, copy the examples folder from the `LAMR` folder to the `User` folder.
-
-4. Open the repository folder in VS Code.
-
-From there, you should be able to use Lean and experiment with the example files as described in
-Option 1.
-
-## To update
-
-We will update the repository, including the examples folder, as the course proceeds.
-When you use Gitpod to start a new virtual machine, it will use the current version of the repository.
-
-If you are using on old virtual machine or a local version of the repository, however,
-you can update it by typing the following commands from inside the repository folder:
+You can update to a newer version of the repository by typing the following in the `lamr`
+repository folder:
 ```
   git pull
+  lake exe cache get
   lake build
 ```
-You will then have to manually copy new files from the `LAMR/Examples`
-folder to the `User/Examples` folder.
-You may have to type `elan update` if you installed Lean a while ago.
 
-If you have forked the repository on Github, you can update the fork by clicking the "fetch upstream"
-button.
+## Option 2: use this repository with Github Codespaces
 
-## To use automated reasoning tools
+You can also use this repository with Lean running in the cloud using Github Codespaces.
+This requires a Github account. If you are signed in to Github, click here:
+<https://codespaces.new/avigad/lamr>.
+
+Make sure the Machine type is `4-core`, and then press `Create codespace`
+(this might take a few minutes).
+This creates a virtual machine in the cloud,
+and installs Lean and Mathlib.
+
+Opening any `.lean` file in the LAMR folder will start Lean.
+You can update the repository by opening a terminal in the browser
+and typing `git pull` followed by `lake exe cache get` and `lake build` as above.
+
+Codespaces offers a certain number of free hours per month. When you are done working,
+press `Ctrl/Cmd+Shift+P` on your keyboard, start typing `stop codespace`, and then
+select `Codespaces: Stop Codespace` from the list of options.
+If you forget, don't worry: the virtual machine will stop itself after a certain
+amount of time of inactivity.
+
+To restart a previous workspace, visit <https://github.com/codespaces>.
+
+## Option 3: use this repository with Gitpod
+
+Gitpod is an alternative to Github Codespaces, but is a little less convenient,
+since it requires you to verify your phone number.
+If you have a Gitpod account or are willing to sign up for one,
+point your browser to
+<https://gitpod.io/#/https://github.com/avigad/lamr>.
+This creates a virtual machine in the cloud,
+and installs Lean and Mathlib.
+It then presents you with a VS Code window, running in a virtual
+copy of the repository.
+You can update the repository by opening a terminal in the browser
+and typing `git pull` followed by `lake exe cache get` and `lake build` as above.
+
+Gitpod gives you 50 free hours every month.
+When you are done working, choose `Stop workspace` from the menu on the left.
+The workspace should also stop automatically
+30 minutes after the last interaction or 3 minutes after closing the tab.
+
+To restart a previous workspace, go to <https://gitpod.io/workspaces/>.
+If you change the filter from Active to All, you will see all your recent workspaces.
+You can pin a workspace to keep it on the list of active ones.
+
+## To use the automated reasoning tools
 
 The `LAMR/bin` folder in the repository contains Linux binaries for CaDiCaL, Z3, CVC4, CVC5, and Vampire.
 We provide procedures for calling them from Lean, and the `LAMR/Examples` folder has some examples.
 If you are using the course with Gitpod or locally with Linux, the external tools will hopefully work
 out of the box. If you are using OS/X or Windows, however, you will have to obtain or build the relevant
-binaries on your own and replace the ones in `LAMR/bin`. You can find information how to do that here:
+binaries on your own and replace the ones in `LAMR/bin`. You can find information on how to do that here:
 
 - [CaDiCaL](https://github.com/arminbiere/cadical).
 - [Z3](https://github.com/Z3Prover/z3)
@@ -130,20 +114,3 @@ binaries on your own and replace the ones in `LAMR/bin`. You can find informatio
 
 Building CaDiCaL for Windows seems difficult.
 You do not need all three SMT solvers; any one of Z3, CVC4, or CVC5 will do.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

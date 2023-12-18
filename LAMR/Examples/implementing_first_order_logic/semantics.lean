@@ -122,7 +122,7 @@ def FOAssignment.update (σ : FOAssignment α) (x : String) (v : α) : FOAssignm
 def FOForm.eval {α} [Inhabited α] [BEq α]
     (M : FOModel α) (σ : FOAssignment α) : FOForm → Bool
   | eq t1 t2 => t1.eval M.fn σ == t2.eval M.fn σ
-  | rel r ts =>  M.rel r (ts.map $ FOTerm.eval M.fn σ)
+  | rel r ts =>  M.rel r (ts.map <| FOTerm.eval M.fn σ)
   | tr => true
   | fls => false
   | neg A => !(eval M σ A)
@@ -172,4 +172,3 @@ def FOForm.testeval (A : FOForm) : Bool := A.eval babyArithMdl trivAssignment
 #eval fo!{∀ x. even(%x) → ∃ y. lt(%x, %y)}.testeval
 #eval fo!{∀ x. ¬ even(%x) → ∃ y. lt(%x, %y)}.testeval
 -- end
-
