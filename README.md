@@ -86,6 +86,9 @@ This creates a virtual machine in the cloud,
 and installs Lean and Mathlib.
 It then presents you with a VS Code window, running in a virtual
 copy of the repository.
+When the terminal shows that the build has completed, you can open any `.lean`
+file in the `LAMR` folder to start Lean.
+
 You can update the repository by opening a terminal in the browser
 and typing `git pull` followed by `lake exe cache get` and `lake build` as above.
 
@@ -106,7 +109,7 @@ If you are using the course with Gitpod or locally with Linux, the external tool
 out of the box. If you are using OS/X or Windows, however, you will have to obtain or build the relevant
 binaries on your own and replace the ones in `LAMR/bin`. You can find information on how to do that here:
 
-- [CaDiCaL](https://github.com/arminbiere/cadical).
+- [CaDiCaL](https://github.com/arminbiere/cadical)
 - [Z3](https://github.com/Z3Prover/z3)
 - [CVC4](https://cvc4.github.io/)
 - [CVC5](https://github.com/cvc5/cvc5)
