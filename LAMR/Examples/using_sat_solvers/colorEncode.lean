@@ -13,7 +13,7 @@ def parseEdgeFile (lines : Array String) : Except String Graph := do
   let lines := lines.filter (fun ln => ln ≠ "" ∧ ln.front ≠ 'c')
 
   let header := lines.get! 0
-  let ["p", "edge", nVerts, nEdges] ← .ok (header |>.splitOnNonEmpty " ")
+  let ["p", "edge", nVerts, nEdges] ← .ok (header.splitOnNonEmpty " ")
     | throw s!"Invalid EDGE header: {header}"
   let (some nVerts, some nEdges) ← .ok (nVerts.toNat?, nEdges.toNat?)
     | throw s!"Invalid vert/edge counts: {header}"
@@ -41,14 +41,14 @@ def readEdgeFile (graphFname : String) : IO Graph := do
 /-- Encodes the proposition "`g` is `nColours`-colourable" as CNF. -/
 def graphColourable (g : Graph) (nColours : Nat) : CnfForm := Id.run do
   let mut cnf : CnfForm := []
-  for i in [0:g.nVerts] do
+  for i in [1:g.nVerts+1] do
     let clause : Clause :=
-      List.range (nColours) |>.map fun j => Lit.pos s!"p_{i}_{j+1}"
+      (List.range nColours).map fun j => Lit.pos s!"p_{i}_{j+1}"
     cnf := clause :: cnf
 
   for (u,v) in g.edges do
     for j in [1:nColours + 1] do
-      cnf := [Lit.neg s!"p_{u-1}_{j}", Lit.neg s!"p_{v-1}_{j}"] :: cnf
+      cnf := [Lit.neg s!"p_{u}_{j}", Lit.neg s!"p_{v}_{j}"] :: cnf
 
   return cnf
 
