@@ -177,7 +177,6 @@ def toBVConst (nBits : Nat) (n : Nat) : String :=
 
 open Std (AssocList)
 
-#check Lean.AssocList.insert
 /-- Extracts constants assigned in a model returned from an SMT solver.
 The model is expected to be a single s-expression representing a list,
 with constant expressions represented by `(define-fun <name> () <type> <body>)`. -/

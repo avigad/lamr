@@ -18,7 +18,7 @@ def parseEdgeFile (lines : Array String) : Except String Graph := do
   let (some nVerts, some nEdges) ← .ok (nVerts.toNat?, nEdges.toNat?)
     | throw s!"Invalid vert/edge counts: {header}"
 
-  let lines := lines[1:] |>.toArray
+  let lines := lines[1:]
   if lines.size ≠ nEdges then
     throw s!"Inconsistent edge count: {nEdges} in header but {lines.size} lines"
   let mut edges := #[]
