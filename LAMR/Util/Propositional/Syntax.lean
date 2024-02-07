@@ -120,6 +120,14 @@ def ofDimacs? (s : String) : Option Lit :=
 instance : Hashable Lit where
   hash l := hash (toString l)
 
+deriving instance DecidableEq for Lit
+
+def var? : Lit → Option String
+  | Lit.pos v => some v
+  | Lit.neg v => some v
+  | Lit.fls   => none
+  | Lit.tr    => none
+
 end Lit
 
 /-
@@ -210,6 +218,17 @@ instance : ToString Clause :=
 
 instance : Hashable Clause :=
   inferInstanceAs (Hashable (List Lit))
+
+deriving instance Membership for Clause
+
+instance (l : Lit) (c : Clause) : Decidable (l ∈ c) := by
+  unfold Clause
+  exact inferInstance
+
+instance : HasSubset Clause := inferInstanceAs (HasSubset (List Lit))
+
+instance : DecidableRel (Subset : Clause → Clause → Prop) :=
+  inferInstanceAs (DecidableRel (Subset : List Lit → List Lit → Prop))
 
 end Clause
 

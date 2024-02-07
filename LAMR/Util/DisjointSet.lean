@@ -5,28 +5,45 @@ Authors: Wojciech Nawrocki, Leonardo de Moura
 -/
 import Std.Data.HashMap
 
+/-! # Disjoint-set data structure -/
+
 open Std (HashMap)
 
-/-- A node in the disjoint-set forest. A node is either a root and represents an equivalence class,
-or a pointer to a parent node.  We represent pointers between nodes as entries in a hashmap
-in order to enable purely functional updates to paths through the forest. -/
+/-- A node in the forest of equivalence-class-trees. -/
 inductive DisjointSet.Node (α : Type u) where
+  /-- A pointer to the parent node in the tree. -/
   | ptr (parent : α)
-  /- Rank is an upper bound on the subtree height. -/
+  /-- A root is the canonical representative of its equivalence class.
+  `rank` is an upper bound on the height of the tree rooted here. -/
   | root (rank : Nat := 0)
   deriving Repr
 
-/-- Implements Tarjan's union-find algorithm. Most of the "read-only" methods return a new version
-of the `DisjointSet` with the same equivalence classes, but with internal paths possibly compressed
-for amortised performance. Implemented using a non-persistent `HashMap` and should therefore be used
-linearly. -/
+/-- Keeps track of an equivalence relation on a type `α`,
+or equivalently a partition of `α` into disjoint subsets,
+using Tarjan's union-find algorithm.
+Any two equivalence classes can be merged into a larger one,
+and for any `a : α` it is possible to find the canonical representative of `[a]`.
+Thus equivalence of two elements `a b : α` can be checked easily
+by reducing it to a comparison on the representatives of `[a]` and `[b]`.
+There can be at most finitely many non-singleton equivalence classes.
+
+Note that to achieve the desired amortized time complexity,
+`DisjointSet` has to compress paths while performing "read-only" operations,
+so these operations actually return a new version of the structure
+which should be used instead from then on.
+`DisjointSet` should be used linearly, i.e.,
+it should have a reference count of 1 at all times.
+
+The behaviour is unspecified if `BEq α` is not a `LawfulBEq α`. -/
 def DisjointSet (α : Type u) [BEq α] [Hashable α] : Type u :=
+  /- We use a hashmap representation rather than an ADT
+  in order to enable efficient local rewrites in the forest. -/
   HashMap α (DisjointSet.Node α)
 
 namespace DisjointSet
 
-/-- Return the equivalence relation on `α` given by `BEq`, i.e. the disjoint-set
-of all singletons. -/
+/-- Return the discrete equivalence relation on `α`,
+i.e., every element is only equivalent to itself. -/
 def singletons (α : Type u) [BEq α] [Hashable α] : DisjointSet α :=
   HashMap.empty
 
@@ -58,7 +75,7 @@ def equivalent (d : DisjointSet α) (a b : α) : DisjointSet α × Bool :=
   let (d₂, rootB) := d₁.canonize b
   (d₂, rootA == rootB)
 
-/-- Return a new set with equivalence classes of the two elements collapsed. -/
+/-- Return a new `DisjointSet` with equivalence classes of the two elements merged. -/
 def union (d : DisjointSet α) (a b : α) : DisjointSet α :=
   let (d₁, rootA, rankA) := d.findRoot a
   let (d₂, rootB, rankB) := d₁.findRoot b

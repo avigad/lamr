@@ -13,7 +13,7 @@ def parseEdgeFile (lines : Array String) : Except String Graph := do
   let lines := lines.filter (fun ln => ln ≠ "" ∧ ln.front ≠ 'c')
 
   let header := lines.get! 0
-  let ["p", "edge", nVerts, nEdges] ← .ok <| header |>.splitOnNonEmpty " "
+  let ["p", "edge", nVerts, nEdges] ← .ok (header |>.splitOnNonEmpty " ")
     | throw s!"Invalid EDGE header: {header}"
   let (some nVerts, some nEdges) ← .ok (nVerts.toNat?, nEdges.toNat?)
     | throw s!"Invalid vert/edge counts: {header}"
@@ -23,9 +23,9 @@ def parseEdgeFile (lines : Array String) : Except String Graph := do
     throw s!"Inconsistent edge count: {nEdges} in header but {lines.size} lines"
   let mut edges := #[]
   for ln in lines do
-    let ["e", u, v] ← .ok <| ln.splitOnNonEmpty " "
+    let ["e", u, v] ← .ok (ln.splitOnNonEmpty " ")
       | throw s!"Invalid line: {ln}"
-    let (some u, some v) ← .ok <| (u.toNat, v.toNat?)
+    let (some u, some v) ← .ok (u.toNat?, v.toNat?)
       | throw s!"Invalid vertices: {ln}"
     edges := edges.push (u, v)
 
@@ -58,11 +58,11 @@ def checkColourable (g : Graph) (nColours : Nat) : IO (Option (List Lit)) := do
   let cnf := graphColourable g nColours
   let (_, result) ← callCadical cnf
   match result with
-  | SatResult.Sat vs  => .ok <| some vs
-  | SatResult.Unsat _ => .ok <| none
+  | SatResult.Sat vs  => .ok (some vs)
+  | SatResult.Unsat _ => .ok none
 
 def main (args : List String) : IO Unit := do
-  let graphFname :: nColours :: _ ← .ok <| args
+  let graphFname :: nColours :: _ ← .ok args
     | do
       IO.println "Usage: <graph.edge> <colors>"
       return ()
@@ -74,3 +74,5 @@ def main (args : List String) : IO Unit := do
     IO.println s!"The graph is {nColours}-colourable! Satisfying assignment: {vs}"
   | none =>
     IO.println s!"The graph is not {nColours}-colourable."
+
+#eval main ["LAMR/Examples/using_sat_solvers/small-graph.edge","3"]

@@ -12,6 +12,16 @@ Misc utilities.
 def List.getA {α} [Inhabited α] (as : List α) (i : Nat) : α :=
   if h : i < as.length then List.get as ⟨i, h⟩ else default
 
+@[specialize]
+def List.mapDep : (as : List α) → (f : (a : α) → a ∈ as → β) → List β
+  | [],    _ => []
+  | a::as, f => f a (List.mem_cons_self ..) :: mapDep as (fun a h => f a (List.mem_cons_of_mem _ h))
+
+@[specialize]
+def List.foldlDep {α : Type u} {β : Type v} : (bs : List β) → (α → (b : β) → b ∈ bs → α) → α → α
+  | nil,       _, a => a
+  | cons b bs, f, a => foldlDep bs (fun a b h => f a b (List.mem_cons_of_mem _ h)) (f a b (List.mem_cons_self ..))
+
 def Std.AssocList.getA [BEq α] [Inhabited β] (l : AssocList α β) (a : α) : β :=
   match l.find? a with
     | some x => x
