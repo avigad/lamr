@@ -97,42 +97,29 @@
 <span id="chapter-lean-as-a-programming-language"></span><h1><span class="section-number">3. </span>Lean as a Programming Language<a class="headerlink" href="#lean-as-a-programming-language" title="Permalink to this heading"></a></h1>
 <section id="about-lean">
 <span id="section-about-lean"></span><h2><span class="section-number">3.1. </span>About Lean<a class="headerlink" href="#about-lean" title="Permalink to this heading"></a></h2>
-<p><em>Lean</em> is a new programming language and interactive proof assistant being developed
-at Microsoft Research.
-It is still in its early stages, and not well documented yet.
-But in many ways it is an ideal system for working with logical syntax
-and putting logic to use.
-Lean is an exciting project, and the system is fun to use.
-So please bear with us.
-Using Lean puts us out on the frontier,
-but if you adopt a pioneering attitude,
-you will be in a good position to enjoy all the cool things
-that Lean has to offer.</p>
+<p><em>Lean 4</em> is a new programming language and interactive proof assistant.
+It is currently used to formalize mathematics, to verify hardware and software,
+and to explore applications of machine learning to mathematical reasoning.
+Though the system is still new and under active development,
+in many ways it is an ideal system for working with logical syntax
+and putting logic to use.</p>
 <p>You can learn more about Lean on the <a class="reference external" href="http://leanprover.github.io/">Lean home page</a>,
 on the <a class="reference external" href="https://leanprover-community.github.io/">Lean community home page</a>,
 and by asking questions on the <a class="reference external" href="https://leanprover.zulipchat.com/">Lean Zulip chat</a>,
 which you are heartily encouraged to join.
-To be more precise, there are currently two versions of Lean:</p>
-<ul class="simple">
-<li><p>Lean 3 is stable, and is primarily an interactive proof assistant.
-It has a very large mathematical library, known as <a class="reference external" href="https://github.com/leanprover-community/mathlib">mathlib</a>.</p></li>
-<li><p>Lean 4 is still evolving and is designed as a performant programming language.
-It can also be used as a proof assistant, though it does not yet have a
-substantial library.
-Its language and syntax are similar to that of Lean 3,
-but it is not backward compatible.</p></li>
-</ul>
-<p>In this course, we will use Lean 4.
-The following documentation is available:</p>
+Lean has a very large mathematical library, known as
+<a class="reference external" href="https://github.com/leanprover-community/mathlib">mathlib</a>, which you can
+learn more about on the Lean community pages.</p>
+<p>The following documentation is available:</p>
 <ul class="simple">
 <li><p>a <a class="reference external" href="https://leanprover.github.io/lean4/doc/">user manual</a></p></li>
-<li><p>the beginning of an <a class="reference external" href="https://leanprover.github.io/functional_programming_in_lean/">introduction to functional programming in Lean</a></p></li>
+<li><p>an <a class="reference external" href="https://leanprover.github.io/functional_programming_in_lean/">introduction to functional programming in Lean</a></p></li>
 <li><p>a <a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">tutorial on theorem proving in Lean</a>.</p></li>
 </ul>
-<p>If you are new to functional programming, you might also find it helpful to consult an
-<a class="reference external" href="http://learnyouahaskell.com/">introduction to functional programming in Haskell</a>.</p>
-<p>As we will see, Lean has a lot of features that make that
-worthwhile. In particular, Lean 4 is designed to be an ideal language for implementing
+<p>As a functional programming language, Lean bears some similarity to Haskell and OCaml.
+If you are new to functional programming, you might also find it helpful to consult an
+<a class="reference external" href="http://learnyouahaskell.com/">introduction to functional programming in Haskell</a>.
+Lean 4 has a number of interesting features, and it is designed for implementing
 powerful logic-based systems, as evidenced by the fact that most of Lean 4 is implemented
 in Lean 4 itself.</p>
 <p>The goal of this section is to give you a better sense of what Lean is, how it can
@@ -487,9 +474,7 @@ using structural recursion on such types.
 For example, here is a Lean definition of the extended
 binary trees that we defined in mathematical terms in
 <a class="reference internal" href="mathematical_background.html#section-generalized-induction-and-recursion"><span class="std std-numref">Section 2.3</span></a>:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="n">Init</span>
-
-<span class="kd">inductive</span> <span class="n">BinTree</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">BinTree</span>
   <span class="bp">|</span> <span class="n">empty</span> <span class="o">:</span> <span class="n">BinTree</span>
   <span class="bp">|</span> <span class="n">node</span>  <span class="o">:</span> <span class="n">BinTree</span> <span class="bp">→</span> <span class="n">BinTree</span> <span class="bp">→</span> <span class="n">BinTree</span>
   <span class="n">deriving</span> <span class="n">Repr</span><span class="o">,</span> <span class="n">DecidableEq</span><span class="o">,</span> <span class="n">Inhabited</span>

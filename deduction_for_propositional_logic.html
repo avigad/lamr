@@ -52,11 +52,13 @@
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">8. Deduction for Propositional Logic</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#axiomatic-systems">8.1. Axiomatic systems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#a-sequent-calculus">8.2. A sequent calculus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#resolution">8.3. Resolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#natural-deduction">8.4. Natural deduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#compactness">8.5. Compactness</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#exercises">8.6. Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resolution">8.2. Resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementing-resolution">8.3. Implementing resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resolution-and-dpll">8.4. Resolution and DPLL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-sequent-calculus">8.5. A sequent calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#natural-deduction">8.6. Natural deduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compactness">8.7. Compactness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">8.8. Exercises</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
@@ -97,14 +99,14 @@
   <section id="deduction-for-propositional-logic">
 <span id="chapter-deduction-for-propositional-logic"></span><h1><span class="section-number">8. </span>Deduction for Propositional Logic<a class="headerlink" href="#deduction-for-propositional-logic" title="Permalink to this heading"></a></h1>
 <p>In the study of computational complexity, a <em>language</em> is a set of strings
-over some alphabet. For example, we can consider the language <span class="math notranslate nohighlight">\(\fn{PROP}\)</span> consisting of all
-propositional formulas, the language <span class="math notranslate nohighlight">\(\fn{SAT}\)</span> consisting of all satisfiable formulas,
-and the language <span class="math notranslate nohighlight">\(\fn{TAUT}\)</span> consisting of all tautologies.
-We have seen that <span class="math notranslate nohighlight">\(\fn{SAT}\)</span> and <span class="math notranslate nohighlight">\(\fn{TAUT}\)</span> are both <em>decidable</em>,
+over some alphabet. For example, we can consider the language PROP consisting of all
+propositional formulas, the language SAT consisting of all satisfiable formulas,
+and the language TAUT consisting of all tautologies.
+We have seen that SAT and TAUT are both <em>decidable</em>,
 which is to say, there is are algorithms to decide membership in those sets.
 The P=NP question is precisely the question
-as to whether there a polynomial time algorithm for <span class="math notranslate nohighlight">\(\fn{SAT}\)</span>, or, equivalently,
-for <span class="math notranslate nohighlight">\(\fn{TAUT}\)</span>.</p>
+as to whether there a polynomial time algorithm for SAT, or, equivalently,
+for TAUT.</p>
 <p>Still speaking in broad terms, a <em>proof system</em> for a language is a relation <span class="math notranslate nohighlight">\(P(d, x)\)</span>
 between strings with the property for any <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(x\)</span> is in the language
 if and only if there is a <span class="math notranslate nohighlight">\(d\)</span> such that <span class="math notranslate nohighlight">\(P(d, x)\)</span> holds.
@@ -115,10 +117,10 @@ This is often easy to do by putting a lot of information into <span class="math 
 NP is the class of languages that have a polynomial time proof system with the additional property
 that for every <span class="math notranslate nohighlight">\(x\)</span> in the language, there is a proof of membership <span class="math notranslate nohighlight">\(d\)</span> whose
 length is polynomially bounded in the length of <span class="math notranslate nohighlight">\(x\)</span>.
-The language <span class="math notranslate nohighlight">\(\fn{SAT}\)</span> is in NP because there are short proofs of satisfiability,
+The language SAT is in NP because there are short proofs of satisfiability,
 namely, the satisfying assignments.</p>
 <p>When it comes to propositional logic, when we talk about proof systems,
-we generally mean a proof system for <span class="math notranslate nohighlight">\(\fn{TAUT}\)</span>.
+we generally mean a proof system for TAUT.
 In other words, a proof system for propositional logic is supposed to show that a formula is valid.
 It can therefore also be used to establish unsatisfiability, since a formula
 <span class="math notranslate nohighlight">\(A\)</span> is unsatisfiable if and only if <span class="math notranslate nohighlight">\(\lnot A\)</span> is valid.</p>
@@ -166,11 +168,30 @@ If the set <span class="math notranslate nohighlight">\(\Gamma\)</span> is infin
 in those terms.
 For most of this chapter, we will not worry about infinite sets of hypotheses,
 since mechanized reasoning generally has to work with finite representations.
-But we will discuss the case where <span class="math notranslate nohighlight">\(\Gamma\)</span> is infinite in <a class="reference internal" href="#section-compactness"><span class="std std-numref">Section 8.5</span></a>.</p>
+But we will discuss the case where <span class="math notranslate nohighlight">\(\Gamma\)</span> is infinite in <a class="reference internal" href="#section-compactness"><span class="std std-numref">Section 8.7</span></a>.</p>
 <p>When it comes to talking about formal proofs, the words <em>proof</em>, <em>deduction</em>,
 and <em>derivation</em> are often used interchangeably.
 The last two are sometimes useful to distinguish formal derivations from
 ordinary (informal) mathematical proofs.</p>
+<p>Different proof systems are useful for different purposes. Some are more faithful
+to informal proof. These are therefore are easier to write down by hand when we try to
+give a formal argument for a claim we can prove informally. Others may be more convenient
+to use in automated reasoning, in the sense that they may be easier to generate automatically
+or easier to check. Still others may be more useful from a theoretical standpoint,
+when we try to reason about provability and the syntactic properties of the system.
+For those reasons, a good deal of work in logic is devoted to designing different types
+of proof systems and reasoning about the relationships between them.</p>
+<p>In this chapter, we will consider four different types of proof systems for propositional
+logic. The first type, axiomatic systems, are interesting mostly for historical reasons.
+They are neither convenient to work with by hand nor convenient for automated reasoning,
+but they do provide a fundamentally intuitive notion of proof, namely, as a sequence of
+statement in which each either is an axiom, a hypothesis, or follows from previous lines
+by a valid logical inference. The second type, resolution, is fundamental to automated
+reasoning. The third, sequent calculi, are also commonly used in automated reasoning, and are
+closely related to <em>tableau systems</em>, which are also common.
+The last kind, natural deduction, is designed to closely model ordinary
+logical reasoning, such as the kind of logical reasoning we use to prove a theorem of
+mathematics. It forms the basis for a number of interactive proof systems.</p>
 <section id="axiomatic-systems">
 <span id="section-axiomatic-systems"></span><h2><span class="section-number">8.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Permalink to this heading"></a></h2>
 <p>Historically, one way of describing a proof system for propositional logic is to give a list
@@ -209,8 +230,404 @@ they do not provide convenient means of modeling informal proofs,
 and they are not useful for automated reasoning or search.
 We will therefore set them aside and focus our attention on other types of proof systems.</p>
 </section>
+<section id="resolution">
+<span id="section-resolution"></span><h2><span class="section-number">8.2. </span>Resolution<a class="headerlink" href="#resolution" title="Permalink to this heading"></a></h2>
+<p>A <em>resolution</em> proof is designed to <em>refute</em> a CNF formula, that is, to prove that
+it is unsatisfiable.
+Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a CNF formula, represented as a set of clauses.
+As in <a class="reference internal" href="decision_procedures_for_propositional_logic.html#section-dpll"><span class="std std-numref">Section 6.3</span></a>, we can assume that none of the clauses contain repeated
+literals or a complementary pair, and we can think of each clause as a set of literals.
+If <span class="math notranslate nohighlight">\(C\)</span> is a clause and <span class="math notranslate nohighlight">\(\ell\)</span> is a literal, we write <span class="math notranslate nohighlight">\(C, \ell\)</span> for
+<span class="math notranslate nohighlight">\(C \lor \ell\)</span>. The <em>resolution rule</em> derives a new clause from an old one:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{prooftree}
+\AXC{$C, p$}
+\AXC{$D, \lnot p$}
+\BIC{$C \lor D$}
+\end{prooftree}\]</div></div></blockquote>
+<p>The rule says that if either <span class="math notranslate nohighlight">\(C\)</span> or <span class="math notranslate nohighlight">\(p\)</span> is true, and either <span class="math notranslate nohighlight">\(D\)</span> or <span class="math notranslate nohighlight">\(\lnot p\)</span>
+is true, then <span class="math notranslate nohighlight">\(C \lor D\)</span> has to be true. A <em>resolution proof</em> of a clause <span class="math notranslate nohighlight">\(C\)</span> from
+a set of clauses <span class="math notranslate nohighlight">\(\Gamma\)</span> is a sequence of steps (or a labelled tree) that obtains <span class="math notranslate nohighlight">\(C\)</span>
+from <span class="math notranslate nohighlight">\(\Gamma\)</span> using instances of the resolution rule. A <em>resolution refutation</em> of <span class="math notranslate nohighlight">\(\Gamma\)</span>
+is a resolution proof of the empty clause from <span class="math notranslate nohighlight">\(\Gamma\)</span>. For example,
+the following proof shows that the CNF formula</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[(p \lor q \lor r) \land (\lnot p \lor s) \land (\lnot q \lor s) \land (\lnot r \lor s) \land \lnot s\]</div>
+</div></blockquote>
+<p>is unsatisfiable:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(p \lor q \lor r\)</span>, hypothesis</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot p \lor s\)</span>, hypothesis</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot q \lor s\)</span>, hypothesis</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot r \lor s\)</span>, hypothesis</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot s\)</span>, hypothesis</p></li>
+<li><p><span class="math notranslate nohighlight">\(q \lor r \lor s\)</span>, resolve 1 and 2 on <span class="math notranslate nohighlight">\(p\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(r \lor s\)</span>, resolve 6 and 3 on <span class="math notranslate nohighlight">\(q\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(s\)</span>, resolve 7 and 4 on <span class="math notranslate nohighlight">\(r\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\bot\)</span>, resolve 8 and 5 on <span class="math notranslate nohighlight">\(s\)</span></p></li>
+</ol>
+</div></blockquote>
+<p>The following theorem shows that resolution proofs can refute any unsatisfiable formula.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>A CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> has a resolution refutation if and only if it is unsatisfiable.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>The forward direction expresses the soundness of the calculus: if we can derive
+<span class="math notranslate nohighlight">\(\bot\)</span> from a set of clauses <span class="math notranslate nohighlight">\(\Gamma\)</span>, then <span class="math notranslate nohighlight">\(\Gamma \models \bot\)</span>.
+This follows from the fact that the resolution rule is a valid inference, which is to say,
+the hypotheses entail the conclusion. This implies that each line in the proof
+is entailed by <span class="math notranslate nohighlight">\(\Gamma\)</span>, so if the proof include <span class="math notranslate nohighlight">\(\bot\)</span>, <span class="math notranslate nohighlight">\(\Gamma\)</span>
+is unsatisfiable.</p>
+<p>Completeness requires a more subtle argument. We want to show that if <span class="math notranslate nohighlight">\(\Gamma\)</span>
+is unsatisfiable, then there is a resolution proof of <span class="math notranslate nohighlight">\(\bot\)</span>.
+To do so, use induction on the number of variables occurring in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+If there are no variables occurring in <span class="math notranslate nohighlight">\(\Gamma\)</span> and <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable,
+then it must contain the empty clause, and so it is immediately refutable.
+Otherwise, choose a variable <span class="math notranslate nohighlight">\(p\)</span> that
+occurs in <span class="math notranslate nohighlight">\(\Gamma\)</span>, and divide the clauses in <span class="math notranslate nohighlight">\(\Gamma\)</span> into three categories:</p>
+<ul class="simple">
+<li><p>those of the form <span class="math notranslate nohighlight">\(C_i \lor p\)</span> for some clause <span class="math notranslate nohighlight">\(C_i\)</span></p></li>
+<li><p>those of the form <span class="math notranslate nohighlight">\(D_j \lor \lnot p\)</span> for some clause <span class="math notranslate nohighlight">\(D_j\)</span></p></li>
+<li><p>those clauses <span class="math notranslate nohighlight">\(E_k\)</span> that contain neither <span class="math notranslate nohighlight">\(p\)</span> nor <span class="math notranslate nohighlight">\(\lnot p\)</span>.</p></li>
+</ul>
+<p>Let <span class="math notranslate nohighlight">\(\Gamma'\)</span> consist of the clauses <span class="math notranslate nohighlight">\(C_i \lor D_j\)</span> for each <span class="math notranslate nohighlight">\(i\)</span>
+and <span class="math notranslate nohighlight">\(j\)</span> together with the clauses <span class="math notranslate nohighlight">\(E_k\)</span>. Notice that all the new clauses
+in <span class="math notranslate nohighlight">\(\Gamma'\)</span> follow from clauses in <span class="math notranslate nohighlight">\(\Gamma\)</span> using the resolution rule.
+It suffices to show that <span class="math notranslate nohighlight">\(\Gamma'\)</span> is unsatisfiable, because then the inductive hypothesis
+implies that there is a
+resolution refutation of <span class="math notranslate nohighlight">\(\Gamma'\)</span>, and hence of <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+<p>Suppose <span class="math notranslate nohighlight">\(\tau\)</span> satisfies each clause <span class="math notranslate nohighlight">\(E_k\)</span>. If each clause <span class="math notranslate nohighlight">\(C_i\)</span> evaluates
+to true under <span class="math notranslate nohighlight">\(\tau\)</span>, when <span class="math notranslate nohighlight">\(\tau[p \mapsto \bot]\)</span> satisfies <span class="math notranslate nohighlight">\(\Gamma\)</span>,
+contradicting the fact that we are assuming <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable.
+Hence some clause <span class="math notranslate nohighlight">\(C_i\)</span> must be false under <span class="math notranslate nohighlight">\(\tau\)</span>. By the dual argument,
+some clause <span class="math notranslate nohighlight">\(D_j\)</span> must be false under <span class="math notranslate nohighlight">\(\tau\)</span>. But then <span class="math notranslate nohighlight">\(C_i \lor D_j\)</span>
+evaluates to false, which means <span class="math notranslate nohighlight">\(\tau\)</span> does not satisfy <span class="math notranslate nohighlight">\(\Gamma'\)</span>.
+In other words, we have shown that any assignment <span class="math notranslate nohighlight">\(\tau\)</span> that satisfies each clause
+<span class="math notranslate nohighlight">\(E_k\)</span> cannot satisfy every clause <span class="math notranslate nohighlight">\(C_i \lor D_j\)</span>, so <span class="math notranslate nohighlight">\(\Gamma'\)</span> is unsatisfiable.</p>
+</div>
+<p>The following fact is implicit in the last argument:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>For any pair of clauses <span class="math notranslate nohighlight">\(C\)</span> and <span class="math notranslate nohighlight">\(D\)</span>, <span class="math notranslate nohighlight">\(C \lor p\)</span> and <span class="math notranslate nohighlight">\(D \lor \lnot p\)</span> are
+satisfiable if and only if <span class="math notranslate nohighlight">\(C \lor D\)</span> is satisfiable.</p>
+</div>
+<p>You should try to spell out a proof of this explicitly.</p>
+</section>
+<section id="implementing-resolution">
+<span id="section-implementing-resolution"></span><h2><span class="section-number">8.3. </span>Implementing resolution<a class="headerlink" href="#implementing-resolution" title="Permalink to this heading"></a></h2>
+<p>The completeness proof we have just seen gives rise to yet another decision procedure
+for propositional logic: given a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> as a set of clauses,
+pick any variable <span class="math notranslate nohighlight">\(p\)</span> and replace all the pairs of clauses of the form
+<span class="math notranslate nohighlight">\(C_i \lor p\)</span> and <span class="math notranslate nohighlight">\(D_j \lor \lnot p\)</span> by <span class="math notranslate nohighlight">\(C_i \lor D_j\)</span>.
+If we manage to derive the empty clause that way
+(that is, from clauses <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(\lnot p\)</span>), we know that <span class="math notranslate nohighlight">\(\Gamma\)</span>
+is unsatisfiable. Otherwise, we pick another variable <span class="math notranslate nohighlight">\(q\)</span> and repeat the process.
+If eventually we obtain the clause <span class="math notranslate nohighlight">\(\bot\)</span>, we know
+the original CNF formula is unsatisfiable.</p>
+<p>It’s easy to code this up in Lean. Notice that the resolution rule can be defined as follows:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">resolve</span> <span class="o">(</span><span class="n">c₁</span> <span class="n">c₂</span> <span class="o">:</span> <span class="n">Clause</span><span class="o">)</span> <span class="o">(</span><span class="n">var</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span> <span class="o">:</span> <span class="n">Clause</span> <span class="o">:=</span>
+  <span class="o">(</span><span class="n">c₁.erase</span> <span class="o">(</span><span class="n">Lit.pos</span> <span class="n">var</span><span class="o">))</span><span class="bp">.</span><span class="n">union&#39;</span> <span class="o">(</span><span class="n">c₂.erase</span> <span class="o">(</span><span class="n">Lit.neg</span> <span class="n">var</span><span class="o">))</span>
+</pre></div>
+</div>
+<p>Given a list of clauses, we can sort them relative to the variable <code class="docutils literal notranslate"><span class="pre">var</span></code> as follows:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">getPosNegClauses</span> <span class="o">(</span><span class="n">var</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span> <span class="o">:</span>
+    <span class="n">List</span> <span class="n">Clause</span> <span class="bp">→</span> <span class="n">List</span> <span class="n">Clause</span> <span class="bp">×</span> <span class="n">List</span> <span class="n">Clause</span> <span class="bp">×</span> <span class="n">List</span> <span class="n">Clause</span>
+  <span class="bp">|</span> <span class="o">[]</span> <span class="bp">=&gt;</span> <span class="o">([],</span> <span class="o">[],</span> <span class="o">[])</span>
+  <span class="bp">|</span> <span class="o">(</span><span class="n">c</span> <span class="o">::</span> <span class="n">cs</span><span class="o">)</span> <span class="bp">=&gt;</span>
+    <span class="k">let</span> <span class="o">(</span><span class="n">pos</span><span class="o">,</span> <span class="n">neg</span><span class="o">,</span> <span class="n">rest</span><span class="o">)</span> <span class="o">:=</span> <span class="n">getPosNegClauses</span> <span class="n">var</span> <span class="n">cs</span>
+    <span class="k">if</span> <span class="n">Lit.pos</span> <span class="n">var</span> <span class="bp">∈</span> <span class="n">c</span> <span class="k">then</span>
+      <span class="o">(</span><span class="n">c</span> <span class="o">::</span> <span class="n">pos</span><span class="o">,</span> <span class="n">neg</span><span class="o">,</span> <span class="n">rest</span><span class="o">)</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="n">Lit.neg</span> <span class="n">var</span> <span class="bp">∈</span> <span class="n">c</span> <span class="k">then</span>
+      <span class="o">(</span><span class="n">pos</span><span class="o">,</span> <span class="n">c</span> <span class="o">::</span> <span class="n">neg</span><span class="o">,</span> <span class="n">rest</span><span class="o">)</span>
+    <span class="k">else</span>
+      <span class="o">(</span><span class="n">pos</span><span class="o">,</span> <span class="n">neg</span><span class="o">,</span> <span class="n">c</span> <span class="o">::</span> <span class="n">rest</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Then, given a function <code class="docutils literal notranslate"><span class="pre">CnfForm.getvar?</span></code> that chooses a variable in a CNF formula
+(returning none if there aren’t any) and another function <code class="docutils literal notranslate"><span class="pre">IsTautology</span></code> that determines
+whether a clause is a tautology, we can determine whether there is a resolution refutation
+as follows:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">refute</span> <span class="o">(</span><span class="n">cnf</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Bool</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
+  <span class="k">if</span> <span class="n">cnf.contains</span> <span class="o">[]</span> <span class="k">then</span>  <span class="c1">-- the empty clause</span>
+    <span class="n">true</span>
+  <span class="k">else</span>
+    <span class="k">match</span> <span class="n">cnf.getVar</span><span class="bp">?</span> <span class="k">with</span>
+      <span class="bp">|</span> <span class="n">none</span>     <span class="bp">=&gt;</span> <span class="n">false</span>
+      <span class="bp">|</span> <span class="n">some</span> <span class="n">var</span> <span class="bp">=&gt;</span> <span class="n">Id.run</span> <span class="k">do</span>
+          <span class="k">let</span> <span class="o">(</span><span class="n">pos</span><span class="o">,</span> <span class="n">neg</span><span class="o">,</span> <span class="n">rest</span><span class="o">)</span> <span class="o">:=</span> <span class="n">getPosNegClauses</span> <span class="n">var</span> <span class="n">cnf</span>
+          <span class="k">let</span> <span class="n">mut</span> <span class="n">new_clauses</span> <span class="o">:</span> <span class="n">List</span> <span class="n">Clause</span> <span class="o">:=</span> <span class="o">[]</span>
+          <span class="n">for</span> <span class="n">c₁</span> <span class="k">in</span> <span class="n">pos</span> <span class="k">do</span>
+            <span class="n">for</span> <span class="n">c₂</span> <span class="k">in</span> <span class="n">neg</span> <span class="k">do</span>
+              <span class="k">let</span> <span class="n">c</span> <span class="o">:=</span> <span class="n">resolve</span> <span class="n">c₁</span> <span class="n">c₂</span> <span class="n">var</span>
+              <span class="k">if</span> <span class="bp">¬</span> <span class="n">IsTautology</span> <span class="n">c</span> <span class="k">then</span>
+                <span class="n">new_clauses</span> <span class="o">:=</span> <span class="n">c</span> <span class="o">::</span> <span class="n">new_clauses</span>
+          <span class="n">refute</span> <span class="o">(</span><span class="n">new_clauses</span> <span class="bp">++</span> <span class="n">rest</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>If you are a hard core functional programmer, you can replace the second case with
+an expression using <cite>map</cite>, <cite>union’</cite>, <cite>Union</cite>, and <cite>filter</cite>, but it isn’t more efficient
+or any easier to read.</p>
+<p>The examples file includes some examples of the procedure in use, but you should try
+some of your own.
+This is a good place to mention that Lean will allow you do add print statements as
+debugging tools, and if you do that, you can trace the progress of the search.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">refute&#39;</span> <span class="o">(</span><span class="n">cnf</span> <span class="o">:</span> <span class="n">CnfForm</span><span class="o">)</span> <span class="o">:</span> <span class="n">Bool</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
+  <span class="k">if</span> <span class="n">cnf.contains</span> <span class="o">[]</span> <span class="k">then</span>  <span class="c1">-- the empty clause</span>
+    <span class="n">dbg_trace</span> <span class="n">f</span><span class="bp">!</span><span class="s2">&quot;derived the empty clause&quot;</span>
+    <span class="n">true</span>
+  <span class="k">else</span>
+    <span class="n">dbg_trace</span> <span class="n">f</span><span class="bp">!</span><span class="s2">&quot;cnf: {cnf}&quot;</span>
+    <span class="k">match</span> <span class="n">cnf.getVar</span><span class="bp">?</span> <span class="k">with</span>
+      <span class="bp">|</span> <span class="n">none</span>     <span class="bp">=&gt;</span>
+          <span class="n">dbg_trace</span> <span class="n">f</span><span class="bp">!</span><span class="s2">&quot;failed; nothing left to split on&quot;</span>
+          <span class="n">false</span>
+      <span class="bp">|</span> <span class="n">some</span> <span class="n">var</span> <span class="bp">=&gt;</span> <span class="n">Id.run</span> <span class="k">do</span>
+          <span class="n">dbg_trace</span> <span class="n">f</span><span class="bp">!</span><span class="s2">&quot;split on {var}&quot;</span>
+          <span class="k">let</span> <span class="o">(</span><span class="n">pos</span><span class="o">,</span> <span class="n">neg</span><span class="o">,</span> <span class="n">rest</span><span class="o">)</span> <span class="o">:=</span> <span class="n">getPosNegClauses</span> <span class="n">var</span> <span class="n">cnf</span>
+          <span class="k">let</span> <span class="n">mut</span> <span class="n">new_clauses</span> <span class="o">:</span> <span class="n">List</span> <span class="n">Clause</span> <span class="o">:=</span> <span class="o">[]</span>
+          <span class="n">for</span> <span class="n">c₁</span> <span class="k">in</span> <span class="n">pos</span> <span class="k">do</span>
+            <span class="n">for</span> <span class="n">c₂</span> <span class="k">in</span> <span class="n">neg</span> <span class="k">do</span>
+              <span class="k">let</span> <span class="n">c</span> <span class="o">:=</span> <span class="n">resolve</span> <span class="n">c₁</span> <span class="n">c₂</span> <span class="n">var</span>
+              <span class="k">if</span> <span class="bp">¬</span> <span class="n">IsTautology</span> <span class="n">c</span> <span class="k">then</span>
+                <span class="n">new_clauses</span> <span class="o">:=</span> <span class="n">c</span> <span class="o">::</span> <span class="n">new_clauses</span>
+          <span class="n">refute&#39;</span> <span class="o">(</span><span class="n">new_clauses</span> <span class="bp">++</span> <span class="n">rest</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>This procedure for evaluating the satisfiability of a CNF formula is fairly naive.
+One can do better by incorporating unit propagation and the pure literal rule,
+as described in
+<a class="reference internal" href="decision_procedures_for_propositional_logic.html#section-unit-propagation-and-the-pure-literal-rule"><span class="std std-numref">Section 6.2</span></a>.
+The resulting procedure is known as the Davis-Putnam procedure, or DP.
+In general, splitting on variables can lead to exponential increase in the size
+of the formula under consideration at each stage,
+and one can be more clever about choosing which variable to split on,
+for example, choosing the variable
+that minimizes the number of clauses in the next step.</p>
+<p>Rather than pursuing such optimization, however, we will use the naive procedure to
+illustrate a common theme in automated reasoning.
+By the completeness of the refutation procedure we have designed, we know that for any
+CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>, either there is a satisfying assignment or a resolution refutation.
+Often, when we have a decision procedure or a search procedure, we can modify it to return
+additional information.
+When <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable, it would be nice if the procedure actually <em>returned</em> the satisfying
+assignment, and otherwise it would be nice if the procedure actually <em>returned</em> a
+resolution refutation.</p>
+<p>Our goal here is to think about how to obtain a proof in the latter case.
+For that, we need to have some sort of computational representation of resolution proofs.
+Here is one option:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">Step</span> <span class="n">where</span>
+  <span class="bp">|</span> <span class="n">hyp</span> <span class="o">(</span><span class="n">clause</span> <span class="o">:</span> <span class="n">Clause</span><span class="o">)</span> <span class="o">:</span> <span class="n">Step</span>
+  <span class="bp">|</span> <span class="n">res</span> <span class="o">(</span><span class="n">var</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span> <span class="o">(</span><span class="n">pos</span> <span class="n">neg</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">Step</span>
+<span class="n">deriving</span> <span class="n">Inhabited</span><span class="o">,</span> <span class="n">Repr</span>
+
+<span class="kd">def</span> <span class="n">Proof</span> <span class="o">:=</span> <span class="n">Array</span> <span class="n">Step</span> <span class="n">deriving</span> <span class="n">Inhabited</span><span class="o">,</span> <span class="n">Repr</span>
+
+<span class="kd">instance</span> <span class="o">:</span> <span class="n">GetElem</span> <span class="n">Proof</span> <span class="n">Nat</span> <span class="n">Step</span> <span class="o">(</span><span class="k">fun</span> <span class="n">xs</span> <span class="n">i</span> <span class="bp">=&gt;</span> <span class="n">i</span> <span class="bp">&lt;</span> <span class="n">xs.size</span><span class="o">)</span> <span class="o">:=</span>
+  <span class="n">inferInstanceAs</span> <span class="o">(</span><span class="n">GetElem</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Step</span><span class="o">)</span> <span class="n">_</span> <span class="n">_</span> <span class="n">_</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>A resolution proof is a sequence of steps, where each line is either a hypothesis or a resolution
+inference. The <code class="docutils literal notranslate"><span class="pre">instance</span></code> command is Lean boilerplate that will allow us to write <code class="docutils literal notranslate"><span class="pre">p[i]!</span></code>
+to refer to step <code class="docutils literal notranslate"><span class="pre">i</span></code> of a resolution proof by telling Lean that the notation
+is inherited from the underlying array representation.</p>
+<p>A proof is only well formed if each resolution step refers to prior steps, which we can
+check as follows.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">Proof.wellFormed</span> <span class="o">(</span><span class="n">p</span> <span class="o">:</span> <span class="n">Proof</span><span class="o">)</span> <span class="o">:</span> <span class="n">Bool</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
+  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="n">p.size</span><span class="o">]</span> <span class="k">do</span>
+    <span class="k">match</span> <span class="n">p</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">!</span> <span class="k">with</span>
+      <span class="bp">|</span> <span class="bp">.</span><span class="n">hyp</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="n">continue</span>
+      <span class="bp">|</span> <span class="bp">.</span><span class="n">res</span> <span class="n">_</span> <span class="n">pos</span> <span class="n">neg</span> <span class="bp">=&gt;</span>
+          <span class="k">if</span> <span class="n">i</span> <span class="bp">≤</span> <span class="n">pos</span> <span class="bp">∨</span> <span class="n">i</span> <span class="bp">≤</span> <span class="n">neg</span> <span class="k">then</span>
+            <span class="n">return</span> <span class="n">false</span>
+  <span class="n">true</span>
+</pre></div>
+</div>
+<p>The notation <code class="docutils literal notranslate"><span class="pre">.hyp</span></code> and <code class="docutils literal notranslate"><span class="pre">.res</span></code> rely on another useful syntactic gadget in Lean: because
+Lean is expecting something of type <code class="docutils literal notranslate"><span class="pre">Step</span></code> at that point, it interprets those expressions
+as <code class="docutils literal notranslate"><span class="pre">Step.hyp</span></code> and <code class="docutils literal notranslate"><span class="pre">Step.res</span></code>. This saves us the trouble of opening the namespace or
+writing <code class="docutils literal notranslate"><span class="pre">Step</span></code> explicitly.</p>
+<p>Assuming the proof is well formed, we can pretty-print it.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">Proof.show</span> <span class="o">(</span><span class="n">p</span> <span class="o">:</span> <span class="n">Proof</span><span class="o">)</span> <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="o">:=</span> <span class="k">do</span>
+  <span class="k">if</span> <span class="bp">¬</span> <span class="n">p.wellFormed</span> <span class="k">then</span>
+    <span class="n">IO.println</span> <span class="s2">&quot;Proof is not well-formed.&quot;</span>
+    <span class="n">return</span>
+  <span class="k">let</span> <span class="n">mut</span> <span class="n">clauses</span> <span class="o">:</span> <span class="n">Array</span> <span class="n">Clause</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[]</span>
+  <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="n">p.size</span><span class="o">]</span> <span class="k">do</span>
+    <span class="k">match</span> <span class="n">p</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">!</span> <span class="k">with</span>
+      <span class="bp">|</span> <span class="n">Step.hyp</span> <span class="n">c</span> <span class="bp">=&gt;</span>
+          <span class="n">clauses</span> <span class="o">:=</span> <span class="n">clauses.push</span> <span class="n">c</span>
+          <span class="n">IO.println</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;{i}: hypothesis: {c}&quot;</span>
+      <span class="bp">|</span> <span class="n">Step.res</span> <span class="n">var</span> <span class="n">pos</span> <span class="n">neg</span> <span class="bp">=&gt;</span>
+          <span class="k">let</span> <span class="n">resolvent</span> <span class="o">:=</span> <span class="n">resolve</span> <span class="n">clauses</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span><span class="bp">!</span> <span class="n">clauses</span><span class="o">[</span><span class="n">neg</span><span class="o">]</span><span class="bp">!</span> <span class="n">var</span>
+          <span class="n">clauses</span> <span class="o">:=</span> <span class="n">clauses.push</span> <span class="n">resolvent</span>
+          <span class="n">IO.println</span> <span class="n">s</span><span class="bp">!</span><span class="s2">&quot;{i}: resolve {pos}, {neg} on {var}: {resolvent}&quot;</span>
+</pre></div>
+</div>
+<p>This enables us to write resolution proofs by hand and see the results.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">example1</span> <span class="o">:</span> <span class="n">Proof</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[</span>
+  <span class="bp">.</span><span class="n">hyp</span> <span class="n">clause</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span> <span class="n">q</span><span class="o">},</span>
+  <span class="bp">.</span><span class="n">hyp</span> <span class="n">clause</span><span class="bp">!</span><span class="o">{</span><span class="bp">-</span><span class="n">p</span><span class="o">},</span>
+  <span class="bp">.</span><span class="n">hyp</span> <span class="n">clause</span><span class="bp">!</span><span class="o">{</span><span class="bp">-</span><span class="n">q</span><span class="o">},</span>
+  <span class="bp">.</span><span class="n">res</span> <span class="s2">&quot;p&quot;</span> <span class="mi">0</span> <span class="mi">1</span><span class="o">,</span>
+  <span class="bp">.</span><span class="n">res</span> <span class="s2">&quot;q&quot;</span> <span class="mi">3</span> <span class="mi">2</span>
+<span class="o">]</span>
+
+<span class="k">#eval</span> <span class="n">example1.wellFormed</span>
+<span class="k">#eval</span> <span class="n">example1.show</span>
+
+<span class="kd">def</span> <span class="n">example2</span> <span class="o">:</span> <span class="n">Proof</span> <span class="o">:=</span> <span class="bp">#</span><span class="o">[</span>
+  <span class="bp">.</span><span class="n">hyp</span> <span class="n">clause</span><span class="bp">!</span><span class="o">{</span><span class="n">p</span> <span class="n">q</span> <span class="n">r</span><span class="o">},</span>
+  <span class="bp">.</span><span class="n">hyp</span> <span class="n">clause</span><span class="bp">!</span><span class="o">{</span><span class="bp">-</span><span class="n">p</span> <span class="n">s</span><span class="o">},</span>
+  <span class="bp">.</span><span class="n">hyp</span> <span class="n">clause</span><span class="bp">!</span><span class="o">{</span><span class="bp">-</span><span class="n">q</span> <span class="n">s</span><span class="o">},</span>
+  <span class="bp">.</span><span class="n">hyp</span> <span class="n">clause</span><span class="bp">!</span><span class="o">{</span><span class="bp">-</span><span class="n">r</span> <span class="n">s</span><span class="o">},</span>
+  <span class="bp">.</span><span class="n">hyp</span> <span class="n">clause</span><span class="bp">!</span><span class="o">{</span><span class="bp">-</span><span class="n">s</span><span class="o">},</span>
+  <span class="bp">.</span><span class="n">res</span> <span class="s2">&quot;p&quot;</span> <span class="mi">0</span> <span class="mi">1</span><span class="o">,</span>
+  <span class="bp">.</span><span class="n">res</span> <span class="s2">&quot;q&quot;</span> <span class="mi">5</span> <span class="mi">2</span><span class="o">,</span>
+  <span class="bp">.</span><span class="n">res</span> <span class="s2">&quot;r&quot;</span> <span class="mi">6</span> <span class="mi">3</span><span class="o">,</span>
+  <span class="bp">.</span><span class="n">res</span> <span class="s2">&quot;s&quot;</span> <span class="mi">7</span> <span class="mi">4</span>
+<span class="o">]</span>
+
+<span class="k">#eval</span> <span class="n">example2.wellFormed</span>
+<span class="k">#eval</span> <span class="n">example2.show</span>
+</pre></div>
+</div>
+<p>Notice that our proof format does not store the clause that is derived at each step,
+because that can be reconstructed from the proof, as we just did with our pretty-printer.
+But for some purposes,
+it is more convenient to use a representation that stores the clause with the
+resolution steps as well as with the hypotheses.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">VerboseStep</span> <span class="n">where</span>
+  <span class="bp">|</span> <span class="n">hyp</span> <span class="o">(</span><span class="n">clause</span> <span class="o">:</span> <span class="n">Clause</span><span class="o">)</span> <span class="o">:</span> <span class="n">VerboseStep</span>
+  <span class="bp">|</span> <span class="n">res</span> <span class="o">(</span><span class="n">var</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span> <span class="o">(</span><span class="n">pos</span> <span class="n">neg</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">(</span><span class="n">clause</span> <span class="o">:</span> <span class="n">Clause</span><span class="o">):</span> <span class="n">VerboseStep</span>
+<span class="n">deriving</span> <span class="n">Inhabited</span><span class="o">,</span> <span class="n">Repr</span>
+
+<span class="kd">def</span> <span class="n">VerboseProof</span> <span class="o">:=</span> <span class="n">Array</span> <span class="n">VerboseStep</span> <span class="n">deriving</span> <span class="n">Inhabited</span><span class="o">,</span> <span class="n">Repr</span>
+</pre></div>
+</div>
+<p>We are now in a good position to modify the <code class="docutils literal notranslate"><span class="pre">refute</span></code> procedure above to build a refutation as
+it goes.
+It is easier to use the verbose proof format, because that makes it easy to refer to the
+clauses we have derived.
+In other words, the procedure to refute a CNF formula should start by adding all the clauses
+in the formula as hypotheses and then iteratively add the clauses that are derived
+by the resolution rule.
+Since the proof includes all the clauses we derive along the way, we ought to keep track of
+a list of numbers that represent the CNF formula at each stage of the algorithm,
+that is, the lines of the proof that correspond to the clauses in the CNF formula that are
+still active.
+Otherwise, the structure of the procedure mirrors that of <code class="docutils literal notranslate"><span class="pre">refute</span></code>.</p>
+<p>We encourage you to try your hand at making these modifications and then showing the refutations
+the procedure obtains.
+Note that the proofs are obtained this way are not efficient:
+the procedure, as we described it, logs every clause that
+is derived in the search, whether or not it contributes to the final proof of <span class="math notranslate nohighlight">\(\bot\)</span>.
+We therefore also encourage you to think about how you can trim these proofs to the
+clauses that are needed.</p>
+</section>
+<section id="resolution-and-dpll">
+<h2><span class="section-number">8.4. </span>Resolution and DPLL<a class="headerlink" href="#resolution-and-dpll" title="Permalink to this heading"></a></h2>
+<p>Recall the theorem established in <a class="reference internal" href="#section-resolution"><span class="std std-numref">Section 8.2</span></a>:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>A CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> has a resolution refutation if and only if it is unsatisfiable.</p>
+</div>
+<p>Our proof gave rise to a procedure, DP, that searches for such a refutation.
+We now describe an alternative proof that is closer in spirit to the DPLL procedure we described
+in <a class="reference internal" href="decision_procedures_for_propositional_logic.html#chapter-decision-procedures-for-propositional-logic"><span class="std std-numref">Chapter 6</span></a>.
+Rather than think of the proof in terms of a search for a refutation, we think of it in terms
+of a search for a satisfying assignment.</p>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>As before, soundness follows straightforwardly from the fact that the resolution rule preserves
+truth under any truth assignment, while the empty clause is unsatisfiable.</p>
+<p>To prove completeness, we use induction on the number of propositional variables
+to show that if <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable, there is a resolution refutation
+of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+If there are no variables, the fact that <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable means that
+it must be the set consisting of the empty clause, and we are done.</p>
+<p>In the induction step, let <span class="math notranslate nohighlight">\(p\)</span> be any variable that occurs in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable, then so are <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[p \mapsto \top]}\)</span>
+and <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[p \mapsto \bot]}\)</span>. By the inductive hypothesis,
+both of these are refutable.</p>
+<p>Remember the relationship between <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \top]}\)</span> and <span class="math notranslate nohighlight">\(\Gamma\)</span>:
+in the former, we remove all the clauses that include <span class="math notranslate nohighlight">\(p\)</span> and delete <span class="math notranslate nohighlight">\(\lnot p\)</span>
+from the remaining clauses.
+So a resolution refutation of the empty clause from <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[p \mapsto \top]}\)</span>
+uses only the clauses of <span class="math notranslate nohighlight">\(\tval{\Gamma}\)</span> that don’t contain <span class="math notranslate nohighlight">\(p\)</span>,
+possibly with <span class="math notranslate nohighlight">\(\lnot p\)</span> removed.
+Restoring <span class="math notranslate nohighlight">\(\lnot p\)</span> to all the initial clauses yields either a proof of the
+empty clause or a proof of <span class="math notranslate nohighlight">\(\lnot p\)</span>.</p>
+<p>In the first case, we have a proof of the empty clause from <span class="math notranslate nohighlight">\(\Gamma\)</span>, and we are done.
+Otherwise, applying the inductive hypotheses to <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[\lnot p \mapsto \bot]}\)</span>
+and repeating the previous argument,
+we obtain either a proof of the empty clause or a proof of <span class="math notranslate nohighlight">\(p\)</span>.
+Once again, in the first case, we are done. Otherwise, we apply the resolution rule to the
+proof of <span class="math notranslate nohighlight">\(p\)</span> and the proof of <span class="math notranslate nohighlight">\(\lnot p\)</span>, and we have a proof of the empty clause.</p>
+</div>
+<p>We can once again view the completeness proof as a decision procedure in disguise.
+The strategy of picking a variable <span class="math notranslate nohighlight">\(p\)</span> and trying to refute
+<span class="math notranslate nohighlight">\(\tval{\Gamma}_{[p \mapsto \top]}\)</span> and <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[p \mapsto \bot]}\)</span>
+simultaneously is exactly the splitting rule of DPLL,
+formulated in terms of demonstrating unsatisfiability rather than searching for a satisfying
+assignment. We can formulate the theorem above in more constructive terms as follows:</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>For any CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>, either <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable or there is a
+resolution refutation.</p>
+</div>
+<p>Remember that at any point in the DPLL search, we have a partial assignment <span class="math notranslate nohighlight">\(\tau\)</span>
+that we are trying to extend to a satisfying assignment to <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>.
+If we fail, we then have to give up on <span class="math notranslate nohighlight">\(\tau\)</span>, backtrack, and try another path.
+To extract either a satisfying assignment or a resolution proof from the result,
+it suffices to show the following constructively:</p>
+<blockquote>
+<div><p>For any partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
+either <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> is satisfiable
+or there is a resolution proof of a clause <span class="math notranslate nohighlight">\(C\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{C}_\tau = \bot\)</span>.</p>
+</div></blockquote>
+<p>This yields the desired conclusion when <span class="math notranslate nohighlight">\(\tau\)</span> is the empty assignment,
+since the only clause that evaluates to <span class="math notranslate nohighlight">\(\bot\)</span> under the empty assignment is the empty clause.</p>
+<p>We will sketch an explanation of how to read off the information above from the DPLL search,
+and we will leave it as an exercise for you to fill in the details.
+Remember that there are three steps that are interleaved in DPLL:</p>
+<ol class="arabic simple">
+<li><p>splitting on a variable <span class="math notranslate nohighlight">\(p\)</span></p></li>
+<li><p>unit propagation</p></li>
+<li><p>removing pure literals</p></li>
+</ol>
+<p>Unit propagation can be viewed as a special case of the splitting rule:
+If a CNF formula contains a unit clause with literal <span class="math notranslate nohighlight">\(\ell\)</span>,
+then splitting on <span class="math notranslate nohighlight">\(\ell\)</span> fails immediately on one branch,
+and the other branch corresponds to the result of applying unit propagation.</p>
+<p>Reasoning about the pure literal rule is more subtle. Suppose <span class="math notranslate nohighlight">\(\ell\)</span> is pure in
+<span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>, and consider the DPLL search
+starting from <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau[\ell \mapsto \top]}\)</span>,
+which is a subset of <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>. If DPLL finds a satisfying assignment
+to <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau[\ell \mapsto \top]}\)</span>, it can be extended to a satisfying
+assignment to <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> by mapping <span class="math notranslate nohighlight">\(\ell\)</span> to <span class="math notranslate nohighlight">\(\top\)</span>.
+On the other hand, for any clause <span class="math notranslate nohighlight">\(C\)</span> such that <span class="math notranslate nohighlight">\(\tval{C}_{\tau[\ell \mapsto \top]} = \bot\)</span>,
+we have <span class="math notranslate nohighlight">\(\tval{C}_\tau = \bot\)</span>, because <span class="math notranslate nohighlight">\(\ell\)</span> is pure in all the clauses of
+<span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>.</p>
+<p>So we only have to deal with the splitting rule. A satisfying assignment for either branch
+results in a satisfying assignment for <span class="math notranslate nohighlight">\(\Gamma\)</span>, we only only have to prove the following:</p>
+<blockquote>
+<div><p>If there are a resolution proof of a clause <span class="math notranslate nohighlight">\(C\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{C}_{\tau[P \mapsto \top]} = \bot\)</span>
+and a resolution proof of a clause <span class="math notranslate nohighlight">\(D\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{D}_{\tau[P \mapsto \bot]} = \bot\)</span>,
+then there is a resolution proof of a clause <span class="math notranslate nohighlight">\(E\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
+<span class="math notranslate nohighlight">\(\tval{E}_\tau = \bot\)</span>.</p>
+</div></blockquote>
+<p>We leave the proof of this fact to you.</p>
+</section>
 <section id="a-sequent-calculus">
-<span id="section-propositional-sequent-calculus"></span><h2><span class="section-number">8.2. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this heading"></a></h2>
+<span id="section-propositional-sequent-calculus"></span><h2><span class="section-number">8.5. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this heading"></a></h2>
 <p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a finite set of propositional formula in negation normal form.
 The next calculus we will consider is designed to prove that the disjunction of the formulas
 in <span class="math notranslate nohighlight">\(\Gamma\)</span> is valid, which is to say, for every truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
@@ -332,128 +749,8 @@ of searching for proofs and people who like to think in terms of searching for m
 It is therefore important to learn how to speak both languages,
 and to be able to translate between them on the fly.</p>
 </section>
-<section id="resolution">
-<span id="section-resolution"></span><h2><span class="section-number">8.3. </span>Resolution<a class="headerlink" href="#resolution" title="Permalink to this heading"></a></h2>
-<p>Given that the sequent calculus implicitly corresponds to a decision procedure for
-propositional logic, it is natural to ask whether there is a proof system that corresponds
-more closely to DPLL, the decision procedure that was the focus of
-<a class="reference internal" href="decision_procedures_for_propositional_logic.html#chapter-decision-procedures-for-propositional-logic"><span class="std std-numref">Chapter 6</span></a>.
-We now describe such a system.</p>
-<p>A <em>resolution</em> proof is designed to <em>refute</em> a CNF formula, that is, to prove that
-it is unsatisfiable.
-Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a CNF formula, represented as a set of clauses.
-As in <a class="reference internal" href="decision_procedures_for_propositional_logic.html#section-dpll"><span class="std std-numref">Section 6.3</span></a>, we can assume that none of the clauses contain repeated
-literals or a complementary pair, and we can think of each clause as a set of literals.
-If <span class="math notranslate nohighlight">\(C\)</span> is a clause and <span class="math notranslate nohighlight">\(\ell\)</span> is a literal, we write <span class="math notranslate nohighlight">\(C, \ell\)</span> for
-<span class="math notranslate nohighlight">\(C \lor \ell\)</span>. The <em>resolution rule</em> derives a new clause from an old one:</p>
-<blockquote>
-<div><div class="math notranslate nohighlight">
-\[\begin{prooftree}
-\AXC{$C, p$}
-\AXC{$D, \lnot p$}
-\BIC{$D \lor D$}
-\end{prooftree}\]</div></div></blockquote>
-<p>The rule says that if either <span class="math notranslate nohighlight">\(C\)</span> or <span class="math notranslate nohighlight">\(p\)</span> is true, and either <span class="math notranslate nohighlight">\(D\)</span> or <span class="math notranslate nohighlight">\(\lnot p\)</span>
-is true, then <span class="math notranslate nohighlight">\(C \lor D\)</span> has to be true. A <em>resolution proof</em> of a clause <span class="math notranslate nohighlight">\(C\)</span> from
-a set of clauses <span class="math notranslate nohighlight">\(\Gamma\)</span> is a sequence of steps (or a labelled tree) that obtains <span class="math notranslate nohighlight">\(C\)</span>
-from <span class="math notranslate nohighlight">\(\Gamma\)</span> using instances of the resolution rule. A <em>resolution refutation</em> of <span class="math notranslate nohighlight">\(\Gamma\)</span>
-is a resolution proof of the empty clause from <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
-<div class="admonition-theorem admonition">
-<p class="admonition-title">Theorem</p>
-<p>A CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> has a resolution refutation if and only if it is unsatisfiable.</p>
-</div>
-<p>Resolution can therefore be understood as a proof system for propositional logic in the following way:
-given any formula <span class="math notranslate nohighlight">\(A\)</span>, put <span class="math notranslate nohighlight">\(\lnot A\)</span> in CNF, and look for a resolution refutation.
-Such a refutation is a proof of <span class="math notranslate nohighlight">\(A\)</span>. The theorem above says that this system is sound
-and complete: <span class="math notranslate nohighlight">\(A\)</span> is valid if and only if <span class="math notranslate nohighlight">\(\lnot A\)</span> is unsatisfiable, which
-happens if and only if there is a refutation of <span class="math notranslate nohighlight">\(\lnot A\)</span>.</p>
-<div class="admonition-proof admonition">
-<p class="admonition-title">Proof</p>
-<p>Soundness follows straightforwardly from the fact that the resolution rule preserves
-truth under any truth assignment, while the empty clause is unsatisfiable.</p>
-<p>To prove completeness, we use induction on the number of propositional variables
-to show that if <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable, there is a resolution refutation
-of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
-If there are no variables, the fact that <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable means that
-it must be the set consisting of the empty clause, and we are done.</p>
-<p>In the induction step, let <span class="math notranslate nohighlight">\(P\)</span> be any variable that occurs in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
-If <span class="math notranslate nohighlight">\(\Gamma\)</span> is unsatisfiable, then so are <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \top]}\)</span>
-and <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \bot]}\)</span>. By the inductive hypothesis,
-both of these are refutable.</p>
-<p>Remember the relationship between <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \top]}\)</span> and <span class="math notranslate nohighlight">\(\Gamma\)</span>:
-in the former, we remove all the clauses that include <span class="math notranslate nohighlight">\(P\)</span> and delete <span class="math notranslate nohighlight">\(\lnot P\)</span>
-from the remaining clauses.
-So a resolution refutation of the empty clause from <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \top]}\)</span>
-uses only the clauses of <span class="math notranslate nohighlight">\(\tval{\Gamma}\)</span> that don’t contain <span class="math notranslate nohighlight">\(P\)</span>,
-possibly with <span class="math notranslate nohighlight">\(\lnot P\)</span> removed.
-Restoring <span class="math notranslate nohighlight">\(\lnot P\)</span> to all the initial clauses yields either a proof of the
-empty clause or a proof of <span class="math notranslate nohighlight">\(\lnot P\)</span>.</p>
-<p>In the first case, we have a proof of the empty clause from <span class="math notranslate nohighlight">\(\Gamma\)</span>, and we are done.
-Otherwise, applying the inductive hypotheses to <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[\lnot P \mapsto \bot]}\)</span>
-and repeating the previous argument,
-we obtain either a proof of the empty clause or a proof of <span class="math notranslate nohighlight">\(P\)</span>.
-Once again, in the first case, we are done. Otherwise, we apply the resolution rule to the
-proof of <span class="math notranslate nohighlight">\(P\)</span> and the proof of <span class="math notranslate nohighlight">\(\lnot P\)</span>, and we have a proof of the empty clause.</p>
-</div>
-<p>We can once again view the completeness proof as a decision procedure in disguise.
-In fact, the strategy of picking a variable and trying to refute
-<span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \top]}\)</span> and <span class="math notranslate nohighlight">\(\tval{\Gamma}_{[P \mapsto \bot]}\)</span>
-simultaneously is exactly the splitting rule of DPLL,
-formulated in terms of demonstrating unsatisfiability rather than searching for a satisfying
-assignment. We can formulate the theorem above in more constructive terms as follows:</p>
-<div class="admonition-theorem admonition">
-<p class="admonition-title">Theorem</p>
-<p>For any CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>, either <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable or there is a
-resolution refutation.</p>
-</div>
-<p>Remember that at any point in the DPLL search, we have a partial assignment <span class="math notranslate nohighlight">\(\tau\)</span>
-that we are trying to extend to a satisfying assignment to <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>.
-If we fail, we then have to give up on <span class="math notranslate nohighlight">\(\tau\)</span>, backtrack, and try another path.
-To extract either a satisfying assignment or a resolution proof from the result,
-it suffices to show the following constructively:</p>
-<blockquote>
-<div><p>For any partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
-either <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> is satisfiable
-or there is a resolution proof of a clause <span class="math notranslate nohighlight">\(C\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
-<span class="math notranslate nohighlight">\(\tval{C}_\tau = \bot\)</span>.</p>
-</div></blockquote>
-<p>This yields the desired conclusion when <span class="math notranslate nohighlight">\(\tau\)</span> is the empty assignment,
-since the only clause that evaluates to <span class="math notranslate nohighlight">\(\bot\)</span> under the empty assignment is the empty clause.</p>
-<p>We will sketch an explanation of how to read off the information above from the DPLL search,
-and we will leave it as an exercise for you to fill in the details.
-Remember that there are three steps that are interleaved in DPLL:</p>
-<ol class="arabic simple">
-<li><p>splitting on a variable <span class="math notranslate nohighlight">\(p\)</span></p></li>
-<li><p>unit propagation</p></li>
-<li><p>removing pure literals</p></li>
-</ol>
-<p>Unit propagation can be viewed as a special case of the splitting rule:
-If a CNF formula contains a unit clause with literal <span class="math notranslate nohighlight">\(\ell\)</span>,
-then splitting on <span class="math notranslate nohighlight">\(\ell\)</span> fails immediately on one branch,
-and the other branch corresponds to the result of applying unit propagation.</p>
-<p>Reasoning about the pure literal rule is more subtle. Suppose <span class="math notranslate nohighlight">\(\ell\)</span> is pure in
-<span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>, and consider the DPLL search
-starting from <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau[\ell \mapsto \top]}\)</span>,
-which is a subset of <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>. If DPLL finds a satisfying assignment
-to <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau[\ell \mapsto \top]}\)</span>, it can be extended to a satisfying
-assignment to <span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span> by mapping <span class="math notranslate nohighlight">\(\ell\)</span> to <span class="math notranslate nohighlight">\(\top\)</span>.
-On the other hand, for any clause <span class="math notranslate nohighlight">\(C\)</span> such that <span class="math notranslate nohighlight">\(\tval{C}_{\tau[\ell \mapsto \top]} = \bot\)</span>,
-we have <span class="math notranslate nohighlight">\(\tval{C}_\tau = \bot\)</span>, because <span class="math notranslate nohighlight">\(\ell\)</span> is pure in all the clauses of
-<span class="math notranslate nohighlight">\(\tval{\Gamma}_\tau\)</span>.</p>
-<p>So we only have to deal with the splitting rule. A satisfying assignment for either branch
-results in a satisfying assignment for <span class="math notranslate nohighlight">\(\Gamma\)</span>, we only only have to prove the following:</p>
-<blockquote>
-<div><p>If there are a resolution proof of a clause <span class="math notranslate nohighlight">\(C\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
-<span class="math notranslate nohighlight">\(\tval{C}_{\tau[P \mapsto \top]} = \bot\)</span>
-and a resolution proof of a clause <span class="math notranslate nohighlight">\(D\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
-<span class="math notranslate nohighlight">\(\tval{D}_{\tau[P \mapsto \bot]} = \bot\)</span>,
-then there is a resolution proof of a clause <span class="math notranslate nohighlight">\(E\)</span> from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that
-<span class="math notranslate nohighlight">\(\tval{E}_\tau = \bot\)</span>.</p>
-</div></blockquote>
-<p>We leave the proof of this fact to you.</p>
-</section>
 <section id="natural-deduction">
-<span id="section-natural-deduction"></span><h2><span class="section-number">8.4. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Permalink to this heading"></a></h2>
+<span id="section-natural-deduction"></span><h2><span class="section-number">8.6. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Permalink to this heading"></a></h2>
 <p>We now consider a type of deductive system that was introduced by Gerhard Gentzen
 in the 1930s, known as <em>natural deduction</em>. As the name suggests,
 the system was designed to model the way someone might carry out an informal
@@ -479,6 +776,7 @@ But Lean also uses the <span class="math notranslate nohighlight">\(\proves\)</s
 so we will stick with that.</p>
 <p>We write “<span class="math notranslate nohighlight">\(\Gamma, A\)</span>” for <span class="math notranslate nohighlight">\(\Gamma \cup \{ A \}\)</span> to represent the hypotheses
 in <span class="math notranslate nohighlight">\(\Gamma\)</span> together with the additional hypothesis <span class="math notranslate nohighlight">\(A\)</span>.
+Similarly, we write “<span class="math notranslate nohighlight">\(\Gamma, \Delta\)</span>” for <span class="math notranslate nohighlight">\(\Gamma \cup \Delta\)</span>.
 The first rule is trivial: we always have</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
@@ -494,8 +792,8 @@ For example, the rules for <span class="math notranslate nohighlight">\(\land\)<
 <div><div class="math notranslate nohighlight">
 \[\begin{prooftree}
 \AXC{$\Gamma \fCenter A$}
-\AXC{$\Gamma \fCenter B$}
-\BIC{$\Gamma \fCenter A \land B$}
+\AXC{$\Delta \fCenter B$}
+\BIC{$\Gamma, \Delta \fCenter A \land B$}
 \end{prooftree}
 \quad \quad
 \begin{prooftree}
@@ -513,8 +811,8 @@ For example, the rules for <span class="math notranslate nohighlight">\(\land\)<
 \quad \quad
 \begin{prooftree}
 \AXC{$\Gamma \fCenter A \limplies B$}
-\AXC{$\Gamma \fCenter A$}
-\BIC{$\Gamma \fCenter B$}
+\AXC{$\Delta \fCenter A$}
+\BIC{$\Gamma, \Delta \fCenter B$}
 \end{prooftree}
 \]</div></div></blockquote>
 <p>Notice that in the introduction rule, to prove <span class="math notranslate nohighlight">\(A \limplies B\)</span>, we
@@ -529,9 +827,9 @@ The rules for disjunction, which codify proof by cases, are as follows:</p>
 \quad \quad
 \begin{prooftree}
 \AXC{$\Gamma \fCenter A \lor B$}
-\AXC{$\Gamma, A \fCenter C$}
-\AXC{$\Gamma, B \fCenter C$}
-\TIC{$\Gamma \fCenter C$}
+\AXC{$\Delta, A \fCenter C$}
+\AXC{$\Pi, B \fCenter C$}
+\TIC{$\Gamma, \Delta, \Pi \fCenter C$}
 \end{prooftree}
 \]</div></div></blockquote>
 <p>For classical logic, we also add the following principle of proof by contradiction:</p>
@@ -551,8 +849,8 @@ to include them in the calculus.</p>
 <blockquote>
 <div><div class="math notranslate nohighlight">
 \[\begin{prooftree}
-\AXC{$A, B \fCenter A$}
-\AXC{$A, B \fCenter B$}
+\AXC{$A \fCenter A$}
+\AXC{$B \fCenter B$}
 \BIC{$A, B \fCenter A \land B$}
 \UIC{$A \fCenter B \limplies A \land B$}
 \UIC{$\fCenter A \limplies (B \limplies A \land B)$}
@@ -591,9 +889,13 @@ if <span class="math notranslate nohighlight">\(\Gamma \models A\)</span>.</p>
 <p>We will not take the time to prove this here. One way to prove it is to
 show that natural deduction can simulate another calculus, like the sequent calculus,
 for which a completeness proof is easier.</p>
+<p>One reason for our interest in natural deduction is that it is the basis for Lean’s
+internal proof language. In the next chapter, we will start to learn how to write
+proofs in Lean, and it will be helpful to understand the instructions we provide the
+system as instructions for constructing natural deduction derivations.</p>
 </section>
 <section id="compactness">
-<span id="section-compactness"></span><h2><span class="section-number">8.5. </span>Compactness<a class="headerlink" href="#compactness" title="Permalink to this heading"></a></h2>
+<span id="section-compactness"></span><h2><span class="section-number">8.7. </span>Compactness<a class="headerlink" href="#compactness" title="Permalink to this heading"></a></h2>
 <p>In automated reasoning, when we write <span class="math notranslate nohighlight">\(\Gamma \models A\)</span> to express
 that <span class="math notranslate nohighlight">\(A\)</span> is entailed by hypotheses in <span class="math notranslate nohighlight">\(\Gamma\)</span>,
 we generally have the in mind case where <span class="math notranslate nohighlight">\(\Gamma\)</span> is finite.
@@ -634,17 +936,11 @@ plane with tiles from <span class="math notranslate nohighlight">\(S\)</span>.</
 <p>You should think about how this follows from the compactness theorem.</p>
 </section>
 <section id="exercises">
-<h2><span class="section-number">8.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">8.8. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <ol class="arabic">
 <li><p>Using only axioms 1 and 2 from <a class="reference internal" href="#section-axiomatic-systems"><span class="std std-numref">Section 8.1</span></a>
 and modus ponens, show how to derive <span class="math notranslate nohighlight">\(p \to p\)</span>. (It is surprisingly
 tricky, but you can do it in 5 lines.)</p></li>
-<li><p>Using the cut-free sequent calculus described in <a class="reference internal" href="#section-propositional-sequent-calculus"><span class="std std-numref">Section 8.2</span></a>,
-either construct a proof of the following sequent or use the methods described
-in that section to find a counterexample:</p>
-<div class="math notranslate nohighlight">
-\[((p \lor q) \to r) \lor ((r \to p) \land (r \to q)).\]</div>
-</li>
 <li><p>Give a resolution refutation of the following list of clauses:</p>
 <ol class="arabic simple">
 <li><p><span class="math notranslate nohighlight">\(p \lor q \lor \lnot r\)</span></p></li>
@@ -661,7 +957,7 @@ clauses, so the first one you derive is numbered 9. For each one,
 specify the two clauses that serve as input to the resolution rule by indicating their numbers.
 (There is a solution with 11 additional clauses, for a total of 19.)</p>
 </li>
-<li><p>In <a class="reference internal" href="#section-resolution"><span class="std std-numref">Section 8.3</span></a>, we outline a method for extracting a resolution refutation
+<li><p>In <a class="reference internal" href="#section-resolution"><span class="std std-numref">Section 8.2</span></a>, we outline a method for extracting a resolution refutation
 of a set of clauses, <span class="math notranslate nohighlight">\(\Gamma\)</span>, from a failed search.
 The method relies on the following claim:</p>
 <blockquote>
@@ -675,6 +971,12 @@ then there is a resolution proof of a clause <span class="math notranslate nohig
 <p>Here <span class="math notranslate nohighlight">\(\tau\)</span> is a partial truth assignment and the notation <span class="math notranslate nohighlight">\(\tval{C}_\tau\)</span> refers to the simplification of the
 clause <span class="math notranslate nohighlight">\(C\)</span> with respect to assignment <span class="math notranslate nohighlight">\(\tau\)</span> that is described in <a class="reference internal" href="decision_procedures_for_propositional_logic.html#section-unit-propagation-and-the-pure-literal-rule"><span class="std std-numref">Section 6.2</span></a>.</p>
 <p>Prove this claim.</p>
+</li>
+<li><p>Using the cut-free sequent calculus described in <a class="reference internal" href="#section-propositional-sequent-calculus"><span class="std std-numref">Section 8.5</span></a>,
+either construct a proof of the following sequent or use the methods described
+in that section to find a counterexample:</p>
+<div class="math notranslate nohighlight">
+\[((p \lor q) \to r) \lor ((r \to p) \land (r \to q)).\]</div>
 </li>
 </ol>
 </section>

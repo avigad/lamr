@@ -9,45 +9,31 @@ Lean as a Programming Language
 About Lean
 ----------
 
-*Lean* is a new programming language and interactive proof assistant being developed
-at Microsoft Research.
-It is still in its early stages, and not well documented yet.
-But in many ways it is an ideal system for working with logical syntax
+*Lean 4* is a new programming language and interactive proof assistant.
+It is currently used to formalize mathematics, to verify hardware and software,
+and to explore applications of machine learning to mathematical reasoning.
+Though the system is still new and under active development,
+in many ways it is an ideal system for working with logical syntax
 and putting logic to use.
-Lean is an exciting project, and the system is fun to use.
-So please bear with us.
-Using Lean puts us out on the frontier,
-but if you adopt a pioneering attitude,
-you will be in a good position to enjoy all the cool things
-that Lean has to offer.
 
 You can learn more about Lean on the `Lean home page <http://leanprover.github.io/>`_,
 on the `Lean community home page <https://leanprover-community.github.io/>`_,
 and by asking questions on the `Lean Zulip chat <https://leanprover.zulipchat.com/>`_,
 which you are heartily encouraged to join.
-To be more precise, there are currently two versions of Lean:
+Lean has a very large mathematical library, known as
+`mathlib <https://github.com/leanprover-community/mathlib>`_, which you can
+learn more about on the Lean community pages.
 
-- Lean 3 is stable, and is primarily an interactive proof assistant.
-  It has a very large mathematical library, known as `mathlib <https://github.com/leanprover-community/mathlib>`_.
-
-- Lean 4 is still evolving and is designed as a performant programming language.
-  It can also be used as a proof assistant, though it does not yet have a
-  substantial library.
-  Its language and syntax are similar to that of Lean 3,
-  but it is not backward compatible.
-
-In this course, we will use Lean 4.
 The following documentation is available:
 
 - a `user manual <https://leanprover.github.io/lean4/doc/>`_
-- the beginning of an `introduction to functional programming in Lean <https://leanprover.github.io/functional_programming_in_lean/>`_
+- an `introduction to functional programming in Lean <https://leanprover.github.io/functional_programming_in_lean/>`_
 - a `tutorial on theorem proving in Lean <https://leanprover.github.io/theorem_proving_in_lean4/>`_.
 
+As a functional programming language, Lean bears some similarity to Haskell and OCaml.
 If you are new to functional programming, you might also find it helpful to consult an
 `introduction to functional programming in Haskell <http://learnyouahaskell.com/>`_.
-
-As we will see, Lean has a lot of features that make that
-worthwhile. In particular, Lean 4 is designed to be an ideal language for implementing
+Lean 4 has a number of interesting features, and it is designed for implementing
 powerful logic-based systems, as evidenced by the fact that most of Lean 4 is implemented
 in Lean 4 itself.
 

@@ -1,17 +1,19 @@
+.. highlight:: lean
+
 .. _chapter_deduction_for_propositional_logic:
 
 Deduction for Propositional Logic
 =================================
 
 In the study of computational complexity, a *language* is a set of strings
-over some alphabet. For example, we can consider the language :math:`\fn{PROP}` consisting of all
-propositional formulas, the language :math:`\fn{SAT}` consisting of all satisfiable formulas,
-and the language :math:`\fn{TAUT}` consisting of all tautologies.
-We have seen that :math:`\fn{SAT}` and :math:`\fn{TAUT}` are both *decidable*,
+over some alphabet. For example, we can consider the language PROP consisting of all
+propositional formulas, the language SAT consisting of all satisfiable formulas,
+and the language TAUT consisting of all tautologies.
+We have seen that SAT and TAUT are both *decidable*,
 which is to say, there is are algorithms to decide membership in those sets.
 The P=NP question is precisely the question
-as to whether there a polynomial time algorithm for :math:`\fn{SAT}`, or, equivalently,
-for :math:`\fn{TAUT}`.
+as to whether there a polynomial time algorithm for SAT, or, equivalently,
+for TAUT.
 
 Still speaking in broad terms, a *proof system* for a language is a relation :math:`P(d, x)`
 between strings with the property for any :math:`x`, :math:`x` is in the language
@@ -23,11 +25,11 @@ This is often easy to do by putting a lot of information into :math:`d`.
 NP is the class of languages that have a polynomial time proof system with the additional property
 that for every :math:`x` in the language, there is a proof of membership :math:`d` whose
 length is polynomially bounded in the length of :math:`x`.
-The language :math:`\fn{SAT}` is in NP because there are short proofs of satisfiability,
+The language SAT is in NP because there are short proofs of satisfiability,
 namely, the satisfying assignments.
 
 When it comes to propositional logic, when we talk about proof systems,
-we generally mean a proof system for :math:`\fn{TAUT}`.
+we generally mean a proof system for TAUT.
 In other words, a proof system for propositional logic is supposed to show that a formula is valid.
 It can therefore also be used to establish unsatisfiability, since a formula
 :math:`A` is unsatisfiable if and only if :math:`\lnot A` is valid.
@@ -87,6 +89,28 @@ and *derivation* are often used interchangeably.
 The last two are sometimes useful to distinguish formal derivations from
 ordinary (informal) mathematical proofs.
 
+Different proof systems are useful for different purposes. Some are more faithful
+to informal proof. These are therefore are easier to write down by hand when we try to
+give a formal argument for a claim we can prove informally. Others may be more convenient
+to use in automated reasoning, in the sense that they may be easier to generate automatically
+or easier to check. Still others may be more useful from a theoretical standpoint,
+when we try to reason about provability and the syntactic properties of the system.
+For those reasons, a good deal of work in logic is devoted to designing different types
+of proof systems and reasoning about the relationships between them.
+
+In this chapter, we will consider four different types of proof systems for propositional
+logic. The first type, axiomatic systems, are interesting mostly for historical reasons.
+They are neither convenient to work with by hand nor convenient for automated reasoning,
+but they do provide a fundamentally intuitive notion of proof, namely, as a sequence of
+statement in which each either is an axiom, a hypothesis, or follows from previous lines
+by a valid logical inference. The second type, resolution, is fundamental to automated
+reasoning. The third, sequent calculi, are also commonly used in automated reasoning, and are
+closely related to *tableau systems*, which are also common.
+The last kind, natural deduction, is designed to closely model ordinary
+logical reasoning, such as the kind of logical reasoning we use to prove a theorem of
+mathematics. It forms the basis for a number of interactive proof systems.
+
+
 .. _section_axiomatic_systems:
 
 Axiomatic systems
@@ -127,6 +151,361 @@ But axiomatic systems are no longer of much practical interest:
 they do not provide convenient means of modeling informal proofs,
 and they are not useful for automated reasoning or search.
 We will therefore set them aside and focus our attention on other types of proof systems.
+
+
+.. _section_resolution:
+
+Resolution
+----------
+
+A *resolution* proof is designed to *refute* a CNF formula, that is, to prove that
+it is unsatisfiable.
+Let :math:`\Gamma` be a CNF formula, represented as a set of clauses.
+As in :numref:`section_dpll`, we can assume that none of the clauses contain repeated
+literals or a complementary pair, and we can think of each clause as a set of literals.
+If :math:`C` is a clause and :math:`\ell` is a literal, we write :math:`C, \ell` for
+:math:`C \lor \ell`. The *resolution rule* derives a new clause from an old one:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[\begin{prooftree}
+      \AXC{$C, p$}
+      \AXC{$D, \lnot p$}
+      \BIC{$C \lor D$}
+      \end{prooftree}\]</div>
+
+  .. raw:: latex
+
+      \begin{prooftree}
+      \AXC{$C, p$}
+      \AXC{$D, \lnot p$}
+      \BIC{$C \lor D$}
+      \end{prooftree}
+
+The rule says that if either :math:`C` or :math:`p` is true, and either :math:`D` or :math:`\lnot p`
+is true, then :math:`C \lor D` has to be true. A *resolution proof* of a clause :math:`C` from
+a set of clauses :math:`\Gamma` is a sequence of steps (or a labelled tree) that obtains :math:`C`
+from :math:`\Gamma` using instances of the resolution rule. A *resolution refutation* of :math:`\Gamma`
+is a resolution proof of the empty clause from :math:`\Gamma`. For example,
+the following proof shows that the CNF formula
+
+  .. math::
+
+    (p \lor q \lor r) \land (\lnot p \lor s) \land (\lnot q \lor s) \land (\lnot r \lor s) \land \lnot s
+
+is unsatisfiable:
+
+  1. :math:`p \lor q \lor r`, hypothesis
+  2. :math:`\lnot p \lor s`, hypothesis
+  3. :math:`\lnot q \lor s`, hypothesis
+  4. :math:`\lnot r \lor s`, hypothesis
+  5. :math:`\lnot s`, hypothesis
+  6. :math:`q \lor r \lor s`, resolve 1 and 2 on :math:`p`
+  7. :math:`r \lor s`, resolve 6 and 3 on :math:`q`
+  8. :math:`s`, resolve 7 and 4 on :math:`r`
+  9. :math:`\bot`, resolve 8 and 5 on :math:`s`
+
+The following theorem shows that resolution proofs can refute any unsatisfiable formula.
+
+.. admonition:: Theorem
+
+    A CNF formula :math:`\Gamma` has a resolution refutation if and only if it is unsatisfiable.
+
+.. admonition:: Proof
+
+  The forward direction expresses the soundness of the calculus: if we can derive
+  :math:`\bot` from a set of clauses :math:`\Gamma`, then :math:`\Gamma \models \bot`.
+  This follows from the fact that the resolution rule is a valid inference, which is to say,
+  the hypotheses entail the conclusion. This implies that each line in the proof
+  is entailed by :math:`\Gamma`, so if the proof include :math:`\bot`, :math:`\Gamma`
+  is unsatisfiable.
+
+  Completeness requires a more subtle argument. We want to show that if :math:`\Gamma`
+  is unsatisfiable, then there is a resolution proof of :math:`\bot`.
+  To do so, use induction on the number of variables occurring in :math:`\Gamma`.
+  If there are no variables occurring in :math:`\Gamma` and :math:`\Gamma` is unsatisfiable,
+  then it must contain the empty clause, and so it is immediately refutable.
+  Otherwise, choose a variable :math:`p` that
+  occurs in :math:`\Gamma`, and divide the clauses in :math:`\Gamma` into three categories:
+
+  - those of the form :math:`C_i \lor p` for some clause :math:`C_i`
+  - those of the form :math:`D_j \lor \lnot p` for some clause :math:`D_j`
+  - those clauses :math:`E_k` that contain neither :math:`p` nor :math:`\lnot p`.
+
+  Let :math:`\Gamma'` consist of the clauses :math:`C_i \lor D_j` for each :math:`i`
+  and :math:`j` together with the clauses :math:`E_k`. Notice that all the new clauses
+  in :math:`\Gamma'` follow from clauses in :math:`\Gamma` using the resolution rule.
+  It suffices to show that :math:`\Gamma'` is unsatisfiable, because then the inductive hypothesis
+  implies that there is a
+  resolution refutation of :math:`\Gamma'`, and hence of :math:`\Gamma`.
+
+  Suppose :math:`\tau` satisfies each clause :math:`E_k`. If each clause :math:`C_i` evaluates
+  to true under :math:`\tau`, when :math:`\tau[p \mapsto \bot]` satisfies :math:`\Gamma`,
+  contradicting the fact that we are assuming :math:`\Gamma` is unsatisfiable.
+  Hence some clause :math:`C_i` must be false under :math:`\tau`. By the dual argument,
+  some clause :math:`D_j` must be false under :math:`\tau`. But then :math:`C_i \lor D_j`
+  evaluates to false, which means :math:`\tau` does not satisfy :math:`\Gamma'`.
+  In other words, we have shown that any assignment :math:`\tau` that satisfies each clause
+  :math:`E_k` cannot satisfy every clause :math:`C_i \lor D_j`, so :math:`\Gamma'` is unsatisfiable.
+
+The following fact is implicit in the last argument:
+
+.. admonition:: Theorem
+
+  For any pair of clauses :math:`C` and :math:`D`, :math:`C \lor p` and :math:`D \lor \lnot p` are
+  satisfiable if and only if :math:`C \lor D` is satisfiable.
+
+You should try to spell out a proof of this explicitly.
+
+
+.. _section_implementing_resolution:
+
+Implementing resolution
+-----------------------
+
+The completeness proof we have just seen gives rise to yet another decision procedure
+for propositional logic: given a CNF formula :math:`\Gamma` as a set of clauses,
+pick any variable :math:`p` and replace all the pairs of clauses of the form
+:math:`C_i \lor p` and :math:`D_j \lor \lnot p` by :math:`C_i \lor D_j`.
+If we manage to derive the empty clause that way
+(that is, from clauses :math:`p` and :math:`\lnot p`), we know that :math:`\Gamma`
+is unsatisfiable. Otherwise, we pick another variable :math:`q` and repeat the process.
+If eventually we obtain the clause :math:`\bot`, we know
+the original CNF formula is unsatisfiable.
+
+It's easy to code this up in Lean. Notice that the resolution rule can be defined as follows:
+
+.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+   :start-after: -- textbook: the resolution rule
+   :end-before: -- end
+
+Given a list of clauses, we can sort them relative to the variable ``var`` as follows:
+
+.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+   :start-after: -- textbook: get positive and negative clauses
+   :end-before: -- end
+
+Then, given a function ``CnfForm.getvar?`` that chooses a variable in a CNF formula
+(returning none if there aren't any) and another function ``IsTautology`` that determines
+whether a clause is a tautology, we can determine whether there is a resolution refutation
+as follows:
+
+.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+   :start-after: -- textbook: search for a resolution refutation
+   :end-before: -- end
+
+If you are a hard core functional programmer, you can replace the second case with
+an expression using `map`, `union'`, `Union`, and `filter`, but it isn't more efficient
+or any easier to read.
+
+The examples file includes some examples of the procedure in use, but you should try
+some of your own.
+This is a good place to mention that Lean will allow you do add print statements as
+debugging tools, and if you do that, you can trace the progress of the search.
+
+.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+   :start-after: -- textbook: debugging the search for a resolution refutation
+   :end-before: -- end
+
+This procedure for evaluating the satisfiability of a CNF formula is fairly naive.
+One can do better by incorporating unit propagation and the pure literal rule,
+as described in
+:numref:`section_unit_propagation_and_the_pure_literal_rule`.
+The resulting procedure is known as the Davis-Putnam procedure, or DP.
+In general, splitting on variables can lead to exponential increase in the size
+of the formula under consideration at each stage,
+and one can be more clever about choosing which variable to split on,
+for example, choosing the variable
+that minimizes the number of clauses in the next step.
+
+Rather than pursuing such optimization, however, we will use the naive procedure to
+illustrate a common theme in automated reasoning.
+By the completeness of the refutation procedure we have designed, we know that for any
+CNF formula :math:`\Gamma`, either there is a satisfying assignment or a resolution refutation.
+Often, when we have a decision procedure or a search procedure, we can modify it to return
+additional information.
+When :math:`\Gamma` is satisfiable, it would be nice if the procedure actually *returned* the satisfying
+assignment, and otherwise it would be nice if the procedure actually *returned* a
+resolution refutation.
+
+Our goal here is to think about how to obtain a proof in the latter case.
+For that, we need to have some sort of computational representation of resolution proofs.
+Here is one option:
+
+.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+   :start-after: -- textbook: resolution proofs
+   :end-before: -- end
+
+A resolution proof is a sequence of steps, where each line is either a hypothesis or a resolution
+inference. The ``instance`` command is Lean boilerplate that will allow us to write ``p[i]!``
+to refer to step ``i`` of a resolution proof by telling Lean that the notation
+is inherited from the underlying array representation.
+
+A proof is only well formed if each resolution step refers to prior steps, which we can
+check as follows.
+
+.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+   :start-after: -- textbook: check a resolution proof is well formed
+   :end-before: -- end
+
+The notation ``.hyp`` and ``.res`` rely on another useful syntactic gadget in Lean: because
+Lean is expecting something of type ``Step`` at that point, it interprets those expressions
+as ``Step.hyp`` and ``Step.res``. This saves us the trouble of opening the namespace or
+writing ``Step`` explicitly.
+
+Assuming the proof is well formed, we can pretty-print it.
+
+.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+   :start-after: -- textbook: pretty-print a resolution proof
+   :end-before: -- end
+
+This enables us to write resolution proofs by hand and see the results.
+
+.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+   :start-after: -- textbook: resolution examples
+   :end-before: -- end
+
+Notice that our proof format does not store the clause that is derived at each step,
+because that can be reconstructed from the proof, as we just did with our pretty-printer.
+But for some purposes,
+it is more convenient to use a representation that stores the clause with the
+resolution steps as well as with the hypotheses.
+
+.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+   :start-after: -- textbook: a verbose form of the resolution proof
+   :end-before: -- end
+
+We are now in a good position to modify the ``refute`` procedure above to build a refutation as
+it goes.
+It is easier to use the verbose proof format, because that makes it easy to refer to the
+clauses we have derived.
+In other words, the procedure to refute a CNF formula should start by adding all the clauses
+in the formula as hypotheses and then iteratively add the clauses that are derived
+by the resolution rule.
+Since the proof includes all the clauses we derive along the way, we ought to keep track of
+a list of numbers that represent the CNF formula at each stage of the algorithm,
+that is, the lines of the proof that correspond to the clauses in the CNF formula that are
+still active.
+Otherwise, the structure of the procedure mirrors that of ``refute``.
+
+We encourage you to try your hand at making these modifications and then showing the refutations
+the procedure obtains.
+Note that the proofs are obtained this way are not efficient:
+the procedure, as we described it, logs every clause that
+is derived in the search, whether or not it contributes to the final proof of :math:`\bot`.
+We therefore also encourage you to think about how you can trim these proofs to the
+clauses that are needed.
+
+
+Resolution and DPLL
+-------------------
+
+Recall the theorem established in :numref:`section_resolution`:
+
+.. admonition:: Theorem
+
+    A CNF formula :math:`\Gamma` has a resolution refutation if and only if it is unsatisfiable.
+
+Our proof gave rise to a procedure, DP, that searches for such a refutation.
+We now describe an alternative proof that is closer in spirit to the DPLL procedure we described
+in :numref:`Chapter %s <chapter_decision_procedures_for_propositional_logic>`.
+Rather than think of the proof in terms of a search for a refutation, we think of it in terms
+of a search for a satisfying assignment.
+
+.. admonition:: Proof
+
+  As before, soundness follows straightforwardly from the fact that the resolution rule preserves
+  truth under any truth assignment, while the empty clause is unsatisfiable.
+
+  To prove completeness, we use induction on the number of propositional variables
+  to show that if :math:`\Gamma` is unsatisfiable, there is a resolution refutation
+  of :math:`\Gamma`.
+  If there are no variables, the fact that :math:`\Gamma` is unsatisfiable means that
+  it must be the set consisting of the empty clause, and we are done.
+
+  In the induction step, let :math:`p` be any variable that occurs in :math:`\Gamma`.
+  If :math:`\Gamma` is unsatisfiable, then so are :math:`\tval{\Gamma}_{[p \mapsto \top]}`
+  and :math:`\tval{\Gamma}_{[p \mapsto \bot]}`. By the inductive hypothesis,
+  both of these are refutable.
+
+  Remember the relationship between :math:`\tval{\Gamma}_{[P \mapsto \top]}` and :math:`\Gamma`:
+  in the former, we remove all the clauses that include :math:`p` and delete :math:`\lnot p`
+  from the remaining clauses.
+  So a resolution refutation of the empty clause from :math:`\tval{\Gamma}_{[p \mapsto \top]}`
+  uses only the clauses of :math:`\tval{\Gamma}` that don't contain :math:`p`,
+  possibly with :math:`\lnot p` removed.
+  Restoring :math:`\lnot p` to all the initial clauses yields either a proof of the
+  empty clause or a proof of :math:`\lnot p`.
+
+  In the first case, we have a proof of the empty clause from :math:`\Gamma`, and we are done.
+  Otherwise, applying the inductive hypotheses to :math:`\tval{\Gamma}_{[\lnot p \mapsto \bot]}`
+  and repeating the previous argument,
+  we obtain either a proof of the empty clause or a proof of :math:`p`.
+  Once again, in the first case, we are done. Otherwise, we apply the resolution rule to the
+  proof of :math:`p` and the proof of :math:`\lnot p`, and we have a proof of the empty clause.
+
+We can once again view the completeness proof as a decision procedure in disguise.
+The strategy of picking a variable :math:`p` and trying to refute
+:math:`\tval{\Gamma}_{[p \mapsto \top]}` and :math:`\tval{\Gamma}_{[p \mapsto \bot]}`
+simultaneously is exactly the splitting rule of DPLL,
+formulated in terms of demonstrating unsatisfiability rather than searching for a satisfying
+assignment. We can formulate the theorem above in more constructive terms as follows:
+
+.. admonition:: Theorem
+
+    For any CNF formula :math:`\Gamma`, either :math:`\Gamma` is satisfiable or there is a
+    resolution refutation.
+
+Remember that at any point in the DPLL search, we have a partial assignment :math:`\tau`
+that we are trying to extend to a satisfying assignment to :math:`\tval{\Gamma}_\tau`.
+If we fail, we then have to give up on :math:`\tau`, backtrack, and try another path.
+To extract either a satisfying assignment or a resolution proof from the result,
+it suffices to show the following constructively:
+
+  For any partial truth assignment :math:`\tau`,
+  either :math:`\tval{\Gamma}_\tau` is satisfiable
+  or there is a resolution proof of a clause :math:`C` from :math:`\Gamma` such that
+  :math:`\tval{C}_\tau = \bot`.
+
+This yields the desired conclusion when :math:`\tau` is the empty assignment,
+since the only clause that evaluates to :math:`\bot` under the empty assignment is the empty clause.
+
+We will sketch an explanation of how to read off the information above from the DPLL search,
+and we will leave it as an exercise for you to fill in the details.
+Remember that there are three steps that are interleaved in DPLL:
+
+#. splitting on a variable :math:`p`
+#. unit propagation
+#. removing pure literals
+
+Unit propagation can be viewed as a special case of the splitting rule:
+If a CNF formula contains a unit clause with literal :math:`\ell`,
+then splitting on :math:`\ell` fails immediately on one branch,
+and the other branch corresponds to the result of applying unit propagation.
+
+Reasoning about the pure literal rule is more subtle. Suppose :math:`\ell` is pure in
+:math:`\tval{\Gamma}_\tau`, and consider the DPLL search
+starting from :math:`\tval{\Gamma}_{\tau[\ell \mapsto \top]}`,
+which is a subset of :math:`\tval{\Gamma}_\tau`. If DPLL finds a satisfying assignment
+to :math:`\tval{\Gamma}_{\tau[\ell \mapsto \top]}`, it can be extended to a satisfying
+assignment to :math:`\tval{\Gamma}_\tau` by mapping :math:`\ell` to :math:`\top`.
+On the other hand, for any clause :math:`C` such that :math:`\tval{C}_{\tau[\ell \mapsto \top]} = \bot`,
+we have :math:`\tval{C}_\tau = \bot`, because :math:`\ell` is pure in all the clauses of
+:math:`\tval{\Gamma}_\tau`.
+
+So we only have to deal with the splitting rule. A satisfying assignment for either branch
+results in a satisfying assignment for :math:`\Gamma`, we only only have to prove the following:
+
+  If there are a resolution proof of a clause :math:`C` from :math:`\Gamma` such that
+  :math:`\tval{C}_{\tau[P \mapsto \top]} = \bot`
+  and a resolution proof of a clause :math:`D` from :math:`\Gamma` such that
+  :math:`\tval{D}_{\tau[P \mapsto \bot]} = \bot`,
+  then there is a resolution proof of a clause :math:`E` from :math:`\Gamma` such that
+  :math:`\tval{E}_\tau = \bot`.
+
+We leave the proof of this fact to you.
+
 
 .. _section_propositional_sequent_calculus:
 
@@ -296,152 +675,6 @@ It is therefore important to learn how to speak both languages,
 and to be able to translate between them on the fly.
 
 
-.. _section_resolution:
-
-Resolution
-----------
-
-Given that the sequent calculus implicitly corresponds to a decision procedure for
-propositional logic, it is natural to ask whether there is a proof system that corresponds
-more closely to DPLL, the decision procedure that was the focus of
-:numref:`Chapter %s <chapter_decision_procedures_for_propositional_logic>`.
-We now describe such a system.
-
-A *resolution* proof is designed to *refute* a CNF formula, that is, to prove that
-it is unsatisfiable.
-Let :math:`\Gamma` be a CNF formula, represented as a set of clauses.
-As in :numref:`section_dpll`, we can assume that none of the clauses contain repeated
-literals or a complementary pair, and we can think of each clause as a set of literals.
-If :math:`C` is a clause and :math:`\ell` is a literal, we write :math:`C, \ell` for
-:math:`C \lor \ell`. The *resolution rule* derives a new clause from an old one:
-
-  .. raw:: html
-
-      <div class="math notranslate nohighlight">
-      \[\begin{prooftree}
-      \AXC{$C, p$}
-      \AXC{$D, \lnot p$}
-      \BIC{$D \lor D$}
-      \end{prooftree}\]</div>
-
-  .. raw:: latex
-
-      \begin{prooftree}
-      \AXC{$C, p$}
-      \AXC{$D, \lnot p$}
-      \BIC{$C \lor D$}
-      \end{prooftree}
-
-The rule says that if either :math:`C` or :math:`p` is true, and either :math:`D` or :math:`\lnot p`
-is true, then :math:`C \lor D` has to be true. A *resolution proof* of a clause :math:`C` from
-a set of clauses :math:`\Gamma` is a sequence of steps (or a labelled tree) that obtains :math:`C`
-from :math:`\Gamma` using instances of the resolution rule. A *resolution refutation* of :math:`\Gamma`
-is a resolution proof of the empty clause from :math:`\Gamma`.
-
-.. admonition:: Theorem
-
-    A CNF formula :math:`\Gamma` has a resolution refutation if and only if it is unsatisfiable.
-
-Resolution can therefore be understood as a proof system for propositional logic in the following way:
-given any formula :math:`A`, put :math:`\lnot A` in CNF, and look for a resolution refutation.
-Such a refutation is a proof of :math:`A`. The theorem above says that this system is sound
-and complete: :math:`A` is valid if and only if :math:`\lnot A` is unsatisfiable, which
-happens if and only if there is a refutation of :math:`\lnot A`.
-
-.. admonition:: Proof
-
-  Soundness follows straightforwardly from the fact that the resolution rule preserves
-  truth under any truth assignment, while the empty clause is unsatisfiable.
-
-  To prove completeness, we use induction on the number of propositional variables
-  to show that if :math:`\Gamma` is unsatisfiable, there is a resolution refutation
-  of :math:`\Gamma`.
-  If there are no variables, the fact that :math:`\Gamma` is unsatisfiable means that
-  it must be the set consisting of the empty clause, and we are done.
-
-  In the induction step, let :math:`P` be any variable that occurs in :math:`\Gamma`.
-  If :math:`\Gamma` is unsatisfiable, then so are :math:`\tval{\Gamma}_{[P \mapsto \top]}`
-  and :math:`\tval{\Gamma}_{[P \mapsto \bot]}`. By the inductive hypothesis,
-  both of these are refutable.
-
-  Remember the relationship between :math:`\tval{\Gamma}_{[P \mapsto \top]}` and :math:`\Gamma`:
-  in the former, we remove all the clauses that include :math:`P` and delete :math:`\lnot P`
-  from the remaining clauses.
-  So a resolution refutation of the empty clause from :math:`\tval{\Gamma}_{[P \mapsto \top]}`
-  uses only the clauses of :math:`\tval{\Gamma}` that don't contain :math:`P`,
-  possibly with :math:`\lnot P` removed.
-  Restoring :math:`\lnot P` to all the initial clauses yields either a proof of the
-  empty clause or a proof of :math:`\lnot P`.
-
-  In the first case, we have a proof of the empty clause from :math:`\Gamma`, and we are done.
-  Otherwise, applying the inductive hypotheses to :math:`\tval{\Gamma}_{[\lnot P \mapsto \bot]}`
-  and repeating the previous argument,
-  we obtain either a proof of the empty clause or a proof of :math:`P`.
-  Once again, in the first case, we are done. Otherwise, we apply the resolution rule to the
-  proof of :math:`P` and the proof of :math:`\lnot P`, and we have a proof of the empty clause.
-
-We can once again view the completeness proof as a decision procedure in disguise.
-In fact, the strategy of picking a variable and trying to refute
-:math:`\tval{\Gamma}_{[P \mapsto \top]}` and :math:`\tval{\Gamma}_{[P \mapsto \bot]}`
-simultaneously is exactly the splitting rule of DPLL,
-formulated in terms of demonstrating unsatisfiability rather than searching for a satisfying
-assignment. We can formulate the theorem above in more constructive terms as follows:
-
-.. admonition:: Theorem
-
-    For any CNF formula :math:`\Gamma`, either :math:`\Gamma` is satisfiable or there is a
-    resolution refutation.
-
-Remember that at any point in the DPLL search, we have a partial assignment :math:`\tau`
-that we are trying to extend to a satisfying assignment to :math:`\tval{\Gamma}_\tau`.
-If we fail, we then have to give up on :math:`\tau`, backtrack, and try another path.
-To extract either a satisfying assignment or a resolution proof from the result,
-it suffices to show the following constructively:
-
-  For any partial truth assignment :math:`\tau`,
-  either :math:`\tval{\Gamma}_\tau` is satisfiable
-  or there is a resolution proof of a clause :math:`C` from :math:`\Gamma` such that
-  :math:`\tval{C}_\tau = \bot`.
-
-This yields the desired conclusion when :math:`\tau` is the empty assignment,
-since the only clause that evaluates to :math:`\bot` under the empty assignment is the empty clause.
-
-We will sketch an explanation of how to read off the information above from the DPLL search,
-and we will leave it as an exercise for you to fill in the details.
-Remember that there are three steps that are interleaved in DPLL:
-
-#. splitting on a variable :math:`p`
-#. unit propagation
-#. removing pure literals
-
-Unit propagation can be viewed as a special case of the splitting rule:
-If a CNF formula contains a unit clause with literal :math:`\ell`,
-then splitting on :math:`\ell` fails immediately on one branch,
-and the other branch corresponds to the result of applying unit propagation.
-
-Reasoning about the pure literal rule is more subtle. Suppose :math:`\ell` is pure in
-:math:`\tval{\Gamma}_\tau`, and consider the DPLL search
-starting from :math:`\tval{\Gamma}_{\tau[\ell \mapsto \top]}`,
-which is a subset of :math:`\tval{\Gamma}_\tau`. If DPLL finds a satisfying assignment
-to :math:`\tval{\Gamma}_{\tau[\ell \mapsto \top]}`, it can be extended to a satisfying
-assignment to :math:`\tval{\Gamma}_\tau` by mapping :math:`\ell` to :math:`\top`.
-On the other hand, for any clause :math:`C` such that :math:`\tval{C}_{\tau[\ell \mapsto \top]} = \bot`,
-we have :math:`\tval{C}_\tau = \bot`, because :math:`\ell` is pure in all the clauses of
-:math:`\tval{\Gamma}_\tau`.
-
-So we only have to deal with the splitting rule. A satisfying assignment for either branch
-results in a satisfying assignment for :math:`\Gamma`, we only only have to prove the following:
-
-  If there are a resolution proof of a clause :math:`C` from :math:`\Gamma` such that
-  :math:`\tval{C}_{\tau[P \mapsto \top]} = \bot`
-  and a resolution proof of a clause :math:`D` from :math:`\Gamma` such that
-  :math:`\tval{D}_{\tau[P \mapsto \bot]} = \bot`,
-  then there is a resolution proof of a clause :math:`E` from :math:`\Gamma` such that
-  :math:`\tval{E}_\tau = \bot`.
-
-We leave the proof of this fact to you.
-
-
 .. _section_natural_deduction:
 
 Natural deduction
@@ -474,6 +707,7 @@ so we will stick with that.
 
 We write ":math:`\Gamma, A`" for :math:`\Gamma \cup \{ A \}` to represent the hypotheses
 in :math:`\Gamma` together with the additional hypothesis :math:`A`.
+Similarly, we write ":math:`\Gamma, \Delta`" for :math:`\Gamma \cup \Delta`.
 The first rule is trivial: we always have
 
   .. raw:: html
@@ -500,8 +734,8 @@ For example, the rules for :math:`\land` are as follows:
       <div class="math notranslate nohighlight">
       \[\begin{prooftree}
       \AXC{$\Gamma \fCenter A$}
-      \AXC{$\Gamma \fCenter B$}
-      \BIC{$\Gamma \fCenter A \land B$}
+      \AXC{$\Delta \fCenter B$}
+      \BIC{$\Gamma, \Delta \fCenter A \land B$}
       \end{prooftree}
       \quad \quad
       \begin{prooftree}
@@ -514,8 +748,8 @@ For example, the rules for :math:`\land` are as follows:
 
       \begin{center}
       \AX$\Gamma \fCenter A$
-      \AX$\Gamma \fCenter B$
-      \BI$\Gamma \fCenter A \land B$
+      \AX$\Delta \fCenter B$
+      \BI$\Gamma, \Delta \fCenter A \land B$
       \DP
       \quad \quad
       \AX$\Gamma \fCenter A_0 \land A_1$
@@ -535,8 +769,8 @@ The rules for implication are as follows:
       \quad \quad
       \begin{prooftree}
       \AXC{$\Gamma \fCenter A \limplies B$}
-      \AXC{$\Gamma \fCenter A$}
-      \BIC{$\Gamma \fCenter B$}
+      \AXC{$\Delta \fCenter A$}
+      \BIC{$\Gamma, \Delta \fCenter B$}
       \end{prooftree}
       \]</div>
 
@@ -548,8 +782,8 @@ The rules for implication are as follows:
       \DP
       \quad \quad
       \AX$\Gamma \fCenter A \limplies B$
-      \AX$\Gamma \fCenter A$
-      \BI$\Gamma \fCenter B$
+      \AX$\Delta \fCenter A$
+      \BI$\Gamma, \Delta \fCenter B$
       \DP
       \end{center}
 
@@ -567,9 +801,9 @@ The rules for disjunction, which codify proof by cases, are as follows:
       \quad \quad
       \begin{prooftree}
       \AXC{$\Gamma \fCenter A \lor B$}
-      \AXC{$\Gamma, A \fCenter C$}
-      \AXC{$\Gamma, B \fCenter C$}
-      \TIC{$\Gamma \fCenter C$}
+      \AXC{$\Delta, A \fCenter C$}
+      \AXC{$\Pi, B \fCenter C$}
+      \TIC{$\Gamma, \Delta, \Pi \fCenter C$}
       \end{prooftree}
       \]</div>
 
@@ -581,9 +815,9 @@ The rules for disjunction, which codify proof by cases, are as follows:
       \DP
       \quad \quad
       \AX$\Gamma \fCenter A \lor B$
-      \AX$\Gamma, A \fCenter C$
-      \AX$\Gamma, B \fCenter C$
-      \TI$\Gamma \fCenter C$
+      \AX$\Delta, A \fCenter C$
+      \AX$\Pi, B \fCenter C$
+      \TI$\Gamma, \Delta, Pi \fCenter C$
       \DP
       \end{center}
 
@@ -618,8 +852,8 @@ As an example, here is a proof of :math:`A \limplies (B \limplies A \land B)`:
 
       <div class="math notranslate nohighlight">
       \[\begin{prooftree}
-      \AXC{$A, B \fCenter A$}
-      \AXC{$A, B \fCenter B$}
+      \AXC{$A \fCenter A$}
+      \AXC{$B \fCenter B$}
       \BIC{$A, B \fCenter A \land B$}
       \UIC{$A \fCenter B \limplies A \land B$}
       \UIC{$\fCenter A \limplies (B \limplies A \land B)$}
@@ -687,6 +921,11 @@ We will not take the time to prove this here. One way to prove it is to
 show that natural deduction can simulate another calculus, like the sequent calculus,
 for which a completeness proof is easier.
 
+One reason for our interest in natural deduction is that it is the basis for Lean's
+internal proof language. In the next chapter, we will start to learn how to write
+proofs in Lean, and it will be helpful to understand the instructions we provide the
+system as instructions for constructing natural deduction derivations.
+
 
 .. _section_compactness:
 
@@ -742,14 +981,6 @@ Exercises
    and modus ponens, show how to derive :math:`p \to p`. (It is surprisingly
    tricky, but you can do it in 5 lines.)
 
-#. Using the cut-free sequent calculus described in :numref:`section_propositional_sequent_calculus`,
-   either construct a proof of the following sequent or use the methods described
-   in that section to find a counterexample:
-
-   .. math::
-
-     ((p \lor q) \to r) \lor ((r \to p) \land (r \to q)).
-
 #. Give a resolution refutation of the following list of clauses:
 
    #. :math:`p \lor q \lor \lnot r`
@@ -782,4 +1013,10 @@ Exercises
 
    Prove this claim.
 
+#. Using the cut-free sequent calculus described in :numref:`section_propositional_sequent_calculus`,
+   either construct a proof of the following sequent or use the methods described
+   in that section to find a counterexample:
 
+   .. math::
+
+     ((p \lor q) \to r) \lor ((r \to p) \land (r \to q)).

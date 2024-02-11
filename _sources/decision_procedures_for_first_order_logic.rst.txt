@@ -380,7 +380,7 @@ The theorem follows from the following lemma.
 
     Let :math:`\Gamma` consist of a set of equations and disequations.
     Let :math:`S` be the set of subterms of all the terms occurring in :math:`\Gamma`.
-    Let :math:`\Gamma'` be the set of al equations between elements of :math:`S`
+    Let :math:`\Gamma'` be the set of all equations between elements of :math:`S`
     that can be derived from the equations in :math:`\Gamma` using the rules above.
     Then :math:`\Gamma` is satisfiable if and only if no disequation in :math:`\Gamma`
     is the negation of an equation in :math:`\Gamma'`.
@@ -415,7 +415,7 @@ solvers) using *union-find* data structures.
     Assuming the algorithm terminates without a contradiction, define a model :math:`\mdl M`
     whose universe consists of all the equivalence classes of elements of :math:`S`
     together with a new element, :math:`\star`. For elements :math:`t_1, \ldots t_n` in :math:`S`,
-    interpret each :math:`n`-ary function symbol :math:`f` by function
+    interpret each :math:`n`-ary function symbol :math:`f` by the function
 
     .. math::
 

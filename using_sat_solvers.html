@@ -110,8 +110,8 @@ The following can be found in <cite>Examples/using_sat_solver/examples.lean</cit
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">cadicalExample</span> <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="o">:=</span> <span class="k">do</span>
   <span class="k">let</span> <span class="o">(</span><span class="n">_</span><span class="o">,</span> <span class="n">result</span><span class="o">)</span> <span class="bp">←</span> <span class="n">callCadical</span> <span class="n">exCnf0</span>
   <span class="n">IO.println</span> <span class="s2">&quot;Output from CaDiCaL :</span><span class="se">\n</span><span class="s2">&quot;</span>
-  <span class="c1">--IO.println s</span>
-  <span class="c1">--IO.println &quot;\n\n&quot;</span>
+  <span class="c1">-- IO.println s</span>
+  <span class="c1">-- IO.println &quot;\n\n&quot;</span>
   <span class="n">IO.println</span> <span class="o">(</span><span class="n">formatResult</span> <span class="n">result</span><span class="o">)</span>
   <span class="n">pure</span> <span class="o">()</span>
 

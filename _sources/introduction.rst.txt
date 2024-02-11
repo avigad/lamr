@@ -101,7 +101,7 @@ reasoning and the acquisition of knowledge.
 
 The logicians' view complements the view from statistics and machine learning,
 where representations of knowledge tend to be very large, approximate,
-and hard to represent is succinct symbolic terms.
+and hard to represent in succinct symbolic terms.
 Such methods have had stunning successes in recent years,
 but there are still branches of computer science and AI where symbolic methods
 are paramount.
@@ -151,9 +151,4 @@ This will give you a sense of how the tools can also be used
 on proof and constraint satisfaction problems that come up in fields like
 program verification, discrete optimization, and AI.
 
-
-Acknowledgments
----------------
-
-We are grateful to Seulkee Baek for implementing the link between Lean and a SAT solver.
 
