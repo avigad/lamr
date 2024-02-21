@@ -272,7 +272,7 @@ For example, consider the partial truth assignment :math:`\tau` with :math:`\tau
 
   \Gamma_\mathrm{unit} :=  (\lnot p_1 \lor \lnot p_3 \lor p_4) \land
         (\lnot p_1 \lor \lnot p_2 \lor p_3) \land (\lnot p_1 \lor p_2) \land (p_1 \lor p_3 \lor p_6) \land \\
-    (\lnot p_1 \lor p_4 \lor \lnot p_5) \land (p_1 \lnot p_6) \land (p_4 \lor p_5 \lor p_6) \land (p_5 \lor \lnot p_6)
+    (\lnot p_1 \lor p_4 \lor \lnot p_5) \land (p_1 \lor \lnot p_6) \land (p_4 \lor p_5 \lor p_6) \land (p_5 \lor \lnot p_6)
 
 The clause :math:`(\lnot p_1 \lor p_2)` is unit under :math:`\tau` because :math:`\tval{(\lnot p_1 \lor p_2)}_{\tau} = (p_2)`.
 Hence unit propagation will extend :math:`\tau` by
@@ -523,4 +523,3 @@ Exercises
    and returns a ``List Lit`` of all pure literals in :math:`\Gamma`.
    The function does not need to find all pure literals on pure literal
    assignment until fixpoint, only the literals the are pure in :math:`\Gamma`.
-

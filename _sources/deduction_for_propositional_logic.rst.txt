@@ -241,7 +241,7 @@ The following theorem shows that resolution proofs can refute any unsatisfiable 
   resolution refutation of :math:`\Gamma'`, and hence of :math:`\Gamma`.
 
   Suppose :math:`\tau` satisfies each clause :math:`E_k`. If each clause :math:`C_i` evaluates
-  to true under :math:`\tau`, when :math:`\tau[p \mapsto \bot]` satisfies :math:`\Gamma`,
+  to true under :math:`\tau`, then :math:`\tau[p \mapsto \bot]` satisfies :math:`\Gamma`,
   contradicting the fact that we are assuming :math:`\Gamma` is unsatisfiable.
   Hence some clause :math:`C_i` must be false under :math:`\tau`. By the dual argument,
   some clause :math:`D_j` must be false under :math:`\tau`. But then :math:`C_i \lor D_j`
@@ -253,10 +253,12 @@ The following fact is implicit in the last argument:
 
 .. admonition:: Theorem
 
-  For any pair of clauses :math:`C` and :math:`D`, :math:`C \lor p` and :math:`D \lor \lnot p` are
-  satisfiable if and only if :math:`C \lor D` is satisfiable.
+  Given :math:`\Gamma` and :math:`\Gamma'` as above (without the assumption that :math:`\Gamma`
+  is unsatisfiable), :math:`\Gamma` and :math:`\Gamma'` are equisatisfiable.
 
-You should try to spell out a proof of this explicitly.
+You should try to spell out a proof of this explicitly. In fact, the completeness argument only
+requires one direction of this theorem, namely, that if :math:`\Gamma'` is
+unsatisfiable, then so is :math:`\Gamma`.
 
 
 .. _section_implementing_resolution:
@@ -429,7 +431,7 @@ of a search for a satisfying assignment.
   and :math:`\tval{\Gamma}_{[p \mapsto \bot]}`. By the inductive hypothesis,
   both of these are refutable.
 
-  Remember the relationship between :math:`\tval{\Gamma}_{[P \mapsto \top]}` and :math:`\Gamma`:
+  Remember the relationship between :math:`\tval{\Gamma}_{[p \mapsto \top]}` and :math:`\Gamma`:
   in the former, we remove all the clauses that include :math:`p` and delete :math:`\lnot p`
   from the remaining clauses.
   So a resolution refutation of the empty clause from :math:`\tval{\Gamma}_{[p \mapsto \top]}`
@@ -495,12 +497,12 @@ we have :math:`\tval{C}_\tau = \bot`, because :math:`\ell` is pure in all the cl
 :math:`\tval{\Gamma}_\tau`.
 
 So we only have to deal with the splitting rule. A satisfying assignment for either branch
-results in a satisfying assignment for :math:`\Gamma`, we only only have to prove the following:
+results in a satisfying assignment for :math:`\Gamma`, so we only only have to prove the following:
 
   If there are a resolution proof of a clause :math:`C` from :math:`\Gamma` such that
-  :math:`\tval{C}_{\tau[P \mapsto \top]} = \bot`
+  :math:`\tval{C}_{\tau[p \mapsto \top]} = \bot`
   and a resolution proof of a clause :math:`D` from :math:`\Gamma` such that
-  :math:`\tval{D}_{\tau[P \mapsto \bot]} = \bot`,
+  :math:`\tval{D}_{\tau[p \mapsto \bot]} = \bot`,
   then there is a resolution proof of a clause :math:`E` from :math:`\Gamma` such that
   :math:`\tval{E}_\tau = \bot`.
 
