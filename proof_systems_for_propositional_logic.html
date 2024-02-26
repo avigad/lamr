@@ -1,28 +1,30 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>8. Deduction for Propositional Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <title>8. Proof Systems for Propositional Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="9. Propositional Logic in Lean" href="propositional_logic_in_lean.html" />
+    <link rel="next" title="9. Using Lean as a Proof Assistant" href="using_lean_as_a_proof_assistant.html" />
     <link rel="prev" title="7. Using SAT Solvers" href="using_sat_solvers.html" /> 
 </head>
 
@@ -31,11 +33,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -50,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Deduction for Propositional Logic</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Proof Systems for Propositional Logic</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#axiomatic-systems">8.1. Axiomatic systems</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#resolution">8.2. Resolution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#implementing-resolution">8.3. Implementing resolution</a></li>
@@ -61,15 +67,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#exercises">8.8. Exercises</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_first_order_logic.html">14. Deduction for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -85,10 +90,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">8. </span>Deduction for Propositional Logic</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">8. </span>Proof Systems for Propositional Logic</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/deduction_for_propositional_logic.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/proof_systems_for_propositional_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -96,8 +101,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="deduction-for-propositional-logic">
-<span id="chapter-deduction-for-propositional-logic"></span><h1><span class="section-number">8. </span>Deduction for Propositional Logic<a class="headerlink" href="#deduction-for-propositional-logic" title="Permalink to this heading"></a></h1>
+  <section id="proof-systems-for-propositional-logic">
+<span id="chapter-proof-systems-for-propositional-logic"></span><h1><span class="section-number">8. </span>Proof Systems for Propositional Logic<a class="headerlink" href="#proof-systems-for-propositional-logic" title="Link to this heading"></a></h1>
 <p>In the study of computational complexity, a <em>language</em> is a set of strings
 over some alphabet. For example, we can consider the language PROP consisting of all
 propositional formulas, the language SAT consisting of all satisfiable formulas,
@@ -193,7 +198,7 @@ The last kind, natural deduction, is designed to closely model ordinary
 logical reasoning, such as the kind of logical reasoning we use to prove a theorem of
 mathematics. It forms the basis for a number of interactive proof systems.</p>
 <section id="axiomatic-systems">
-<span id="section-axiomatic-systems"></span><h2><span class="section-number">8.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Permalink to this heading"></a></h2>
+<span id="section-axiomatic-systems"></span><h2><span class="section-number">8.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Link to this heading"></a></h2>
 <p>Historically, one way of describing a proof system for propositional logic is to give a list
 of axioms, like this one:</p>
 <ol class="arabic simple">
@@ -231,7 +236,7 @@ and they are not useful for automated reasoning or search.
 We will therefore set them aside and focus our attention on other types of proof systems.</p>
 </section>
 <section id="resolution">
-<span id="section-resolution"></span><h2><span class="section-number">8.2. </span>Resolution<a class="headerlink" href="#resolution" title="Permalink to this heading"></a></h2>
+<span id="section-resolution"></span><h2><span class="section-number">8.2. </span>Resolution<a class="headerlink" href="#resolution" title="Link to this heading"></a></h2>
 <p>A <em>resolution</em> proof is designed to <em>refute</em> a CNF formula, that is, to prove that
 it is unsatisfiable.
 Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a CNF formula, represented as a set of clauses.
@@ -321,7 +326,7 @@ requires one direction of this theorem, namely, that if <span class="math notran
 unsatisfiable, then so is <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
 </section>
 <section id="implementing-resolution">
-<span id="section-implementing-resolution"></span><h2><span class="section-number">8.3. </span>Implementing resolution<a class="headerlink" href="#implementing-resolution" title="Permalink to this heading"></a></h2>
+<span id="section-implementing-resolution"></span><h2><span class="section-number">8.3. </span>Implementing resolution<a class="headerlink" href="#implementing-resolution" title="Link to this heading"></a></h2>
 <p>The completeness proof we have just seen gives rise to yet another decision procedure
 for propositional logic: given a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> as a set of clauses,
 pick any variable <span class="math notranslate nohighlight">\(p\)</span> and replace all the pairs of clauses of the form
@@ -532,7 +537,7 @@ We therefore also encourage you to think about how you can trim these proofs to 
 clauses that are needed.</p>
 </section>
 <section id="resolution-and-dpll">
-<h2><span class="section-number">8.4. </span>Resolution and DPLL<a class="headerlink" href="#resolution-and-dpll" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">8.4. </span>Resolution and DPLL<a class="headerlink" href="#resolution-and-dpll" title="Link to this heading"></a></h2>
 <p>Recall the theorem established in <a class="reference internal" href="#section-resolution"><span class="std std-numref">Section 8.2</span></a>:</p>
 <div class="admonition-theorem admonition">
 <p class="admonition-title">Theorem</p>
@@ -629,7 +634,7 @@ then there is a resolution proof of a clause <span class="math notranslate nohig
 <p>We leave the proof of this fact to you.</p>
 </section>
 <section id="a-sequent-calculus">
-<span id="section-propositional-sequent-calculus"></span><h2><span class="section-number">8.5. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this heading"></a></h2>
+<span id="section-propositional-sequent-calculus"></span><h2><span class="section-number">8.5. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Link to this heading"></a></h2>
 <p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a finite set of propositional formula in negation normal form.
 The next calculus we will consider is designed to prove that the disjunction of the formulas
 in <span class="math notranslate nohighlight">\(\Gamma\)</span> is valid, which is to say, for every truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
@@ -752,7 +757,7 @@ It is therefore important to learn how to speak both languages,
 and to be able to translate between them on the fly.</p>
 </section>
 <section id="natural-deduction">
-<span id="section-natural-deduction"></span><h2><span class="section-number">8.6. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Permalink to this heading"></a></h2>
+<span id="section-natural-deduction"></span><h2><span class="section-number">8.6. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Link to this heading"></a></h2>
 <p>We now consider a type of deductive system that was introduced by Gerhard Gentzen
 in the 1930s, known as <em>natural deduction</em>. As the name suggests,
 the system was designed to model the way someone might carry out an informal
@@ -897,7 +902,7 @@ proofs in Lean, and it will be helpful to understand the instructions we provide
 system as instructions for constructing natural deduction derivations.</p>
 </section>
 <section id="compactness">
-<span id="section-compactness"></span><h2><span class="section-number">8.7. </span>Compactness<a class="headerlink" href="#compactness" title="Permalink to this heading"></a></h2>
+<span id="section-compactness"></span><h2><span class="section-number">8.7. </span>Compactness<a class="headerlink" href="#compactness" title="Link to this heading"></a></h2>
 <p>In automated reasoning, when we write <span class="math notranslate nohighlight">\(\Gamma \models A\)</span> to express
 that <span class="math notranslate nohighlight">\(A\)</span> is entailed by hypotheses in <span class="math notranslate nohighlight">\(\Gamma\)</span>,
 we generally have the in mind case where <span class="math notranslate nohighlight">\(\Gamma\)</span> is finite.
@@ -938,7 +943,7 @@ plane with tiles from <span class="math notranslate nohighlight">\(S\)</span>.</
 <p>You should think about how this follows from the compactness theorem.</p>
 </section>
 <section id="exercises">
-<h2><span class="section-number">8.8. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">8.8. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading"></a></h2>
 <ol class="arabic">
 <li><p>Using only axioms 1 and 2 from <a class="reference internal" href="#section-axiomatic-systems"><span class="std std-numref">Section 8.1</span></a>
 and modus ponens, show how to derive <span class="math notranslate nohighlight">\(p \to p\)</span>. (It is surprisingly
@@ -989,7 +994,7 @@ in that section to find a counterexample:</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="using_sat_solvers.html" class="btn btn-neutral float-left" title="7. Using SAT Solvers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="propositional_logic_in_lean.html" class="btn btn-neutral float-right" title="9. Propositional Logic in Lean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="using_lean_as_a_proof_assistant.html" class="btn btn-neutral float-right" title="9. Using Lean as a Proof Assistant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

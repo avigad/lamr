@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Logic and Mechanized Reasoning &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,11 +30,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -47,16 +53,15 @@
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_propositional_logic.html">8. Proof Systems for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_first_order_logic.html">14. Deduction for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -72,8 +77,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>Logic and Mechanized Reasoning</li>
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Logic and Mechanized Reasoning</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -84,7 +89,7 @@
            <div itemprop="articleBody">
              
   <section id="logic-and-mechanized-reasoning">
-<h1>Logic and Mechanized Reasoning<a class="headerlink" href="#logic-and-mechanized-reasoning" title="Permalink to this heading"></a></h1>
+<h1>Logic and Mechanized Reasoning<a class="headerlink" href="#logic-and-mechanized-reasoning" title="Link to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -141,24 +146,24 @@
 <li class="toctree-l2"><a class="reference internal" href="using_sat_solvers.html#exercise-numbermind">7.4. Exercise: NumberMind</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_propositional_logic.html#axiomatic-systems">8.1. Axiomatic systems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_propositional_logic.html#resolution">8.2. Resolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_propositional_logic.html#implementing-resolution">8.3. Implementing resolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_propositional_logic.html#resolution-and-dpll">8.4. Resolution and DPLL</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_propositional_logic.html#a-sequent-calculus">8.5. A sequent calculus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_propositional_logic.html#natural-deduction">8.6. Natural deduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_propositional_logic.html#compactness">8.7. Compactness</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_propositional_logic.html#exercises">8.8. Exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_propositional_logic.html">8. Proof Systems for Propositional Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_propositional_logic.html#axiomatic-systems">8.1. Axiomatic systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_propositional_logic.html#resolution">8.2. Resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_propositional_logic.html#implementing-resolution">8.3. Implementing resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_propositional_logic.html#resolution-and-dpll">8.4. Resolution and DPLL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_propositional_logic.html#a-sequent-calculus">8.5. A sequent calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_propositional_logic.html#natural-deduction">8.6. Natural deduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_propositional_logic.html#compactness">8.7. Compactness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_propositional_logic.html#exercises">8.8. Exercises</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="propositional_logic_in_lean.html#implication">9.1. Implication</a></li>
-<li class="toctree-l2"><a class="reference internal" href="propositional_logic_in_lean.html#conjunction">9.2. Conjunction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="propositional_logic_in_lean.html#disjunction">9.3. Disjunction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="propositional_logic_in_lean.html#negation">9.4. Negation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="propositional_logic_in_lean.html#miscellany">9.5. Miscellany</a></li>
-<li class="toctree-l2"><a class="reference internal" href="propositional_logic_in_lean.html#exercises">9.6. Exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#propositional-logic">9.1. Propositional logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#proof-terms">9.2. Proof terms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#structured-proofs">9.3. Structured proofs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#equational-reasoning">9.4. Equational reasoning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#induction">9.5. Induction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#exercises">9.6. Exercises</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a><ul>
@@ -189,11 +194,11 @@
 <li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#exercise-almost-squares">13.5. Exercise: Almost squares</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_first_order_logic.html">14. Deduction for First-Order Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_first_order_logic.html#axiomatic-systems">14.1. Axiomatic systems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_first_order_logic.html#a-sequent-calculus">14.2. A sequent calculus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_first_order_logic.html#resolution">14.3. Resolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deduction_for_first_order_logic.html#natural-deduction">14.4. Natural deduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#axiomatic-systems">14.1. Axiomatic systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#a-sequent-calculus">14.2. A sequent calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#resolution">14.3. Resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#natural-deduction">14.4. Natural deduction</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a><ul>
@@ -202,18 +207,12 @@
 <li class="toctree-l2"><a class="reference internal" href="using_first_order_theorem_provers.html#exercise-the-last-asylum">15.3. Exercise: The Last Asylum</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="first_order_logic_in_lean.html#quantifiers">16.1. Quantifiers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="first_order_logic_in_lean.html#equational-reasoning">16.2. Equational reasoning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="first_order_logic_in_lean.html#structural-induction">16.3. Structural induction</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#sorts">17.1. Sorts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#function-types">17.2. Function types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#higher-order-logic">17.3. Higher-order logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#inductive-types">17.4. Inductive Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#dependent-types">17.5. Dependent Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#sorts">16.1. Sorts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#function-types">16.2. Function types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#higher-order-logic">16.3. Higher-order logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#inductive-types">16.4. Inductive Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#dependent-types">16.5. Dependent Types</a></li>
 </ul>
 </li>
 </ul>

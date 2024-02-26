@@ -18,15 +18,14 @@ Logic and Mechanized Reasoning
    implementing_propositional_logic
    decision_procedures_for_propositional_logic
    using_sat_solvers
-   deduction_for_propositional_logic
-   propositional_logic_in_lean
+   proof_systems_for_propositional_logic
+   using_lean_as_a_proof_assistant
    first_order_logic
    implementing_first_order_logic
    decision_procedures_for_first_order_logic
    using_smt_solvers
-   deduction_for_first_order_logic
+   proof_systems_for_first_order_logic
    using_first_order_theorem_provers
-   first_order_logic_in_lean
    beyond_first_order_logic
 
 .. * :ref:`genindex`

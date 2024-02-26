@@ -1,9 +1,9 @@
 .. highlight:: lean
 
-.. _chapter_deduction_for_propositional_logic:
+.. _chapter_proof_systems_for_propositional_logic:
 
-Deduction for Propositional Logic
-=================================
+Proof Systems for Propositional Logic
+=====================================
 
 In the study of computational complexity, a *language* is a set of strings
 over some alphabet. For example, we can consider the language PROP consisting of all

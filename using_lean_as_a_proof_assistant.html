@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>9. Using Lean as a Proof Assistant &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="10. First-Order Logic" href="first_order_logic.html" />
+    <link rel="prev" title="8. Proof Systems for Propositional Logic" href="proof_systems_for_propositional_logic.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_propositional_logic.html">8. Proof Systems for Propositional Logic</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">9. Using Lean as a Proof Assistant</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#propositional-logic">9.1. Propositional logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#proof-terms">9.2. Proof terms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structured-proofs">9.3. Structured proofs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#equational-reasoning">9.4. Equational reasoning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#induction">9.5. Induction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercises">9.6. Exercises</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Logic and Mechanized Reasoning</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">9. </span>Using Lean as a Proof Assistant</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/using_lean_as_a_proof_assistant.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="using-lean-as-a-proof-assistant">
+<span id="chapter-using-lean-as-a-proof-assistant"></span><h1><span class="section-number">9. </span>Using Lean as a Proof Assistant<a class="headerlink" href="#using-lean-as-a-proof-assistant" title="Link to this heading"></a></h1>
+<p>This chapter marks three shifts in the way we are using Lean.
+First, up to this point we have been using Lean as a programming language, whereas here
+we will begin to use Lean as a <em>proof assistant</em>.
+In the theory-implementation-application trichotomy that we used to describe this course,
+this marks a shift from using Lean to implement logical tools
+to using Lean as an important application of logic,
+one that is used to verify hardware, software, and
+complex systems as well as mathematical theorems.
+Finally, whereas up to now our focus has been on representing logical languages in Lean,
+now we are using Lean as a logical language itself. This can be viewed as a shift from treating
+logic as an <em>object language</em> to treating logic as a <em>metalanguage</em>, a distinction
+we will now explain.</p>
+<p>Imagine implementing one programming language, such as Lisp, in
+another programming language, like C++.
+In this scenario, we can characterize Lisp as being the object language, that is, the
+one that is being implemented, and C++ as the metalanguage, the one that is carrying out
+the implementation.
+What we did in <a class="reference internal" href="implementing_propositional_logic.html#chapter-implementing-propositional-logic"><span class="std std-numref">Chapter 5</span></a> is similar:
+we are used one logical system, Lean, to
+implement another one, propositional logic.
+Whether we care about logical languages or programming languages (or a combination of both),
+it’s often the case that we use one language to implement or describe another.
+If we use Lean to implement a decision procedure for propositional logic,
+propositional logic is the object language, the target of our implementation.
+If we use propositional connectives (and more) to prove the correctness of that procedure in Lean,
+then in that case we are using propositional logic as part of the metalanguage,
+the thing we are using to achieve our goal.</p>
+<p>One goal of this chapter is to clarify the sense in which Lean itself is a logical system,
+which is to say, its language can be used to state mathematical theorems and prove them.
+Using a logical foundation like Lean’s as both a programming language and a mathematical language
+brings a number of benefits:</p>
+<ul class="simple">
+<li><p>It allows us to specify the behavior of computer programs in the same language that we write them.</p></li>
+<li><p>It allows us to prove, rigorously, that our computer programs are correct, which is to say,
+that they meet their specifications.</p></li>
+<li><p>It allows us to enforce preconditions on our programs. For example, we can write functions
+whose input is required to be a positive integer, a requirement that is enforced
+statically, at compile time. Compiler optimizations can make use of this knowledge.</p></li>
+<li><p>It allows us to compute with objects in our mathematical libraries.</p></li>
+<li><p>It gives us ways of using computation reliably in mathematical proofs.</p></li>
+</ul>
+<p>Although we will not discuss it in this course, Lean also serves as its own <em>metaprogramming
+language</em>, which means that we can use Lean to develop automation that can help us construct
+programs and proofs.
+In that way, Lean becomes a self-extending system, meaning that we can
+improve its support for programming and theorem proving using the system itself.</p>
+<p>Lean’s logical foundation is powerful and expressive enough to carry out any mathematical argument,
+and the use of proof assistants in hardware and software verification is an import subject to study.
+In this chapter, we will present only the most basic aspects of using Lean as a proof assistant,
+to convey a flavor of what is possible.
+You can learn more about the use of Lean as a proof assistant in either
+<a class="reference external" href="https://leanprover-community.github.io/mathematics_in_lean/">Mathematics in Lean</a> or
+<a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">Theorem Proving in Lean 4</a>.
+You may also enjoy interactive tutorials, like the Natural Number Game, found on the
+<a class="reference external" href="https://adam.math.hhu.de/">Lean Game Server</a>.</p>
+<p>For the examples in this chapter, we use the following imports:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="n">Mathlib.Data.Real.Basic</span>
+<span class="kn">import</span> <span class="n">Mathlib.Tactic</span>
+</pre></div>
+</div>
+<p>Since importing a file also imports everything it depends on, these serve to make
+available to us a modest portion of Lean’s mathematical library, Mathlib.</p>
+<section id="propositional-logic">
+<span id="section-propositional-logic"></span><h2><span class="section-number">9.1. </span>Propositional logic<a class="headerlink" href="#propositional-logic" title="Link to this heading"></a></h2>
+<p>In Lean, we can declare variables that range over propositions and then
+use them to build more complicated propositions.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">P</span> <span class="n">Q</span> <span class="n">R</span> <span class="n">S</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span>
+
+<span class="k">#check</span> <span class="n">True</span>
+<span class="k">#check</span> <span class="n">False</span>
+<span class="k">#check</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span>
+<span class="k">#check</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span>
+<span class="k">#check</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span>
+<span class="k">#check</span> <span class="n">P</span> <span class="bp">↔</span> <span class="n">Q</span>
+<span class="k">#check</span> <span class="bp">¬</span> <span class="n">P</span>
+</pre></div>
+</div>
+<p>Hovering over the symbols will give you options for typing them. Using <code class="docutils literal notranslate"><span class="pre">\and</span></code>, <code class="docutils literal notranslate"><span class="pre">\or</span></code>, <code class="docutils literal notranslate"><span class="pre">\to</span></code>,
+<code class="docutils literal notranslate"><span class="pre">\iff</span></code>, and <code class="docutils literal notranslate"><span class="pre">\not</span></code> will work.
+In Lean, you state a theorem with the keyword <code class="docutils literal notranslate"><span class="pre">theorem</span></code>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">easy</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">apply</span> <span class="n">h</span>
+</pre></div>
+</div>
+<p>What follows the keyword <code class="docutils literal notranslate"><span class="pre">by</span></code> is what is known as a <em>tactic proof</em>, that is,
+a list of commands that tells Lean how to construct a proof of the theorem.
+In the next section, we will say more about how proofs are represented in Lean
+and what tactics do underneath the hood.
+Here, instead, we will focus on how to use them.
+Stating a theorem creates a <em>goal</em>, namely, the theorem to be proved.
+If you put your cursor at the beginning of the line <code class="docutils literal notranslate"><span class="pre">intro</span> <span class="pre">h</span></code>,
+the infoview window shows the following goal:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>P Q R S: Prop
+⊢ P → P
+</pre></div>
+</div>
+<p>If you put your cursor at the end of the line, you will see that the goal
+has changed to:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>P Q R S: Prop
+h : P
+⊢ P
+</pre></div>
+</div>
+<p>When the cursor is at the beginning of the line <code class="docutils literal notranslate"><span class="pre">intro</span> <span class="pre">h</span></code>,
+the highlighting in the infoview window helpfully shows what is about to change,
+and when you move the cursor to the end of the line,
+the highlighting shows what has just changed.
+The notation should remind you of a sequent in natural deduction: the second goal says that we
+are given propositions <code class="docutils literal notranslate"><span class="pre">P</span></code>, <code class="docutils literal notranslate"><span class="pre">Q</span></code>, <code class="docutils literal notranslate"><span class="pre">R</span></code>, and <code class="docutils literal notranslate"><span class="pre">S</span></code> together with the assumption
+that <code class="docutils literal notranslate"><span class="pre">P</span></code> holds, labelled as <code class="docutils literal notranslate"><span class="pre">h</span></code>, and we are to prove <code class="docutils literal notranslate"><span class="pre">P</span></code>.
+The command <code class="docutils literal notranslate"><span class="pre">apply</span> <span class="pre">P</span></code> finishes it off, leaving you with the happy message, “no goals.”
+The label <code class="docutils literal notranslate"><span class="pre">h</span></code> is arbitrary, and you can use any valid identifier instead.
+It’s conventional to use the letter <code class="docutils literal notranslate"><span class="pre">h</span></code> for hypotheses.
+The information before the turnstile is called the <em>context</em>.
+The right side of the sequent is also sometimes confusingly called the goal, but
+we will call it the <em>conclusion</em> of the sequent and reserve the term “goal”
+for the entire sequent.</p>
+<p>You can use the <code class="docutils literal notranslate"><span class="pre">example</span></code> keyword to prove a theorem without naming it:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">apply</span> <span class="n">h</span>
+</pre></div>
+</div>
+<p>When an <code class="docutils literal notranslate"><span class="pre">apply</span></code> command finishes off the goal exactly, it is conventional to use the
+<code class="docutils literal notranslate"><span class="pre">exact</span></code> tactic instead:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">exact</span> <span class="n">h</span>
+</pre></div>
+</div>
+<p>You can also end a proof with the <code class="docutils literal notranslate"><span class="pre">done</span></code> tactic,
+which does nothing but declare that there are no more goals.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">exact</span> <span class="n">h</span>
+  <span class="n">done</span>
+</pre></div>
+</div>
+<p>It is often useful to put a <code class="docutils literal notranslate"><span class="pre">done</span></code> at the end of a proof while you are still
+writing it.
+Lean gives you an error message if the proof isn’t over, and the error message tells you
+the goals that remain to be proved.
+It can be convenient to force Lean to put the error message on the <code class="docutils literal notranslate"><span class="pre">done</span></code>
+command rather than somewhere lower down in the file. You can then delete the <code class="docutils literal notranslate"><span class="pre">done</span></code>
+when you are finished with the proof.
+Notice, by the way, that you can learn more about a tactic by hovering over it in  VS Code.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">apply</span></code> tactic can also be used to apply an implication.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span> <span class="o">:</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">apply</span> <span class="n">h1</span>
+  <span class="n">exact</span> <span class="n">h2</span>
+</pre></div>
+</div>
+<p>In this example, applying the assumption <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">→</span> <span class="pre">Q</span></code> to the goal reduces the task of
+proving <code class="docutils literal notranslate"><span class="pre">Q</span></code> to the task of proving <code class="docutils literal notranslate"><span class="pre">P</span></code>.
+To prove a conjunction, we can use the <code class="docutils literal notranslate"><span class="pre">constructor</span></code> tactic:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">hP</span> <span class="n">hQ</span>
+  <span class="n">constructor</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">hP</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">hQ</span>
+</pre></div>
+</div>
+<p>The command <code class="docutils literal notranslate"><span class="pre">intro</span> <span class="pre">hP</span> <span class="pre">hQ</span></code> is shorthand for writing <code class="docutils literal notranslate"><span class="pre">intro</span> <span class="pre">hP</span></code> followed by <code class="docutils literal notranslate"><span class="pre">intro</span> <span class="pre">hQ</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">constructor</span></code> tactic tells Lean we intend to prove <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">∧</span> <span class="pre">Q</span></code> by proving
+each conjunct in turn.
+As a result, after that line, there are <em>two</em> goals to prove, one for each conjunct.
+The first period focuses on the first goal, which is solved using <code class="docutils literal notranslate"><span class="pre">hP</span></code>,
+and the second period focuses on the second goal, which is using <code class="docutils literal notranslate"><span class="pre">hQ</span></code>.
+Lean is whitespace sensitive, and once you focus on a goal, Lean expects you to maintain
+the indentation until the goal is solved.
+You can check that the proof still works if you delete the periods.
+Structuring a proof in this way, however, tends to make it more readable and robust.</p>
+<p>At this point, there is a trick that is worth mentioning.
+At any point in a proof, you can solve the current goal with the <code class="docutils literal notranslate"><span class="pre">sorry</span></code> tactic.
+You can prove any theorem at all using <code class="docutils literal notranslate"><span class="pre">sorry</span></code>.
+It’s cheating, and the squiggly line the editor puts underneath the name of the theorem tells
+you as much.
+But it is often a useful device when writing proofs, because it means you can temporarily
+close a goal to work on others, and then come back to it.</p>
+<p>The natural way to <em>use</em> a conjunction <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">P</span> <span class="pre">∧</span> <span class="pre">Q</span></code> in a hypothesis is to split it
+to the hypotheses <code class="docutils literal notranslate"><span class="pre">hP</span> <span class="pre">:</span> <span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">hQ</span> <span class="pre">:</span> <span class="pre">Q</span></code>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">∧</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">rcases</span> <span class="n">h</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">hP</span><span class="o">,</span> <span class="n">hQ</span><span class="o">⟩</span>
+  <span class="n">constructor</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">hQ</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">hP</span>
+</pre></div>
+</div>
+<p>Here the angle brackets denote a conjunctive pattern for Lean to match <code class="docutils literal notranslate"><span class="pre">h</span></code>
+against, and the <code class="docutils literal notranslate"><span class="pre">rcases</span></code> tactic does the matching, removing <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">P</span> <span class="pre">∧</span> <span class="pre">Q</span></code>
+and replacing it with <code class="docutils literal notranslate"><span class="pre">hP</span> <span class="pre">:</span> <span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">hQ</span> <span class="pre">:</span> <span class="pre">Q</span></code>.</p>
+<p>The corresponding proof for disjunction is dual:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">∨</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">rcases</span> <span class="n">h</span> <span class="k">with</span> <span class="n">hP</span> <span class="bp">|</span> <span class="n">hQ</span>
+  <span class="bp">.</span> <span class="n">right</span>
+    <span class="n">exact</span> <span class="n">hP</span>
+  <span class="bp">.</span> <span class="n">left</span>
+    <span class="n">exact</span> <span class="n">hQ</span>
+</pre></div>
+</div>
+<p>Here we use a vertical bar with <code class="docutils literal notranslate"><span class="pre">rcases</span> <span class="pre">h</span></code> because the split is disjunctive,
+resulting in two goals: one in which we have <code class="docutils literal notranslate"><span class="pre">hP</span> <span class="pre">:</span> <span class="pre">P</span></code> in the context and one
+in which we have <code class="docutils literal notranslate"><span class="pre">hQ</span> <span class="pre">:</span> <span class="pre">Q</span></code>. The <code class="docutils literal notranslate"><span class="pre">right</span></code> tactic tells Lean that we want to prove
+<code class="docutils literal notranslate"><span class="pre">Q</span> <span class="pre">∨</span> <span class="pre">P</span></code> by proving <code class="docutils literal notranslate"><span class="pre">P</span></code>, and the <code class="docutils literal notranslate"><span class="pre">left</span></code> tactic tells Lean that we want to prove
+<code class="docutils literal notranslate"><span class="pre">Q</span> <span class="pre">∨</span> <span class="pre">P</span></code> by proving <code class="docutils literal notranslate"><span class="pre">Q</span></code>.
+Notice that in contrast to casing on a conjunction, which results in one new goal and
+two new hypotheses,
+casing on a disjunction results in two new goals, each with one new hypothesis.</p>
+<p>Recall from <a class="reference internal" href="proof_systems_for_propositional_logic.html#section-natural-deduction"><span class="std std-numref">Section 8.6</span></a> that in the natural deduction
+proof system, rules for the connectives can be categorized as either introduction
+rules or elimination rules.
+Even though we have not yet clarified the relationship between natural deduction
+and Lean’s internal logic, you should notice that the tactics we have given so far
+follow a similar pattern:</p>
+<ul class="simple">
+<li><p>Given a goal of the form <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">→</span> <span class="pre">Q</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">intro</span></code> tactic to prove it.</p></li>
+<li><p>Given a hypothesis of the form <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">P</span> <span class="pre">→</span> <span class="pre">Q</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">apply</span></code> tactic to use it.</p></li>
+<li><p>Given a goal of the form <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">∧</span> <span class="pre">Q</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">constructor</span></code> tactic to prove it.</p></li>
+<li><p>Given a hypothesis of the form <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">P</span> <span class="pre">∧</span> <span class="pre">Q</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">rcases</span></code> tactic to use it.</p></li>
+<li><p>Given a goal of the form <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">∨</span> <span class="pre">Q</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">left</span></code> and <code class="docutils literal notranslate"><span class="pre">right</span></code> tactics to prove it.</p></li>
+<li><p>Given a hypothesis of the form <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">P</span> <span class="pre">∨</span> <span class="pre">Q</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">rcases</span></code> tactic to use it.</p></li>
+</ul>
+<p>In Lean, negation <code class="docutils literal notranslate"><span class="pre">¬</span> <span class="pre">P</span></code> is defined to be <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">→</span> <span class="pre">False</span></code>.
+For most purposes, the two expressions are interchangeable.
+This means that you can prove <code class="docutils literal notranslate"><span class="pre">¬</span> <span class="pre">P</span></code>
+by assuming <code class="docutils literal notranslate"><span class="pre">P</span></code> and deriving <code class="docutils literal notranslate"><span class="pre">False</span></code>, and if you have <code class="docutils literal notranslate"><span class="pre">hnp</span> <span class="pre">:</span> <span class="pre">¬</span> <span class="pre">P</span></code>,
+you an reduce the task of proving <code class="docutils literal notranslate"><span class="pre">False</span></code> to the task of proving <code class="docutils literal notranslate"><span class="pre">P</span></code>.
+In the next example, the <code class="docutils literal notranslate"><span class="pre">intro</span></code> tactic implements the first strategy,
+and the <code class="docutils literal notranslate"><span class="pre">apply</span></code> tactic implements the second.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">Q</span> <span class="bp">→</span> <span class="bp">¬</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">hnQ</span>
+  <span class="n">intro</span> <span class="n">hP</span>
+  <span class="n">apply</span> <span class="n">hnQ</span>
+  <span class="n">apply</span> <span class="n">h</span>
+  <span class="n">exact</span> <span class="n">hP</span>
+</pre></div>
+</div>
+<p>After the second <code class="docutils literal notranslate"><span class="pre">intro</span></code>, we have <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">P</span> <span class="pre">→</span> <span class="pre">Q</span></code>, <code class="docutils literal notranslate"><span class="pre">hnQ</span> <span class="pre">:</span> <span class="pre">¬</span> <span class="pre">Q</span></code>, and <code class="docutils literal notranslate"><span class="pre">hP</span> <span class="pre">:</span> <span class="pre">P</span></code>
+in the context and <code class="docutils literal notranslate"><span class="pre">False</span></code> as the desired conclusion. Applying <code class="docutils literal notranslate"><span class="pre">hnQ</span></code> leaves
+us the goal of proving <code class="docutils literal notranslate"><span class="pre">Q</span></code>, which we do using <code class="docutils literal notranslate"><span class="pre">h</span></code> and <code class="docutils literal notranslate"><span class="pre">hP</span></code>.</p>
+<p>There is no introduction rule for falsity; there is no canonical way to prove <code class="docutils literal notranslate"><span class="pre">False</span></code>!
+If we assume <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">False</span></code>, we can reach any conclusion we want,
+using either <code class="docutils literal notranslate"><span class="pre">contradiction</span></code> or <code class="docutils literal notranslate"><span class="pre">rcases</span> <span class="pre">h</span></code>.
+Intuitively, there is no proof of <code class="docutils literal notranslate"><span class="pre">False</span></code>, so if we have <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">False</span></code>,
+there are no cases to consider.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">False</span><span class="o">)</span> <span class="o">:</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">contradiction</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">False</span><span class="o">)</span> <span class="o">:</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rcases</span> <span class="n">h</span>
+</pre></div>
+</div>
+<p>As a convenience, if you have <code class="docutils literal notranslate"><span class="pre">h</span> <span class="pre">:</span> <span class="pre">P</span></code> and <code class="docutils literal notranslate"><span class="pre">hnP</span> <span class="pre">:</span> <span class="pre">¬</span> <span class="pre">P</span></code> in the context,
+the contradiction tactic solves the goal automatically.</p>
+<p>The principles we have used before all fall within what is known as
+<em>intuitionistic</em> logic. Many mathematical arguments require <em>classical</em> logic,
+which is embodied in the <em>law of the excluded middle</em>, <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">∨</span> <span class="pre">¬</span> <span class="pre">P</span></code>.
+This is embodied in the <code class="docutils literal notranslate"><span class="pre">by_cases</span></code> tactic, which lets us split on cases.
+In the proof below, we have <code class="docutils literal notranslate"><span class="pre">hP</span> <span class="pre">:</span> <span class="pre">P</span></code> in the first case and <code class="docutils literal notranslate"><span class="pre">hnP</span> <span class="pre">:</span> <span class="pre">¬</span> <span class="pre">P</span></code> in the second.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">by_cases</span> <span class="n">hP</span> <span class="o">:</span> <span class="n">P</span>
+  <span class="bp">.</span> <span class="n">right</span>
+    <span class="n">apply</span> <span class="n">h1</span>
+    <span class="n">exact</span> <span class="n">hP</span>
+  <span class="bp">.</span> <span class="n">left</span>
+    <span class="n">exact</span> <span class="n">hP</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="bp">¬</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">hnnP</span>
+  <span class="n">by_cases</span> <span class="n">hP</span> <span class="o">:</span> <span class="n">P</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">hP</span>
+  <span class="bp">.</span> <span class="n">contradiction</span>
+</pre></div>
+</div>
+<p>Classical reasoning is also embodied in the <code class="docutils literal notranslate"><span class="pre">by_contra</span></code> tactic, which allows
+us to do proof by contradiction.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="bp">¬</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">hnnP</span>
+  <span class="n">by_contra</span> <span class="n">hnP</span>
+  <span class="n">apply</span> <span class="n">hnnP</span>
+  <span class="n">exact</span> <span class="n">hnP</span>
+</pre></div>
+</div>
+<p>Applying <code class="docutils literal notranslate"><span class="pre">by_contra</span> <span class="pre">hnP</span></code> to a goal with conclusion <code class="docutils literal notranslate"><span class="pre">P</span></code> adds <code class="docutils literal notranslate"><span class="pre">hnP</span> <span class="pre">:</span> <span class="pre">¬</span> <span class="pre">P</span></code> to the context
+and asks us to prove <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>You can think of <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">↔</span> <span class="pre">Q</span></code> as an abbreviation for <code class="docutils literal notranslate"><span class="pre">(P</span> <span class="pre">→</span> <span class="pre">Q)</span> <span class="pre">∧</span> <span class="pre">(Q</span> <span class="pre">→</span> <span class="pre">P)</span></code>.
+It is not implemented exactly that way in Lean, but like a conjunction,
+the task of proving such a statement can be split into the forward
+and backward directions.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">↔</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span> <span class="o">:</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rcases</span> <span class="n">h1</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">hpq</span><span class="o">,</span> <span class="n">_</span><span class="o">⟩</span>
+  <span class="n">apply</span> <span class="n">hpq</span>
+  <span class="n">exact</span> <span class="n">h2</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">↔</span> <span class="n">Q</span><span class="o">)</span> <span class="o">:</span> <span class="n">Q</span> <span class="bp">↔</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rcases</span> <span class="n">h1</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">h2</span><span class="o">,</span> <span class="n">h3</span><span class="o">⟩</span>
+  <span class="n">constructor</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">h3</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">h2</span>
+</pre></div>
+</div>
+<p>In the first example, the underscore omits a label for the hypothesis, since we don’t
+needed it. If you use a label, Lean’s built in linter will warn you that the label is unused.
+The hypothesis still appears in the context with an inaccessible name, and can be used
+by automation. If you replace the underscore with a dash (<code class="docutils literal notranslate"><span class="pre">-</span></code>), the <code class="docutils literal notranslate"><span class="pre">rcases</span></code> tactic
+clears it entirely from the context.</p>
+<p>The methods in this section are <em>complete</em> for classical propositional logic,
+which is to say, any proof in classical propositional logic can be carried out
+using these methods.
+That is not to say that these methods are the most <em>efficient</em>; Lean
+offers both automation and syntax for writing proofs more compactly.
+As far as automation is concerned, all the proofs in this section
+can be carried out using the <code class="docutils literal notranslate"><span class="pre">tauto</span></code> tactic, which stands for “tautology.”</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">tauto</span>
+</pre></div>
+</div>
+<p>But writing propositional proofs by hand is a good way to learn how propositional logic
+works in Lean, and in more complicated proofs we often need to carry out simple logical
+manipulations by hand.</p>
+</section>
+<section id="proof-terms">
+<span id="section-proof-terms"></span><h2><span class="section-number">9.2. </span>Proof terms<a class="headerlink" href="#proof-terms" title="Link to this heading"></a></h2>
+<p>Remember that, in Lean’s foundation, everything is expression.
+In particular, if an expression <code class="docutils literal notranslate"><span class="pre">P</span></code> has type <code class="docutils literal notranslate"><span class="pre">Prop</span></code>, then a term <code class="docutils literal notranslate"><span class="pre">p</span></code>
+of type <code class="docutils literal notranslate"><span class="pre">P</span></code> is interpreted as a proof of <code class="docutils literal notranslate"><span class="pre">P</span></code>.
+Lean’s proof language is therefore essentially the same as its programming language,
+which means that we can write proofs the same way we write programs.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">prod_swap</span> <span class="o">(</span><span class="n">α</span> <span class="n">β</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">)</span> <span class="o">:</span> <span class="n">α</span> <span class="bp">×</span> <span class="n">β</span> <span class="bp">→</span> <span class="n">β</span> <span class="bp">×</span> <span class="n">α</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="n">p</span> <span class="bp">=&gt;</span> <span class="n">Prod.mk</span> <span class="o">(</span><span class="n">Prod.snd</span> <span class="n">p</span><span class="o">)</span> <span class="o">(</span><span class="n">Prod.fst</span> <span class="n">p</span><span class="o">)</span>
+
+<span class="kd">theorem</span> <span class="n">and_swap</span> <span class="o">(</span><span class="n">P</span> <span class="n">Q</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">∧</span> <span class="n">P</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="n">h</span> <span class="bp">=&gt;</span> <span class="n">And.intro</span> <span class="o">(</span><span class="n">And.right</span> <span class="n">h</span><span class="o">)</span> <span class="o">(</span><span class="n">And.left</span> <span class="n">h</span><span class="o">)</span>
+
+<span class="kd">def</span> <span class="n">sum_swap</span> <span class="o">(</span><span class="n">α</span> <span class="n">β</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">)</span> <span class="o">:</span> <span class="n">Sum</span> <span class="n">α</span> <span class="n">β</span> <span class="bp">→</span> <span class="n">Sum</span> <span class="n">β</span> <span class="n">α</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="n">s</span> <span class="bp">=&gt;</span> <span class="k">match</span> <span class="n">s</span> <span class="k">with</span>
+    <span class="bp">|</span> <span class="n">Sum.inl</span> <span class="n">a</span> <span class="bp">=&gt;</span> <span class="n">Sum.inr</span> <span class="n">a</span>
+    <span class="bp">|</span> <span class="n">Sum.inr</span> <span class="n">b</span> <span class="bp">=&gt;</span> <span class="n">Sum.inl</span> <span class="n">b</span>
+
+<span class="kd">theorem</span> <span class="n">or_swap</span> <span class="o">(</span><span class="n">P</span> <span class="n">Q</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">∨</span> <span class="n">P</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="n">h</span> <span class="bp">=&gt;</span> <span class="k">match</span> <span class="n">h</span> <span class="k">with</span>
+    <span class="bp">|</span> <span class="n">Or.inl</span> <span class="n">hp</span> <span class="bp">=&gt;</span> <span class="n">Or.inr</span> <span class="n">hp</span>
+    <span class="bp">|</span> <span class="n">Or.inr</span> <span class="n">hq</span> <span class="bp">=&gt;</span> <span class="n">Or.inl</span> <span class="n">hq</span>
+</pre></div>
+</div>
+<p>Instead of using the identifier <code class="docutils literal notranslate"><span class="pre">def</span></code>, it is conventional to use the word <code class="docutils literal notranslate"><span class="pre">theorem</span></code>
+to name the proof of a proposition.
+Each keyword serves to assign an expression to an identifier; the main difference
+is that theorems are marked <em>opaque</em>, which means that they are generally
+not unfolded. A proof written this way is called a <em>proof term</em>.
+The tactic proofs described in the previous section are nothing more than instructions
+that tell the system how to construct such an expression.</p>
+<p>The syntax for proof terms, in turn, is closely related to natural deduction.
+The <code class="docutils literal notranslate"><span class="pre">#explode</span></code> command prints proof terms in a format that is closer to the presentation of
+natural deduction in <a class="reference internal" href="proof_systems_for_propositional_logic.html#section-natural-deduction"><span class="std std-numref">Section 8.6</span></a>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="bp">#</span><span class="n">explode</span> <span class="n">and_swap</span>
+<span class="bp">#</span><span class="n">explode</span> <span class="n">or_swap</span>
+</pre></div>
+</div>
+<p>Don’t look too hard for an exact correspondence, because the details differ.
+But Lean’s foundation can be seen as a vast generalization of natural deduction,
+giving rise to its uniform treatment of proofs and programs.
+The analogy between the two is known as the Curry-Howard correspondence, and it explains
+the fact that the introduction and elimination rules for the connectives
+look a lot like the constructors and destructors for the corresponding data types.
+The examples above show that the introduction and elimination rules for conjunction
+parallel the constructors and destructors for the pair data type,
+and the introduction and elimination rules for disjunction parallel the constructors
+and destructors for the sum data type. In Lean’s foundation, the introduction and elimination rules for implication
+are exactly lambda abstraction and function application, respectively.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">P</span> <span class="o">:=</span> <span class="k">fun</span> <span class="n">h</span> <span class="bp">=&gt;</span> <span class="n">And.intro</span> <span class="n">h</span> <span class="n">h</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span> <span class="o">:</span> <span class="n">Q</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h2</span>
+</pre></div>
+</div>
+<p>In Lean, <code class="docutils literal notranslate"><span class="pre">¬</span> <span class="pre">P</span></code> is defined to be <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">→</span> <span class="pre">False</span></code>. The following proof assumes <code class="docutils literal notranslate"><span class="pre">P</span></code> and
+<code class="docutils literal notranslate"><span class="pre">¬</span> <span class="pre">P</span></code>, concludes <code class="docutils literal notranslate"><span class="pre">⊥</span></code>, and then uses the <em>ex falso</em> principle to conclude <code class="docutils literal notranslate"><span class="pre">Q</span></code>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span> <span class="o">:=</span> <span class="k">fun</span> <span class="n">h1</span> <span class="n">h2</span> <span class="bp">=&gt;</span> <span class="n">False.elim</span> <span class="o">(</span><span class="n">h2</span> <span class="n">h1</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>Lean allows the use of anonymous constructors and projections with proof terms just as with data:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">∧</span> <span class="n">P</span> <span class="o">:=</span>
+  <span class="k">fun</span> <span class="n">h</span> <span class="bp">=&gt;</span> <span class="o">⟨</span><span class="n">h.right</span><span class="o">,</span> <span class="n">h.left</span><span class="o">⟩</span>
+</pre></div>
+</div>
+<p>You can use proof terms in a tactic proof:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">→</span> <span class="o">(</span><span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span><span class="o">)</span> <span class="bp">∨</span> <span class="n">R</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h1</span> <span class="n">h2</span>
+  <span class="n">exact</span> <span class="n">Or.inl</span> <span class="o">(</span><span class="n">And.intro</span> <span class="n">h1</span> <span class="n">h2</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In fact, under the hood, a tactic proof is essentially a program that constructs the
+relevant proof. Here are some more examples:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">and_swap&#39;</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">∧</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">rcases</span> <span class="n">h</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">h1</span><span class="o">,</span> <span class="n">h2</span><span class="o">⟩</span>
+  <span class="n">constructor</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">h2</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">h1</span>
+
+<span class="kd">theorem</span> <span class="n">or_swap&#39;</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">∨</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">rcases</span> <span class="n">h</span> <span class="k">with</span> <span class="n">h1</span> <span class="bp">|</span>  <span class="n">h2</span>
+  <span class="bp">.</span> <span class="n">right</span><span class="bp">;</span> <span class="n">exact</span> <span class="n">h1</span>
+  <span class="bp">.</span> <span class="n">left</span><span class="bp">;</span> <span class="n">exact</span> <span class="n">h2</span>
+
+<span class="k">#print</span> <span class="n">and_swap&#39;</span>
+<span class="bp">#</span><span class="n">explode</span> <span class="n">and_swap&#39;</span>
+<span class="k">#print</span> <span class="n">or_swap&#39;</span>
+<span class="bp">#</span><span class="n">explode</span> <span class="n">or_swap&#39;</span>
+</pre></div>
+</div>
+<p>Lean’s <code class="docutils literal notranslate"><span class="pre">show_term</span></code> tactic will show you the proof term that a tactic block produces,
+and it will even given you the option of clicking to replace the tactic block by an explicit
+use of that term.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">P</span> <span class="n">Q</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">Q</span> <span class="bp">∧</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">intro</span> <span class="n">h</span>
+  <span class="n">show_term</span> <span class="o">{</span>
+  <span class="n">rcases</span> <span class="n">h</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">h1</span><span class="o">,</span> <span class="n">h2</span><span class="o">⟩</span>
+  <span class="n">constructor</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">h2</span>
+  <span class="bp">.</span> <span class="n">exact</span> <span class="n">h1</span><span class="o">}</span>
+</pre></div>
+</div>
+<p>You can read more about Lean expressions in
+<a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">Theorem Proving in Lean 4</a>.
+For the most part, in this course, we will focus on tactic proofs,
+but you should feel free to use a proof term with <code class="docutils literal notranslate"><span class="pre">apply</span></code> or <code class="docutils literal notranslate"><span class="pre">exact</span></code> when you feel like it.
+More importantly,  you should keep in mind that at the end of the day, what you are doing is
+constructing something like a natural deduction proof, represented as an expression in Lean’s
+foundation.
+You can therefore think of Lean as an engine for manipulating expressions that can represent
+data types, statements, programs, and proofs.
+Tactics are pieces of automation that are designed to help us construct these expressions.</p>
+</section>
+<section id="structured-proofs">
+<span id="section-structured-proofs"></span><h2><span class="section-number">9.3. </span>Structured proofs<a class="headerlink" href="#structured-proofs" title="Link to this heading"></a></h2>
+<p>Tactics allow us to work backward to prove a goal by reducing it to simpler ones.
+Lean also provides a means of reasoning forward from hypotheses,
+using the <code class="docutils literal notranslate"><span class="pre">have</span></code> tactic:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">(</span><span class="n">h3</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span> <span class="o">:</span> <span class="n">R</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="n">hQ</span> <span class="o">:</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+    <span class="n">apply</span> <span class="n">h1</span>
+    <span class="n">exact</span> <span class="n">h3</span>
+  <span class="n">apply</span> <span class="n">h2</span>
+  <span class="n">exact</span> <span class="n">hQ</span>
+</pre></div>
+</div>
+<p>Here the first line of the proof states an intermediate goal of proving <code class="docutils literal notranslate"><span class="pre">Q</span></code>.
+The result is named <code class="docutils literal notranslate"><span class="pre">hQ</span></code>, which we are then free to use.
+Using <code class="docutils literal notranslate"><span class="pre">have</span></code>  tends to make proofs more readable
+because the text displays the stepping stones to the main goal.
+It also tends to make proofs more robust,
+in that errors are localized to small, compartmentalized parts of the proof.
+If you omit the keyword <code class="docutils literal notranslate"><span class="pre">by</span></code>, you can use a proof term to fill an easy <code class="docutils literal notranslate"><span class="pre">have</span></code>:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">(</span><span class="n">h3</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span> <span class="o">:</span> <span class="n">R</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="n">hQ</span> <span class="o">:</span> <span class="n">Q</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h3</span>
+  <span class="n">exact</span> <span class="n">h2</span> <span class="n">hQ</span>
+</pre></div>
+</div>
+<p>You can even write <code class="docutils literal notranslate"><span class="pre">have</span> <span class="pre">hQ</span> <span class="pre">:=</span> <span class="pre">h1</span> <span class="pre">h3</span></code> in the second line of the first proof, omitting the type
+ascription, because Lean can figure that out. Of course, this sacrifices readability somewhat.
+You can generallly eliminate a <code class="docutils literal notranslate"><span class="pre">have</span></code> statement by inlining the result.
+For example, replacing <code class="docutils literal notranslate"><span class="pre">hQ</span></code> by <code class="docutils literal notranslate"><span class="pre">h1</span> <span class="pre">h3</span></code> yields the first proof below:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">(</span><span class="n">h3</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span> <span class="o">:</span> <span class="n">R</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">exact</span> <span class="n">h2</span> <span class="o">(</span><span class="n">h1</span> <span class="n">h3</span><span class="o">)</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">(</span><span class="n">h3</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span> <span class="o">:</span> <span class="n">R</span> <span class="o">:=</span> <span class="n">h2</span> <span class="o">(</span><span class="n">h1</span> <span class="n">h3</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>The proof <code class="docutils literal notranslate"><span class="pre">by</span> <span class="pre">exact</span> <span class="pre">h2</span> <span class="pre">(h1</span> <span class="pre">h3)</span></code> is equivalent to just presenting the proof term <code class="docutils literal notranslate"><span class="pre">h2</span> <span class="pre">(h1</span> <span class="pre">h3)</span></code>,
+as we do in the second example.</p>
+<p>Lean also has a <code class="docutils literal notranslate"><span class="pre">show</span></code> tactic, which declares the goal we are about to solve.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">(</span><span class="n">h3</span> <span class="o">:</span> <span class="n">P</span><span class="o">)</span> <span class="o">:</span> <span class="n">R</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="k">have</span> <span class="n">hQ</span> <span class="o">:</span> <span class="n">Q</span> <span class="o">:=</span> <span class="n">h1</span> <span class="n">h3</span>
+  <span class="k">show</span> <span class="n">R</span>
+  <span class="n">exact</span> <span class="n">h2</span> <span class="n">hQ</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">R</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rcases</span> <span class="n">h1</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">hP</span><span class="o">,</span> <span class="n">hQ</span><span class="o">⟩</span>
+  <span class="k">have</span> <span class="n">hR</span> <span class="o">:</span> <span class="n">R</span> <span class="o">:=</span> <span class="n">h2</span> <span class="n">hQ</span>
+  <span class="k">show</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">R</span>
+  <span class="n">exact</span> <span class="o">⟨</span><span class="n">hP</span><span class="o">,</span> <span class="n">hR</span><span class="o">⟩</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">show</span></code> tactic mainly serves to make a proof more readable, though it does a little more work than
+we are letting on here. For example, if there are multiple goals left to prove, <code class="docutils literal notranslate"><span class="pre">show</span></code> fill focus on the
+first one that matches the given statement.</p>
+</section>
+<section id="equational-reasoning">
+<span id="section-equational-reasoning-in-lean"></span><h2><span class="section-number">9.4. </span>Equational reasoning<a class="headerlink" href="#equational-reasoning" title="Link to this heading"></a></h2>
+<p>We are still a long way from from full-blown mathematical reasoning. In the chapters to come, we
+will gradually expand the formal languages we consider, and we will explore ways to automate
+the associated patterns of reasoning. In particular, in the next chapter,
+we will see that it is important
+to be able to reason about <em>terms</em> and relationships between them. For example, if <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>
+are variables ranging over integers and <code class="docutils literal notranslate"><span class="pre">xs</span></code> and <code class="docutils literal notranslate"><span class="pre">ys</span></code> are variables ranging over lists of
+integers, the expression <code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">+</span> <span class="pre">y)</span> <span class="pre">+</span> <span class="pre">3</span></code>
+is a term denoting an integer and the expression <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">::</span> <span class="pre">xs</span> <span class="pre">++</span> <span class="pre">[3]</span> <span class="pre">++</span> <span class="pre">ys</span></code> is a term denoting a list
+of integers. The expressions <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">y</span> <span class="pre">+</span> <span class="pre">3</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">y</span> <span class="pre">+</span> <span class="pre">3</span></code>, and <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">∈</span> <span class="pre">xs</span></code> are <em>formulas</em>
+that say that <code class="docutils literal notranslate"><span class="pre">x</span></code> is less than <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">+</span> <span class="pre">3</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">+</span> <span class="pre">3</span></code>, and <code class="docutils literal notranslate"><span class="pre">x</span></code> is an element
+of the list <code class="docutils literal notranslate"><span class="pre">xs</span></code>, respectively. The symbols <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">=</span></code>, and <code class="docutils literal notranslate"><span class="pre">∈</span></code> denote binary
+<em>relations</em>, since they express a relationship between the terms on either side.</p>
+<p>Mathematically, the most fundamental relation is the equality relationship.
+Equality satisfies two axiomatic properties: first, everything is equal to itself, and
+second, equal terms can be substituted for one another. In Lean, these are implemented by the
+tactics <code class="docutils literal notranslate"><span class="pre">rfl</span></code> and <code class="docutils literal notranslate"><span class="pre">rw</span></code>, respectively. The first is short for <code class="docutils literal notranslate"><span class="pre">reflexivity</span></code>, and the
+second is short for <code class="docutils literal notranslate"><span class="pre">rewrite</span></code>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">f</span> <span class="o">(</span><span class="n">a</span> <span class="bp">+</span> <span class="n">b</span><span class="o">)</span> <span class="bp">=</span> <span class="n">f</span> <span class="o">(</span><span class="n">a</span> <span class="bp">+</span> <span class="n">b</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rfl</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">b</span> <span class="bp">=</span> <span class="n">c</span><span class="o">)</span> <span class="o">:</span> <span class="n">f</span> <span class="o">(</span><span class="n">a</span> <span class="bp">+</span> <span class="n">b</span><span class="o">)</span> <span class="bp">=</span> <span class="n">f</span> <span class="o">(</span><span class="n">a</span> <span class="bp">+</span> <span class="n">c</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">h</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>In the second example, the rewrite tactic replaces <code class="docutils literal notranslate"><span class="pre">b</span></code> by <code class="docutils literal notranslate"><span class="pre">c</span></code> in the goal and then
+automatically applies reflexivity to finish it off.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">rw</span></code> tactic takes a list of identities and rewrites with them one at a time.
+You can use a left arrow to indicate that the tactic should use an equation in the
+reverse direction:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">c</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">b</span> <span class="bp">=</span> <span class="n">d</span><span class="o">)</span> <span class="o">:</span> <span class="n">f</span> <span class="o">(</span><span class="n">a</span> <span class="bp">+</span> <span class="n">b</span><span class="o">)</span> <span class="bp">=</span> <span class="n">f</span> <span class="o">(</span><span class="n">c</span> <span class="bp">+</span> <span class="n">d</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">h1</span><span class="o">,</span> <span class="n">h2</span><span class="o">]</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">c</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">d</span> <span class="bp">=</span> <span class="n">c</span> <span class="bp">+</span> <span class="n">b</span><span class="o">)</span> <span class="o">(</span><span class="n">h3</span> <span class="o">:</span> <span class="n">d</span> <span class="bp">=</span> <span class="n">e</span><span class="o">)</span> <span class="o">:</span>
+    <span class="n">f</span> <span class="o">(</span><span class="n">a</span> <span class="bp">+</span> <span class="n">b</span><span class="o">)</span> <span class="bp">=</span> <span class="n">f</span> <span class="o">(</span><span class="n">e</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">h1</span><span class="o">,</span> <span class="bp">←</span><span class="n">h2</span><span class="o">,</span> <span class="n">h3</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Notice that even common properties like the symmetry and transitivity of equality can
+be reduced to the substitution property and reflexivity.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">b</span><span class="o">)</span> <span class="o">:</span> <span class="n">b</span> <span class="bp">=</span> <span class="n">a</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">h</span><span class="o">]</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">b</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">b</span> <span class="bp">=</span> <span class="n">c</span><span class="o">)</span> <span class="o">:</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">c</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">h1</span><span class="o">,</span> <span class="n">h2</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>You can also rewrite with general identities. In Lean, when you write <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">*</span> <span class="pre">b</span> <span class="pre">*</span> <span class="pre">c</span></code>, parentheses
+associate to the left, so the expression is interpreted as <code class="docutils literal notranslate"><span class="pre">(a</span> <span class="pre">*</span> <span class="pre">b)</span> <span class="pre">*</span> <span class="pre">c</span></code>. The identities
+<code class="docutils literal notranslate"><span class="pre">mul_assoc</span></code>, <code class="docutils literal notranslate"><span class="pre">mul_comm</span></code>, and <code class="docutils literal notranslate"><span class="pre">mul_left_comm</span></code> can be used to move the parentheses around.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#check</span> <span class="o">(</span><span class="n">mul_assoc</span> <span class="o">:</span> <span class="bp">∀</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span><span class="o">,</span> <span class="o">(</span><span class="n">a</span> <span class="bp">*</span> <span class="n">b</span><span class="o">)</span> <span class="bp">*</span> <span class="n">c</span> <span class="bp">=</span> <span class="n">a</span> <span class="bp">*</span> <span class="o">(</span><span class="n">b</span> <span class="bp">*</span> <span class="n">c</span><span class="o">))</span>
+<span class="k">#check</span> <span class="o">(</span><span class="n">mul_comm</span> <span class="o">:</span> <span class="bp">∀</span> <span class="n">a</span> <span class="n">b</span><span class="o">,</span> <span class="n">a</span> <span class="bp">*</span> <span class="n">b</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">*</span> <span class="n">a</span><span class="o">)</span>
+<span class="k">#check</span> <span class="o">(</span><span class="n">mul_left_comm</span> <span class="o">:</span> <span class="bp">∀</span> <span class="n">a</span> <span class="n">b</span> <span class="n">c</span><span class="o">,</span> <span class="n">a</span> <span class="bp">*</span> <span class="o">(</span><span class="n">b</span> <span class="bp">*</span> <span class="n">c</span><span class="o">)</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">*</span> <span class="o">(</span><span class="n">a</span> <span class="bp">*</span> <span class="n">c</span><span class="o">))</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="n">c</span> <span class="bp">*</span> <span class="n">b</span><span class="o">)</span> <span class="bp">*</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">*</span> <span class="o">(</span><span class="n">a</span> <span class="bp">*</span> <span class="n">c</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">mul_assoc</span><span class="o">,</span> <span class="n">mul_comm</span><span class="o">,</span> <span class="bp">←</span><span class="n">mul_assoc</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Notice that your cursor after the comma in the list of the identities shows that goal
+at the point, so you can step through a sequence of rewrites to see what is happening.</p>
+<p>You can specialize identities at particular arguments. For example, <code class="docutils literal notranslate"><span class="pre">mul_comm</span> <span class="pre">c</span> <span class="pre">a</span></code> is the
+identity <code class="docutils literal notranslate"><span class="pre">c</span> <span class="pre">*</span> <span class="pre">a</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">*</span> <span class="pre">c</span></code>, and <code class="docutils literal notranslate"><span class="pre">mul_comm</span> <span class="pre">c</span></code> is the identity <code class="docutils literal notranslate"><span class="pre">∀</span> <span class="pre">x,</span> <span class="pre">c</span> <span class="pre">*</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">x</span> <span class="pre">*</span> <span class="pre">c</span></code>.
+Notice that Lean uses the same syntax for applying a theorem to arguments as it does for
+applying a function to arguments. In the underlying foundation, the two are instances
+of the same thing.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="n">a</span> <span class="bp">*</span> <span class="n">b</span><span class="o">)</span> <span class="bp">*</span> <span class="n">c</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">*</span> <span class="o">(</span><span class="n">a</span> <span class="bp">*</span> <span class="n">c</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">mul_comm</span> <span class="n">a</span> <span class="n">b</span><span class="o">,</span> <span class="n">mul_assoc</span> <span class="n">b</span> <span class="n">a</span> <span class="n">c</span><span class="o">]</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="n">a</span> <span class="bp">*</span> <span class="n">b</span><span class="o">)</span> <span class="bp">*</span> <span class="n">c</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">*</span> <span class="o">(</span><span class="n">a</span> <span class="bp">*</span> <span class="n">c</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">mul_comm</span> <span class="n">a</span><span class="o">,</span> <span class="n">mul_assoc</span><span class="o">]</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">a</span> <span class="n">b</span> <span class="n">c</span> <span class="n">d</span> <span class="n">e</span> <span class="o">:</span> <span class="n">ℕ</span><span class="o">)</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span>
+    <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">d</span> <span class="bp">=</span> <span class="n">c</span> <span class="bp">+</span> <span class="n">a</span><span class="o">)</span> <span class="o">(</span><span class="n">h3</span> <span class="o">:</span> <span class="n">e</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">+</span> <span class="n">c</span><span class="o">)</span> <span class="o">:</span>
+  <span class="n">d</span> <span class="bp">=</span> <span class="n">e</span> <span class="bp">+</span> <span class="mi">1</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">h2</span><span class="o">,</span> <span class="n">h3</span><span class="o">,</span> <span class="n">h1</span><span class="o">,</span> <span class="n">add_comm</span> <span class="n">b</span> <span class="n">c</span><span class="o">,</span> <span class="n">add_assoc</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>You can also use <code class="docutils literal notranslate"><span class="pre">rw</span></code> with the <code class="docutils literal notranslate"><span class="pre">at</span></code> modifier to rewrite at a particular hypothesis.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">a</span> <span class="n">b</span> <span class="n">c</span> <span class="n">d</span> <span class="n">e</span> <span class="o">:</span> <span class="n">ℕ</span><span class="o">)</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">d</span> <span class="bp">=</span> <span class="n">c</span> <span class="bp">+</span> <span class="n">a</span><span class="o">)</span> <span class="o">(</span><span class="n">h3</span> <span class="o">:</span> <span class="n">e</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">+</span> <span class="n">c</span><span class="o">)</span> <span class="o">:</span> <span class="n">d</span> <span class="bp">=</span> <span class="n">e</span> <span class="bp">+</span> <span class="mi">1</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">h1</span><span class="o">]</span> <span class="n">at</span> <span class="n">h2</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">h2</span><span class="o">,</span> <span class="n">h3</span><span class="o">,</span> <span class="bp">←</span><span class="n">add_assoc</span><span class="o">,</span> <span class="n">add_comm</span> <span class="n">c</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Sometimes, you only want to replace a single occurrence of a term. You can use the <code class="docutils literal notranslate"><span class="pre">nth_rw</span></code>
+tactic for that.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">a</span> <span class="bp">*</span> <span class="n">a</span><span class="o">)</span> <span class="o">:</span> <span class="n">b</span> <span class="bp">*</span> <span class="n">a</span> <span class="bp">=</span> <span class="n">b</span> <span class="bp">*</span> <span class="o">(</span><span class="n">a</span> <span class="bp">*</span> <span class="n">a</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">nth_rw</span> <span class="mi">1</span> <span class="o">[</span><span class="n">h</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>In this example, <code class="docutils literal notranslate"><span class="pre">nth_rw</span> <span class="pre">1</span> <span class="pre">[h]</span></code> applies the rewrite <code class="docutils literal notranslate"><span class="pre">h</span></code> to the first occurrence of <code class="docutils literal notranslate"><span class="pre">a</span></code>
+in the conclusion.</p>
+<p>Mathlib has specialized tactics for proving particular types of equations. For example,
+<code class="docutils literal notranslate"><span class="pre">norm_num</span></code> can be used for concrete calculations and <code class="docutils literal notranslate"><span class="pre">ring</span></code> can be used to prove
+identities involving addition, subtraction, multiplication, integer coefficients, and
+natural number exponents.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="mi">123</span> <span class="bp">*</span> <span class="mi">345</span> <span class="bp">=</span> <span class="mi">42435</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">norm_num</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="n">a</span> <span class="bp">+</span> <span class="n">b</span><span class="o">)</span><span class="bp">^</span><span class="mi">2</span> <span class="bp">=</span> <span class="n">a</span><span class="bp">^</span><span class="mi">2</span> <span class="bp">+</span> <span class="mi">2</span><span class="bp">*</span><span class="n">a</span><span class="bp">*</span><span class="n">b</span> <span class="bp">+</span> <span class="n">b</span><span class="bp">^</span><span class="mi">2</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">ring</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">a</span><span class="bp">^</span><span class="mi">2</span> <span class="bp">-</span> <span class="n">b</span><span class="bp">^</span><span class="mi">2</span> <span class="bp">=</span> <span class="o">(</span><span class="n">a</span> <span class="bp">+</span> <span class="n">b</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">a</span> <span class="bp">-</span> <span class="n">b</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">ring</span>
+</pre></div>
+</div>
+<p>Rewriting with the name of a function amounts to unfolding the definition, or, if
+it is defined by cases, its defining clauses.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">fib</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span>
+  <span class="bp">|</span> <span class="mi">0</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
+  <span class="bp">|</span> <span class="mi">1</span> <span class="bp">=&gt;</span> <span class="mi">1</span>
+  <span class="bp">|</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">2</span><span class="o">)</span> <span class="bp">=&gt;</span> <span class="n">fib</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">+</span> <span class="n">fib</span> <span class="n">n</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">fib</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">3</span><span class="o">)</span> <span class="bp">=</span> <span class="mi">2</span> <span class="bp">*</span> <span class="n">fib</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">+</span> <span class="n">fib</span> <span class="n">n</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">fib</span><span class="o">,</span> <span class="n">fib</span><span class="o">]</span>
+  <span class="n">ring</span>
+</pre></div>
+</div>
+<p>Finally, Lean will let you rewrite with propositional equivalences.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#check</span> <span class="o">(</span><span class="n">not_and_or</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span><span class="o">)</span> <span class="bp">↔</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">∨</span> <span class="bp">¬</span> <span class="n">Q</span><span class="o">)</span>
+<span class="k">#check</span> <span class="o">(</span><span class="n">not_not</span> <span class="o">:</span> <span class="bp">¬</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">↔</span> <span class="n">P</span><span class="o">)</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">P</span> <span class="bp">∧</span> <span class="bp">¬</span> <span class="n">Q</span><span class="o">)</span> <span class="bp">↔</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">not_and_or</span><span class="o">,</span> <span class="n">not_not</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Sometimes Lean will surprise you by not making you prove something you think you should have to.
+When it needs to, Lean will unfold definitions and apply computational rules to simplify
+an expression, and so it can often treat syntactically different expressions as being the
+same. In the next example, Lean unfolds the definition of addition and determines <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">+</span> <span class="pre">0</span></code>
+and <code class="docutils literal notranslate"><span class="pre">n</span></code> are <em>definitionally equal</em>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">n</span> <span class="bp">+</span> <span class="mi">0</span> <span class="bp">=</span> <span class="n">n</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rfl</span>
+</pre></div>
+</div>
+<p>Replacing <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">+</span> <span class="pre">0</span></code> by <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">+</span> <span class="pre">n</span></code> does not work, however. Definitional equality
+is subtle and we will discuss it in detail here, but it might be helpful to know that Lean can
+generally unfold a recursive definition or a definition on cases when it has to.
+This feature of Lean is probably at play when you find that <code class="docutils literal notranslate"><span class="pre">rw</span></code> declares a
+goal solved when you thought you had more work to do.</p>
+<p>Lean has other automation that can handle equational reasoning, most notably, a tactic
+called <code class="docutils literal notranslate"><span class="pre">simp</span></code> that simplifies expressions using a database of identities that have been
+marked for its use.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">fib</span> <span class="mi">8</span> <span class="bp">=</span> <span class="mi">21</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">simp</span> <span class="o">[</span><span class="n">fib</span><span class="o">]</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">a</span> <span class="bp">+</span> <span class="n">b</span> <span class="bp">-</span> <span class="n">b</span> <span class="bp">=</span> <span class="n">a</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">simp</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">↔</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">P</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">simp</span>
+</pre></div>
+</div>
+<p>As usual, hovering over <code class="docutils literal notranslate"><span class="pre">simp</span></code> provides more information about how it works.
+In the real world, you should feel free to use automation like <code class="docutils literal notranslate"><span class="pre">simp</span></code> with reckless abandon.
+The more automation the better! That’s what this course is all about. But for the
+exercises
+we will ask you to do proofs using more elementary tactics — for example, using only
+the <code class="docutils literal notranslate"><span class="pre">rw</span></code> tactic to prove identities — so that you acquire a solid understanding of the
+principles of reasoning that they implement.</p>
+</section>
+<section id="induction">
+<span id="section-lean-induction"></span><h2><span class="section-number">9.5. </span>Induction<a class="headerlink" href="#induction" title="Link to this heading"></a></h2>
+<p>With only equality and the propositional connectives, our vocabulary is limited.
+In Lean, it is possible to describe any precise mathematical property or relationship, and,
+indeed, a vast number of them are already defined in Mathlib.
+But even with just equality and the propositional connectives, we can prove
+some interesting theorems, and so we will make a small start on that here.</p>
+<p>In <a class="reference internal" href="mathematical_background.html#chapter-mathematical-background"><span class="std std-numref">Chapter 2</span></a> we reviewed the principle
+of induction, and we have seen throughout this book that Lean allows us to define inductive
+data types and to define functions on those types by structural recursion.
+We now introduce Lean’s <code class="docutils literal notranslate"><span class="pre">induction</span></code> tactic.
+In the next example, we define the function <code class="docutils literal notranslate"><span class="pre">sum_up_to</span> <span class="pre">n</span></code> that sums the numbers
+up to and including <code class="docutils literal notranslate"><span class="pre">n</span></code>, and we use induction to prove that it is equal to
+<code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">*</span> <span class="pre">(n</span> <span class="pre">+</span> <span class="pre">1)</span> <span class="pre">/</span> <span class="pre">2</span></code> for every <code class="docutils literal notranslate"><span class="pre">n</span></code>.
+(We state this in a roundabout way to avoid having to deal with division.)</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">sum_up_to</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span>
+  <span class="bp">|</span> <span class="mi">0</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
+  <span class="bp">|</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">+</span> <span class="n">sum_up_to</span> <span class="n">n</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="mi">2</span> <span class="bp">*</span> <span class="n">sum_up_to</span> <span class="n">n</span> <span class="bp">=</span> <span class="n">n</span> <span class="bp">*</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">n</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">zero</span> <span class="bp">=&gt;</span>
+      <span class="n">rw</span> <span class="o">[</span><span class="n">Nat.zero_eq</span><span class="o">,</span> <span class="n">sum_up_to</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">succ</span> <span class="n">n</span> <span class="n">ih</span> <span class="bp">=&gt;</span>
+      <span class="n">rw</span> <span class="o">[</span><span class="n">Nat.succ_eq_add_one</span><span class="o">,</span> <span class="n">sum_up_to</span><span class="o">,</span> <span class="n">mul_add</span><span class="o">,</span> <span class="n">ih</span><span class="o">]</span>
+      <span class="n">ring</span>
+</pre></div>
+</div>
+<p>As usual, hovering over <code class="docutils literal notranslate"><span class="pre">induction</span></code> gives you more information about its syntax and usage,
+including variations. Here the two cases are named <code class="docutils literal notranslate"><span class="pre">zero</span></code> and <code class="docutils literal notranslate"><span class="pre">succ</span></code>, corresponding to
+the two canonical ways of constructing a natural number. In the <code class="docutils literal notranslate"><span class="pre">succ</span></code> case
+we name the variable <code class="docutils literal notranslate"><span class="pre">n</span></code> and the inductive hypothesis <code class="docutils literal notranslate"><span class="pre">ih</span></code>.
+It is unfortunate that the two cases of the induction use <code class="docutils literal notranslate"><span class="pre">Nat.zero</span></code> and <code class="docutils literal notranslate"><span class="pre">Nat.succ</span> <span class="pre">n</span></code>
+instead of the (definitionally equal) expressions <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">+</span> <span class="pre">1</span></code>, respectively, but the
+equations <code class="docutils literal notranslate"><span class="pre">Nat.zero_eq</span></code> and <code class="docutils literal notranslate"><span class="pre">Nat.succ_eq_add_one</span></code> fix that. Rewriting with
+<code class="docutils literal notranslate"><span class="pre">sum_up_to</span></code> unfolds the definition, and hovering over <code class="docutils literal notranslate"><span class="pre">mul_add</span></code> shows that it
+distributes the multiplication over addition so that we can apply the inductive hypothesis.
+Remember that you can step through the rewrites in the infoview window by moving your cursor
+down the list. Here is another example of a proof by induction:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">sum_odds</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span>
+  <span class="bp">|</span> <span class="mi">0</span> <span class="bp">=&gt;</span> <span class="mi">0</span>
+  <span class="bp">|</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="mi">2</span> <span class="bp">*</span> <span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">+</span> <span class="n">sum_odds</span> <span class="n">n</span>
+
+<span class="kd">theorem</span> <span class="n">sum_odds_eq_square</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">sum_odds</span> <span class="n">n</span> <span class="bp">=</span> <span class="n">n</span><span class="bp">^</span><span class="mi">2</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">n</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">zero</span> <span class="bp">=&gt;</span>
+      <span class="n">rw</span> <span class="o">[</span><span class="n">sum_odds</span><span class="o">,</span> <span class="n">Nat.zero_eq</span><span class="o">,</span> <span class="n">pow_two</span><span class="o">,</span> <span class="n">zero_mul</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">succ</span> <span class="n">n</span> <span class="n">ih</span> <span class="bp">=&gt;</span>
+      <span class="n">rw</span> <span class="o">[</span><span class="n">sum_odds</span><span class="o">,</span> <span class="n">ih</span><span class="o">,</span> <span class="n">Nat.succ_eq_add_one</span><span class="o">]</span>
+      <span class="n">ring</span>
+</pre></div>
+</div>
+<p>In fact, in Lean’s library, addition and multiplication on the natural numbers are defined
+recursively and their properties are proved using induction. In the example below,
+we define addition with the name <code class="docutils literal notranslate"><span class="pre">add'</span></code> to avoid clashing with names in the library,
+and we open the <code class="docutils literal notranslate"><span class="pre">Nat</span></code> namespace to shorten names like <code class="docutils literal notranslate"><span class="pre">succ</span></code> and <code class="docutils literal notranslate"><span class="pre">zero_eq</span></code>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">open</span> <span class="n">Nat</span>
+
+<span class="kd">def</span> <span class="n">add&#39;</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span>
+  <span class="bp">|</span> <span class="n">m</span><span class="o">,</span> <span class="mi">0</span> <span class="bp">=&gt;</span> <span class="n">m</span>
+  <span class="bp">|</span> <span class="n">m</span><span class="o">,</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">add&#39;</span> <span class="n">m</span> <span class="n">n</span><span class="o">)</span> <span class="bp">+</span> <span class="mi">1</span>
+
+<span class="kd">theorem</span> <span class="n">zero_add&#39;</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">add&#39;</span> <span class="mi">0</span> <span class="n">n</span> <span class="bp">=</span> <span class="n">n</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">n</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">zero</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">add&#39;</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">succ</span> <span class="n">n</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">add&#39;</span><span class="o">,</span> <span class="n">ih</span><span class="o">]</span>
+
+<span class="kd">theorem</span> <span class="n">succ_add&#39;</span> <span class="o">(</span><span class="n">m</span> <span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">add&#39;</span> <span class="o">(</span><span class="n">succ</span> <span class="n">m</span><span class="o">)</span> <span class="n">n</span> <span class="bp">=</span> <span class="n">succ</span> <span class="o">(</span><span class="n">add&#39;</span> <span class="n">m</span> <span class="n">n</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">n</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">zero</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">add&#39;</span><span class="o">,</span> <span class="n">add&#39;</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">succ</span> <span class="n">n</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">add&#39;</span><span class="o">,</span> <span class="n">ih</span><span class="o">,</span> <span class="n">add&#39;</span><span class="o">]</span>
+
+<span class="kd">theorem</span> <span class="n">add&#39;_comm</span> <span class="o">(</span><span class="n">m</span> <span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:</span> <span class="n">add&#39;</span> <span class="n">m</span> <span class="n">n</span> <span class="bp">=</span> <span class="n">add&#39;</span> <span class="n">n</span> <span class="n">m</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">m</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">zero</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">zero_eq</span><span class="o">,</span> <span class="n">zero_add&#39;</span><span class="o">,</span> <span class="n">add&#39;</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">succ</span> <span class="n">m</span> <span class="n">ih</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">add&#39;</span><span class="o">,</span> <span class="n">succ_add&#39;</span><span class="o">,</span> <span class="n">ih</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Lean supports induction on any inductive type, not just the natural numbers.
+Remember that Lean’s core library defines the <code class="docutils literal notranslate"><span class="pre">List</span></code> data type
+and notation for it.
+In the example below, we open the namespace, declare some variables, and
+confirm the recursive definition of the append function.
+The proofs by reflexivity show that <code class="docutils literal notranslate"><span class="pre">nil_append</span></code> and <code class="docutils literal notranslate"><span class="pre">cons_append</span></code> are definitionally
+true, which is to say, they following by unfolding the definition of <code class="docutils literal notranslate"><span class="pre">append</span></code>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">open</span> <span class="n">List</span>
+
+<span class="kd">variable</span> <span class="o">{</span><span class="n">α</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">}</span>
+<span class="kd">variable</span> <span class="o">(</span><span class="n">as</span> <span class="n">bs</span> <span class="n">cs</span> <span class="o">:</span> <span class="n">List</span> <span class="n">α</span><span class="o">)</span>
+<span class="kd">variable</span> <span class="o">(</span><span class="n">a</span> <span class="n">b</span> <span class="n">c</span> <span class="o">:</span> <span class="n">α</span><span class="o">)</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="o">[]</span> <span class="bp">++</span> <span class="n">as</span> <span class="bp">=</span> <span class="n">as</span> <span class="o">:=</span> <span class="n">nil_append</span> <span class="n">as</span>
+<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="n">a</span> <span class="o">::</span> <span class="n">as</span><span class="o">)</span> <span class="bp">++</span> <span class="n">bs</span> <span class="bp">=</span> <span class="n">a</span> <span class="o">::</span> <span class="o">(</span><span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span><span class="o">)</span> <span class="o">:=</span> <span class="n">cons_append</span> <span class="n">a</span> <span class="n">as</span> <span class="n">bs</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="o">[]</span> <span class="bp">++</span> <span class="n">as</span> <span class="bp">=</span> <span class="n">as</span> <span class="o">:=</span> <span class="n">rfl</span>
+<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="n">a</span> <span class="o">::</span> <span class="n">as</span><span class="o">)</span> <span class="bp">++</span> <span class="n">bs</span> <span class="bp">=</span> <span class="n">a</span> <span class="o">::</span> <span class="o">(</span><span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span><span class="o">)</span> <span class="o">:=</span> <span class="n">rfl</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">variable</span></code> command does not do anything substantial.
+It tells Lean that when the corresponding identifiers are used
+in definitions and theorems that follow,
+they should be interpreted as arguments to those theorems and proofs,
+with the indicated types.
+The curly brackets around the declaration <code class="docutils literal notranslate"><span class="pre">α</span> <span class="pre">:</span> <span class="pre">Type</span></code> indicate that that
+argument is meant to be <em>implicit</em>, which is to say,
+users do not have to write it explicitly.
+Rather, Lean is expected to infer it from the context.</p>
+<p>The library stores the theorems <code class="docutils literal notranslate"><span class="pre">[]</span> <span class="pre">++</span> <span class="pre">as</span></code> and
+<code class="docutils literal notranslate"><span class="pre">(a</span> <span class="pre">::</span> <span class="pre">as)</span> <span class="pre">++</span> <span class="pre">bs</span> <span class="pre">=</span> <span class="pre">a</span> <span class="pre">::</span> <span class="pre">(as</span> <span class="pre">++</span> <span class="pre">bs)</span></code> under the names <code class="docutils literal notranslate"><span class="pre">nil_append</span></code>
+and <code class="docutils literal notranslate"><span class="pre">cons_append</span></code>, respectively.
+You can see the statements by writing <code class="docutils literal notranslate"><span class="pre">#check</span> <span class="pre">nil_append</span></code> and <code class="docutils literal notranslate"><span class="pre">#check</span> <span class="pre">cons_append</span></code>.
+Remember that we took these to be the defining equations for the
+<code class="docutils literal notranslate"><span class="pre">append</span></code> function in <a class="reference internal" href="mathematical_background.html#section-generalized-induction-and-recursion"><span class="std std-numref">Section 2.3</span></a>.</p>
+<p>Lean’s library also proves <code class="docutils literal notranslate"><span class="pre">as</span> <span class="pre">++</span> <span class="pre">[]</span></code> under the name <code class="docutils literal notranslate"><span class="pre">append_nil</span></code>,
+but to illustrate how proofs like this go, we will prove it again
+under the name <code class="docutils literal notranslate"><span class="pre">append_nil'</span></code>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">append_nil&#39;</span> <span class="o">:</span> <span class="n">as</span> <span class="bp">++</span> <span class="o">[]</span> <span class="bp">=</span> <span class="n">as</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">as</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">nil</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">nil_append</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">cons</span> <span class="n">a</span> <span class="n">as</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">cons_append</span><span class="o">,</span> <span class="n">ih</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Even though the proof is straightforward, some cleverness is needed to decide which variable
+to induct on. The fact that <code class="docutils literal notranslate"><span class="pre">append</span></code> is defined by recursion on the first argument makes
+<code class="docutils literal notranslate"><span class="pre">as</span></code> the natural choice. Similarly, we can prove the associativity of the <code class="docutils literal notranslate"><span class="pre">append</span></code> function.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">append_assoc&#39;</span> <span class="o">:</span> <span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span> <span class="bp">++</span> <span class="n">cs</span> <span class="bp">=</span> <span class="n">as</span> <span class="bp">++</span> <span class="o">(</span><span class="n">bs</span> <span class="bp">++</span> <span class="n">cs</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">as</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">nil</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">nil_append</span><span class="o">,</span> <span class="n">nil_append</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">cons</span> <span class="n">a</span> <span class="n">as</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">cons_append</span><span class="o">,</span> <span class="n">cons_append</span><span class="o">,</span> <span class="n">ih</span><span class="o">,</span> <span class="n">cons_append</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Sometimes proving even simple identities can be challenging. Lean defines the list <code class="docutils literal notranslate"><span class="pre">reverse</span></code>
+function using a tail recursive auxiliary function <code class="docutils literal notranslate"><span class="pre">reverseAux</span> <span class="pre">as</span> <span class="pre">bs</span></code>,
+which in turn uses an accumulator to append the reverse of <code class="docutils literal notranslate"><span class="pre">as</span></code> to <code class="docutils literal notranslate"><span class="pre">bs</span></code></p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="n">reverse</span> <span class="n">as</span> <span class="bp">=</span> <span class="n">reverseAux</span> <span class="n">as</span> <span class="o">[]</span> <span class="o">:=</span> <span class="n">rfl</span>
+<span class="kd">example</span> <span class="o">:</span> <span class="n">reverseAux</span> <span class="o">[]</span> <span class="n">bs</span> <span class="bp">=</span> <span class="n">bs</span> <span class="o">:=</span> <span class="n">rfl</span>
+<span class="kd">example</span> <span class="o">:</span> <span class="n">reverseAux</span> <span class="o">(</span><span class="n">a</span> <span class="o">::</span> <span class="n">as</span><span class="o">)</span> <span class="n">bs</span> <span class="bp">=</span> <span class="n">reverseAux</span> <span class="n">as</span> <span class="o">(</span><span class="n">a</span> <span class="o">::</span> <span class="n">bs</span><span class="o">)</span> <span class="o">:=</span> <span class="n">rfl</span>
+</pre></div>
+</div>
+<p>If you try proving <code class="docutils literal notranslate"><span class="pre">reverse</span> <span class="pre">(as</span> <span class="pre">++</span> <span class="pre">bs)</span> <span class="pre">=</span> <span class="pre">reverse</span> <span class="pre">bs</span> <span class="pre">++</span> <span class="pre">reverse</span> <span class="pre">as</span></code>, you’ll find that
+it isn’t easy. It turns out to be best to prove the following two identities first:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">reverseAux_append</span> <span class="o">:</span> <span class="n">reverseAux</span> <span class="o">(</span><span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span><span class="o">)</span> <span class="n">cs</span> <span class="bp">=</span> <span class="n">reverseAux</span> <span class="n">bs</span> <span class="o">(</span><span class="n">reverseAux</span> <span class="n">as</span> <span class="n">cs</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">as</span> <span class="n">generalizing</span> <span class="n">cs</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">nil</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">nil_append</span><span class="o">,</span> <span class="n">reverseAux</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">cons</span> <span class="n">a</span> <span class="n">as</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">cons_append</span><span class="o">,</span> <span class="n">reverseAux</span><span class="o">,</span> <span class="n">reverseAux</span><span class="o">,</span> <span class="n">ih</span><span class="o">]</span>
+
+<span class="kd">theorem</span> <span class="n">reverseAux_append&#39;</span> <span class="o">:</span> <span class="n">reverseAux</span> <span class="n">as</span> <span class="o">(</span><span class="n">bs</span> <span class="bp">++</span> <span class="n">cs</span><span class="o">)</span> <span class="bp">=</span> <span class="n">reverseAux</span> <span class="n">as</span> <span class="n">bs</span> <span class="bp">++</span> <span class="n">cs</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">as</span> <span class="n">generalizing</span> <span class="n">bs</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">nil</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">reverseAux</span><span class="o">,</span> <span class="n">reverseAux</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">cons</span> <span class="n">a</span> <span class="n">as</span> <span class="n">ih</span> <span class="bp">=&gt;</span> <span class="n">rw</span> <span class="o">[</span><span class="n">reverseAux</span><span class="o">,</span> <span class="n">reverseAux</span><span class="o">,</span> <span class="bp">←</span><span class="n">cons_append</span><span class="o">,</span> <span class="n">ih</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">generalizing</span></code> clause in the two induction tells Lean that the inductive hypothesis
+should be applied to any choice of second parameter, not just the one from the
+previous step. Mathematically, what is going on is that we are proving by induction
+on <code class="docutils literal notranslate"><span class="pre">as</span></code> that the identity holds <em>for every choice of</em> the second parameter.
+This is needed because the recursive step of <code class="docutils literal notranslate"><span class="pre">reverseAux</span></code> uses a different parameter in the
+recursive call.
+You should try deleting the <code class="docutils literal notranslate"><span class="pre">generalizing</span></code> clause to see what goes
+wrong when we omit it.</p>
+<p>With those facts in hand, we have the identity we are after:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">theorem</span> <span class="n">reverse_append</span> <span class="o">:</span> <span class="n">reverse</span> <span class="o">(</span><span class="n">as</span> <span class="bp">++</span> <span class="n">bs</span><span class="o">)</span> <span class="bp">=</span> <span class="n">reverse</span> <span class="n">bs</span> <span class="bp">++</span> <span class="n">reverse</span> <span class="n">as</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">rw</span> <span class="o">[</span><span class="n">reverse</span><span class="o">,</span> <span class="n">reverseAux_append</span><span class="o">,</span> <span class="n">reverse</span><span class="o">,</span> <span class="bp">←</span><span class="n">reverseAux_append&#39;</span><span class="o">,</span> <span class="n">nil_append</span><span class="o">,</span>
+      <span class="n">reverse</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>As a similar exercise, we encourage you to prove that for any list <code class="docutils literal notranslate"><span class="pre">as</span></code>,
+<code class="docutils literal notranslate"><span class="pre">reverse</span> <span class="pre">(reverse</span> <span class="pre">as)</span> <span class="pre">=</span> <span class="pre">as</span></code>. You can do this by proving suitable lemmas about <code class="docutils literal notranslate"><span class="pre">reverseAux</span></code>.</p>
+<p>Let’s consider one last example, which brings us closer to the kinds of logical operations
+that we have been implementing in Lean.
+We have often relied on the fact that when we evaluate
+a propositional formula relative to a truth assignment, the resulting truth value only depends
+on the variables that occur in the formula.
+We can formalize in Lean what it means to say that a variable <code class="docutils literal notranslate"><span class="pre">v</span></code> occurs in <code class="docutils literal notranslate"><span class="pre">A</span></code> in Lean
+as follows:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">namespace</span> <span class="n">PropForm</span>
+
+<span class="kd">def</span> <span class="n">Occurs</span> <span class="o">(</span><span class="n">v</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span> <span class="o">:</span> <span class="n">PropForm</span> <span class="bp">→</span> <span class="kt">Prop</span>
+  <span class="bp">|</span> <span class="n">tr</span> <span class="bp">=&gt;</span> <span class="n">False</span>
+  <span class="bp">|</span> <span class="n">fls</span> <span class="bp">=&gt;</span> <span class="n">False</span>
+  <span class="bp">|</span> <span class="n">var</span> <span class="n">w</span> <span class="bp">=&gt;</span> <span class="n">v</span> <span class="bp">=</span> <span class="n">w</span>
+  <span class="bp">|</span> <span class="n">neg</span> <span class="n">A</span> <span class="bp">=&gt;</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">A</span>
+  <span class="bp">|</span> <span class="n">conj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">A</span> <span class="bp">∨</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">B</span>
+  <span class="bp">|</span> <span class="n">disj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">A</span> <span class="bp">∨</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">B</span>
+  <span class="bp">|</span> <span class="n">impl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">A</span> <span class="bp">∨</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">B</span>
+  <span class="bp">|</span> <span class="n">biImpl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">A</span> <span class="bp">∨</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">B</span>
+</pre></div>
+</div>
+<p>Here we follow Lean’s convention of using capital letters for propositions, properties, and
+predicates. We could just as well have defined a function <code class="docutils literal notranslate"><span class="pre">vars</span> <span class="pre">:</span> <span class="pre">PropForm</span> <span class="pre">→</span> <span class="pre">Finset</span> <span class="pre">String</span></code>
+that returns the finite set of variables contained in a propositional formula, in which case
+<code class="docutils literal notranslate"><span class="pre">Occurs</span> <span class="pre">v</span> <span class="pre">A</span></code> would be equivalent to <code class="docutils literal notranslate"><span class="pre">v</span> <span class="pre">∈</span> <span class="pre">vars</span> <span class="pre">A</span></code>.</p>
+<p>In the past, we have also defined an evaluation function for propositional formulas relative
+to a partial truth assignment, an element of type <code class="docutils literal notranslate"><span class="pre">PropAssignment</span></code>.
+Here, to simplify the discussion, we will use total assignments to propositional variables,
+represented as functions of type <code class="docutils literal notranslate"><span class="pre">String</span> <span class="pre">→</span> <span class="pre">Bool</span></code>.
+The evaluation function for propositional formulas is then defined straightforwardly as follows.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">eval</span> <span class="o">(</span><span class="n">v</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">Bool</span><span class="o">)</span> <span class="o">:</span> <span class="n">PropForm</span> <span class="bp">→</span> <span class="n">Bool</span>
+  <span class="bp">|</span> <span class="n">var</span> <span class="n">s</span> <span class="bp">=&gt;</span> <span class="n">v</span> <span class="n">s</span>
+  <span class="bp">|</span> <span class="n">tr</span> <span class="bp">=&gt;</span> <span class="n">true</span>
+  <span class="bp">|</span> <span class="n">fls</span> <span class="bp">=&gt;</span> <span class="n">false</span>
+  <span class="bp">|</span> <span class="n">neg</span> <span class="n">A</span> <span class="bp">=&gt;</span> <span class="bp">!</span><span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">A</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">conj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">A</span><span class="o">)</span> <span class="bp">&amp;&amp;</span> <span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">disj</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">A</span><span class="o">)</span> <span class="bp">||</span> <span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">impl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="bp">!</span><span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">A</span><span class="o">)</span> <span class="bp">||</span> <span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">B</span><span class="o">)</span>
+  <span class="bp">|</span> <span class="n">biImpl</span> <span class="n">A</span> <span class="n">B</span> <span class="bp">=&gt;</span> <span class="o">(</span><span class="bp">!</span><span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">A</span><span class="o">)</span> <span class="bp">||</span> <span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">B</span><span class="o">))</span> <span class="bp">&amp;&amp;</span> <span class="o">(</span><span class="bp">!</span><span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">B</span><span class="o">)</span> <span class="bp">||</span> <span class="o">(</span><span class="n">eval</span> <span class="n">v</span> <span class="n">A</span><span class="o">))</span>
+</pre></div>
+</div>
+<p>The following theorem formalizes the statement that changing the value of a truth assignment
+at a variable that does not occur in a formula does not change the value of the formula.
+The proof is mainly a matter of unfolding definitions and checking all the cases.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">A</span> <span class="n">B</span> <span class="o">:</span> <span class="n">PropForm</span><span class="o">)</span> <span class="o">(</span><span class="n">τ</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">Bool</span><span class="o">)</span> <span class="o">(</span><span class="n">v</span> <span class="o">:</span> <span class="n">String</span><span class="o">)</span>
+
+<span class="kd">theorem</span> <span class="n">eval_of_not_occurs</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">A</span><span class="o">)</span> <span class="o">(</span><span class="n">b</span> <span class="o">:</span> <span class="n">Bool</span><span class="o">)</span> <span class="o">:</span>
+    <span class="n">A.eval</span> <span class="o">(</span><span class="k">fun</span> <span class="n">w</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">v</span> <span class="bp">=</span> <span class="n">w</span> <span class="k">then</span> <span class="n">b</span> <span class="k">else</span> <span class="n">τ</span> <span class="n">w</span><span class="o">)</span> <span class="bp">=</span> <span class="n">A.eval</span> <span class="n">τ</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">A</span> <span class="k">with</span>
+  <span class="bp">|</span> <span class="n">var</span> <span class="n">s</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">eval</span><span class="o">]</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">Occurs</span><span class="o">]</span> <span class="n">at</span> <span class="n">h</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">if_neg</span> <span class="n">h</span><span class="o">,</span> <span class="n">eval</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">tr</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">eval</span><span class="o">,</span> <span class="n">eval</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">fls</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">eval</span><span class="o">,</span> <span class="n">eval</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">neg</span> <span class="n">A</span> <span class="n">ihA</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">eval</span><span class="o">,</span> <span class="n">eval</span><span class="o">]</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">Occurs</span><span class="o">]</span> <span class="n">at</span> <span class="n">h</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">ihA</span> <span class="n">h</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">conj</span> <span class="n">A</span> <span class="n">B</span> <span class="n">ihA</span> <span class="n">ihB</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">Occurs</span><span class="o">,</span> <span class="n">not_or</span><span class="o">]</span> <span class="n">at</span> <span class="n">h</span>
+    <span class="n">rcases</span> <span class="n">h</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">hA</span><span class="o">,</span> <span class="n">hB</span><span class="o">⟩</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">eval</span><span class="o">,</span> <span class="n">eval</span><span class="o">,</span> <span class="n">ihA</span> <span class="n">hA</span><span class="o">,</span> <span class="n">ihB</span> <span class="n">hB</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">disj</span> <span class="n">A</span> <span class="n">B</span> <span class="n">ihA</span> <span class="n">ihB</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">Occurs</span><span class="o">,</span> <span class="n">not_or</span><span class="o">]</span> <span class="n">at</span> <span class="n">h</span>
+    <span class="n">rcases</span> <span class="n">h</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">hA</span><span class="o">,</span> <span class="n">hB</span><span class="o">⟩</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">eval</span><span class="o">,</span> <span class="n">eval</span><span class="o">,</span> <span class="n">ihA</span> <span class="n">hA</span><span class="o">,</span> <span class="n">ihB</span> <span class="n">hB</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">impl</span> <span class="n">A</span> <span class="n">B</span> <span class="n">ihA</span> <span class="n">ihB</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">Occurs</span><span class="o">,</span> <span class="n">not_or</span><span class="o">]</span> <span class="n">at</span> <span class="n">h</span>
+    <span class="n">rcases</span> <span class="n">h</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">hA</span><span class="o">,</span> <span class="n">hB</span><span class="o">⟩</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">eval</span><span class="o">,</span> <span class="n">eval</span><span class="o">,</span> <span class="n">ihA</span> <span class="n">hA</span><span class="o">,</span> <span class="n">ihB</span> <span class="n">hB</span><span class="o">]</span>
+  <span class="bp">|</span> <span class="n">biImpl</span> <span class="n">A</span> <span class="n">B</span> <span class="n">ihA</span> <span class="n">ihB</span> <span class="bp">=&gt;</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">Occurs</span><span class="o">,</span> <span class="n">not_or</span><span class="o">]</span> <span class="n">at</span> <span class="n">h</span>
+    <span class="n">rcases</span> <span class="n">h</span> <span class="k">with</span> <span class="o">⟨</span><span class="n">hA</span><span class="o">,</span> <span class="n">hB</span><span class="o">⟩</span>
+    <span class="n">rw</span> <span class="o">[</span><span class="n">eval</span><span class="o">,</span> <span class="n">eval</span><span class="o">,</span> <span class="n">ihA</span> <span class="n">hA</span><span class="o">,</span> <span class="n">ihB</span> <span class="n">hB</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>The theorems <code class="docutils literal notranslate"><span class="pre">if_pos</span> <span class="pre">h</span></code> and <code class="docutils literal notranslate"><span class="pre">if_neg</span> <span class="pre">h</span></code> are used to rewrite an if-then-else expression
+given the knowledge <code class="docutils literal notranslate"><span class="pre">h</span></code> that the condition is true or false, respectively.
+You should step through the proof and make sure you understand how it works.</p>
+<p>Verifying proofs involving logical operations or programming constructs often looks like this,
+with lots of straightforwrd cases to check.
+Because such checking is tedious, the general practice is to verify only one or two
+representative cases in a pen-and-paper proof and claim that the others are “similar.”
+This is often a source of bugs, however, since a corner case or subtle difference in one
+of the cases and render the claim false.
+When formalizing such a theorem, it would be nice if the cases can be checked automatically.
+Indeed, in this case Lean’s simplifier reduces the proof to a one-liner:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">Occurs</span> <span class="n">v</span> <span class="n">A</span><span class="o">)</span> <span class="o">(</span><span class="n">b</span> <span class="o">:</span> <span class="n">Bool</span><span class="o">)</span> <span class="o">:</span>
+    <span class="n">A.eval</span> <span class="o">(</span><span class="k">fun</span> <span class="n">w</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">v</span> <span class="bp">=</span> <span class="n">w</span> <span class="k">then</span> <span class="n">b</span> <span class="k">else</span> <span class="n">τ</span> <span class="n">w</span><span class="o">)</span> <span class="bp">=</span> <span class="n">A.eval</span> <span class="n">τ</span> <span class="o">:=</span> <span class="kd">by</span>
+  <span class="n">induction</span> <span class="n">A</span> <span class="bp">&lt;;&gt;</span> <span class="n">simp</span> <span class="o">[</span><span class="bp">*</span><span class="o">,</span> <span class="n">Occurs</span><span class="o">,</span> <span class="n">eval</span><span class="o">,</span> <span class="n">not_or</span><span class="o">]</span> <span class="n">at</span> <span class="bp">*</span> <span class="bp">&lt;;&gt;</span> <span class="n">simp</span> <span class="o">[</span><span class="bp">*</span><span class="o">]</span> <span class="n">at</span> <span class="bp">*</span>
+</pre></div>
+</div>
+<p>Lean has even more powerful automation, like <a class="reference external" href="https://github.com/leanprover-community/aesop">Aesop</a>,
+that is designed for such purposes.
+Working through proofs like the one above by hand is a good way to come to terms with
+what we want such automation to do,
+and the techniques that we are describing in this course form the basis for writing
+such automation.</p>
+</section>
+<section id="exercises">
+<h2><span class="section-number">9.6. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading"></a></h2>
+<p>Complete the following proofs in Lean.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="n">Mathlib.Data.Real.Basic</span>
+
+<span class="kd">variable</span> <span class="o">(</span><span class="n">P</span> <span class="n">Q</span> <span class="n">R</span> <span class="n">S</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span> <span class="bp">∧</span> <span class="o">(</span><span class="n">P</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="bp">→</span> <span class="n">R</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="bp">∧</span> <span class="o">(</span><span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="bp">→</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">R</span><span class="o">)</span> <span class="o">:</span> <span class="n">Q</span> <span class="bp">∧</span> <span class="n">r</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span><span class="o">))</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="bp">¬</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">))</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∧</span> <span class="bp">¬</span> <span class="n">Q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">:</span> <span class="n">r</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">:</span> <span class="o">(</span><span class="n">P</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="bp">∧</span> <span class="o">(</span><span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h1</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">(</span><span class="n">h2</span> <span class="o">:</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span><span class="o">)</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="bp">→</span> <span class="n">R</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span><span class="o">))</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">∧</span> <span class="bp">¬</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">∧</span> <span class="bp">¬</span> <span class="n">Q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span><span class="o">)</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="c1">-- this one requires classical logic!</span>
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="bp">¬</span> <span class="o">(</span><span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span><span class="o">))</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">∨</span> <span class="bp">¬</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+
+<span class="c1">-- this one too</span>
+<span class="kd">example</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span><span class="o">)</span> <span class="o">:</span> <span class="bp">¬</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span> <span class="o">:=</span> <span class="kd">by</span>
+<span class="gr">sorry</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="proof_systems_for_propositional_logic.html" class="btn btn-neutral float-left" title="8. Proof Systems for Propositional Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="first_order_logic.html" class="btn btn-neutral float-right" title="10. First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Jeremy Avigad, Marijn J. H. Heule, and Wojciech Nawrocki.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,29 +1,31 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>15. Using First-Order Theorem Provers &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="16. First-Order Logic in Lean" href="first_order_logic_in_lean.html" />
-    <link rel="prev" title="14. Deduction for First-Order Logic" href="deduction_for_first_order_logic.html" /> 
+    <link rel="next" title="16. Beyond First-Order Logic" href="beyond_first_order_logic.html" />
+    <link rel="prev" title="14. Proof Systems for First-Order Logic" href="proof_systems_for_first_order_logic.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,11 +33,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -50,21 +56,20 @@
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_propositional_logic.html">8. Proof Systems for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_first_order_logic.html">14. Deduction for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">15. Using First-Order Theorem Provers</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example-aunt-agatha">15.1. Example: Aunt Agatha</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-the-eighth-asylum">15.2. Example: The Eighth Asylum</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#exercise-the-last-asylum">15.3. Exercise: The Last Asylum</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -80,8 +85,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">15. </span>Using First-Order Theorem Provers</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">15. </span>Using First-Order Theorem Provers</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/using_first_order_theorem_provers.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -92,7 +97,7 @@
            <div itemprop="articleBody">
              
   <section id="using-first-order-theorem-provers">
-<span id="chapter-using-first-order-theorem-provers"></span><h1><span class="section-number">15. </span>Using First-Order Theorem Provers<a class="headerlink" href="#using-first-order-theorem-provers" title="Permalink to this heading"></a></h1>
+<span id="chapter-using-first-order-theorem-provers"></span><h1><span class="section-number">15. </span>Using First-Order Theorem Provers<a class="headerlink" href="#using-first-order-theorem-provers" title="Link to this heading"></a></h1>
 <p>Given a set of hypotheses and a conclusion, a first-order theorem prover
 does its best to find a proof of the conclusion from the hypotheses, using
 first-order logic with equality.
@@ -108,7 +113,7 @@ a search will be successful makes the quest all the more exciting.
 In this chapter, we show you how you can call a theorem prover from
 within Lean.</p>
 <section id="example-aunt-agatha">
-<h2><span class="section-number">15.1. </span>Example: Aunt Agatha<a class="headerlink" href="#example-aunt-agatha" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">15.1. </span>Example: Aunt Agatha<a class="headerlink" href="#example-aunt-agatha" title="Link to this heading"></a></h2>
 <p>The following story is taken from a talk by Peter Baumgartner.</p>
 <blockquote>
 <div><p>Someone who lives in Dreadbury Mansion killed Aunt Agatha.
@@ -169,7 +174,7 @@ Vampire confirms this:</p>
 <p>It is also worthwhile finding a proof on your own.</p>
 </section>
 <section id="example-the-eighth-asylum">
-<h2><span class="section-number">15.2. </span>Example: The Eighth Asylum<a class="headerlink" href="#example-the-eighth-asylum" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">15.2. </span>Example: The Eighth Asylum<a class="headerlink" href="#example-the-eighth-asylum" title="Link to this heading"></a></h2>
 <p>In an article called “The Asylum of Doctor Tarr and Professor Fether,” published
 in the <em>American Mathematical Monthly</em> and later in a collection <em>The Lady or the Tiger? and other Logic Puzzles</em>,
 Raymond Smullyan tells of an investigation of 11 insane asylums by Inspector Craig of Scotland Yard.
@@ -229,7 +234,7 @@ doesn’t hold. We can therefore formalize the hypotheses as follows:</p>
 Vampire to check some of your conclusions along the way.</p>
 </section>
 <section id="exercise-the-last-asylum">
-<h2><span class="section-number">15.3. </span>Exercise: The Last Asylum<a class="headerlink" href="#exercise-the-last-asylum" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">15.3. </span>Exercise: The Last Asylum<a class="headerlink" href="#exercise-the-last-asylum" title="Link to this heading"></a></h2>
 <p>The last puzzle in the chapter reads as follows:</p>
 <blockquote>
 <div><p>The last asylum Craig visited he found to the be the most bizarre of all.
@@ -280,8 +285,8 @@ See if you can find one as well, perhaps using Smullyan’s solution as a starti
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="deduction_for_first_order_logic.html" class="btn btn-neutral float-left" title="14. Deduction for First-Order Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="first_order_logic_in_lean.html" class="btn btn-neutral float-right" title="16. First-Order Logic in Lean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="proof_systems_for_first_order_logic.html" class="btn btn-neutral float-left" title="14. Proof Systems for First-Order Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="beyond_first_order_logic.html" class="btn btn-neutral float-right" title="16. Beyond First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

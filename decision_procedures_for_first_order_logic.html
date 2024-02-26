@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>12. Decision Procedures for First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,11 +33,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -50,8 +56,8 @@
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_propositional_logic.html">8. Proof Systems for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">12. Decision Procedures for First-Order Logic</a><ul>
@@ -61,10 +67,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_first_order_logic.html">14. Deduction for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -80,8 +85,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">12. </span>Decision Procedures for First-Order Logic</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">12. </span>Decision Procedures for First-Order Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/decision_procedures_for_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -92,7 +97,7 @@
            <div itemprop="articleBody">
              
   <section id="decision-procedures-for-first-order-logic">
-<span id="chapter-decision-procedures-for-first-order-logic"></span><h1><span class="section-number">12. </span>Decision Procedures for First-Order Logic<a class="headerlink" href="#decision-procedures-for-first-order-logic" title="Permalink to this heading"></a></h1>
+<span id="chapter-decision-procedures-for-first-order-logic"></span><h1><span class="section-number">12. </span>Decision Procedures for First-Order Logic<a class="headerlink" href="#decision-procedures-for-first-order-logic" title="Link to this heading"></a></h1>
 <p>Given a propositional formula <span class="math notranslate nohighlight">\(A\)</span> and a truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
 we have seen that it is straightforward to test wither <span class="math notranslate nohighlight">\(A\)</span> is true under <span class="math notranslate nohighlight">\(\tau\)</span>.
 We have also seen that a formula <span class="math notranslate nohighlight">\(A\)</span> is valid if and only if it is provable,
@@ -131,7 +136,7 @@ We will see that SMT solvers focus on the case where the answer is positive.
 The goal of this chapter is to establish decidability in a few interesting cases,
 without worrying about efficiency and implementation.</p>
 <section id="linear-arithmetic">
-<h2><span class="section-number">12.1. </span>Linear arithmetic<a class="headerlink" href="#linear-arithmetic" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">12.1. </span>Linear arithmetic<a class="headerlink" href="#linear-arithmetic" title="Link to this heading"></a></h2>
 <p>A <em>linear expression</em> is one of the form <span class="math notranslate nohighlight">\(a_1 x_1 + a_2 x_2 + \cdots + a_n x_n + b\)</span>,
 where each <span class="math notranslate nohighlight">\(a_i\)</span> is a rational number, <span class="math notranslate nohighlight">\(b\)</span> is a rational number,
 and each <span class="math notranslate nohighlight">\(x_i\)</span> is a variable.
@@ -251,7 +256,7 @@ The proof is much harder, however. The theorem was proved by Alfred Tarski befor
 but it wasn’t published until 1948, after the war.</p>
 </section>
 <section id="linear-integer-arithmetic">
-<h2><span class="section-number">12.2. </span>Linear integer arithmetic<a class="headerlink" href="#linear-integer-arithmetic" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">12.2. </span>Linear integer arithmetic<a class="headerlink" href="#linear-integer-arithmetic" title="Link to this heading"></a></h2>
 <p>What happens if we replace the real numbers by the integers? It turns out that
 truth in the structure <span class="math notranslate nohighlight">\((\mathbb Z, 0, 1, +)\)</span> is also decidable.
 This was established in 1926 by Mojżesz Presburger, a student of Tarski’s,
@@ -271,7 +276,7 @@ This follows from the methods that Gödel used to prove the incompleteness theor
 and it is also a consequence of <em>Tarski’s theorem</em> on the undefinability of truth.</p>
 </section>
 <section id="equality">
-<span id="section-equality"></span><h2><span class="section-number">12.3. </span>Equality<a class="headerlink" href="#equality" title="Permalink to this heading"></a></h2>
+<span id="section-equality"></span><h2><span class="section-number">12.3. </span>Equality<a class="headerlink" href="#equality" title="Link to this heading"></a></h2>
 <p>Fix a language, <span class="math notranslate nohighlight">\(L\)</span>. We will consider equations <span class="math notranslate nohighlight">\(s = t\)</span> and <em>disequations</em>
 <span class="math notranslate nohighlight">\(s \ne t\)</span> between closed terms.
 The fact that we are considering closed terms mean that there are no variables to substitute

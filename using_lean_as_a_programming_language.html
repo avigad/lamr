@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>3. Lean as a Programming Language &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,11 +33,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -57,16 +63,15 @@
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_propositional_logic.html">8. Proof Systems for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_first_order_logic.html">14. Deduction for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -82,8 +87,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">3. </span>Lean as a Programming Language</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3. </span>Lean as a Programming Language</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/using_lean_as_a_programming_language.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -94,9 +99,9 @@
            <div itemprop="articleBody">
              
   <section id="lean-as-a-programming-language">
-<span id="chapter-lean-as-a-programming-language"></span><h1><span class="section-number">3. </span>Lean as a Programming Language<a class="headerlink" href="#lean-as-a-programming-language" title="Permalink to this heading"></a></h1>
+<span id="chapter-lean-as-a-programming-language"></span><h1><span class="section-number">3. </span>Lean as a Programming Language<a class="headerlink" href="#lean-as-a-programming-language" title="Link to this heading"></a></h1>
 <section id="about-lean">
-<span id="section-about-lean"></span><h2><span class="section-number">3.1. </span>About Lean<a class="headerlink" href="#about-lean" title="Permalink to this heading"></a></h2>
+<span id="section-about-lean"></span><h2><span class="section-number">3.1. </span>About Lean<a class="headerlink" href="#about-lean" title="Link to this heading"></a></h2>
 <p><em>Lean 4</em> is a new programming language and interactive proof assistant.
 It is currently used to formalize mathematics, to verify hardware and software,
 and to explore applications of machine learning to mathematical reasoning.
@@ -283,7 +288,7 @@ opens up a world of opportunity.
 It is the key to unlocking the secrets of the universe.</p>
 </section>
 <section id="using-lean-as-a-functional-programming-language">
-<span id="section-using-lean-as-a-functional-programming-language"></span><h2><span class="section-number">3.2. </span>Using Lean as a functional programming language<a class="headerlink" href="#using-lean-as-a-functional-programming-language" title="Permalink to this heading"></a></h2>
+<span id="section-using-lean-as-a-functional-programming-language"></span><h2><span class="section-number">3.2. </span>Using Lean as a functional programming language<a class="headerlink" href="#using-lean-as-a-functional-programming-language" title="Link to this heading"></a></h2>
 <p>The fact that Lean is a functional programming language means
 that instead of presenting a program as a list of instructions,
 you simply <em>define</em> functions and ask Lean to evaluate them.</p>
@@ -466,7 +471,7 @@ a list of Fibonacci values with running time linear in the
 length of the list.</p>
 </section>
 <section id="inductive-data-types-in-lean">
-<span id="section-inductive-data-types-in-lean"></span><h2><span class="section-number">3.3. </span>Inductive data types in Lean<a class="headerlink" href="#inductive-data-types-in-lean" title="Permalink to this heading"></a></h2>
+<span id="section-inductive-data-types-in-lean"></span><h2><span class="section-number">3.3. </span>Inductive data types in Lean<a class="headerlink" href="#inductive-data-types-in-lean" title="Link to this heading"></a></h2>
 <p>One reason that computer scientists and logicians tend to like
 functional programming languages is that they often provide
 good support for defining inductive data types and then
@@ -561,7 +566,7 @@ value in case the input is none.</p>
 </div>
 </section>
 <section id="using-lean-as-an-imperative-programming-language">
-<span id="section-using-lean-as-an-imperative-programming-language"></span><h2><span class="section-number">3.4. </span>Using Lean as an imperative programming language<a class="headerlink" href="#using-lean-as-an-imperative-programming-language" title="Permalink to this heading"></a></h2>
+<span id="section-using-lean-as-an-imperative-programming-language"></span><h2><span class="section-number">3.4. </span>Using Lean as an imperative programming language<a class="headerlink" href="#using-lean-as-an-imperative-programming-language" title="Link to this heading"></a></h2>
 <p>The fact that Lean is a functional programming language means that there
 is no global notion of <em>state</em>.
 Functions take values as input and return values as output;
@@ -686,7 +691,7 @@ equivalent to <code class="docutils literal notranslate"><span class="pre">T</sp
 </div>
 </section>
 <section id="exercises">
-<h2><span class="section-number">3.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">3.5. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading"></a></h2>
 <ol class="arabic">
 <li><p>Using operations on <code class="docutils literal notranslate"><span class="pre">List</span></code>, write a Lean function that for every <span class="math notranslate nohighlight">\(n\)</span> returns
 the list of all the divisors of <span class="math notranslate nohighlight">\(n\)</span> that are less than <span class="math notranslate nohighlight">\(n\)</span>.</p></li>

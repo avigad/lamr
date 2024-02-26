@@ -1,0 +1,833 @@
+.. highlight:: lean
+
+.. _chapter_using_lean_as_a_proof_assistant:
+
+Using Lean as a Proof Assistant
+===============================
+
+This chapter marks three shifts in the way we are using Lean.
+First, up to this point we have been using Lean as a programming language, whereas here
+we will begin to use Lean as a *proof assistant*.
+In the theory-implementation-application trichotomy that we used to describe this course,
+this marks a shift from using Lean to implement logical tools
+to using Lean as an important application of logic,
+one that is used to verify hardware, software, and
+complex systems as well as mathematical theorems.
+Finally, whereas up to now our focus has been on representing logical languages in Lean,
+now we are using Lean as a logical language itself. This can be viewed as a shift from treating
+logic as an *object language* to treating logic as a *metalanguage*, a distinction
+we will now explain.
+
+Imagine implementing one programming language, such as Lisp, in
+another programming language, like C++.
+In this scenario, we can characterize Lisp as being the object language, that is, the
+one that is being implemented, and C++ as the metalanguage, the one that is carrying out
+the implementation.
+What we did in :numref:`Chapter %s<chapter_implementing_propositional_logic>` is similar:
+we are used one logical system, Lean, to
+implement another one, propositional logic.
+Whether we care about logical languages or programming languages (or a combination of both),
+it's often the case that we use one language to implement or describe another.
+If we use Lean to implement a decision procedure for propositional logic,
+propositional logic is the object language, the target of our implementation.
+If we use propositional connectives (and more) to prove the correctness of that procedure in Lean,
+then in that case we are using propositional logic as part of the metalanguage,
+the thing we are using to achieve our goal.
+
+One goal of this chapter is to clarify the sense in which Lean itself is a logical system,
+which is to say, its language can be used to state mathematical theorems and prove them.
+Using a logical foundation like Lean's as both a programming language and a mathematical language
+brings a number of benefits:
+
+- It allows us to specify the behavior of computer programs in the same language that we write them.
+- It allows us to prove, rigorously, that our computer programs are correct, which is to say,
+  that they meet their specifications.
+- It allows us to enforce preconditions on our programs. For example, we can write functions
+  whose input is required to be a positive integer, a requirement that is enforced
+  statically, at compile time. Compiler optimizations can make use of this knowledge.
+- It allows us to compute with objects in our mathematical libraries.
+- It gives us ways of using computation reliably in mathematical proofs.
+
+Although we will not discuss it in this course, Lean also serves as its own *metaprogramming
+language*, which means that we can use Lean to develop automation that can help us construct
+programs and proofs.
+In that way, Lean becomes a self-extending system, meaning that we can
+improve its support for programming and theorem proving using the system itself.
+
+Lean's logical foundation is powerful and expressive enough to carry out any mathematical argument,
+and the use of proof assistants in hardware and software verification is an import subject to study.
+In this chapter, we will present only the most basic aspects of using Lean as a proof assistant,
+to convey a flavor of what is possible.
+You can learn more about the use of Lean as a proof assistant in either
+`Mathematics in Lean <https://leanprover-community.github.io/mathematics_in_lean/>`_ or
+`Theorem Proving in Lean 4 <https://leanprover.github.io/theorem_proving_in_lean4/>`_.
+You may also enjoy interactive tutorials, like the Natural Number Game, found on the
+`Lean Game Server <https://adam.math.hhu.de/>`_.
+
+For the examples in this chapter, we use the following imports:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: imports
+   :end-before: -- end textbook
+
+Since importing a file also imports everything it depends on, these serve to make
+available to us a modest portion of Lean's mathematical library, Mathlib.
+
+
+.. _section_propositional_logic:
+
+Propositional logic
+-------------------
+
+In Lean, we can declare variables that range over propositions and then
+use them to build more complicated propositions.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: Prop
+   :end-before: -- end textbook
+
+Hovering over the symbols will give you options for typing them. Using ``\and``, ``\or``, ``\to``,
+``\iff``, and ``\not`` will work.
+In Lean, you state a theorem with the keyword ``theorem``.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: id proof
+   :end-before: -- end textbook
+
+What follows the keyword ``by`` is what is known as a *tactic proof*, that is,
+a list of commands that tells Lean how to construct a proof of the theorem.
+In the next section, we will say more about how proofs are represented in Lean
+and what tactics do underneath the hood.
+Here, instead, we will focus on how to use them.
+Stating a theorem creates a *goal*, namely, the theorem to be proved.
+If you put your cursor at the beginning of the line ``intro h``,
+the infoview window shows the following goal:
+
+.. code-block:: none
+
+  P Q R S: Prop
+  ⊢ P → P
+
+If you put your cursor at the end of the line, you will see that the goal
+has changed to:
+
+.. code-block:: none
+
+  P Q R S: Prop
+  h : P
+  ⊢ P
+
+When the cursor is at the beginning of the line ``intro h``,
+the highlighting in the infoview window helpfully shows what is about to change,
+and when you move the cursor to the end of the line,
+the highlighting shows what has just changed.
+The notation should remind you of a sequent in natural deduction: the second goal says that we
+are given propositions ``P``, ``Q``, ``R``, and ``S`` together with the assumption
+that ``P`` holds, labelled as ``h``, and we are to prove ``P``.
+The command ``apply P`` finishes it off, leaving you with the happy message, "no goals."
+The label ``h`` is arbitrary, and you can use any valid identifier instead.
+It's conventional to use the letter ``h`` for hypotheses.
+The information before the turnstile is called the *context*.
+The right side of the sequent is also sometimes confusingly called the goal, but
+we will call it the *conclusion* of the sequent and reserve the term "goal"
+for the entire sequent.
+
+You can use the ``example`` keyword to prove a theorem without naming it:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: id proof 2
+   :end-before: -- end textbook
+
+When an ``apply`` command finishes off the goal exactly, it is conventional to use the
+``exact`` tactic instead:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: id proof 3
+   :end-before: -- end textbook
+
+You can also end a proof with the ``done`` tactic,
+which does nothing but declare that there are no more goals.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: id proof 4
+   :end-before: -- end textbook
+
+It is often useful to put a ``done`` at the end of a proof while you are still
+writing it.
+Lean gives you an error message if the proof isn't over, and the error message tells you
+the goals that remain to be proved.
+It can be convenient to force Lean to put the error message on the ``done``
+command rather than somewhere lower down in the file. You can then delete the ``done``
+when you are finished with the proof.
+Notice, by the way, that you can learn more about a tactic by hovering over it in  VS Code.
+
+The ``apply`` tactic can also be used to apply an implication.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: apply
+   :end-before: -- end textbook
+
+In this example, applying the assumption ``P → Q`` to the goal reduces the task of
+proving ``Q`` to the task of proving ``P``.
+To prove a conjunction, we can use the ``constructor`` tactic:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: and example
+   :end-before: -- end textbook
+
+The command ``intro hP hQ`` is shorthand for writing ``intro hP`` followed by ``intro hQ``.
+The ``constructor`` tactic tells Lean we intend to prove ``P ∧ Q`` by proving
+each conjunct in turn.
+As a result, after that line, there are *two* goals to prove, one for each conjunct.
+The first period focuses on the first goal, which is solved using ``hP``,
+and the second period focuses on the second goal, which is using ``hQ``.
+Lean is whitespace sensitive, and once you focus on a goal, Lean expects you to maintain
+the indentation until the goal is solved.
+You can check that the proof still works if you delete the periods.
+Structuring a proof in this way, however, tends to make it more readable and robust.
+
+At this point, there is a trick that is worth mentioning.
+At any point in a proof, you can solve the current goal with the ``sorry`` tactic.
+You can prove any theorem at all using ``sorry``.
+It's cheating, and the squiggly line the editor puts underneath the name of the theorem tells
+you as much.
+But it is often a useful device when writing proofs, because it means you can temporarily
+close a goal to work on others, and then come back to it.
+
+The natural way to *use* a conjunction ``h : P ∧ Q`` in a hypothesis is to split it
+to the hypotheses ``hP : P`` and ``hQ : Q``.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: another and example
+   :end-before: -- end textbook
+
+Here the angle brackets denote a conjunctive pattern for Lean to match ``h``
+against, and the ``rcases`` tactic does the matching, removing ``h : P ∧ Q``
+and replacing it with ``hP : P`` and ``hQ : Q``.
+
+The corresponding proof for disjunction is dual:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: or example
+   :end-before: -- end textbook
+
+Here we use a vertical bar with ``rcases h`` because the split is disjunctive,
+resulting in two goals: one in which we have ``hP : P`` in the context and one
+in which we have ``hQ : Q``. The ``right`` tactic tells Lean that we want to prove
+``Q ∨ P`` by proving ``P``, and the ``left`` tactic tells Lean that we want to prove
+``Q ∨ P`` by proving ``Q``.
+Notice that in contrast to casing on a conjunction, which results in one new goal and
+two new hypotheses,
+casing on a disjunction results in two new goals, each with one new hypothesis.
+
+Recall from :numref:`section_natural_deduction` that in the natural deduction
+proof system, rules for the connectives can be categorized as either introduction
+rules or elimination rules.
+Even though we have not yet clarified the relationship between natural deduction
+and Lean's internal logic, you should notice that the tactics we have given so far
+follow a similar pattern:
+
+- Given a goal of the form ``P → Q``, we can use the ``intro`` tactic to prove it.
+- Given a hypothesis of the form ``h : P → Q``, we can use the ``apply`` tactic to use it.
+- Given a goal of the form ``P ∧ Q``, we can use the ``constructor`` tactic to prove it.
+- Given a hypothesis of the form ``h : P ∧ Q``, we can use the ``rcases`` tactic to use it.
+- Given a goal of the form ``P ∨ Q``, we can use the ``left`` and ``right`` tactics to prove it.
+- Given a hypothesis of the form ``h : P ∨ Q``, we can use the ``rcases`` tactic to use it.
+
+In Lean, negation ``¬ P`` is defined to be ``P → False``.
+For most purposes, the two expressions are interchangeable.
+This means that you can prove ``¬ P``
+by assuming ``P`` and deriving ``False``, and if you have ``hnp : ¬ P``,
+you an reduce the task of proving ``False`` to the task of proving ``P``.
+In the next example, the ``intro`` tactic implements the first strategy,
+and the ``apply`` tactic implements the second.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: negation
+   :end-before: -- end textbook
+
+After the second ``intro``, we have ``h : P → Q``, ``hnQ : ¬ Q``, and ``hP : P``
+in the context and ``False`` as the desired conclusion. Applying ``hnQ`` leaves
+us the goal of proving ``Q``, which we do using ``h`` and ``hP``.
+
+There is no introduction rule for falsity; there is no canonical way to prove ``False``!
+If we assume ``h : False``, we can reach any conclusion we want,
+using either ``contradiction`` or ``rcases h``.
+Intuitively, there is no proof of ``False``, so if we have ``h : False``,
+there are no cases to consider.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: ex falso
+   :end-before: -- end textbook
+
+As a convenience, if you have ``h : P`` and ``hnP : ¬ P`` in the context,
+the contradiction tactic solves the goal automatically.
+
+The principles we have used before all fall within what is known as
+*intuitionistic* logic. Many mathematical arguments require *classical* logic,
+which is embodied in the *law of the excluded middle*, ``P ∨ ¬ P``.
+This is embodied in the ``by_cases`` tactic, which lets us split on cases.
+In the proof below, we have ``hP : P`` in the first case and ``hnP : ¬ P`` in the second.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: by_cases
+   :end-before: -- end textbook
+
+Classical reasoning is also embodied in the ``by_contra`` tactic, which allows
+us to do proof by contradiction.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: by_contra
+   :end-before: -- end textbook
+
+Applying ``by_contra hnP`` to a goal with conclusion ``P`` adds ``hnP : ¬ P`` to the context
+and asks us to prove ``False``.
+
+You can think of ``P ↔ Q`` as an abbreviation for ``(P → Q) ∧ (Q → P)``.
+It is not implemented exactly that way in Lean, but like a conjunction,
+the task of proving such a statement can be split into the forward
+and backward directions.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: iff
+   :end-before: -- end textbook
+
+In the first example, the underscore omits a label for the hypothesis, since we don't
+needed it. If you use a label, Lean's built in linter will warn you that the label is unused.
+The hypothesis still appears in the context with an inaccessible name, and can be used
+by automation. If you replace the underscore with a dash (``-``), the ``rcases`` tactic
+clears it entirely from the context.
+
+The methods in this section are *complete* for classical propositional logic,
+which is to say, any proof in classical propositional logic can be carried out
+using these methods.
+That is not to say that these methods are the most *efficient*; Lean
+offers both automation and syntax for writing proofs more compactly.
+As far as automation is concerned, all the proofs in this section
+can be carried out using the ``tauto`` tactic, which stands for "tautology."
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/propositional_logic.lean
+   :start-after: -- textbook: tauto
+   :end-before: -- end textbook
+
+But writing propositional proofs by hand is a good way to learn how propositional logic
+works in Lean, and in more complicated proofs we often need to carry out simple logical
+manipulations by hand.
+
+
+.. _section_proof_terms:
+
+Proof terms
+-----------
+
+Remember that, in Lean's foundation, everything is expression.
+In particular, if an expression ``P`` has type ``Prop``, then a term ``p``
+of type ``P`` is interpreted as a proof of ``P``.
+Lean's proof language is therefore essentially the same as its programming language,
+which means that we can write proofs the same way we write programs.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: proof terms
+   :end-before: -- end textbook
+
+Instead of using the identifier ``def``, it is conventional to use the word ``theorem``
+to name the proof of a proposition.
+Each keyword serves to assign an expression to an identifier; the main difference
+is that theorems are marked *opaque*, which means that they are generally
+not unfolded. A proof written this way is called a *proof term*.
+The tactic proofs described in the previous section are nothing more than instructions
+that tell the system how to construct such an expression.
+
+The syntax for proof terms, in turn, is closely related to natural deduction.
+The ``#explode`` command prints proof terms in a format that is closer to the presentation of
+natural deduction in :numref:`section_natural_deduction`.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: exploding proof terms
+   :end-before: -- end textbook
+
+Don't look too hard for an exact correspondence, because the details differ.
+But Lean's foundation can be seen as a vast generalization of natural deduction,
+giving rise to its uniform treatment of proofs and programs.
+The analogy between the two is known as the Curry-Howard correspondence, and it explains
+the fact that the introduction and elimination rules for the connectives
+look a lot like the constructors and destructors for the corresponding data types.
+The examples above show that the introduction and elimination rules for conjunction
+parallel the constructors and destructors for the pair data type,
+and the introduction and elimination rules for disjunction parallel the constructors
+and destructors for the sum data type. In Lean's foundation, the introduction and elimination rules for implication
+are exactly lambda abstraction and function application, respectively.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: implication
+   :end-before: -- end textbook
+
+In Lean, ``¬ P`` is defined to be ``P → False``. The following proof assumes ``P`` and
+``¬ P``, concludes ``⊥``, and then uses the *ex falso* principle to conclude ``Q``.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: negation and false
+   :end-before: -- end textbook
+
+Lean allows the use of anonymous constructors and projections with proof terms just as with data:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: anonymous constructors
+   :end-before: -- end textbook
+
+You can use proof terms in a tactic proof:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: tactics and proof terms
+   :end-before: -- end textbook
+
+In fact, under the hood, a tactic proof is essentially a program that constructs the
+relevant proof. Here are some more examples:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: more tactics and proof terms
+   :end-before: -- end textbook
+
+Lean's ``show_term`` tactic will show you the proof term that a tactic block produces,
+and it will even given you the option of clicking to replace the tactic block by an explicit
+use of that term.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: show_term
+   :end-before: -- end textbook
+
+You can read more about Lean expressions in
+`Theorem Proving in Lean 4 <https://leanprover.github.io/theorem_proving_in_lean4/>`_.
+For the most part, in this course, we will focus on tactic proofs,
+but you should feel free to use a proof term with ``apply`` or ``exact`` when you feel like it.
+More importantly,  you should keep in mind that at the end of the day, what you are doing is
+constructing something like a natural deduction proof, represented as an expression in Lean's
+foundation.
+You can therefore think of Lean as an engine for manipulating expressions that can represent
+data types, statements, programs, and proofs.
+Tactics are pieces of automation that are designed to help us construct these expressions.
+
+
+.. _section_structured_proofs:
+
+Structured proofs
+-----------------
+
+Tactics allow us to work backward to prove a goal by reducing it to simpler ones.
+Lean also provides a means of reasoning forward from hypotheses,
+using the ``have`` tactic:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: have
+   :end-before: -- end textbook
+
+Here the first line of the proof states an intermediate goal of proving ``Q``.
+The result is named ``hQ``, which we are then free to use.
+Using ``have``  tends to make proofs more readable
+because the text displays the stepping stones to the main goal.
+It also tends to make proofs more robust,
+in that errors are localized to small, compartmentalized parts of the proof.
+If you omit the keyword ``by``, you can use a proof term to fill an easy ``have``:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: have again
+   :end-before: -- end textbook
+
+You can even write ``have hQ := h1 h3`` in the second line of the first proof, omitting the type
+ascription, because Lean can figure that out. Of course, this sacrifices readability somewhat.
+You can generallly eliminate a ``have`` statement by inlining the result.
+For example, replacing ``hQ`` by ``h1 h3`` yields the first proof below:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: inlining the result
+   :end-before: -- end textbook
+
+The proof ``by exact h2 (h1 h3)`` is equivalent to just presenting the proof term ``h2 (h1 h3)``,
+as we do in the second example.
+
+Lean also has a ``show`` tactic, which declares the goal we are about to solve.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/proof_terms.lean
+   :start-after: -- textbook: have and show
+   :end-before: -- end textbook
+
+The ``show`` tactic mainly serves to make a proof more readable, though it does a little more work than
+we are letting on here. For example, if there are multiple goals left to prove, ``show`` fill focus on the
+first one that matches the given statement.
+
+
+.. _section_equational_reasoning_in_lean:
+
+Equational reasoning
+--------------------
+
+We are still a long way from from full-blown mathematical reasoning. In the chapters to come, we
+will gradually expand the formal languages we consider, and we will explore ways to automate
+the associated patterns of reasoning. In particular, in the next chapter,
+we will see that it is important
+to be able to reason about *terms* and relationships between them. For example, if ``x`` and ``y``
+are variables ranging over integers and ``xs`` and ``ys`` are variables ranging over lists of
+integers, the expression ``(x + y) + 3``
+is a term denoting an integer and the expression ``x :: xs ++ [3] ++ ys`` is a term denoting a list
+of integers. The expressions ``x < y + 3``, ``x = y + 3``, and ``x ∈ xs`` are *formulas*
+that say that ``x`` is less than ``y + 3``, ``x`` is equal to ``y + 3``, and ``x`` is an element
+of the list ``xs``, respectively. The symbols ``<``, ``=``, and ``∈`` denote binary
+*relations*, since they express a relationship between the terms on either side.
+
+Mathematically, the most fundamental relation is the equality relationship.
+Equality satisfies two axiomatic properties: first, everything is equal to itself, and
+second, equal terms can be substituted for one another. In Lean, these are implemented by the
+tactics ``rfl`` and ``rw``, respectively. The first is short for ``reflexivity``, and the
+second is short for ``rewrite``.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: rfl and rw
+   :end-before: -- end textbook
+
+In the second example, the rewrite tactic replaces ``b`` by ``c`` in the goal and then
+automatically applies reflexivity to finish it off.
+
+The ``rw`` tactic takes a list of identities and rewrites with them one at a time.
+You can use a left arrow to indicate that the tactic should use an equation in the
+reverse direction:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: more rw
+   :end-before: -- end textbook
+
+Notice that even common properties like the symmetry and transitivity of equality can
+be reduced to the substitution property and reflexivity.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: symmetry and transitivity
+   :end-before: -- end textbook
+
+You can also rewrite with general identities. In Lean, when you write ``a * b * c``, parentheses
+associate to the left, so the expression is interpreted as ``(a * b) * c``. The identities
+``mul_assoc``, ``mul_comm``, and ``mul_left_comm`` can be used to move the parentheses around.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: moving parentheses around
+   :end-before: -- end textbook
+
+Notice that your cursor after the comma in the list of the identities shows that goal
+at the point, so you can step through a sequence of rewrites to see what is happening.
+
+You can specialize identities at particular arguments. For example, ``mul_comm c a`` is the
+identity ``c * a = a * c``, and ``mul_comm c`` is the identity ``∀ x, c * x = x * c``.
+Notice that Lean uses the same syntax for applying a theorem to arguments as it does for
+applying a function to arguments. In the underlying foundation, the two are instances
+of the same thing.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: rewriting with arguments
+   :end-before: -- end textbook
+
+You can also use ``rw`` with the ``at`` modifier to rewrite at a particular hypothesis.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: rewriting at a hypothesis
+   :end-before: -- end textbook
+
+Sometimes, you only want to replace a single occurrence of a term. You can use the ``nth_rw``
+tactic for that.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: using nth_rw
+   :end-before: -- end textbook
+
+In this example, ``nth_rw 1 [h]`` applies the rewrite ``h`` to the first occurrence of ``a``
+in the conclusion.
+
+Mathlib has specialized tactics for proving particular types of equations. For example,
+``norm_num`` can be used for concrete calculations and ``ring`` can be used to prove
+identities involving addition, subtraction, multiplication, integer coefficients, and
+natural number exponents.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: specialized calculations
+   :end-before: -- end textbook
+
+Rewriting with the name of a function amounts to unfolding the definition, or, if
+it is defined by cases, its defining clauses.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: rewriting with a function name
+   :end-before: -- end textbook
+
+Finally, Lean will let you rewrite with propositional equivalences.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: propositional equivalences
+   :end-before: -- end textbook
+
+Sometimes Lean will surprise you by not making you prove something you think you should have to.
+When it needs to, Lean will unfold definitions and apply computational rules to simplify
+an expression, and so it can often treat syntactically different expressions as being the
+same. In the next example, Lean unfolds the definition of addition and determines ``n + 0``
+and ``n`` are *definitionally equal*.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: definitional equality
+   :end-before: -- end textbook
+
+Replacing ``n + 0`` by ``0 + n`` does not work, however. Definitional equality
+is subtle and we will discuss it in detail here, but it might be helpful to know that Lean can
+generally unfold a recursive definition or a definition on cases when it has to.
+This feature of Lean is probably at play when you find that ``rw`` declares a
+goal solved when you thought you had more work to do.
+
+Lean has other automation that can handle equational reasoning, most notably, a tactic
+called ``simp`` that simplifies expressions using a database of identities that have been
+marked for its use.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/equational_reasoning.lean
+   :start-after: -- textbook: simp
+   :end-before: -- end textbook
+
+As usual, hovering over ``simp`` provides more information about how it works.
+In the real world, you should feel free to use automation like ``simp`` with reckless abandon.
+The more automation the better! That's what this course is all about. But for the
+exercises
+we will ask you to do proofs using more elementary tactics --- for example, using only
+the ``rw`` tactic to prove identities --- so that you acquire a solid understanding of the
+principles of reasoning that they implement.
+
+
+.. _section_lean_induction:
+
+Induction
+---------
+
+With only equality and the propositional connectives, our vocabulary is limited.
+In Lean, it is possible to describe any precise mathematical property or relationship, and,
+indeed, a vast number of them are already defined in Mathlib.
+But even with just equality and the propositional connectives, we can prove
+some interesting theorems, and so we will make a small start on that here.
+
+In :numref:`Chapter %s <chapter_mathematical_background>` we reviewed the principle
+of induction, and we have seen throughout this book that Lean allows us to define inductive
+data types and to define functions on those types by structural recursion.
+We now introduce Lean's ``induction`` tactic.
+In the next example, we define the function ``sum_up_to n`` that sums the numbers
+up to and including ``n``, and we use induction to prove that it is equal to
+``n * (n + 1) / 2`` for every ``n``.
+(We state this in a roundabout way to avoid having to deal with division.)
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: induction on Nat
+   :end-before: -- end textbook
+
+As usual, hovering over ``induction`` gives you more information about its syntax and usage,
+including variations. Here the two cases are named ``zero`` and ``succ``, corresponding to
+the two canonical ways of constructing a natural number. In the ``succ`` case
+we name the variable ``n`` and the inductive hypothesis ``ih``.
+It is unfortunate that the two cases of the induction use ``Nat.zero`` and ``Nat.succ n``
+instead of the (definitionally equal) expressions ``0`` and ``n + 1``, respectively, but the
+equations ``Nat.zero_eq`` and ``Nat.succ_eq_add_one`` fix that. Rewriting with
+``sum_up_to`` unfolds the definition, and hovering over ``mul_add`` shows that it
+distributes the multiplication over addition so that we can apply the inductive hypothesis.
+Remember that you can step through the rewrites in the infoview window by moving your cursor
+down the list. Here is another example of a proof by induction:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: more induction on Nat
+   :end-before: -- end textbook
+
+In fact, in Lean's library, addition and multiplication on the natural numbers are defined
+recursively and their properties are proved using induction. In the example below,
+we define addition with the name ``add'`` to avoid clashing with names in the library,
+and we open the ``Nat`` namespace to shorten names like ``succ`` and ``zero_eq``.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: definition of addition
+   :end-before: -- end textbook
+
+Lean supports induction on any inductive type, not just the natural numbers.
+Remember that Lean's core library defines the ``List`` data type
+and notation for it.
+In the example below, we open the namespace, declare some variables, and
+confirm the recursive definition of the append function.
+The proofs by reflexivity show that ``nil_append`` and ``cons_append`` are definitionally
+true, which is to say, they following by unfolding the definition of ``append``.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: List
+   :end-before: -- end textbook
+
+The ``variable`` command does not do anything substantial.
+It tells Lean that when the corresponding identifiers are used
+in definitions and theorems that follow,
+they should be interpreted as arguments to those theorems and proofs,
+with the indicated types.
+The curly brackets around the declaration ``α : Type`` indicate that that
+argument is meant to be *implicit*, which is to say,
+users do not have to write it explicitly.
+Rather, Lean is expected to infer it from the context.
+
+The library stores the theorems ``[] ++ as`` and
+``(a :: as) ++ bs = a :: (as ++ bs)`` under the names ``nil_append``
+and ``cons_append``, respectively.
+You can see the statements by writing ``#check nil_append`` and ``#check cons_append``.
+Remember that we took these to be the defining equations for the
+``append`` function in :numref:`section_generalized_induction_and_recursion`.
+
+Lean's library also proves ``as ++ []`` under the name ``append_nil``,
+but to illustrate how proofs like this go, we will prove it again
+under the name ``append_nil'``.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: append_nil'
+   :end-before: -- end textbook
+
+Even though the proof is straightforward, some cleverness is needed to decide which variable
+to induct on. The fact that ``append`` is defined by recursion on the first argument makes
+``as`` the natural choice. Similarly, we can prove the associativity of the ``append`` function.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: append_assoc'
+   :end-before: -- end textbook
+
+Sometimes proving even simple identities can be challenging. Lean defines the list ``reverse``
+function using a tail recursive auxiliary function ``reverseAux as bs``,
+which in turn uses an accumulator to append the reverse of ``as`` to ``bs``
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: reverse
+   :end-before: -- end textbook
+
+If you try proving ``reverse (as ++ bs) = reverse bs ++ reverse as``, you'll find that
+it isn't easy. It turns out to be best to prove the following two identities first:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: reverse identities
+   :end-before: -- end textbook
+
+The ``generalizing`` clause in the two induction tells Lean that the inductive hypothesis
+should be applied to any choice of second parameter, not just the one from the
+previous step. Mathematically, what is going on is that we are proving by induction
+on ``as`` that the identity holds *for every choice of* the second parameter.
+This is needed because the recursive step of ``reverseAux`` uses a different parameter in the
+recursive call.
+You should try deleting the ``generalizing`` clause to see what goes
+wrong when we omit it.
+
+With those facts in hand, we have the identity we are after:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: reverse_append
+   :end-before: -- end textbook
+
+As a similar exercise, we encourage you to prove that for any list ``as``,
+``reverse (reverse as) = as``. You can do this by proving suitable lemmas about ``reverseAux``.
+
+Let's consider one last example, which brings us closer to the kinds of logical operations
+that we have been implementing in Lean.
+We have often relied on the fact that when we evaluate
+a propositional formula relative to a truth assignment, the resulting truth value only depends
+on the variables that occur in the formula.
+We can formalize in Lean what it means to say that a variable ``v`` occurs in ``A`` in Lean
+as follows:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: occurs
+   :end-before: -- end textbook
+
+Here we follow Lean's convention of using capital letters for propositions, properties, and
+predicates. We could just as well have defined a function ``vars : PropForm → Finset String``
+that returns the finite set of variables contained in a propositional formula, in which case
+``Occurs v A`` would be equivalent to ``v ∈ vars A``.
+
+In the past, we have also defined an evaluation function for propositional formulas relative
+to a partial truth assignment, an element of type ``PropAssignment``.
+Here, to simplify the discussion, we will use total assignments to propositional variables,
+represented as functions of type ``String → Bool``.
+The evaluation function for propositional formulas is then defined straightforwardly as follows.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: eval
+   :end-before: -- end textbook
+
+The following theorem formalizes the statement that changing the value of a truth assignment
+at a variable that does not occur in a formula does not change the value of the formula.
+The proof is mainly a matter of unfolding definitions and checking all the cases.
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: eval_of_not_occurs
+   :end-before: -- end textbook
+
+The theorems ``if_pos h`` and ``if_neg h`` are used to rewrite an if-then-else expression
+given the knowledge ``h`` that the condition is true or false, respectively.
+You should step through the proof and make sure you understand how it works.
+
+Verifying proofs involving logical operations or programming constructs often looks like this,
+with lots of straightforwrd cases to check.
+Because such checking is tedious, the general practice is to verify only one or two
+representative cases in a pen-and-paper proof and claim that the others are "similar."
+This is often a source of bugs, however, since a corner case or subtle difference in one
+of the cases and render the claim false.
+When formalizing such a theorem, it would be nice if the cases can be checked automatically.
+Indeed, in this case Lean's simplifier reduces the proof to a one-liner:
+
+.. literalinclude:: ../../LAMR/Examples/using_lean_as_a_proof_assistant/induction.lean
+   :start-after: -- textbook: eval_of_not_occurs with automation
+   :end-before: -- end textbook
+
+Lean has even more powerful automation, like `Aesop <https://github.com/leanprover-community/aesop>`_,
+that is designed for such purposes.
+Working through proofs like the one above by hand is a good way to come to terms with
+what we want such automation to do,
+and the techniques that we are describing in this course form the basis for writing
+such automation.
+
+Exercises
+---------
+
+Complete the following proofs in Lean.
+
+.. code-block:: lean
+
+   import Mathlib.Data.Real.Basic
+
+   variable (P Q R S : Prop)
+
+   example : P ∧ Q ∧ (P → R) → R := by
+   sorry
+
+   example : (P → Q) ∧ (Q → R) → P → r := by
+   sorry
+
+   example (h : P → Q) (h1 : P ∧ R) : Q ∧ r := by
+   sorry
+
+   example (h : ¬ (P ∧ Q)) : P → ¬ Q := by
+   sorry
+
+   example (h : ¬ (P → Q)) : ¬ Q := by
+   sorry
+
+   example (h : P ∧ ¬ Q) : ¬ (P → Q) := by
+   sorry
+
+   example (h1 : P ∨ Q) (h2 : P → R) : r ∨ Q := by
+   sorry
+
+   example (h1 : P ∨ Q → R) : (P → R) ∧ (Q → R) := by
+   sorry
+
+   example (h1 : P → R) (h2 : Q → R) : P ∨ Q → R := by
+   sorry
+
+   example (h : ¬ (P ∨ Q)) : ¬ P ∧ ¬ Q := by
+   sorry
+
+   example (h : ¬ P ∧ ¬ Q) : ¬ (P ∨ Q) := by
+   sorry
+
+   -- this one requires classical logic!
+   example (h : ¬ (P ∧ Q)) : ¬ P ∨ ¬ Q := by
+   sorry
+
+   -- this one too
+   example (h : P → Q) : ¬ P ∨ Q := by
+   sorry

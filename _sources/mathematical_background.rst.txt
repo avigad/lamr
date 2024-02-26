@@ -1,7 +1,7 @@
-.. _chapter_mathematical_background:
-
 .. Here is how to refer to this chapter: :numref:`Chapter %s <chapter_mathematical_background>`.
    For a section, just use :numref:`section_link`
+
+.. _chapter_mathematical_background:
 
 Mathematical Background
 =======================
@@ -619,8 +619,3 @@ Exercises
    string MI, you can produce any string
    MI...I, that is, M followed by only Is, if the number
    of Is is not equal to zero modulo 3.)
-
-
-
-
-

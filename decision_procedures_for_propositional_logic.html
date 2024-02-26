@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>6. Decision Procedures for Propositional Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,11 +33,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -58,16 +64,15 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="using_sat_solvers.html">7. Using SAT Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_propositional_logic.html">8. Deduction for Propositional Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="propositional_logic_in_lean.html">9. Propositional Logic in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_propositional_logic.html">8. Proof Systems for Propositional Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deduction_for_first_order_logic.html">14. Deduction for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="first_order_logic_in_lean.html">16. First-Order Logic in Lean</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">17. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -83,8 +88,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">6. </span>Decision Procedures for Propositional Logic</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">6. </span>Decision Procedures for Propositional Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/decision_procedures_for_propositional_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -95,7 +100,7 @@
            <div itemprop="articleBody">
              
   <section id="decision-procedures-for-propositional-logic">
-<span id="chapter-decision-procedures-for-propositional-logic"></span><h1><span class="section-number">6. </span>Decision Procedures for Propositional Logic<a class="headerlink" href="#decision-procedures-for-propositional-logic" title="Permalink to this heading"></a></h1>
+<span id="chapter-decision-procedures-for-propositional-logic"></span><h1><span class="section-number">6. </span>Decision Procedures for Propositional Logic<a class="headerlink" href="#decision-procedures-for-propositional-logic" title="Link to this heading"></a></h1>
 <p>We have seen that it is possible to determine whether or not a propositional formula is valid
 by writing out its entire truth table.
 This seems pretty inefficient; if a formula <span class="math notranslate nohighlight">\(A\)</span> has <span class="math notranslate nohighlight">\(n\)</span> variables,
@@ -135,7 +140,7 @@ This provides a recipe for determining the validity of <span class="math notrans
 namely, use a SAT solver to determine whether <span class="math notranslate nohighlight">\(\lnot A\)</span>
 is satisfiable, and then change a “yes” answer to a “no” and vice-versa.</p>
 <section id="the-tseitin-transformation">
-<span id="section-the-tseitin-transformation"></span><h2><span class="section-number">6.1. </span>The Tseitin transformation<a class="headerlink" href="#the-tseitin-transformation" title="Permalink to this heading"></a></h2>
+<span id="section-the-tseitin-transformation"></span><h2><span class="section-number">6.1. </span>The Tseitin transformation<a class="headerlink" href="#the-tseitin-transformation" title="Link to this heading"></a></h2>
 <p>We have seen that if <span class="math notranslate nohighlight">\(A\)</span> is a propositional formula, the smallest CNF equivalent
 may be exponentially longer.
 The Tseitin transformation provides an elegant workaround:
@@ -234,7 +239,7 @@ pleasant form.</p>
 
 <span class="k">#eval</span> <span class="n">printDefs</span> <span class="n">ex1</span>
 
-<span class="c">/-</span><span class="cm"></span>
+<span class="c">/-</span>
 <span class="cm">output:</span>
 
 <span class="cm">def_7, where</span>
@@ -332,7 +337,7 @@ and then reconstructs the definitions to show that the result is equivalent
 to the original formula.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#eval</span> <span class="n">toString</span> <span class="n">ex1.toCnf</span>
 
-<span class="c">/-</span><span class="cm"></span>
+<span class="c">/-</span>
 <span class="cm">Here is ex1:</span>
 
 <span class="cm">((p ∧ q ∧ ¬ r) ∨ (r ∧ (¬ p ∨ ¬ q)) ∧ (¬ s ∨ (p ∧ t))</span>
@@ -375,7 +380,7 @@ can be represented by the conjunction of the clauses <span class="math notransla
 can be represented by the single clause <span class="math notranslate nohighlight">\(\lnot d \lor \ell_1 \lor \cdots \lor \ell_n\)</span>.</p>
 </section>
 <section id="unit-propagation-and-the-pure-literal-rule">
-<span id="section-unit-propagation-and-the-pure-literal-rule"></span><h2><span class="section-number">6.2. </span>Unit propagation and the pure literal rule<a class="headerlink" href="#unit-propagation-and-the-pure-literal-rule" title="Permalink to this heading"></a></h2>
+<span id="section-unit-propagation-and-the-pure-literal-rule"></span><h2><span class="section-number">6.2. </span>Unit propagation and the pure literal rule<a class="headerlink" href="#unit-propagation-and-the-pure-literal-rule" title="Link to this heading"></a></h2>
 <p>In earlier chapters, we considered only truth assignments that assign a truth value to all propositional
 variables. However, complete search methods for SAT like DPLL use <em>partial assignments</em>, which assign truth
 values to some subset of the variables. For a clause <span class="math notranslate nohighlight">\(C\)</span> and partial truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
@@ -442,7 +447,7 @@ so the pure literal rule will assign it to <span class="math notranslate nohighl
 three satisfying assignments, while <span class="math notranslate nohighlight">\(\tval{\Gamma}_{\tau}\)</span> has only two satisfying assignments.</p>
 </section>
 <section id="dpll">
-<span id="section-dpll"></span><h2><span class="section-number">6.3. </span>DPLL<a class="headerlink" href="#dpll" title="Permalink to this heading"></a></h2>
+<span id="section-dpll"></span><h2><span class="section-number">6.3. </span>DPLL<a class="headerlink" href="#dpll" title="Link to this heading"></a></h2>
 <p>One of the first and most well-known decision procedures for SAT problems is the Davis-Putnam-Logemann-Loveland
 (DPLL) algorithm, which was invented by Davis, Logemann, and Loveland in 1962,
 based on
@@ -557,7 +562,7 @@ to true, assuming <code class="docutils literal notranslate"><span class="pre">x
 </div>
 </section>
 <section id="autarkies-and-2-sat">
-<span id="section-autarkies-and-2-sat"></span><h2><span class="section-number">6.4. </span>Autarkies and 2-SAT<a class="headerlink" href="#autarkies-and-2-sat" title="Permalink to this heading"></a></h2>
+<span id="section-autarkies-and-2-sat"></span><h2><span class="section-number">6.4. </span>Autarkies and 2-SAT<a class="headerlink" href="#autarkies-and-2-sat" title="Link to this heading"></a></h2>
 <p>Unit propagation and the pure literal rule form the core of the DPLL algorithm.
 In this section, we present a generalization of the pure literal rule,
 and we illustrate its use by providing an efficient algorithm for a restricted version of SAT.</p>
@@ -616,7 +621,7 @@ or contains the empty clause,
 which indicates that the original clause is unsatisfiable.</p>
 </section>
 <section id="cdcl">
-<span id="section-cdcl"></span><h2><span class="section-number">6.5. </span>CDCL<a class="headerlink" href="#cdcl" title="Permalink to this heading"></a></h2>
+<span id="section-cdcl"></span><h2><span class="section-number">6.5. </span>CDCL<a class="headerlink" href="#cdcl" title="Link to this heading"></a></h2>
 <p>The Conflict-Driven Clause-Learning (CDCL) decision procedure is the most successful SAT solving
 paradigm. Although it evolved from DPLL, modern implementations of CDCL have hardly any resemblance
 with the classic decision procedure. The algorithms differ in core algorithmic choices.
@@ -672,7 +677,7 @@ In top-tier solvers, about half the runtime can be devoted to such
 techniques.</p>
 </section>
 <section id="exercises">
-<h2><span class="section-number">6.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">6.6. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>Write, in Lean, a predicate <code class="docutils literal notranslate"><span class="pre">isAutarky</span></code> that takes an assignment
 <span class="math notranslate nohighlight">\(\tau\)</span> (of type <code class="docutils literal notranslate"><span class="pre">PropAssignment</span></code>) and a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span>
