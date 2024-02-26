@@ -27,8 +27,8 @@ Examples of use of Cadical.
 def cadicalExample : IO Unit := do
   let (_, result) ← callCadical exCnf0
   IO.println "Output from CaDiCaL :\n"
-  --IO.println s
-  --IO.println "\n\n"
+  -- IO.println s
+  -- IO.println "\n\n"
   IO.println (formatResult result)
   pure ()
 

@@ -10,7 +10,7 @@ def PropAssignment.evalCnf (τ : PropAssignment) (φ : CnfForm) : Bool :=
   (φ : List Clause).foldl (init := true) (fun v c => v ∧ τ.evalClause c)
 
 /-- Erases all elements equal to the argument from the list. -/
-protected def List.eraseAll {α} [BEq α] : List α → α → List α
+def List.eraseAll {α} [BEq α] : List α → α → List α
   | [],    _ => []
   | a::as, b => match a == b with
     | true  => List.eraseAll as b
@@ -65,16 +65,16 @@ partial def propagateUnits (τ : PropAssignment) (φ : CnfForm) : PropAssignment
       else propagateUnits (τ.withLit x) φ'
 -- end: propagateUnits
 
+#eval toString <| propagateUnits [] cnf!{p, q, q -q}
+#eval toString <| propagateUnits [] cnf!{p, q, -q -q}
+#eval toString <| propagateUnits [] cnf!{p q, p -q}
+
 /-- Assign (previously unassigned) `x` to true and perform unit propagation. -/
 -- textbook: propagateWithNew
 def propagateWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) :
     PropAssignment × CnfForm :=
   propagateUnits (τ.withLit x) (simplify x φ)
 -- end: propagateWithNew
-
-#eval toString <| propagateUnits [] cnf!{p, q, q -q}
-#eval toString <| propagateUnits [] cnf!{p, q, -q -q}
-#eval toString <| propagateUnits [] cnf!{p q, p -q}
 
 /-- Picks which literal to split on. The parity (whether it's negated) returned should
 be tried first, and then the opposite. -/
@@ -175,3 +175,5 @@ def main (args : List String) : IO UInt32 :=
   | _ => do
     IO.println ("Usage: dpll <problem.cnf>")
     return 1
+
+--#eval main ()

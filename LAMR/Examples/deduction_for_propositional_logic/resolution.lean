@@ -245,7 +245,4 @@ def VerboseProof.show (vp : VerboseProof) : IO Unit := do
       | .res var pos neg c =>
           IO.println s!"{i}: resolve {pos}, {neg} on {var}: {c}"
 
-instance : GetElem VerboseProof Nat VerboseStep (fun xs i => i < xs.size) :=
-  inferInstanceAs (GetElem (Array VerboseStep) _ _ _)
-
 end Resolution

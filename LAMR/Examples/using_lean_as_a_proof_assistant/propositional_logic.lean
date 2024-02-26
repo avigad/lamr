@@ -1,261 +1,143 @@
-import Init
+-- textbook: imports
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
+-- end textbook
 
 -- textbook: Prop
-variable (p q r s : Prop)
+variable (P Q R S : Prop)
 
 #check True
 #check False
-#check p ∧ q
-#check p ∨ q
-#check p → q
-#check p ↔ q
-#check ¬ p
--- end textbook
-
--- textbook: proof terms
-theorem foo : p → q → p ∧ q :=
-  fun hp hq => And.intro hp hq
-
-theorem bar : p ∧ q → q ∧ p :=
-  fun ⟨hp, hq⟩ => ⟨hq, hp⟩
+#check P ∧ Q
+#check P ∨ Q
+#check P → Q
+#check P ↔ Q
+#check ¬ P
 -- end textbook
 
 -- textbook: id proof
-example : p → p := by
+theorem easy : P → P := by
   intro h
   apply h
 -- end textbook
 
+-- textbook: id proof 2
+example : P → P := by
+  intro h
+  apply h
+-- end textbook
+
+-- textbook: id proof 3
+example : P → P := by
+  intro h
+  exact h
+-- end textbook
+
+-- textbook: id proof 4
+example : P → P := by
+  intro h
+  exact h
+  done
+-- end textbook
+
 -- textbook: apply
-example (h1 : p → q) (h2 : p) : q := by
+example (h1 : P → Q) (h2 : P) : Q := by
   apply h1
   exact h2
 -- end textbook
 
--- textbook: have
-example (h1 : p → q) (h2 : p) : q := by
-  have h3 : q := h1 h2
-  exact h3
--- end textbook
-
--- textbook: have again
-example (h1 : p → q) (h2 : p) : q := by
-  have h3 := h1 h2
-  exact h3
--- end textbook
-
--- textbook: application
-example (h1 : p → q) (h2 : p) : q := by
-  exact h1 h2
-
-example (h1 : p → q) (h2 : p) : q := h1 h2
--- end textbook
-
-
 -- textbook: and example
-theorem and_example : p → q → p ∧ q := by
-  intro hp
-  intro hq
-  apply And.intro
-  . exact hp
-  . exact hq
-
-#print and_example
-
-example : p → q → p ∧ q :=
-  fun hp hq => And.intro hp hq
+example : P → Q → P ∧ Q := by
+  intro hP hQ
+  constructor
+  . exact hP
+  . exact hQ
 -- end textbook
 
--- textbook: and proof variants
-example : p → q → p ∧ q := by
-  intro hp
-  intro hq
-  apply And.intro hp hq
--- end textbook
-
--- textbook: and intro
-example : p → q → p ∧ q := And.intro
--- end textbook
-
--- textbook: another and proof
-example : p ∧ q → q ∧ p := by
+-- textbook: another and example
+example : P ∧ Q → Q ∧ P := by
   intro h
-  have ⟨hp, hq⟩ := h
-  apply And.intro
-  . exact hq
-  . exact hp
+  rcases h with ⟨hP, hQ⟩
+  constructor
+  . exact hQ
+  . exact hP
 -- end textbook
 
--- textbook: and proof with cases
-example : p ∧ q → q ∧ p := by
+-- textbook: or example
+example : P ∨ Q → Q ∨ P := by
   intro h
-  cases h with
-  | intro hp hq =>
-    exact And.intro hq hp
-
-example : p ∧ q → q ∧ p := by
-  intro h
-  cases h
-  case intro hp hq =>
-    exact And.intro hq hp
--- end textbook
-
--- textbook: have
-  example (h1 : p ∧ q) (h2 : q → r) : p ∧ r := by
-  have ⟨hp, hq⟩ := h1
-  have hr : r := h2 hq
-  exact And.intro hp hr
-
-  example (h1 : p ∧ q) (h2 : q → r) : p ∧ r := by
-  have ⟨hp, hq⟩ := h1
-  have hr := h2 hq
-  exact And.intro hp hr
-
-  example (h1 : p ∧ q) (h2 : q → r) : p ∧ r := by
-  have ⟨hp, hq⟩ := h1
-  have hr : r := by
-    apply h2
-    exact hq
-  exact And.intro hp hr
--- end textbook
-
--- textbook: have and let
-example (h1 : p ∧ q) (h2 : q → r) : p ∧ r := by
-  let ⟨hp, hq⟩ := h1
-  let hr : r := by
-    apply h2
-    exact hq
-  exact And.intro hp hr
-
-example (h1 : p ∧ q) (h2 : q → r) : p ∧ r := by
-  let ⟨hp, hq⟩ := h1
-  exact And.intro hp (h2 hq)
--- end textbook
-
--- textbook: or proofs
-example : p ∨ q → q ∨ p := by
-  intro h
-  apply Or.elim h
-  . intro hp
-    apply Or.inr
-    exact hp
-  . intro hq
-    apply Or.inl
-    exact hq
-
-example : p ∨ q → q ∨ p := by
-  intro h
-  cases h with
-  | inl hp =>
-    exact Or.inr hp
-  | inr hq =>
-    exact Or.inl hq
-
-example : p ∨ q → q ∨ p := by
-  intro h
-  cases h
-  case inl hp =>
-    exact Or.inr hp
-  case inr hq =>
-    exact Or.inl hq
+  rcases h with hP | hQ
+  . right
+    exact hP
+  . left
+    exact hQ
 -- end textbook
 
 -- textbook: negation
-example (h : p → q) : ¬ q → ¬ p := by
-  intro hnq hp
-  apply hnq
+example (h : P → Q) : ¬ Q → ¬ P := by
+  intro hnQ
+  intro hP
+  apply hnQ
   apply h
-  apply hp
--- end textbook
-
--- textbook: contradiction
-example (h1 : p) (h2 : ¬ p) : q := by
-  contradiction
-
-example (h1 : p ∨ q) (h2 : ¬ p) : q := by
-  apply Or.elim h1
-  . intro hp
-    contradiction
-  . intro hq
-    exact hq
--- end textbook
-
--- textbook: absurd
-example (h1 : p) (h2 : ¬ p) : q := by
-  exact absurd h1 h2
-
-example (h1 : p) (h2 : ¬ p) : q := absurd h1 h2
-
-example (h1 : p ∨ q) (h2 : ¬ p) : q := by
-  apply Or.elim h1
-  . intro hp
-    exact absurd hp h2
-  . intro hq
-    exact hq
+  exact hP
 -- end textbook
 
 -- textbook: ex falso
-example (h : False) : p := by
+example (h : False) : P := by
   contradiction
 
-example (h : False) : p := by
-  cases h
+example (h : False) : P := by
+  rcases h
 -- end textbook
 
+-- textbook: contradiction
+example (h1 : P) (h2 : ¬ P) : Q := by
+  contradiction
 
--- textbook: excluded middle
-example (h1 : p → q) : ¬ p ∨ q := by
-  apply Or.elim (Classical.em p)
-  . intro hp
-    apply Or.inr
+example (h1 : P ∨ Q) (h2 : ¬ P) : Q := by
+  rcases h1 with hP | hQ
+  . contradiction
+  . exact hQ
+-- end textbook
+
+-- textbook: by_cases
+example (h1 : P → Q) : ¬ P ∨ Q := by
+  by_cases hP : P
+  . right
     apply h1
-    exact hp
-  . intro hnp
-    apply Or.inl
-    exact hnp
+    exact hP
+  . left
+    exact hP
 
-example : ¬ ¬ p → p := by
-  intro hnnp
-  apply Or.elim (Classical.em p)
-  . intro hp; exact hp
-  . intro hnp
-    contradiction
+example : ¬ ¬ P → P := by
+  intro hnnP
+  by_cases hP : P
+  . exact hP
+  . contradiction
 -- end textbook
 
--- textbook: classical principles
-example : ¬ ¬ p → p := by
-  intro hnnp
-  apply Classical.byCases
-  . intro (hp : p)
-    exact hp
-  . intro (hnp : ¬ p)
-    exact absurd hnp hnnp
-
-example : ¬ ¬ p → p := by
-  intro hnnp
-  apply Classical.byContradiction
-  intro (hnp : ¬ p)
-  exact hnnp hnp
+-- textbook: by_contra
+example : ¬ ¬ P → P := by
+  intro hnnP
+  by_contra hnP
+  apply hnnP
+  exact hnP
 -- end textbook
 
 -- textbook: iff
-example (h1 : p ↔ q) (h2 : p) : q := by
-  have ⟨h3, _⟩ := h1
-  apply h3
+example (h1 : P ↔ Q) (h2 : P) : Q := by
+  rcases h1 with ⟨hpq, _⟩
+  apply hpq
   exact h2
 
-example (h1 : p ↔ q) : q ↔ p := by
-  have ⟨h2, h3⟩ := h1
-  apply Iff.intro
+example (h1 : P ↔ Q) : Q ↔ P := by
+  rcases h1 with ⟨h2, h3⟩
+  constructor
   . exact h3
   . exact h2
 -- end textbook
 
--- textbook: more proof terms
-example : p ∨ q → q ∨ p :=
-  fun h => Or.elim h (fun hp => Or.inr hp) (fun hq => Or.inl hq)
-
-example (h1 : p → q) : ¬ q → ¬ p :=
-  fun hnq hp => hnq (h1 hp)
+-- textbook: tauto
+example (h1 : P → Q) : ¬ P ∨ Q := by
+  tauto
 -- end textbook
-
