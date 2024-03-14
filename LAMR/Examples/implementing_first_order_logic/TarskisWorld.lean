@@ -136,6 +136,18 @@ def World.toArray (world : World) : Array (Array (Option Object)) := Id.run do
     arr := arr.set! obj.row <| arr[obj.row]!.set! obj.col (some obj)
   arr
 
+open Lean in
+def World.toJson (world : World) : Json := Id.run do
+  let mut tets : Array Json := #[]
+  let mut cubs : Array Json := #[]
+  let mut dods : Array Json := #[]
+  for obj in world do
+    match obj.shape with
+    | .tet => tets := tets.push (.arr #[.num obj.row, .num obj.col, toString obj.size])
+    | .cube => cubs := cubs.push (.arr #[.num obj.row, .num obj.col, toString obj.size])
+    | .dodec => dods := dods.push (.arr #[.num obj.row, .num obj.col, toString obj.size])
+  return json% { tets: $(tets), cubs: $(cubs), dods: $(dods) }
+
 instance : ToString World :=
   ⟨fun world => Id.run do
     let arr := world.toArray
@@ -149,6 +161,29 @@ instance : ToString World :=
     s⟩
 
 def World.show (world : World) : IO Unit := do IO.print <| toString world
+
+/- Implement a 3D visualization widget. -/
+section widget
+open Lean Elab in
+private unsafe def evalWorldUnsafe (stx : Syntax) : TermElabM World :=
+  Term.evalTerm World (mkConst ``World) stx
+
+open Lean Elab in
+@[implemented_by evalWorldUnsafe]
+private opaque evalWorld (stx : Syntax) : TermElabM World
+
+@[widget]
+def tarskisWidget : Lean.Widget.UserWidgetDefinition where
+  name := "Tarski's World"
+  javascript := include_str "TarskisWorld.js"
+
+syntax "#3d_world" term : command
+open Lean Elab Command in
+elab_rules : command
+  | `(command| #3d_world%$tk $w) => liftTermElabM do
+    let w ← evalWorld w
+    Lean.Widget.saveWidgetInfo ``tarskisWidget (json% { world: $(w.toJson) }) tk
+end widget
 
 /-
 Implement the language
@@ -194,6 +229,8 @@ def myWorld : World := [
   ⟨dodec, large, 7, 4⟩ ]
 
 #eval myWorld.show
+
+#3d_world myWorld
 
 /-
 -----------------------------------------
