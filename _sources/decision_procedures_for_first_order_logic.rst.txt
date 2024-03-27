@@ -49,7 +49,7 @@ might consider. Fixing a model :math:`\mdl M`, we can ask:
 - Given a first-order formula :math:`A`, possibly with free variables,
   is there a variable assignment :math:`\sigma` such that :math:`A` is true in :math:`\mdl M`
   under :math:`\sigma`, that is, :math:`\models_{\mdl M, \sigma} A`?
-- iven a first-order formula :math:`A`, possibly with free variables,
+- Given a first-order formula :math:`A`, possibly with free variables,
   is :math:`A` is true in :math:`\mdl M` under every assignment :math:`\sigma`?
 
 In the first case, :math:`A` is said to be *satisfiable* in :math:`\mdl M`, and in the second case,
