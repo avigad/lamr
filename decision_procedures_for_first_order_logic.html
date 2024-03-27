@@ -61,9 +61,13 @@
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">12. Decision Procedures for First-Order Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#linear-arithmetic">12.1. Linear arithmetic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#linear-integer-arithmetic">12.2. Linear integer arithmetic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#equality">12.3. Equality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#equality">12.1. Equality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementing-congruence-closure">12.2. Implementing congruence closure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deciding-universal-sentences">12.3. Deciding universal sentences</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linear-arithmetic">12.4. Linear arithmetic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementing-fourier-motzkin">12.5. Implementing Fourier-Motzkin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-full-decision-procedure">12.6. A full decision procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other-theories">12.7. Other theories</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
@@ -98,198 +102,114 @@
              
   <section id="decision-procedures-for-first-order-logic">
 <span id="chapter-decision-procedures-for-first-order-logic"></span><h1><span class="section-number">12. </span>Decision Procedures for First-Order Logic<a class="headerlink" href="#decision-procedures-for-first-order-logic" title="Link to this heading"></a></h1>
-<p>Given a propositional formula <span class="math notranslate nohighlight">\(A\)</span> and a truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
-we have seen that it is straightforward to test wither <span class="math notranslate nohighlight">\(A\)</span> is true under <span class="math notranslate nohighlight">\(\tau\)</span>.
-We have also seen that a formula <span class="math notranslate nohighlight">\(A\)</span> is valid if and only if it is provable,
-and we have considered decision procedures for propositional logic that determine whether
-that is the case.</p>
-<p>In a similar way, given a first-order sentence <span class="math notranslate nohighlight">\(A\)</span> and a model <span class="math notranslate nohighlight">\(\mdl M\)</span>,
-we can ask whether <span class="math notranslate nohighlight">\(A\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span>.
-But for most fixed choices of <span class="math notranslate nohighlight">\(\mdl M\)</span>, there is no algorithm to determine
-whether or not <span class="math notranslate nohighlight">\(A\)</span> is true. For example, there is no algorithm to determine whether
-a sentence in a language with two binary function symbols is true of the model
-<span class="math notranslate nohighlight">\((\mathbb{Z}, +, \times)\)</span>.</p>
-<p>Given a first-order sentence <span class="math notranslate nohighlight">\(A\)</span>, we can also ask whether it is valid,
-that is, true in all models.
-Once we have suitable proof systems for first-order logic, this will be equivalent
-to the question as to whether <span class="math notranslate nohighlight">\(A\)</span> is provable.
-If the language has a binary relation symbol or two unary functions, this, too, is undecidable.</p>
-<p>But all is not lost. For some interesting models, the question of truth is decidable. These include
-the theory of the real numbers <span class="math notranslate nohighlight">\((\mathbb{R}, 0, 1, +, \times, &lt;)\)</span> with zero, one, addition,
-multiplication, and the less-than relation,
-and the theory of the integers <span class="math notranslate nohighlight">\((\mathbb{Z}, 0, 1, +, &lt;)\)</span>
-in the same language except without multiplication.</p>
-<p>We can also ask about validity for restricted classes of formulas. A formula is said to be
-<em>quantifier-free</em> if it has no quantifiers, and <em>universal</em> if it consists of any number
-of universal quantifiers <span class="math notranslate nohighlight">\(\forall\)</span> followed by a quantifier-free formula.
-Interestingly, the question as to whether a universal first-order formula is valid is decidable.</p>
-<p>Another thing we can do is ask whether a formula <span class="math notranslate nohighlight">\(A\)</span> is provable from some axioms <span class="math notranslate nohighlight">\(\Gamma\)</span>.
-For some fixed choices of <span class="math notranslate nohighlight">\(\Gamma\)</span>, this question is decidable.
-For example, there are natural axioms that characterize truth in the two
-structures mentioned above, <span class="math notranslate nohighlight">\((\mathbb{R}, 0, 1, +, \times, &lt;)\)</span> and <span class="math notranslate nohighlight">\((\mathbb{Z}, 0, 1, +, &lt;)\)</span>.</p>
-<p>From the theoretical standpoint, before looking for a computational solution to a problem in logic,
-the first challenge is to determine whether or not the problem
-is decidable. If the answer is “yes,” we can look for implementations that
-are efficient in practice. If the answer is “no,” the best we can do is look for simplifications
-or approximations.
-We will see that SMT solvers focus on the case where the answer is positive.
-The goal of this chapter is to establish decidability in a few interesting cases,
-without worrying about efficiency and implementation.</p>
-<section id="linear-arithmetic">
-<h2><span class="section-number">12.1. </span>Linear arithmetic<a class="headerlink" href="#linear-arithmetic" title="Link to this heading"></a></h2>
-<p>A <em>linear expression</em> is one of the form <span class="math notranslate nohighlight">\(a_1 x_1 + a_2 x_2 + \cdots + a_n x_n + b\)</span>,
-where each <span class="math notranslate nohighlight">\(a_i\)</span> is a rational number, <span class="math notranslate nohighlight">\(b\)</span> is a rational number,
-and each <span class="math notranslate nohighlight">\(x_i\)</span> is a variable.
-We think of the variables <span class="math notranslate nohighlight">\(x_i\)</span> as ranging over the real numbers.
-A <em>linear constraint</em> is one of the form <span class="math notranslate nohighlight">\(s = t\)</span> or <span class="math notranslate nohighlight">\(s &lt; t\)</span>, where
-<span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are linear expressions. (In practice, we usually include constraints
-of the form <span class="math notranslate nohighlight">\(s \le t\)</span> and sometimes <span class="math notranslate nohighlight">\(s \ne t\)</span> as well, but let’s keep it simple for now.)</p>
-<p>Notice that any linear constraint is equivalent to one of the form <span class="math notranslate nohighlight">\(t = 0\)</span> or <span class="math notranslate nohighlight">\(t &gt; 0\)</span>,
-since we can move all the terms to one side. For example, the constraint <span class="math notranslate nohighlight">\(3 x + 2 y &lt; 3y + 4z\)</span>
-is equivalent to <span class="math notranslate nohighlight">\(-3x + y + 4z &gt; 0\)</span>.
-An important observation that we will use below is that any linear constraint that involves
-a variable <span class="math notranslate nohighlight">\(x\)</span> can be written as <span class="math notranslate nohighlight">\(x = t\)</span>, <span class="math notranslate nohighlight">\(x &lt; t\)</span>, or <span class="math notranslate nohighlight">\(t &lt; x\)</span>,
-where <span class="math notranslate nohighlight">\(x\)</span> does not occur in <span class="math notranslate nohighlight">\(t\)</span>.
-We do this by simply solving for <span class="math notranslate nohighlight">\(x\)</span>.
-For example, the previous constraint can be expressed as <span class="math notranslate nohighlight">\(x &lt; (1/3)y + (4/3)z\)</span>.
-Remember that dividing both sides of an inequality by a negative number reverses the direction.</p>
-<p>A set <span class="math notranslate nohighlight">\(\Gamma\)</span> of linear constraints is <em>satisfiable</em> if there is an assignment of real
-values to the variables that makes them all true. Our first goal is to prove the following.</p>
-<div class="admonition-theorem admonition">
-<p class="admonition-title">Theorem</p>
-<p>The question as to whether a finite set of linear constraints is satisfiable is
-decidable.</p>
-</div>
-<div class="admonition-proof admonition">
-<p class="admonition-title">Proof</p>
-<p>We use induction on the number of variables. If there are no variables at all,
-<span class="math notranslate nohighlight">\(\Gamma\)</span> contains only expressions of the form <span class="math notranslate nohighlight">\(b_0 &lt; b_1\)</span> or <span class="math notranslate nohighlight">\(b_0 = b_1\)</span>
-where <span class="math notranslate nohighlight">\(b_0\)</span> and <span class="math notranslate nohighlight">\(b_1\)</span> are constants, and we only need to perform
-the comparisons to see whether they are true. Remember that if <span class="math notranslate nohighlight">\(\Gamma\)</span>
-is the empty set, we take it to be trivially satisfied.</p>
-<p>In the inductive step, <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a variable.
-If <span class="math notranslate nohighlight">\(\Gamma\)</span> contains any false constant equations, it is unsatisfiable,
-and it it contains any true constant equations, we can remove them without
-affecting satisfiability.
-If <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a nontrivial equation with a variable <span class="math notranslate nohighlight">\(x\)</span>,
-we put
-it in the form <span class="math notranslate nohighlight">\(x = t\)</span> and then substitute <span class="math notranslate nohighlight">\(t\)</span> for <span class="math notranslate nohighlight">\(x\)</span> everywhere.
-The resulting set of constraints has one fewer variable, and clearly
-it is equisatisfiable with the original one.
-Given an assignment to the new set of constraints, we just assign <span class="math notranslate nohighlight">\(x\)</span>
-the value of <span class="math notranslate nohighlight">\(t\)</span>.</p>
-<p>So we can now assume that there are no equations in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
-We can divide the inequalities in <span class="math notranslate nohighlight">\(\Gamma\)</span> intro three kinds:</p>
+<p>In the terminology of logic and computer science, a <em>decision procedure</em> is an
+algorithm that accepts a class of yes/no questions and answers them correctly. Fix a set of first-order sentences, <span class="math notranslate nohighlight">\(\Gamma\)</span>, which we can think of as a set of axioms of as a description of a
+possible state of affairs. Here are some questions we can ask:</p>
 <ul class="simple">
-<li><p>those that don’t contain <span class="math notranslate nohighlight">\(x\)</span> at all</p></li>
-<li><p>those that can be expressed in the form <span class="math notranslate nohighlight">\(s_i &lt; x\)</span></p></li>
-<li><p>those that can be expressed in the form <span class="math notranslate nohighlight">\(x &lt; t_j\)</span></p></li>
+<li><p>Given  a first-order sentence <span class="math notranslate nohighlight">\(A\)</span>,
+does <span class="math notranslate nohighlight">\(\Gamma\)</span> prove <span class="math notranslate nohighlight">\(A\)</span>, that is, <span class="math notranslate nohighlight">\(\Gamma \proves A\)</span>?</p></li>
+<li><p>Given  a first-order sentence <span class="math notranslate nohighlight">\(A\)</span>,
+does <span class="math notranslate nohighlight">\(\Gamma\)</span> entail <span class="math notranslate nohighlight">\(A\)</span>, that is, <span class="math notranslate nohighlight">\(\Gamma \models A\)</span>?</p></li>
+<li><p>Given  a first-order sentence <span class="math notranslate nohighlight">\(A\)</span>,
+is <span class="math notranslate nohighlight">\(\Gamma \cup \{ A \}\)</span> is satisfiable, that is, is there a model
+<span class="math notranslate nohighlight">\(\mdl M\)</span> of <span class="math notranslate nohighlight">\(\Gamma\)</span> in which <span class="math notranslate nohighlight">\(A\)</span> is true?</p></li>
 </ul>
-<p>Let <span class="math notranslate nohighlight">\(\Gamma'\)</span> be the set that results from removing the inequalities
-in the last two categories
-and replacing them with inequalities of the form <span class="math notranslate nohighlight">\(s_i &lt; t_j\)</span>.
-We claim <span class="math notranslate nohighlight">\(\Gamma'\)</span> is equisatisfiable with <span class="math notranslate nohighlight">\(\Gamma\)</span>.
-Clearly any assignment that satisfies <span class="math notranslate nohighlight">\(\Gamma\)</span> also satisfies <span class="math notranslate nohighlight">\(\Gamma'\)</span>.
-Conversely, suppose <span class="math notranslate nohighlight">\(\sigma\)</span> is an assignment that satisfies <span class="math notranslate nohighlight">\(\Gamma'\)</span>.
-Then, under that assignment, the value of each <span class="math notranslate nohighlight">\(s_i\)</span> is less than the value
-of every <span class="math notranslate nohighlight">\(t_j\)</span>. We obtain an assignment satisfying <span class="math notranslate nohighlight">\(\Gamma\)</span>
-by mapping <span class="math notranslate nohighlight">\(x\)</span> to any value between the largest <span class="math notranslate nohighlight">\(s_i\)</span> and the
-smallest <span class="math notranslate nohighlight">\(t_j\)</span>. (If one of the last two categories is empty, we
-remove the constraints in the other category entirely,
-since they can be satisfied by taking <span class="math notranslate nohighlight">\(x\)</span> sufficiently large or sufficiently
-small.)</p>
-</div>
-<p>The procedure implicit in this proof is known as the <em>Fourier-Motzkin</em> procedure, since
-an incipient presentation of the idea can be found in the work of Jean-Baptiste Joseph
-Fourier in the early nineteenth century. (This is the same Fourier who gave us Fourier
-analysis.) In the worst case, every elimination step divides the number of equations in half and
-then squares it, resulting in doubly exponential behavior.
-The procedure works well in practice, though, since in many applications each variable is
-contained in only a few equations. (There are obvious heuristics, like choosing a variable
-at each stage that minimizes the number of equations at the next stage.)
-There is an implementation of the procedure in the file <cite>FourierMotzkin.lean</cite> in the <cite>Examples</cite>
-folder,
-modulo two components that we ask you to supply.
-SMT solvers use much more efficient methods based on the simplex algorithm from linear programming.</p>
-<p>What does this theorem have to do with logic?
-Suppose the variables are labeled <span class="math notranslate nohighlight">\(x_1, x_2, \ldots, x_n\)</span> and the
-constraints are labeled <span class="math notranslate nohighlight">\(c_1, c_2, \ldots, c_m\)</span>. Then what we are really asking as to whether
-the formula <span class="math notranslate nohighlight">\(\ex {x_1, \ldots, x_n} c_1 \land c_2 \land \cdots \land c_m\)</span>
-is true of the real numbers when the constraints are interpreted in the expected way.
-To make this more precise, consider the structure <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;)\)</span>
-in a language with symbols <span class="math notranslate nohighlight">\(0\)</span>, <span class="math notranslate nohighlight">\(1\)</span>, <span class="math notranslate nohighlight">\(+\)</span>, and <span class="math notranslate nohighlight">\(&lt;\)</span>.
-All the constraints can be expressed in this language, albeit in a clunky way. For example,
-we can write <span class="math notranslate nohighlight">\(3 x\)</span> as <span class="math notranslate nohighlight">\(x + x + x\)</span>, and express a constraint like <span class="math notranslate nohighlight">\(x -(1/2)y + (4/3)z &lt; 0\)</span>
-as <span class="math notranslate nohighlight">\(6x + 8z &lt; 3y\)</span>. A slight expansion of the proof of the theorem above yields the following:</p>
-<div class="admonition-theorem admonition">
-<p class="admonition-title">Theorem</p>
-<p>The question as to whether a sentence <span class="math notranslate nohighlight">\(A\)</span> is true in <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;)\)</span>
-is decidable.</p>
-</div>
-<p>We will only sketch the details here.
-The algorithm uses an important method known as “elimination of quantifiers.”
-The idea is to successively eliminate quantifiers, one by one, until we are left with a
-quantifier-free sentence. We can determine the truth of that by simply calculating.</p>
-<p>We will show that any formula <span class="math notranslate nohighlight">\(\ex x A\)</span>, where <span class="math notranslate nohighlight">\(A\)</span> is quantifier-free,
-is equivalent to a quantifier-free formula <span class="math notranslate nohighlight">\(A'\)</span> that does not include <span class="math notranslate nohighlight">\(x\)</span>.
-Repeating the process and using the fact that <span class="math notranslate nohighlight">\(\fa x A\)</span> is equivalent to
-<span class="math notranslate nohighlight">\(\lnot \ex x \lnot A\)</span>, we can eliminate all the quantifiers.</p>
-<p>Given a formula <span class="math notranslate nohighlight">\(\ex x A\)</span>, put <span class="math notranslate nohighlight">\(A\)</span> into disjunctive normal form.
-(We are not worrying about efficiency now, only trying to establish decidability in principle.)
-We can replace <span class="math notranslate nohighlight">\(s \not&lt; t\)</span> by <span class="math notranslate nohighlight">\(t &lt; s \lor s = t\)</span>, and we can replace
-<span class="math notranslate nohighlight">\(s \ne t\)</span> by <span class="math notranslate nohighlight">\(s &lt; t \lor t &lt; s\)</span>.
-Putting the result into disjunctive normal form again, we can assume that all the atomic
-formulas are of the form <span class="math notranslate nohighlight">\(s &lt; t\)</span> or <span class="math notranslate nohighlight">\(s = t\)</span>.</p>
-<p>If we write <span class="math notranslate nohighlight">\(A\)</span> as <span class="math notranslate nohighlight">\(A_1 \lor A_2 \lor \cdots \lor A_n\)</span>, then <span class="math notranslate nohighlight">\(\ex x A\)</span>
-is equivalent to <span class="math notranslate nohighlight">\((\ex x A_1) \lor (\ex x A_2) \lor \cdots \lor (\ex x A_n)\)</span>.
-So we only need to show how to eliminate an existential quantifier from a conjunction
-of constraints of the form <span class="math notranslate nohighlight">\(s &lt; t\)</span> or <span class="math notranslate nohighlight">\(s = t\)</span>.
-But that is exactly what the proof of the first theorem in this section does,
-so we are done.</p>
-<p>It is possible to write down axioms that justify every step of the transformation.
-The resulting set of axioms is known as the theory of <em>linear arithmetic</em>.
-The argument shows that the resulting set of axioms characterizes the structure exactly,
-and that the question of provability from those axioms is decidable.</p>
-<p>Interestingly, the theorem remains true if we add multiplication.
-The resulting theory is known as the theory of <em>real closed fields</em>.
-The proof is much harder, however. The theorem was proved by Alfred Tarski before World War II,
-but it wasn’t published until 1948, after the war.</p>
-</section>
-<section id="linear-integer-arithmetic">
-<h2><span class="section-number">12.2. </span>Linear integer arithmetic<a class="headerlink" href="#linear-integer-arithmetic" title="Link to this heading"></a></h2>
-<p>What happens if we replace the real numbers by the integers? It turns out that
-truth in the structure <span class="math notranslate nohighlight">\((\mathbb Z, 0, 1, +)\)</span> is also decidable.
-This was established in 1926 by Mojżesz Presburger, a student of Tarski’s,
-who later died in the Holocaust. (The story has it that Tarski did not think
-the result was enough for a dissertation, and made him do more work.)
-The resulting theorem is known as <em>Presburger arithmetic</em> or <em>linear integer arithmetic</em>.
-In contrast to the reals, the order on the integers is <em>discrete</em>, since
-there is nothing between a value <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(x + 1\)</span>.
-The decision procedure is more complicated than that for linear arithmetic,
-and we will not discuss it here.
-SMT solvers, however, use efficient implementations of the <em>existential fragment</em>
-of the theory, which is to say, the satisfiability problem for quantifier-free formulas.</p>
-<p>In contrast to the case with the real numbers, however, the result is false if we
-add multiplication.
-In other words, truth in the model <span class="math notranslate nohighlight">\((\mathbb Z, 0, 1, +, \times)\)</span> is undecidable.
-This follows from the methods that Gödel used to prove the incompleteness theorems,
-and it is also a consequence of <em>Tarski’s theorem</em> on the undefinability of truth.</p>
-</section>
+<p>The first two questions are equivalent. We
+have not yet presented deductive systems for first-order logic, but we will do so in
+<a class="reference internal" href="proof_systems_for_first_order_logic.html#chapter-proof-systems-for-first-order-logic"><span class="std std-numref">Chapter 14</span></a>, and by the soundness and
+completeness theorems for those systems, we will have that a sentence <span class="math notranslate nohighlight">\(A\)</span> is provable from
+a set of hypotheses <span class="math notranslate nohighlight">\(\Gamma\)</span> if and only if it is entailed by <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+The third question is equivalent to the first two by translation: as with propositional logic,
+we have that <span class="math notranslate nohighlight">\(\Gamma \models A\)</span> if and only if <span class="math notranslate nohighlight">\(\Gamma \cup \{ \lnot A \}\)</span> is
+unsatisfiable. So questions about entailment are equivalent to questions about satisfiability,
+negating the formula in question.</p>
+<p>Whether or not a problem of the form above is decidable depends on <span class="math notranslate nohighlight">\(\Gamma\)</span>. For example,
+if <span class="math notranslate nohighlight">\(\Gamma\)</span> is empty, the first question boils down to the question as to whether a sentence
+<span class="math notranslate nohighlight">\(A\)</span> is provable in first-order logic. If the language in question has a binary relation symbol
+or two unary function symbols, the question is undecidable. In the special case where the language
+has only unary predicate symbols and a single function symbol, the question is decidable.
+Neither of these facts are easy to prove.</p>
+<p>Interestingly, adding axioms to <span class="math notranslate nohighlight">\(\Gamma\)</span> can make provability decidable. One way to think
+of this is that doing so constrains the types of models that have to be considered.
+Given a set of axioms <span class="math notranslate nohighlight">\(\Gamma\)</span>, deciding whether or not provability is decidable
+of often hard, and, for that reason, generally interesting. To show that the answer is “yes,”
+one should describe an algorithm, and then there is the further question as to whether the
+algorithm can be made to run efficiently on the specific questions we care about. A “no” answer
+usually proceeds to showing that a solution would lead to a solution to the halting problem,
+or another problem that has been shown to be reducible to it.</p>
+<p>The second type question above asks about the truth of a sentence <span class="math notranslate nohighlight">\(A\)</span> in all models of
+<span class="math notranslate nohighlight">\(\Gamma\)</span>, and the third type of question above asks about the truth of a sentence
+<span class="math notranslate nohighlight">\(A\)</span> in <em>some</em> model of <span class="math notranslate nohighlight">\(\Gamma\)</span>. There are other types of decision procedures we
+might consider. Fixing a model <span class="math notranslate nohighlight">\(\mdl M\)</span>, we can ask:</p>
+<ul class="simple">
+<li><p>Given a first-order formula <span class="math notranslate nohighlight">\(A\)</span>, possibly with free variables,
+is there a variable assignment <span class="math notranslate nohighlight">\(\sigma\)</span> such that <span class="math notranslate nohighlight">\(A\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span>
+under <span class="math notranslate nohighlight">\(\sigma\)</span>, that is, <span class="math notranslate nohighlight">\(\models_{\mdl M, \sigma} A\)</span>?</p></li>
+<li><p>iven a first-order formula <span class="math notranslate nohighlight">\(A\)</span>, possibly with free variables,
+is <span class="math notranslate nohighlight">\(A\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span> under every assignment <span class="math notranslate nohighlight">\(\sigma\)</span>?</p></li>
+</ul>
+<p>In the first case, <span class="math notranslate nohighlight">\(A\)</span> is said to be <em>satisfiable</em> in <span class="math notranslate nohighlight">\(\mdl M\)</span>, and in the second case,
+it is said to be <span class="math notranslate nohighlight">\(A\)</span> <em>valid</em> in <span class="math notranslate nohighlight">\(\mdl M\)</span>. But be careful: the words are being used
+in a slightly different sense than before, when satisfiable meant “true in some model” rather than
+“true for some assignment” and valid meant “true in all models” rather than
+“true for all assignments.”</p>
+<p>Remember that a sentence is a formula without free variables.
+If <span class="math notranslate nohighlight">\(A\)</span> is a sentence, both questions boil down to the question as to
+whether <span class="math notranslate nohighlight">\(A\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span>. Notice that if <span class="math notranslate nohighlight">\(A\)</span> has free variables
+<span class="math notranslate nohighlight">\(x_1, x_2, \ldots, x_n\)</span>, then the following are all equivalent:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(A\)</span> is satisfiable in <span class="math notranslate nohighlight">\(\mdl M\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\ex {x_1, x_2, \ldots, x_n} A\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x_1, x_2, \ldots, x_n} \lnot A\)</span> is false in <span class="math notranslate nohighlight">\(\mdl M\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot A\)</span> is not valid in <span class="math notranslate nohighlight">\(\mdl M\)</span>.</p></li>
+</ul>
+<p>It is confusing that there are so many ways to ask the same question! But you have to get used
+to it: logicians and computer scientists slip back and forth between the different ways of
+thinking about a problem, sometimes even in the same sentence.</p>
+<p>The relationship between the first group of questions, having to do with entailment and
+satisfiability, and the second group of questions, having to do with truth in models, is
+subtle. Sometimes, for a given model <span class="math notranslate nohighlight">\(\mdl M\)</span>, there is a natural set of axioms <span class="math notranslate nohighlight">\(\Gamma\)</span>
+such that a sentence is true in <span class="math notranslate nohighlight">\(\mdl M\)</span> if and only if it is provable from <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+Sometimes, instead, one can show that there is <em>no</em> computable set of axioms that has this property.
+Life is complicated! The set of all true sentences of a model <span class="math notranslate nohighlight">\(\mdl M\)</span>
+is called “the theory of <span class="math notranslate nohighlight">\(\mdl M\)</span>, so we can express the last property
+by saying that the theory of <span class="math notranslate nohighlight">\(\mdl M\)</span> is not computable.</p>
+<p>To muddy the waters even further, instead of asking questions about all first-order formulas,
+we can consider restricted problems where we are only allowed to ask about formulas of a certain
+kind. A formula is said to be <em>quantifier-free</em> if it has no quantifiers, <em>universal</em> if it consists
+of any number of universal quantifiers <span class="math notranslate nohighlight">\(\forall\)</span> (possibly none) followed by a
+quantifier-free formula, and <em>existential</em> if it consists of any number of existential quantifiers
+followed by a quantifier-free formula. In some cases, So we can ask, for a decision procedure for
+the provability of universal formulas from a set of axioms or for the satisfiability of an
+existential formula in a model, and in some cases, we may have a positive answer even though
+the full problem is undecidable.</p>
+<p>In this chapter, we will describe, in detail,
+a decision procedure for the validity universal formulas in pure first-order logic, that is,
+first-order logic without any axioms. We will also describe a decision procedure for the
+satisfiability of quantifier-free formulas in the theory of linear equations and
+inequalities in the real numbers. Finally, we will state some other important decidability and
+undecidability results, to give you a fuller sense of the landscape.
+In <a class="reference internal" href="using_smt_solvers.html#chapter-using-smt-solvers"><span class="std std-numref">Chapter 13</span></a>, we will consider SMT solvers,
+whose main strength is that they are capable of combining decision procedures for the
+quantifier-free parts of various theories and using them together effectively.</p>
 <section id="equality">
-<span id="section-equality"></span><h2><span class="section-number">12.3. </span>Equality<a class="headerlink" href="#equality" title="Link to this heading"></a></h2>
+<span id="section-equality"></span><h2><span class="section-number">12.1. </span>Equality<a class="headerlink" href="#equality" title="Link to this heading"></a></h2>
 <p>Fix a language, <span class="math notranslate nohighlight">\(L\)</span>. We will consider equations <span class="math notranslate nohighlight">\(s = t\)</span> and <em>disequations</em>
-<span class="math notranslate nohighlight">\(s \ne t\)</span> between closed terms.
+<span class="math notranslate nohighlight">\(u \ne v\)</span> between closed terms.
 The fact that we are considering closed terms mean that there are no variables to substitute
 for; computer scientists sometimes call these <em>ground</em> terms.
 (As with unification, in some contexts we may want to treat some variables as constant.
 What is important here is not whether we call them variables or constants, but, rather,
 the fact that we are not considering substitutions.)</p>
 <p>The problem we are addressing here is this: given a set of equations and disequations, is
-it satisfiable? Note that the word “satisfiable” is used in a different sense than it was
-used in the previous two sections. In those sections, we are interested in whether a
-set of formulas is satisfied by a variable assignment in a <em>particular</em>
-model, namely, the reals and the integers, respectively. Here we are asking whether
-a set of sentences is satisfied by any model.</p>
+it satisfiable? Notice that here we are asking about satisfiability in <em>any</em> model. In particular,
+the set</p>
+<div class="math notranslate nohighlight">
+\[\{ s_1 = t_1, \ldots, s_n = t_n, u_1 \ne v_1, \ldots, u_m \ne v_m \}\]</div>
+<p>is <em>unsatisfiable</em> if and only if we have</p>
+<div class="math notranslate nohighlight">
+\[s_1 = t_1, \ldots, s_n = t_n \proves u_1 = v_1 \lor \cdots \lor u_m = v_m\]</div>
+<p>So we can think of the problem in either way.</p>
 <p>For example, consider the following set of sentences:</p>
 <ol class="arabic simple">
 <li><p><span class="math notranslate nohighlight">\(f(a, a) = b\)</span></p></li>
@@ -363,19 +283,7 @@ You should convince yourself that using these rules we can derive</p>
 \UIC{$t[r/x] = t[s/x]$}
 \end{prooftree}
 \]</div></div></blockquote>
-<p>for any terms <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(s\)</span>, and <span class="math notranslate nohighlight">\(t\)</span> and variable <span class="math notranslate nohighlight">\(x\)</span>. If we add relation symbols
-and atomic formulas, we would add the following rule:</p>
-<blockquote>
-<div><div class="math notranslate nohighlight">
-\[
-\begin{prooftree}
-\AXC{$s_1 = t_1$}
-\AXC{$\ldots$}
-\AXC{$s_n = t_n$}
-\AXC{$R(s_1, \ldots, s_n)$}
-\QuaternaryInfC{$R(t_1, \ldots, t_n)$}
-\end{prooftree}
-\]</div></div></blockquote>
+<p>for any terms <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(s\)</span>, and <span class="math notranslate nohighlight">\(t\)</span> and variable <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <p>Returning to our proof plan, we want to show that if applying these rules successively
 does not result in a contradiction, then there is a model in which the original equations
 and disequations are all true.
@@ -394,9 +302,7 @@ that can be derived from the equations in <span class="math notranslate nohighli
 Then <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable if and only if no disequation in <span class="math notranslate nohighlight">\(\Gamma\)</span>
 is the negation of an equation in <span class="math notranslate nohighlight">\(\Gamma'\)</span>.</p>
 </div>
-<p>The algorithm implicit in this lemma is called <em>congruence closure</em>.
-We will see that it can be implemented efficiently (and <em>is</em> implemented efficiently in SMT
-solvers) using <em>union-find</em> data structures.</p>
+<p>The algorithm implicit in this lemma is called <em>congruence closure</em>.</p>
 <div class="admonition-proof admonition">
 <p class="admonition-title">Proof</p>
 <p>One direction of the lemma is easy. Since the equational rules preserve truth in any
@@ -473,30 +379,276 @@ equivalence classes:</p>
 f^{\mdl M}([f(a)]) &amp; = [a] \\
 f^{\mdl M}([b]) &amp; = \star \\
 f^{\mdl M}(\star) &amp; = \star\end{split}\]</div>
-<p>You can check that this satisfies the original set of equations and disequations.</p>
-<p>Suppose we allow atomic formulas <span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span> and negated atomic formulas in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
-To test satisfiability, we do not have to change much.
+<p>You can check that this satisfies the original set of equations and disequations. We don’t really need
+to introduce the new element <span class="math notranslate nohighlight">\(\star\)</span>; you can check that everything works if we replace it by
+any of the equivalence classes. We simply find it clearer to use <span class="math notranslate nohighlight">\(\star\)</span> as a catch-all for
+everything that falls outside the scope of the finite set of terms we started with.</p>
+<p>Our analysis establishes an interesting property of
+first-order logic: it is possible to prove a disjunction <span class="math notranslate nohighlight">\(u_1 = v_1 \lor \cdots \lor u_m = v_m\)</span>
+from a set of equation if and only if it is possible to prove <span class="math notranslate nohighlight">\(u_i = v_i\)</span> for some <span class="math notranslate nohighlight">\(i\)</span>.
+This is a property known as <em>convexity</em>. It relies on the fact that we allow only positive
+equations on the right-hand side. For example, <span class="math notranslate nohighlight">\(a = b \lor a \ne b\)</span> is provable in
+first-order logic, but clearly neither disjunct is provable on its own.</p>
+<p>We have described the algorithm as working on closed terms, that is, terms with no variables.
+Of course, there is no harm if we allow variables in the terms and simply treat them as
+constants. The point is that in this formulation of the problem, a hypothesis <span class="math notranslate nohighlight">\(f(x) = a\)</span>
+is interpreted as a statement about one particular <span class="math notranslate nohighlight">\(x\)</span> that never changes in the
+statement of a problem. It is an entirely different problem to consider hypotheses
+like <span class="math notranslate nohighlight">\(\fa x f(x) = a\)</span> for which we are allowed to substitute any term for <span class="math notranslate nohighlight">\(x\)</span>.
+For example, we might want to add axioms like <span class="math notranslate nohighlight">\(\fa {x, y, z} (x + y) + z\)</span> and
+<span class="math notranslate nohighlight">\(\fa {x, y}. x + y = y + x\)</span> as axioms for the integers or real numbers. The problem of
+determining whether a single equation follows from a set of universally
+quantified equations is known as the <em>word problem</em>, and, in general it is undecidable.</p>
+</section>
+<section id="implementing-congruence-closure">
+<h2><span class="section-number">12.2. </span>Implementing congruence closure<a class="headerlink" href="#implementing-congruence-closure" title="Link to this heading"></a></h2>
+<p>Congruence closuure can be implemented efficiently (and <em>is</em> implemented efficiently in SMT
+solvers) using <em>union-find</em> data structures.</p>
+<p>[This section needs to be written. In the meanwhile, see the <a class="reference external" href="https://www.cs.cmu.edu/~mheule/15311-s24/slides/congruence-closure.pdf">slides</a> and the file <code class="docutils literal notranslate"><span class="pre">CongruenceClosure.lean</span></code>].</p>
+</section>
+<section id="deciding-universal-sentences">
+<span id="id1"></span><h2><span class="section-number">12.3. </span>Deciding universal sentences<a class="headerlink" href="#deciding-universal-sentences" title="Link to this heading"></a></h2>
+<p>Remember that the following problems are all intertranslatable:</p>
+<ul class="simple">
+<li><p>Given a universal sentence <span class="math notranslate nohighlight">\(A\)</span>, is <span class="math notranslate nohighlight">\(A\)</span> valid, that is, true in every model? (Equivalently:
+if <span class="math notranslate nohighlight">\(A\)</span> provable?)</p></li>
+<li><p>Given a quantifier-free formula <span class="math notranslate nohighlight">\(A\)</span>, does <span class="math notranslate nohighlight">\(\models_{\mdl{M}, \sigma} A\)</span> hold for every
+model <span class="math notranslate nohighlight">\(\mdl M\)</span> and every variable assignment <span class="math notranslate nohighlight">\(\sigma\)</span>?</p></li>
+<li><p>Given a quantifier-free formula <span class="math notranslate nohighlight">\(A\)</span>, does <span class="math notranslate nohighlight">\(\models_{\mdl{M}, \sigma} A\)</span> hold for <em>some</em>
+model <span class="math notranslate nohighlight">\(\mdl M\)</span> and variable assignment <span class="math notranslate nohighlight">\(\sigma\)</span>?</p></li>
+<li><p>Given an existential sentence <span class="math notranslate nohighlight">\(A\)</span>, is <span class="math notranslate nohighlight">\(A\)</span> satisfiable, that is, true in some model?</p></li>
+</ul>
+<p>In particular, a universal formula <span class="math notranslate nohighlight">\(\fa {\vec x} A\)</span> is valid if and only if <span class="math notranslate nohighlight">\(A\)</span> holds
+for every model and every variable assignment, which happens if and only if <span class="math notranslate nohighlight">\(\lnot A\)</span> never holds for any model and variable assignment, which happens if and only if <span class="math notranslate nohighlight">\(\ex {\vec x} \lnot A\)</span> is
+not satisfiable. Notice that in each case we are asking questions about <em>pure</em> first-order logic,
+without any axioms <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+<p>Remember that in first-order logic, the atomic formulas include equations <span class="math notranslate nohighlight">\(s = t\)</span> and formulas
+<span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span>, where <span class="math notranslate nohighlight">\(R\)</span> is a relation symbol. The set of <em>literals</em> include the
+negations of those as well. It is not hard to extend congruence closure to an algorithm to determine
+the satisfiability of any finite set of literals. To start with, we add the following rule to our
+equational proof system:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[
+\begin{prooftree}
+\AXC{$s_1 = t_1$}
+\AXC{$\ldots$}
+\AXC{$s_n = t_n$}
+\AXC{$R(s_1, \ldots, s_n)$}
+\QuaternaryInfC{$R(t_1, \ldots, t_n)$}
+\end{prooftree}
+\]</div></div></blockquote>
+<p>Suppose <span class="math notranslate nohighlight">\(\Gamma\)</span> is a set of literals.
+To test the satisfiability of <span class="math notranslate nohighlight">\(\Gamma\)</span>, we do not have to change much in the previous algorithm.
 Using the congruence rule for relations, whenever we have derived <span class="math notranslate nohighlight">\(R(s_1, \ldots, s_n)\)</span>
-and <span class="math notranslate nohighlight">\(s_i = t_i\)</span> for every <span class="math notranslate nohighlight">\(i\)</span>, we can conclude <span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span>.
+and we have also derived equations <span class="math notranslate nohighlight">\(s_i = t_i\)</span> for every <span class="math notranslate nohighlight">\(i\)</span>,
+we can conclude <span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span>.
 The algorithm terminates when we contradict a disequality or another negated atomic formula.
 If the algorithm terminates without a contradiction, we build a model as before,
 where we simply declare that <span class="math notranslate nohighlight">\(R^{\mdl M}([t_1], \ldots, [t_n])\)</span> holds if and only if
-we have determined that <span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span> in a consequence of the original set.</p>
+we have determined that <span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span> in a consequence of the original set.
+Another way to think about the algorithm is that we can replace each atomic formula
+<span class="math notranslate nohighlight">\(R(t_1, \ldots, t_n)\)</span>
+by an equation <span class="math notranslate nohighlight">\(f_R(t_1, \ldots, t_n) = \top\)</span> and each negated atomic formula
+<span class="math notranslate nohighlight">\(\lnot R(t_1, \ldots, t_n)\)</span> by a disequation <span class="math notranslate nohighlight">\(f_R(t_1, \ldots, t_n) \ne \top\)</span> and
+run the usual congruence closure algorithm on that.</p>
 <p>Now suppose we are given an existential sentence <span class="math notranslate nohighlight">\(\ex {x_1, \ldots, x_n} A\)</span>
 where <span class="math notranslate nohighlight">\(A\)</span> is quantifier-free, and suppose we want to determine whether it is satisfiable.
-Replace <span class="math notranslate nohighlight">\(x_1, \ldots, x_n\)</span> in <span class="math notranslate nohighlight">\(A\)</span> with new constants <span class="math notranslate nohighlight">\(c_1, \ldots, c_n\)</span>.
-The resulting quantifier-free sentence is satisfiable if and only if the existential one is.
-Put that sentence in DNF, and use the fact <span class="math notranslate nohighlight">\(A_1 \lor \cdots \lor A_n\)</span> is satisfiable
-if and only if one of the sentences <span class="math notranslate nohighlight">\(A_i\)</span> is.
-That reduces the task to determining whether a conjunction of literals is satisfiable,
+Write <span class="math notranslate nohighlight">\(A\)</span> in disjunctive normal form, that is, as a disjunction
+<span class="math notranslate nohighlight">\(A_1 \lor \cdots \lor A_n\)</span> of conjunctions of literals.
+Then <span class="math notranslate nohighlight">\(\ex {x_1, \ldots, x_n} A\)</span> is satisfiable if and only if one of the formulas
+<span class="math notranslate nohighlight">\(A_1, \ldots, A_n\)</span> is satisfied by some model <span class="math notranslate nohighlight">\(\mdl M\)</span> and variable assignment
+<span class="math notranslate nohighlight">\(\sigma\)</span>. That reduces the task to determining whether a conjunction of literals is satisfiable,
 and we have just explained how to do that.</p>
 <p>Since a sentence is valid if and only if its negation is satisfiable, and since the negation
 of a universal sentence is an existential sentence, we have shown the following.</p>
 <div class="admonition-theorem admonition">
 <p class="admonition-title">Theorem</p>
-<p>The satisfiability of an existential sentence in first-order logic is decidable.
-Equivalently, the validity of a universal sentence is decidable.</p>
+<p>The validity of universal sentences in pure first-order logic is decidable.
+Equivalently, the satisfiability of existential sentences is decidable.</p>
 </div>
+</section>
+<section id="linear-arithmetic">
+<h2><span class="section-number">12.4. </span>Linear arithmetic<a class="headerlink" href="#linear-arithmetic" title="Link to this heading"></a></h2>
+<p>We now turn from questions having to do with satisfiability and validity in arbitrary
+models to questions about satisfiability in a particular model, namely, the real numbers.
+A <em>linear expression</em> is one of the form <span class="math notranslate nohighlight">\(a_1 x_1 + a_2 x_2 + \cdots + a_n x_n + b\)</span>,
+where each <span class="math notranslate nohighlight">\(a_i\)</span> is a rational number, <span class="math notranslate nohighlight">\(b\)</span> is a rational number,
+and each <span class="math notranslate nohighlight">\(x_i\)</span> is a variable.
+We think of the variables <span class="math notranslate nohighlight">\(x_i\)</span> as ranging over the real numbers.
+A <em>linear constraint</em> is one of the form <span class="math notranslate nohighlight">\(s = t\)</span> or <span class="math notranslate nohighlight">\(s &lt; t\)</span>, where
+<span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are linear expressions. (In practice, we usually include constraints
+of the form <span class="math notranslate nohighlight">\(s \le t\)</span> and sometimes <span class="math notranslate nohighlight">\(s \ne t\)</span> as well. But the first can be
+written <span class="math notranslate nohighlight">\(s &lt; t\)</span> and the second can be written <span class="math notranslate nohighlight">\(s &lt; t \lor t &lt; s\)</span>, so questions about
+those can be rexpressed in terms of <span class="math notranslate nohighlight">\(&lt;\)</span> and <span class="math notranslate nohighlight">\(=\)</span>, and focusing on those will simplify
+the presentation below.)</p>
+<p>Notice that any linear constraint is equivalent to one of the form <span class="math notranslate nohighlight">\(t = 0\)</span> or <span class="math notranslate nohighlight">\(t &gt; 0\)</span>,
+since we can move all the terms to one side. For example, the constraint <span class="math notranslate nohighlight">\(3 x + 2 y &lt; 3y + 4z\)</span>
+is equivalent to <span class="math notranslate nohighlight">\(-3x + y + 4z &gt; 0\)</span>.
+An important observation that we will use below is that any linear constraint that involves
+a variable <span class="math notranslate nohighlight">\(x\)</span> can be written as <span class="math notranslate nohighlight">\(x = t\)</span>, <span class="math notranslate nohighlight">\(x &lt; t\)</span>, or <span class="math notranslate nohighlight">\(t &lt; x\)</span>,
+where <span class="math notranslate nohighlight">\(x\)</span> does not occur in <span class="math notranslate nohighlight">\(t\)</span>.
+We do this by simply solving for <span class="math notranslate nohighlight">\(x\)</span>.
+For example, the previous constraint can be expressed as <span class="math notranslate nohighlight">\(x &lt; (1/3)y + (4/3)z\)</span>.
+Remember that dividing both sides of an inequality by a negative number reverses the direction.</p>
+<p>In this section we say that a set <span class="math notranslate nohighlight">\(\Gamma\)</span> of linear constraints is <em>satisfiable</em> if and only
+if there is an assignment of real
+values to the variables that makes them all true. Our first goal is to prove the following.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>The question as to whether a finite set of linear constraints is satisfiable is
+decidable.</p>
+</div>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>We use induction on the number of variables. If there are no variables at all,
+<span class="math notranslate nohighlight">\(\Gamma\)</span> contains only expressions of the form <span class="math notranslate nohighlight">\(b_0 &lt; b_1\)</span> or <span class="math notranslate nohighlight">\(b_0 = b_1\)</span>
+where <span class="math notranslate nohighlight">\(b_0\)</span> and <span class="math notranslate nohighlight">\(b_1\)</span> are constants, and we only need to perform
+the comparisons to see whether they are true. Remember that if <span class="math notranslate nohighlight">\(\Gamma\)</span>
+is the empty set, we take it to be trivially satisfied.</p>
+<p>In the inductive step, <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a variable.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> contains any false constant equations, it is unsatisfiable,
+and it it contains any true constant equations, we can remove them without
+affecting satisfiability.
+If <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a nontrivial equation with a variable <span class="math notranslate nohighlight">\(x\)</span>,
+we put
+it in the form <span class="math notranslate nohighlight">\(x = t\)</span> and then substitute <span class="math notranslate nohighlight">\(t\)</span> for <span class="math notranslate nohighlight">\(x\)</span> everywhere.
+The resulting set of constraints has one fewer variable, and clearly
+it is equisatisfiable with the original one.
+Given an assignment to the new set of constraints, we just assign <span class="math notranslate nohighlight">\(x\)</span>
+the value of <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<p>So we can now assume that there are no equations in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+We can divide the inequalities in <span class="math notranslate nohighlight">\(\Gamma\)</span> intro three kinds:</p>
+<ul class="simple">
+<li><p>those that don’t contain <span class="math notranslate nohighlight">\(x\)</span> at all</p></li>
+<li><p>those that can be expressed in the form <span class="math notranslate nohighlight">\(s_i &lt; x\)</span></p></li>
+<li><p>those that can be expressed in the form <span class="math notranslate nohighlight">\(x &lt; t_j\)</span></p></li>
+</ul>
+<p>Let <span class="math notranslate nohighlight">\(\Gamma'\)</span> be the set that results from removing the inequalities
+in the last two categories
+and replacing them with inequalities of the form <span class="math notranslate nohighlight">\(s_i &lt; t_j\)</span>.
+We claim <span class="math notranslate nohighlight">\(\Gamma'\)</span> is equisatisfiable with <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+Clearly any assignment that satisfies <span class="math notranslate nohighlight">\(\Gamma\)</span> also satisfies <span class="math notranslate nohighlight">\(\Gamma'\)</span>.
+Conversely, suppose <span class="math notranslate nohighlight">\(\sigma\)</span> is an assignment that satisfies <span class="math notranslate nohighlight">\(\Gamma'\)</span>.
+Then, under that assignment, the value of each <span class="math notranslate nohighlight">\(s_i\)</span> is less than the value
+of every <span class="math notranslate nohighlight">\(t_j\)</span>. We obtain an assignment satisfying <span class="math notranslate nohighlight">\(\Gamma\)</span>
+by mapping <span class="math notranslate nohighlight">\(x\)</span> to any value between the largest <span class="math notranslate nohighlight">\(s_i\)</span> and the
+smallest <span class="math notranslate nohighlight">\(t_j\)</span>. (If one of the last two categories is empty, we
+remove the constraints in the other category entirely,
+since they can be satisfied by taking <span class="math notranslate nohighlight">\(x\)</span> sufficiently large or sufficiently
+small.)</p>
+</div>
+</section>
+<section id="implementing-fourier-motzkin">
+<h2><span class="section-number">12.5. </span>Implementing Fourier-Motzkin<a class="headerlink" href="#implementing-fourier-motzkin" title="Link to this heading"></a></h2>
+<p>The procedure implicit in this proof is known as the <em>Fourier-Motzkin</em> procedure.
+The idea can be found in the work of Jean-Baptiste Joseph
+Fourier in the early nineteenth century (the same Fourier who gave us Fourier
+analysis), but it was rediscovered by multiple people in the nineteenth century, including Theo In the worst case, every elimination step divides the number of equations in half and
+then squares it, resulting in doubly exponential behavior.
+The procedure works well in practice, though, since in many applications each variable is
+contained in only a few equations. (There are obvious heuristics, like choosing a variable
+at each stage that minimizes the number of equations at the next stage.)
+There is an implementation of the procedure in the file <cite>FourierMotzkin.lean</cite> in the <cite>Examples</cite>
+folder,
+modulo two components that we ask you to supply.
+SMT solvers use much more efficient methods based on the simplex algorithm from linear programming.</p>
+</section>
+<section id="a-full-decision-procedure">
+<h2><span class="section-number">12.6. </span>A full decision procedure<a class="headerlink" href="#a-full-decision-procedure" title="Link to this heading"></a></h2>
+<p>We can describe the Fourier-Motzkin procedure more explicitly as a decision procedure
+for satisfiability of existential sentences in a langauge for the real numbers as follows.
+Suppose we are given a problem in linear arithmetic where the variables are labeled
+<span class="math notranslate nohighlight">\(x_1, x_2, \ldots, x_n\)</span> and the
+constraints are labeled <span class="math notranslate nohighlight">\(c_1, c_2, \ldots, c_m\)</span>. Then what we are really asking as to whether
+the formula <span class="math notranslate nohighlight">\(\ex {x_1, \ldots, x_n} c_1 \land c_2 \land \cdots \land c_m\)</span>
+is true of the real numbers when the constraints are interpreted in the expected way.
+To make this more precise, consider the structure <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;)\)</span>
+in a language with symbols <span class="math notranslate nohighlight">\(0\)</span>, <span class="math notranslate nohighlight">\(1\)</span>, <span class="math notranslate nohighlight">\(+\)</span>, and <span class="math notranslate nohighlight">\(&lt;\)</span>.
+All the constraints can be expressed in this language, albeit in a clunky way. For example,
+we can write <span class="math notranslate nohighlight">\(3 x\)</span> as <span class="math notranslate nohighlight">\(x + x + x\)</span>, and express a constraint like <span class="math notranslate nohighlight">\(x -(1/2)y + (4/3)z &lt; 0\)</span>
+as <span class="math notranslate nohighlight">\(6x + 8z &lt; 3y\)</span>. Alternatively, we can add symbols for scalar multiplication to the language.</p>
+<p>We now obtain a decision procedure for arbitrary existential formulas
+<span class="math notranslate nohighlight">\(\ex {x_1, \ldots, x_n} A\)</span> as follows.
+Given a formula <span class="math notranslate nohighlight">\(\ex x A\)</span>, put <span class="math notranslate nohighlight">\(A\)</span> into negation normal form, so that all the negations
+are pushed down to atomic formulas.
+Replace <span class="math notranslate nohighlight">\(\lnot (s &lt; t)\)</span> by <span class="math notranslate nohighlight">\(t &lt; s \lor s = t\)</span>, and we can replace
+<span class="math notranslate nohighlight">\(s \ne t\)</span> by <span class="math notranslate nohighlight">\(s &lt; t \lor t &lt; s\)</span>.
+(In practice, it is more efficient to include <span class="math notranslate nohighlight">\(\le\)</span> in the language as well, and use the
+fact that <span class="math notranslate nohighlight">\(\lnot (s \le t)\)</span> is equivalent to <span class="math notranslate nohighlight">\(t &lt; s\)</span>.)
+Putting the result into disjunctive normal form, we can assume that all the atomic
+formulas are of the form <span class="math notranslate nohighlight">\(s &lt; t\)</span> or <span class="math notranslate nohighlight">\(s = t\)</span>.
+We can move the existential quantifiers through the disjunction as we did in <a class="reference internal" href="#deciding-universal-sentences"><span class="std std-numref">Section 12.3</span></a> and then apply the Fourier-Motzkin procedure to
+each disjunction.</p>
+<p>In fact, a modification of the algorithm provides a decision procedure for the satisfiability
+of <em>any</em> sentence in the language, not just the existential ones.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>The question as to whether a sentence <span class="math notranslate nohighlight">\(A\)</span> is true in <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;, \le)\)</span>
+is decidable.</p>
+</div>
+<p>We will only sketch the details here.
+The algorithm uses an important method known as “elimination of quantifiers.”
+The idea is to successively eliminate quantifiers, one by one, until we are left with a
+quantifier-free sentence. We can determine the truth of that by simply calculating.</p>
+<p>We will show that any formula <span class="math notranslate nohighlight">\(\ex x A\)</span>, where <span class="math notranslate nohighlight">\(A\)</span> is quantifier-free,
+is equivalent to a quantifier-free formula <span class="math notranslate nohighlight">\(A'\)</span> that does not include <span class="math notranslate nohighlight">\(x\)</span>.
+Repeating the process and using the fact that <span class="math notranslate nohighlight">\(\fa x A\)</span> is equivalent to
+<span class="math notranslate nohighlight">\(\lnot \ex x \lnot A\)</span>, we can eliminate all the quantifiers. We are then
+left with a quantifier-free sentence, that is, a boolean combination of equations and
+inequalities between closed terms. We can decide the truth of that sentence by evaluating
+the terms.</p>
+<p>We have already seen all the ideas. The procedure above allows us to write
+<span class="math notranslate nohighlight">\(\ex x A\)</span> as <span class="math notranslate nohighlight">\((\ex x A_1) \lor (\ex x A_2) \lor \cdots \lor (\ex x A_n)\)</span>
+where each <span class="math notranslate nohighlight">\(A_i\)</span> is a conjunction of atomic formulas.
+So we only need to show how to eliminate an existential quantifier from a conjunction
+of constraints of the form <span class="math notranslate nohighlight">\(s &lt; t\)</span> or <span class="math notranslate nohighlight">\(s = t\)</span>.
+But that is exactly what the pivot step in the Fourier-Motzkin procedure does, and we are done.</p>
+<p>It is possible to write down axioms that justify every step of the transformation.
+The resulting set of axioms is known as the theory of <em>linear arithmetic</em>.
+The argument shows that the resulting set of axioms characterizes the structure exactly,
+and that the question of provability from those axioms is decidable.</p>
+<p>You should also notice that the justification of the procedure only used the fact basic
+facts about arithmetic on the real numbers, as well as the fact we can find a real number
+between any other two. So the procedure works just the same way, and returns the same answer,
+for other structures that satisfy these properties, like the rationals.
+In other words, the structure <span class="math notranslate nohighlight">\((\mathbb Q, 0, 1, +, &lt;, \le)\)</span> has exactly the same
+theory as <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;, \le)\)</span>.</p>
+</section>
+<section id="other-theories">
+<h2><span class="section-number">12.7. </span>Other theories<a class="headerlink" href="#other-theories" title="Link to this heading"></a></h2>
+<p>What happens if we extend linear arithmetic by adding multiplication between
+arbitrary terms? Formally, we are asking about the theory of the real numbers
+<span class="math notranslate nohighlight">\((\mathbb{R}, 0, 1, +, \times, &lt;)\)</span> with zero, one, addition,
+multiplication, and the less-than relation. It is equivalent to extending
+linear arithmetic by allowing atomic formulas <span class="math notranslate nohighlight">\(p = 0\)</span> and <span class="math notranslate nohighlight">\(p &gt; 0\)</span> where <span class="math notranslate nohighlight">\(p\)</span> is
+an arbitrary polynomial. The theory, known also as the theory of <em>Real closed
+fields</em>, is still decidable. The theorem was proved by Alfred Tarski before World War II,
+but it wasn’t published until 1948, after the war.</p>
+<p>Returning to the language without multiplication, one can ask what happens if we replace
+the real numbers by the integers.
+In other words, we can ask whether the truth of sentences in the structure
+<span class="math notranslate nohighlight">\((\mathbb Z, 0, 1, +, &lt;)\)</span> is decidable.
+In contrast to the reals, the order on the integers is <em>discrete</em>, since
+there is nothing between a value <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(x + 1\)</span>.
+The problem is nonetheless decidable.
+The result was first proved  in 1926 by Mojżesz Presburger, a student of Tarski’s,
+who later died in the Holocaust. The story has it that Tarski did not think
+the result was enough for a dissertation, and made him do more work.
+The resulting theory is known as <em>Presburger arithmetic</em> or <em>linear integer arithmetic</em>.</p>
+<p>The decision procedure is more complicated than that for linear arithmetic,
+and we will not discuss it here.
+SMT solvers, however, use efficient implementations of the <em>existential fragment</em>
+of the theory, which is to say, the satisfiability problem for quantifier-free formulas.</p>
+<p>What happens if we add multiplication?
+In contrast to the case with the real numbers, however, the theory of the integers
+with addition and multiplication is undecidable.
+In other words, there is no algorithm to decide truth in the model
+<span class="math notranslate nohighlight">\((\mathbb Z, 0, 1, +, \times)\)</span>.
+This follows from the methods that Gödel used to prove the incompleteness theorems,
+and it is also a consequence of <em>Tarski’s theorem</em> on the undefinability of truth.
+The phenomena can be stated in very strong terms: no theory or structure in which one
+can interpret a small amount of arithmetic with addition and multiplication is decidable.</p>
 </section>
 </section>
 

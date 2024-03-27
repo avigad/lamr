@@ -3,206 +3,104 @@
 Decision Procedures for First-Order Logic
 =========================================
 
-Given a propositional formula :math:`A` and a truth assignment :math:`\tau`,
-we have seen that it is straightforward to test wither :math:`A` is true under :math:`\tau`.
-We have also seen that a formula :math:`A` is valid if and only if it is provable,
-and we have considered decision procedures for propositional logic that determine whether
-that is the case.
+In the terminology of logic and computer science, a *decision procedure* is an
+algorithm that accepts a class of yes/no questions and answers them correctly. Fix a set of first-order sentences, :math:`\Gamma`, which we can think of as a set of axioms of as a description of a
+possible state of affairs. Here are some questions we can ask:
 
-In a similar way, given a first-order sentence :math:`A` and a model :math:`\mdl M`,
-we can ask whether :math:`A` is true in :math:`\mdl M`.
-But for most fixed choices of :math:`\mdl M`, there is no algorithm to determine
-whether or not :math:`A` is true. For example, there is no algorithm to determine whether
-a sentence in a language with two binary function symbols is true of the model
-:math:`(\mathbb{Z}, +, \times)`.
+- Given  a first-order sentence :math:`A`,
+  does :math:`\Gamma` prove :math:`A`, that is, :math:`\Gamma \proves A`?
+- Given  a first-order sentence :math:`A`,
+  does :math:`\Gamma` entail :math:`A`, that is, :math:`\Gamma \models A`?
+- Given  a first-order sentence :math:`A`,
+  is :math:`\Gamma \cup \{ A \}` is satisfiable, that is, is there a model
+  :math:`\mdl M` of :math:`\Gamma` in which :math:`A` is true?
 
-Given a first-order sentence :math:`A`, we can also ask whether it is valid,
-that is, true in all models.
-Once we have suitable proof systems for first-order logic, this will be equivalent
-to the question as to whether :math:`A` is provable.
-If the language has a binary relation symbol or two unary functions, this, too, is undecidable.
+The first two questions are equivalent. We
+have not yet presented deductive systems for first-order logic, but we will do so in
+:numref:`Chapter %s <chapter_proof_systems_for_first_order_logic>`, and by the soundness and
+completeness theorems for those systems, we will have that a sentence :math:`A` is provable from
+a set of hypotheses :math:`\Gamma` if and only if it is entailed by :math:`\Gamma`.
+The third question is equivalent to the first two by translation: as with propositional logic,
+we have that :math:`\Gamma \models A` if and only if :math:`\Gamma \cup \{ \lnot A \}` is
+unsatisfiable. So questions about entailment are equivalent to questions about satisfiability,
+negating the formula in question.
 
-But all is not lost. For some interesting models, the question of truth is decidable. These include
-the theory of the real numbers :math:`(\mathbb{R}, 0, 1, +, \times, <)` with zero, one, addition,
-multiplication, and the less-than relation,
-and the theory of the integers :math:`(\mathbb{Z}, 0, 1, +, <)`
-in the same language except without multiplication.
+Whether or not a problem of the form above is decidable depends on :math:`\Gamma`. For example,
+if :math:`\Gamma` is empty, the first question boils down to the question as to whether a sentence
+:math:`A` is provable in first-order logic. If the language in question has a binary relation symbol
+or two unary function symbols, the question is undecidable. In the special case where the language
+has only unary predicate symbols and a single function symbol, the question is decidable.
+Neither of these facts are easy to prove.
 
-We can also ask about validity for restricted classes of formulas. A formula is said to be
-*quantifier-free* if it has no quantifiers, and *universal* if it consists of any number
-of universal quantifiers :math:`\forall` followed by a quantifier-free formula.
-Interestingly, the question as to whether a universal first-order formula is valid is decidable.
+Interestingly, adding axioms to :math:`\Gamma` can make provability decidable. One way to think
+of this is that doing so constrains the types of models that have to be considered.
+Given a set of axioms :math:`\Gamma`, deciding whether or not provability is decidable
+of often hard, and, for that reason, generally interesting. To show that the answer is "yes,"
+one should describe an algorithm, and then there is the further question as to whether the
+algorithm can be made to run efficiently on the specific questions we care about. A "no" answer
+usually proceeds to showing that a solution would lead to a solution to the halting problem,
+or another problem that has been shown to be reducible to it.
 
-Another thing we can do is ask whether a formula :math:`A` is provable from some axioms :math:`\Gamma`.
-For some fixed choices of :math:`\Gamma`, this question is decidable.
-For example, there are natural axioms that characterize truth in the two
-structures mentioned above, :math:`(\mathbb{R}, 0, 1, +, \times, <)` and :math:`(\mathbb{Z}, 0, 1, +, <)`.
+The second type question above asks about the truth of a sentence :math:`A` in all models of
+:math:`\Gamma`, and the third type of question above asks about the truth of a sentence
+:math:`A` in *some* model of :math:`\Gamma`. There are other types of decision procedures we
+might consider. Fixing a model :math:`\mdl M`, we can ask:
 
-From the theoretical standpoint, before looking for a computational solution to a problem in logic,
-the first challenge is to determine whether or not the problem
-is decidable. If the answer is "yes," we can look for implementations that
-are efficient in practice. If the answer is "no," the best we can do is look for simplifications
-or approximations.
-We will see that SMT solvers focus on the case where the answer is positive.
-The goal of this chapter is to establish decidability in a few interesting cases,
-without worrying about efficiency and implementation.
+- Given a first-order formula :math:`A`, possibly with free variables,
+  is there a variable assignment :math:`\sigma` such that :math:`A` is true in :math:`\mdl M`
+  under :math:`\sigma`, that is, :math:`\models_{\mdl M, \sigma} A`?
+- iven a first-order formula :math:`A`, possibly with free variables,
+  is :math:`A` is true in :math:`\mdl M` under every assignment :math:`\sigma`?
 
+In the first case, :math:`A` is said to be *satisfiable* in :math:`\mdl M`, and in the second case,
+it is said to be :math:`A` *valid* in :math:`\mdl M`. But be careful: the words are being used
+in a slightly different sense than before, when satisfiable meant "true in some model" rather than
+"true for some assignment" and valid meant "true in all models" rather than
+"true for all assignments."
 
-Linear arithmetic
------------------
+Remember that a sentence is a formula without free variables.
+If :math:`A` is a sentence, both questions boil down to the question as to
+whether :math:`A` is true in :math:`\mdl M`. Notice that if :math:`A` has free variables
+:math:`x_1, x_2, \ldots, x_n`, then the following are all equivalent:
 
-A *linear expression* is one of the form :math:`a_1 x_1 + a_2 x_2 + \cdots + a_n x_n + b`,
-where each :math:`a_i` is a rational number, :math:`b` is a rational number,
-and each :math:`x_i` is a variable.
-We think of the variables :math:`x_i` as ranging over the real numbers.
-A *linear constraint* is one of the form :math:`s = t` or :math:`s < t`, where
-:math:`s` and :math:`t` are linear expressions. (In practice, we usually include constraints
-of the form :math:`s \le t` and sometimes :math:`s \ne t` as well, but let's keep it simple for now.)
+- :math:`A` is satisfiable in :math:`\mdl M`.
+- :math:`\ex {x_1, x_2, \ldots, x_n} A` is true in :math:`\mdl M`.
+- :math:`\fa {x_1, x_2, \ldots, x_n} \lnot A` is false in :math:`\mdl M`.
+- :math:`\lnot A` is not valid in :math:`\mdl M`.
 
-Notice that any linear constraint is equivalent to one of the form :math:`t = 0` or :math:`t > 0`,
-since we can move all the terms to one side. For example, the constraint :math:`3 x + 2 y < 3y + 4z`
-is equivalent to :math:`-3x + y + 4z > 0`.
-An important observation that we will use below is that any linear constraint that involves
-a variable :math:`x` can be written as :math:`x = t`, :math:`x < t`, or :math:`t < x`,
-where :math:`x` does not occur in :math:`t`.
-We do this by simply solving for :math:`x`.
-For example, the previous constraint can be expressed as :math:`x < (1/3)y + (4/3)z`.
-Remember that dividing both sides of an inequality by a negative number reverses the direction.
+It is confusing that there are so many ways to ask the same question! But you have to get used
+to it: logicians and computer scientists slip back and forth between the different ways of
+thinking about a problem, sometimes even in the same sentence.
 
-A set :math:`\Gamma` of linear constraints is *satisfiable* if there is an assignment of real
-values to the variables that makes them all true. Our first goal is to prove the following.
+The relationship between the first group of questions, having to do with entailment and
+satisfiability, and the second group of questions, having to do with truth in models, is
+subtle. Sometimes, for a given model :math:`\mdl M`, there is a natural set of axioms :math:`\Gamma`
+such that a sentence is true in :math:`\mdl M` if and only if it is provable from :math:`\Gamma`.
+Sometimes, instead, one can show that there is *no* computable set of axioms that has this property.
+Life is complicated! The set of all true sentences of a model :math:`\mdl M`
+is called "the theory of :math:`\mdl M`, so we can express the last property
+by saying that the theory of :math:`\mdl M` is not computable.
 
-.. admonition:: Theorem
+To muddy the waters even further, instead of asking questions about all first-order formulas,
+we can consider restricted problems where we are only allowed to ask about formulas of a certain
+kind. A formula is said to be *quantifier-free* if it has no quantifiers, *universal* if it consists
+of any number of universal quantifiers :math:`\forall` (possibly none) followed by a
+quantifier-free formula, and *existential* if it consists of any number of existential quantifiers
+followed by a quantifier-free formula. In some cases, So we can ask, for a decision procedure for
+the provability of universal formulas from a set of axioms or for the satisfiability of an
+existential formula in a model, and in some cases, we may have a positive answer even though
+the full problem is undecidable.
 
-    The question as to whether a finite set of linear constraints is satisfiable is
-    decidable.
+In this chapter, we will describe, in detail,
+a decision procedure for the validity universal formulas in pure first-order logic, that is,
+first-order logic without any axioms. We will also describe a decision procedure for the
+satisfiability of quantifier-free formulas in the theory of linear equations and
+inequalities in the real numbers. Finally, we will state some other important decidability and
+undecidability results, to give you a fuller sense of the landscape.
+In :numref:`Chapter %s <chapter_using_smt_solvers>`, we will consider SMT solvers,
+whose main strength is that they are capable of combining decision procedures for the
+quantifier-free parts of various theories and using them together effectively.
 
-.. admonition:: Proof
-
-    We use induction on the number of variables. If there are no variables at all,
-    :math:`\Gamma` contains only expressions of the form :math:`b_0 < b_1` or :math:`b_0 = b_1`
-    where :math:`b_0` and :math:`b_1` are constants, and we only need to perform
-    the comparisons to see whether they are true. Remember that if :math:`\Gamma`
-    is the empty set, we take it to be trivially satisfied.
-
-    In the inductive step, :math:`\Gamma` contains a variable.
-    If :math:`\Gamma` contains any false constant equations, it is unsatisfiable,
-    and it it contains any true constant equations, we can remove them without
-    affecting satisfiability.
-    If :math:`\Gamma` contains a nontrivial equation with a variable :math:`x`,
-    we put
-    it in the form :math:`x = t` and then substitute :math:`t` for :math:`x` everywhere.
-    The resulting set of constraints has one fewer variable, and clearly
-    it is equisatisfiable with the original one.
-    Given an assignment to the new set of constraints, we just assign :math:`x`
-    the value of :math:`t`.
-
-    So we can now assume that there are no equations in :math:`\Gamma`.
-    We can divide the inequalities in :math:`\Gamma` intro three kinds:
-
-    - those that don't contain :math:`x` at all
-    - those that can be expressed in the form :math:`s_i < x`
-    - those that can be expressed in the form :math:`x < t_j`
-
-    Let :math:`\Gamma'` be the set that results from removing the inequalities
-    in the last two categories
-    and replacing them with inequalities of the form :math:`s_i < t_j`.
-    We claim :math:`\Gamma'` is equisatisfiable with :math:`\Gamma`.
-    Clearly any assignment that satisfies :math:`\Gamma` also satisfies :math:`\Gamma'`.
-    Conversely, suppose :math:`\sigma` is an assignment that satisfies :math:`\Gamma'`.
-    Then, under that assignment, the value of each :math:`s_i` is less than the value
-    of every :math:`t_j`. We obtain an assignment satisfying :math:`\Gamma`
-    by mapping :math:`x` to any value between the largest :math:`s_i` and the
-    smallest :math:`t_j`. (If one of the last two categories is empty, we
-    remove the constraints in the other category entirely,
-    since they can be satisfied by taking :math:`x` sufficiently large or sufficiently
-    small.)
-
-The procedure implicit in this proof is known as the *Fourier-Motzkin* procedure, since
-an incipient presentation of the idea can be found in the work of Jean-Baptiste Joseph
-Fourier in the early nineteenth century. (This is the same Fourier who gave us Fourier
-analysis.) In the worst case, every elimination step divides the number of equations in half and
-then squares it, resulting in doubly exponential behavior.
-The procedure works well in practice, though, since in many applications each variable is
-contained in only a few equations. (There are obvious heuristics, like choosing a variable
-at each stage that minimizes the number of equations at the next stage.)
-There is an implementation of the procedure in the file `FourierMotzkin.lean` in the `Examples`
-folder,
-modulo two components that we ask you to supply.
-SMT solvers use much more efficient methods based on the simplex algorithm from linear programming.
-
-What does this theorem have to do with logic?
-Suppose the variables are labeled :math:`x_1, x_2, \ldots, x_n` and the
-constraints are labeled :math:`c_1, c_2, \ldots, c_m`. Then what we are really asking as to whether
-the formula :math:`\ex {x_1, \ldots, x_n} c_1 \land c_2 \land \cdots \land c_m`
-is true of the real numbers when the constraints are interpreted in the expected way.
-To make this more precise, consider the structure :math:`(\mathbb R, 0, 1, +, <)`
-in a language with symbols :math:`0`, :math:`1`, :math:`+`, and :math:`<`.
-All the constraints can be expressed in this language, albeit in a clunky way. For example,
-we can write :math:`3 x` as :math:`x + x + x`, and express a constraint like :math:`x -(1/2)y + (4/3)z < 0`
-as :math:`6x + 8z < 3y`. A slight expansion of the proof of the theorem above yields the following:
-
-.. admonition:: Theorem
-
-    The question as to whether a sentence :math:`A` is true in :math:`(\mathbb R, 0, 1, +, <)`
-    is decidable.
-
-We will only sketch the details here.
-The algorithm uses an important method known as "elimination of quantifiers."
-The idea is to successively eliminate quantifiers, one by one, until we are left with a
-quantifier-free sentence. We can determine the truth of that by simply calculating.
-
-We will show that any formula :math:`\ex x A`, where :math:`A` is quantifier-free,
-is equivalent to a quantifier-free formula :math:`A'` that does not include :math:`x`.
-Repeating the process and using the fact that :math:`\fa x A` is equivalent to
-:math:`\lnot \ex x \lnot A`, we can eliminate all the quantifiers.
-
-Given a formula :math:`\ex x A`, put :math:`A` into disjunctive normal form.
-(We are not worrying about efficiency now, only trying to establish decidability in principle.)
-We can replace :math:`s \not< t` by :math:`t < s \lor s = t`, and we can replace
-:math:`s \ne t` by :math:`s < t \lor t < s`.
-Putting the result into disjunctive normal form again, we can assume that all the atomic
-formulas are of the form :math:`s < t` or :math:`s = t`.
-
-If we write :math:`A` as :math:`A_1 \lor A_2 \lor \cdots \lor A_n`, then :math:`\ex x A`
-is equivalent to :math:`(\ex x A_1) \lor (\ex x A_2) \lor \cdots \lor (\ex x A_n)`.
-So we only need to show how to eliminate an existential quantifier from a conjunction
-of constraints of the form :math:`s < t` or :math:`s = t`.
-But that is exactly what the proof of the first theorem in this section does,
-so we are done.
-
-It is possible to write down axioms that justify every step of the transformation.
-The resulting set of axioms is known as the theory of *linear arithmetic*.
-The argument shows that the resulting set of axioms characterizes the structure exactly,
-and that the question of provability from those axioms is decidable.
-
-Interestingly, the theorem remains true if we add multiplication.
-The resulting theory is known as the theory of *real closed fields*.
-The proof is much harder, however. The theorem was proved by Alfred Tarski before World War II,
-but it wasn't published until 1948, after the war.
-
-
-Linear integer arithmetic
--------------------------
-
-What happens if we replace the real numbers by the integers? It turns out that
-truth in the structure :math:`(\mathbb Z, 0, 1, +)` is also decidable.
-This was established in 1926 by Mojżesz Presburger, a student of Tarski's,
-who later died in the Holocaust. (The story has it that Tarski did not think
-the result was enough for a dissertation, and made him do more work.)
-The resulting theorem is known as *Presburger arithmetic* or *linear integer arithmetic*.
-In contrast to the reals, the order on the integers is *discrete*, since
-there is nothing between a value :math:`x` and :math:`x + 1`.
-The decision procedure is more complicated than that for linear arithmetic,
-and we will not discuss it here.
-SMT solvers, however, use efficient implementations of the *existential fragment*
-of the theory, which is to say, the satisfiability problem for quantifier-free formulas.
-
-In contrast to the case with the real numbers, however, the result is false if we
-add multiplication.
-In other words, truth in the model :math:`(\mathbb Z, 0, 1, +, \times)` is undecidable.
-This follows from the methods that Gödel used to prove the incompleteness theorems,
-and it is also a consequence of *Tarski's theorem* on the undefinability of truth.
 
 .. _section_equality:
 
@@ -210,7 +108,7 @@ Equality
 --------
 
 Fix a language, :math:`L`. We will consider equations :math:`s = t` and *disequations*
-:math:`s \ne t` between closed terms.
+:math:`u \ne v` between closed terms.
 The fact that we are considering closed terms mean that there are no variables to substitute
 for; computer scientists sometimes call these *ground* terms.
 (As with unification, in some contexts we may want to treat some variables as constant.
@@ -218,11 +116,20 @@ What is important here is not whether we call them variables or constants, but, 
 the fact that we are not considering substitutions.)
 
 The problem we are addressing here is this: given a set of equations and disequations, is
-it satisfiable? Note that the word "satisfiable" is used in a different sense than it was
-used in the previous two sections. In those sections, we are interested in whether a
-set of formulas is satisfied by a variable assignment in a *particular*
-model, namely, the reals and the integers, respectively. Here we are asking whether
-a set of sentences is satisfied by any model.
+it satisfiable? Notice that here we are asking about satisfiability in *any* model. In particular,
+the set
+
+.. math::
+
+  \{ s_1 = t_1, \ldots, s_n = t_n, u_1 \ne v_1, \ldots, u_m \ne v_m \}
+
+is *unsatisfiable* if and only if we have
+
+.. math::
+
+  s_1 = t_1, \ldots, s_n = t_n \proves u_1 = v_1 \lor \cdots \lor u_m = v_m
+
+So we can think of the problem in either way.
 
 For example, consider the following set of sentences:
 
@@ -339,32 +246,7 @@ You should convince yourself that using these rules we can derive
       \end{center}
 
 
-for any terms :math:`r`, :math:`s`, and :math:`t` and variable :math:`x`. If we add relation symbols
-and atomic formulas, we would add the following rule:
-
-  .. raw:: html
-
-      <div class="math notranslate nohighlight">
-      \[
-      \begin{prooftree}
-      \AXC{$s_1 = t_1$}
-      \AXC{$\ldots$}
-      \AXC{$s_n = t_n$}
-      \AXC{$R(s_1, \ldots, s_n)$}
-      \QuaternaryInfC{$R(t_1, \ldots, t_n)$}
-      \end{prooftree}
-      \]</div>
-
-  .. raw:: latex
-
-      \begin{center}
-      \AXC{$s_1 = t_1$}
-      \AXC{$\ldots$}
-      \AXC{$s_n = t_n$}
-      \AXC{$R(s_1, \ldots, s_n)$}
-      \QuaternaryInfC{$R(t_1, \ldots, t_n)$}
-      \DP
-      \end{center}
+for any terms :math:`r`, :math:`s`, and :math:`t` and variable :math:`x`.
 
 Returning to our proof plan, we want to show that if applying these rules successively
 does not result in a contradiction, then there is a model in which the original equations
@@ -386,8 +268,6 @@ The theorem follows from the following lemma.
     is the negation of an equation in :math:`\Gamma'`.
 
 The algorithm implicit in this lemma is called *congruence closure*.
-We will see that it can be implemented efficiently (and *is* implemented efficiently in SMT
-solvers) using *union-find* data structures.
 
 .. admonition:: Proof
 
@@ -485,24 +365,110 @@ We now construct a model :math:`\mdl M` with these elements and an additional el
     f^{\mdl M}([b]) & = \star \\
     f^{\mdl M}(\star) & = \star
 
-You can check that this satisfies the original set of equations and disequations.
+You can check that this satisfies the original set of equations and disequations. We don't really need
+to introduce the new element :math:`\star`; you can check that everything works if we replace it by
+any of the equivalence classes. We simply find it clearer to use :math:`\star` as a catch-all for
+everything that falls outside the scope of the finite set of terms we started with.
 
-Suppose we allow atomic formulas :math:`R(t_1, \ldots, t_n)` and negated atomic formulas in :math:`\Gamma`.
-To test satisfiability, we do not have to change much.
+Our analysis establishes an interesting property of
+first-order logic: it is possible to prove a disjunction :math:`u_1 = v_1 \lor \cdots \lor u_m = v_m`
+from a set of equation if and only if it is possible to prove :math:`u_i = v_i` for some :math:`i`.
+This is a property known as *convexity*. It relies on the fact that we allow only positive
+equations on the right-hand side. For example, :math:`a = b \lor a \ne b` is provable in
+first-order logic, but clearly neither disjunct is provable on its own.
+
+We have described the algorithm as working on closed terms, that is, terms with no variables.
+Of course, there is no harm if we allow variables in the terms and simply treat them as
+constants. The point is that in this formulation of the problem, a hypothesis :math:`f(x) = a`
+is interpreted as a statement about one particular :math:`x` that never changes in the
+statement of a problem. It is an entirely different problem to consider hypotheses
+like :math:`\fa x f(x) = a` for which we are allowed to substitute any term for :math:`x`.
+For example, we might want to add axioms like :math:`\fa {x, y, z} (x + y) + z` and
+:math:`\fa {x, y}. x + y = y + x` as axioms for the integers or real numbers. The problem of
+determining whether a single equation follows from a set of universally
+quantified equations is known as the *word problem*, and, in general it is undecidable.
+
+Implementing congruence closure
+-------------------------------
+
+Congruence closuure can be implemented efficiently (and *is* implemented efficiently in SMT
+solvers) using *union-find* data structures.
+
+
+[This section needs to be written. In the meanwhile, see the `slides <https://www.cs.cmu.edu/~mheule/15311-s24/slides/congruence-closure.pdf>`_ and the file ``CongruenceClosure.lean``].
+
+.. _deciding_universal_sentences:
+
+Deciding universal sentences
+----------------------------
+
+Remember that the following problems are all intertranslatable:
+
+- Given a universal sentence :math:`A`, is :math:`A` valid, that is, true in every model? (Equivalently:
+  if :math:`A` provable?)
+- Given a quantifier-free formula :math:`A`, does :math:`\models_{\mdl{M}, \sigma} A` hold for every
+  model :math:`\mdl M` and every variable assignment :math:`\sigma`?
+- Given a quantifier-free formula :math:`A`, does :math:`\models_{\mdl{M}, \sigma} A` hold for *some*
+  model :math:`\mdl M` and variable assignment :math:`\sigma`?
+- Given an existential sentence :math:`A`, is :math:`A` satisfiable, that is, true in some model?
+
+In particular, a universal formula :math:`\fa {\vec x} A` is valid if and only if :math:`A` holds
+for every model and every variable assignment, which happens if and only if :math:`\lnot A` never holds for any model and variable assignment, which happens if and only if :math:`\ex {\vec x} \lnot A` is
+not satisfiable. Notice that in each case we are asking questions about *pure* first-order logic,
+without any axioms :math:`\Gamma`.
+
+Remember that in first-order logic, the atomic formulas include equations :math:`s = t` and formulas
+:math:`R(t_1, \ldots, t_n)`, where :math:`R` is a relation symbol. The set of *literals* include the
+negations of those as well. It is not hard to extend congruence closure to an algorithm to determine
+the satisfiability of any finite set of literals. To start with, we add the following rule to our
+equational proof system:
+
+  .. raw:: html
+
+      <div class="math notranslate nohighlight">
+      \[
+      \begin{prooftree}
+      \AXC{$s_1 = t_1$}
+      \AXC{$\ldots$}
+      \AXC{$s_n = t_n$}
+      \AXC{$R(s_1, \ldots, s_n)$}
+      \QuaternaryInfC{$R(t_1, \ldots, t_n)$}
+      \end{prooftree}
+      \]</div>
+
+  .. raw:: latex
+
+      \begin{center}
+      \AXC{$s_1 = t_1$}
+      \AXC{$\ldots$}
+      \AXC{$s_n = t_n$}
+      \AXC{$R(s_1, \ldots, s_n)$}
+      \QuaternaryInfC{$R(t_1, \ldots, t_n)$}
+      \DP
+      \end{center}
+
+Suppose :math:`\Gamma` is a set of literals.
+To test the satisfiability of :math:`\Gamma`, we do not have to change much in the previous algorithm.
 Using the congruence rule for relations, whenever we have derived :math:`R(s_1, \ldots, s_n)`
-and :math:`s_i = t_i` for every :math:`i`, we can conclude :math:`R(t_1, \ldots, t_n)`.
+and we have also derived equations :math:`s_i = t_i` for every :math:`i`,
+we can conclude :math:`R(t_1, \ldots, t_n)`.
 The algorithm terminates when we contradict a disequality or another negated atomic formula.
 If the algorithm terminates without a contradiction, we build a model as before,
 where we simply declare that :math:`R^{\mdl M}([t_1], \ldots, [t_n])` holds if and only if
 we have determined that :math:`R(t_1, \ldots, t_n)` in a consequence of the original set.
+Another way to think about the algorithm is that we can replace each atomic formula
+:math:`R(t_1, \ldots, t_n)`
+by an equation :math:`f_R(t_1, \ldots, t_n) = \top` and each negated atomic formula
+:math:`\lnot R(t_1, \ldots, t_n)` by a disequation :math:`f_R(t_1, \ldots, t_n) \ne \top` and
+run the usual congruence closure algorithm on that.
 
 Now suppose we are given an existential sentence :math:`\ex {x_1, \ldots, x_n} A`
 where :math:`A` is quantifier-free, and suppose we want to determine whether it is satisfiable.
-Replace :math:`x_1, \ldots, x_n` in :math:`A` with new constants :math:`c_1, \ldots, c_n`.
-The resulting quantifier-free sentence is satisfiable if and only if the existential one is.
-Put that sentence in DNF, and use the fact :math:`A_1 \lor \cdots \lor A_n` is satisfiable
-if and only if one of the sentences :math:`A_i` is.
-That reduces the task to determining whether a conjunction of literals is satisfiable,
+Write :math:`A` in disjunctive normal form, that is, as a disjunction
+:math:`A_1 \lor \cdots \lor A_n` of conjunctions of literals.
+Then :math:`\ex {x_1, \ldots, x_n} A` is satisfiable if and only if one of the formulas
+:math:`A_1, \ldots, A_n` is satisfied by some model :math:`\mdl M` and variable assignment
+:math:`\sigma`. That reduces the task to determining whether a conjunction of literals is satisfiable,
 and we have just explained how to do that.
 
 Since a sentence is valid if and only if its negation is satisfiable, and since the negation
@@ -510,9 +476,208 @@ of a universal sentence is an existential sentence, we have shown the following.
 
 .. admonition:: Theorem
 
-  The satisfiability of an existential sentence in first-order logic is decidable.
-  Equivalently, the validity of a universal sentence is decidable.
+  The validity of universal sentences in pure first-order logic is decidable.
+  Equivalently, the satisfiability of existential sentences is decidable.
 
 
-.. TODO: In the exercises, show the convexity of equational logic.
+Linear arithmetic
+-----------------
 
+We now turn from questions having to do with satisfiability and validity in arbitrary
+models to questions about satisfiability in a particular model, namely, the real numbers.
+A *linear expression* is one of the form :math:`a_1 x_1 + a_2 x_2 + \cdots + a_n x_n + b`,
+where each :math:`a_i` is a rational number, :math:`b` is a rational number,
+and each :math:`x_i` is a variable.
+We think of the variables :math:`x_i` as ranging over the real numbers.
+A *linear constraint* is one of the form :math:`s = t` or :math:`s < t`, where
+:math:`s` and :math:`t` are linear expressions. (In practice, we usually include constraints
+of the form :math:`s \le t` and sometimes :math:`s \ne t` as well. But the first can be
+written :math:`s < t` and the second can be written :math:`s < t \lor t < s`, so questions about
+those can be rexpressed in terms of :math:`<` and :math:`=`, and focusing on those will simplify
+the presentation below.)
+
+Notice that any linear constraint is equivalent to one of the form :math:`t = 0` or :math:`t > 0`,
+since we can move all the terms to one side. For example, the constraint :math:`3 x + 2 y < 3y + 4z`
+is equivalent to :math:`-3x + y + 4z > 0`.
+An important observation that we will use below is that any linear constraint that involves
+a variable :math:`x` can be written as :math:`x = t`, :math:`x < t`, or :math:`t < x`,
+where :math:`x` does not occur in :math:`t`.
+We do this by simply solving for :math:`x`.
+For example, the previous constraint can be expressed as :math:`x < (1/3)y + (4/3)z`.
+Remember that dividing both sides of an inequality by a negative number reverses the direction.
+
+In this section we say that a set :math:`\Gamma` of linear constraints is *satisfiable* if and only
+if there is an assignment of real
+values to the variables that makes them all true. Our first goal is to prove the following.
+
+.. admonition:: Theorem
+
+    The question as to whether a finite set of linear constraints is satisfiable is
+    decidable.
+
+.. admonition:: Proof
+
+    We use induction on the number of variables. If there are no variables at all,
+    :math:`\Gamma` contains only expressions of the form :math:`b_0 < b_1` or :math:`b_0 = b_1`
+    where :math:`b_0` and :math:`b_1` are constants, and we only need to perform
+    the comparisons to see whether they are true. Remember that if :math:`\Gamma`
+    is the empty set, we take it to be trivially satisfied.
+
+    In the inductive step, :math:`\Gamma` contains a variable.
+    If :math:`\Gamma` contains any false constant equations, it is unsatisfiable,
+    and it it contains any true constant equations, we can remove them without
+    affecting satisfiability.
+    If :math:`\Gamma` contains a nontrivial equation with a variable :math:`x`,
+    we put
+    it in the form :math:`x = t` and then substitute :math:`t` for :math:`x` everywhere.
+    The resulting set of constraints has one fewer variable, and clearly
+    it is equisatisfiable with the original one.
+    Given an assignment to the new set of constraints, we just assign :math:`x`
+    the value of :math:`t`.
+
+    So we can now assume that there are no equations in :math:`\Gamma`.
+    We can divide the inequalities in :math:`\Gamma` intro three kinds:
+
+    - those that don't contain :math:`x` at all
+    - those that can be expressed in the form :math:`s_i < x`
+    - those that can be expressed in the form :math:`x < t_j`
+
+    Let :math:`\Gamma'` be the set that results from removing the inequalities
+    in the last two categories
+    and replacing them with inequalities of the form :math:`s_i < t_j`.
+    We claim :math:`\Gamma'` is equisatisfiable with :math:`\Gamma`.
+    Clearly any assignment that satisfies :math:`\Gamma` also satisfies :math:`\Gamma'`.
+    Conversely, suppose :math:`\sigma` is an assignment that satisfies :math:`\Gamma'`.
+    Then, under that assignment, the value of each :math:`s_i` is less than the value
+    of every :math:`t_j`. We obtain an assignment satisfying :math:`\Gamma`
+    by mapping :math:`x` to any value between the largest :math:`s_i` and the
+    smallest :math:`t_j`. (If one of the last two categories is empty, we
+    remove the constraints in the other category entirely,
+    since they can be satisfied by taking :math:`x` sufficiently large or sufficiently
+    small.)
+
+Implementing Fourier-Motzkin
+----------------------------
+
+The procedure implicit in this proof is known as the *Fourier-Motzkin* procedure.
+The idea can be found in the work of Jean-Baptiste Joseph
+Fourier in the early nineteenth century (the same Fourier who gave us Fourier
+analysis), but it was rediscovered by multiple people in the nineteenth century, including Theo In the worst case, every elimination step divides the number of equations in half and
+then squares it, resulting in doubly exponential behavior.
+The procedure works well in practice, though, since in many applications each variable is
+contained in only a few equations. (There are obvious heuristics, like choosing a variable
+at each stage that minimizes the number of equations at the next stage.)
+There is an implementation of the procedure in the file `FourierMotzkin.lean` in the `Examples`
+folder,
+modulo two components that we ask you to supply.
+SMT solvers use much more efficient methods based on the simplex algorithm from linear programming.
+
+
+A full decision procedure
+-------------------------
+
+We can describe the Fourier-Motzkin procedure more explicitly as a decision procedure
+for satisfiability of existential sentences in a langauge for the real numbers as follows.
+Suppose we are given a problem in linear arithmetic where the variables are labeled
+:math:`x_1, x_2, \ldots, x_n` and the
+constraints are labeled :math:`c_1, c_2, \ldots, c_m`. Then what we are really asking as to whether
+the formula :math:`\ex {x_1, \ldots, x_n} c_1 \land c_2 \land \cdots \land c_m`
+is true of the real numbers when the constraints are interpreted in the expected way.
+To make this more precise, consider the structure :math:`(\mathbb R, 0, 1, +, <)`
+in a language with symbols :math:`0`, :math:`1`, :math:`+`, and :math:`<`.
+All the constraints can be expressed in this language, albeit in a clunky way. For example,
+we can write :math:`3 x` as :math:`x + x + x`, and express a constraint like :math:`x -(1/2)y + (4/3)z < 0`
+as :math:`6x + 8z < 3y`. Alternatively, we can add symbols for scalar multiplication to the language.
+
+We now obtain a decision procedure for arbitrary existential formulas
+:math:`\ex {x_1, \ldots, x_n} A` as follows.
+Given a formula :math:`\ex x A`, put :math:`A` into negation normal form, so that all the negations
+are pushed down to atomic formulas.
+Replace :math:`\lnot (s < t)` by :math:`t < s \lor s = t`, and we can replace
+:math:`s \ne t` by :math:`s < t \lor t < s`.
+(In practice, it is more efficient to include :math:`\le` in the language as well, and use the
+fact that :math:`\lnot (s \le t)` is equivalent to :math:`t < s`.)
+Putting the result into disjunctive normal form, we can assume that all the atomic
+formulas are of the form :math:`s < t` or :math:`s = t`.
+We can move the existential quantifiers through the disjunction as we did in :numref:`deciding_universal_sentences` and then apply the Fourier-Motzkin procedure to
+each disjunction.
+
+In fact, a modification of the algorithm provides a decision procedure for the satisfiability
+of *any* sentence in the language, not just the existential ones.
+
+.. admonition:: Theorem
+
+    The question as to whether a sentence :math:`A` is true in :math:`(\mathbb R, 0, 1, +, <, \le)`
+    is decidable.
+
+We will only sketch the details here.
+The algorithm uses an important method known as "elimination of quantifiers."
+The idea is to successively eliminate quantifiers, one by one, until we are left with a
+quantifier-free sentence. We can determine the truth of that by simply calculating.
+
+We will show that any formula :math:`\ex x A`, where :math:`A` is quantifier-free,
+is equivalent to a quantifier-free formula :math:`A'` that does not include :math:`x`.
+Repeating the process and using the fact that :math:`\fa x A` is equivalent to
+:math:`\lnot \ex x \lnot A`, we can eliminate all the quantifiers. We are then
+left with a quantifier-free sentence, that is, a boolean combination of equations and
+inequalities between closed terms. We can decide the truth of that sentence by evaluating
+the terms.
+
+We have already seen all the ideas. The procedure above allows us to write
+:math:`\ex x A` as :math:`(\ex x A_1) \lor (\ex x A_2) \lor \cdots \lor (\ex x A_n)`
+where each :math:`A_i` is a conjunction of atomic formulas.
+So we only need to show how to eliminate an existential quantifier from a conjunction
+of constraints of the form :math:`s < t` or :math:`s = t`.
+But that is exactly what the pivot step in the Fourier-Motzkin procedure does, and we are done.
+
+It is possible to write down axioms that justify every step of the transformation.
+The resulting set of axioms is known as the theory of *linear arithmetic*.
+The argument shows that the resulting set of axioms characterizes the structure exactly,
+and that the question of provability from those axioms is decidable.
+
+You should also notice that the justification of the procedure only used the fact basic
+facts about arithmetic on the real numbers, as well as the fact we can find a real number
+between any other two. So the procedure works just the same way, and returns the same answer,
+for other structures that satisfy these properties, like the rationals.
+In other words, the structure :math:`(\mathbb Q, 0, 1, +, <, \le)` has exactly the same
+theory as :math:`(\mathbb R, 0, 1, +, <, \le)`.
+
+
+Other theories
+--------------
+
+What happens if we extend linear arithmetic by adding multiplication between
+arbitrary terms? Formally, we are asking about the theory of the real numbers
+:math:`(\mathbb{R}, 0, 1, +, \times, <)` with zero, one, addition,
+multiplication, and the less-than relation. It is equivalent to extending
+linear arithmetic by allowing atomic formulas :math:`p = 0` and :math:`p > 0` where :math:`p` is
+an arbitrary polynomial. The theory, known also as the theory of *Real closed
+fields*, is still decidable. The theorem was proved by Alfred Tarski before World War II,
+but it wasn't published until 1948, after the war.
+
+Returning to the language without multiplication, one can ask what happens if we replace
+the real numbers by the integers.
+In other words, we can ask whether the truth of sentences in the structure
+:math:`(\mathbb Z, 0, 1, +, <)` is decidable.
+In contrast to the reals, the order on the integers is *discrete*, since
+there is nothing between a value :math:`x` and :math:`x + 1`.
+The problem is nonetheless decidable.
+The result was first proved  in 1926 by Mojżesz Presburger, a student of Tarski's,
+who later died in the Holocaust. The story has it that Tarski did not think
+the result was enough for a dissertation, and made him do more work.
+The resulting theory is known as *Presburger arithmetic* or *linear integer arithmetic*.
+
+The decision procedure is more complicated than that for linear arithmetic,
+and we will not discuss it here.
+SMT solvers, however, use efficient implementations of the *existential fragment*
+of the theory, which is to say, the satisfiability problem for quantifier-free formulas.
+
+What happens if we add multiplication?
+In contrast to the case with the real numbers, however, the theory of the integers
+with addition and multiplication is undecidable.
+In other words, there is no algorithm to decide truth in the model
+:math:`(\mathbb Z, 0, 1, +, \times)`.
+This follows from the methods that Gödel used to prove the incompleteness theorems,
+and it is also a consequence of *Tarski's theorem* on the undefinability of truth.
+The phenomena can be stated in very strong terms: no theory or structure in which one
+can interpret a small amount of arithmetic with addition and multiplication is decidable.

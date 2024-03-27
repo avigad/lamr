@@ -425,6 +425,8 @@ You can define a world and display it:</p>
 
 <span class="k">#eval</span> <span class="n">myWorld.show</span>
 
+<span class="bp">#</span><span class="mi">3</span><span class="n">d_world</span> <span class="n">myWorld</span>
+
 <span class="c">/-</span>
 <span class="cm">-----------------------------------------</span>
 <span class="cm">| D- |    |    |    | D+ |    |    |    |</span>
@@ -643,7 +645,7 @@ given a list of pairs of terms to unify,
 it computes the association list and uses <cite>usolve</cite> to turn it into a
 substitution.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="n">partial</span> <span class="kd">def</span> <span class="n">usolve</span> <span class="o">(</span><span class="n">env</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="o">:</span> <span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
-  <span class="k">let</span> <span class="n">env&#39;</span> <span class="o">:=</span> <span class="n">env.mapVal</span> <span class="o">(</span><span class="n">subst</span> <span class="n">env</span><span class="o">)</span>
+  <span class="k">let</span> <span class="n">env&#39;</span> <span class="o">:=</span> <span class="n">env.mapVal</span> <span class="o">(</span><span class="k">fun</span> <span class="n">_</span> <span class="bp">=&gt;</span> <span class="n">subst</span> <span class="n">env</span><span class="o">)</span>
   <span class="k">if</span> <span class="n">env&#39;</span> <span class="bp">==</span> <span class="n">env</span> <span class="k">then</span> <span class="n">env</span> <span class="k">else</span> <span class="n">usolve</span> <span class="n">env&#39;</span>
 
 <span class="n">partial</span> <span class="kd">def</span> <span class="n">fullUnify</span> <span class="o">(</span><span class="n">eqs</span> <span class="o">:</span> <span class="n">List</span> <span class="o">(</span><span class="n">FOTerm</span> <span class="bp">×</span> <span class="n">FOTerm</span><span class="o">))</span> <span class="o">:</span> <span class="n">Option</span> <span class="o">(</span><span class="n">AssocList</span> <span class="n">String</span> <span class="n">FOTerm</span><span class="o">)</span> <span class="o">:=</span>
