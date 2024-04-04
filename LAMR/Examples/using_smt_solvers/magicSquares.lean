@@ -91,7 +91,7 @@ def printMagicSquare (n : Nat) (model : Sexp) : IO Unit := do
 #eval (do
   let cmds := magicSquareToBvSmt 3
   -- Set `verbose := false` to hide SMT-LIB communications
-  let out ← callCvc5 cmds (verbose := true)
+  let out ← callZ3 cmds (verbose := true)
   match out with
   | Sexp.atom "sat" :: m :: _ =>
     IO.println "SAT with assignment:"

@@ -24,7 +24,7 @@ def ockham : World := []
 #eval ockham.eval fo!{∀ x. Small(%x) ↔ (∀ y. ¬ %y = %x → LeftOf(%x, %y))}
 
 /-
-Create as world (with as many objects as you like) in which all the following sentences are true.
+Create a world (with as many objects as you like) in which all the following sentences are true.
 -/
 
 def arnault : World := []

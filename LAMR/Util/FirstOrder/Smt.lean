@@ -1,6 +1,7 @@
 import Std
 import Lean.Parser
 import Lean.PrettyPrinter
+import LAMR.System
 
 section
 open Lean.Parser
@@ -121,9 +122,16 @@ private def argsCvc5 : IO.Process.SpawnArgs := {
   cmd := "LAMR/bin/cvc5"
   args := #["--lang", "smt", "LAMR/bin/temp.smt"] }
 
-private def argsZ3 : IO.Process.SpawnArgs := {
-  cmd := "LAMR/bin/z3"
-  args := #["-smt2", "LAMR/bin/temp.smt"] }
+private def argsZ3 : IO IO.Process.SpawnArgs := do
+  let sys ← getSystem
+  pure {
+    cmd := match sys with
+      | .linux => "LAMR/bin/z3-linux"
+      | .osx => "LAMR/bin/z3-osx"
+      | .osxArm => "LAMR/bin/z3-osx-arm"
+      | .windows => "LAMR/bin/z3-win.exe"
+      | .windowsArm => "LAMR/bin/z3-win.exe"  -- TODO: should be arm binary
+    args := #["-smt2", "LAMR/bin/temp.smt"] }
 
 private def argsBoolector : IO.Process.SpawnArgs := {
   cmd := "LAMR/bin/boolector"
@@ -152,7 +160,9 @@ private def callSolver (args : IO.Process.SpawnArgs) (commands : List Sexp) (ver
 
 def callCvc4 := @callSolver argsCvc4
 def callCvc5 := @callSolver argsCvc5
-def callZ3 := @callSolver argsZ3
+def callZ3 (commands : List Sexp) (verbose : Bool := false) := do
+  let args ← argsZ3
+  callSolver args commands verbose
 def callBoolector := @callSolver argsBoolector
 
 private def hexdigits : Array Char :=
