@@ -960,6 +960,46 @@ and completeness, given the fact that any proof can use only a finite number of 
 Conversely, the stronger versions of the completeness theorem
 follows from the weaker one using the compactness theorem.
 
+Say that a set of propositional formulas is *finitely satisfiable* if every finite subset is
+satisfiable.
+Given that :math:`\Gamma \models A` is equivalent to saying that :math:`\Gamma \cup \{ \lnot A \}`
+is unsatisfiable, the compactness theorem is equivalent to the following:
+
+.. admonition:: Theorem
+
+  For any set of propositional formulas :math:`\Gamma`, :math:`\Gamma` is satisfiable if
+  and only if it is finitely satisfiable.
+
+One direction is easy: if :math:`\Gamma` is satisfied by a truth assignment :math:`\tau`,
+every finite subset is also satisfied by :math:`\tau`. To prove the other direction, we
+will enumerate all the propositional variable :math:`P_0, P_1, \ldots` and recursively
+assign values to them to build a truth assignment that satisfies all of :math:`\Gamma`.
+To do that, we need the following:
+
+.. admonition:: Lemma
+
+  Let :math:`\tau` be any partial truth assignment, and suppose that every finite subset of
+  :math:`\Gamma` is satisfied by a truth assignment that extends :math:`\tau`. Then for
+  every propositional variable :math:`P_i`, either every finite  subset of
+  :math:`\Gamma` is satisfied by a truth assignment that extends :math:`\tau[P_i \mapsto \top]`
+  or every finite  subset of
+  :math:`\Gamma` is satisfied by a truth assignment that extends :math:`\tau[P_i \mapsto \bot]`.
+
+.. admonition:: Proof
+
+  Suppose otherwise. Then there is a finite subset :math:`\Gamma_0` of :math:`\Gamma`
+  that is not satisfied by any truth assignment that extends :math:`\tau[P_i \mapsto \top]`
+  and there is a finite subset :math:`\Gamma_1` of :math:`\Gamma` that is not satisfied by
+  any truth assignment that extends :math:`\tau[P_i \mapsto \bot]`.
+  But then there is no truth assignment extending :math:`\tau` that satisfies
+  :math:`\Gamma_0 \cup \Gamma_1`, because any such truth assignment has to assign :math:`\top`
+  or :math:`\bot` to :math:`P_i`.
+
+The proof of the compactness theorem follows straightforwardly. Given :math:`\Gamma`, we recursively
+assign values to :math:`P_0, P_1, \ldots` while maintaining the property in the lemma. The
+resulting assignment assigns a truth value to every formula and satisfied all the formula in
+:math:`\Gamma`.
+
 As an example of an application of the compactness theorem, imagine a
 finite set of oriented square tiles :math:`S`, all the same size, where "oriented" means that
 each has is a distinguished top edge.

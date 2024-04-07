@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2. Mathematical Background &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=2709fde1"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -33,15 +31,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="index.html" class="icon icon-home">
-            Logic and Mechanized Reasoning
+            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -87,8 +81,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">2. </span>Mathematical Background</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">2. </span>Mathematical Background</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/mathematical_background.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -99,9 +93,9 @@
            <div itemprop="articleBody">
              
   <section id="mathematical-background">
-<span id="chapter-mathematical-background"></span><h1><span class="section-number">2. </span>Mathematical Background<a class="headerlink" href="#mathematical-background" title="Link to this heading"></a></h1>
+<span id="chapter-mathematical-background"></span><h1><span class="section-number">2. </span>Mathematical Background<a class="headerlink" href="#mathematical-background" title="Permalink to this heading"></a></h1>
 <section id="induction-and-recursion-on-the-natural-numbers">
-<span id="section-induction-and-recursion-on-the-natural-numbers"></span><h2><span class="section-number">2.1. </span>Induction and recursion on the natural numbers<a class="headerlink" href="#induction-and-recursion-on-the-natural-numbers" title="Link to this heading"></a></h2>
+<span id="section-induction-and-recursion-on-the-natural-numbers"></span><h2><span class="section-number">2.1. </span>Induction and recursion on the natural numbers<a class="headerlink" href="#induction-and-recursion-on-the-natural-numbers" title="Permalink to this heading"></a></h2>
 <p>In its most basic form, the principle of induction on the natural numbers
 says that if you want to prove that every natural number has some property,
 it suffices to show that zero has the property,
@@ -202,7 +196,7 @@ The exercises below ask you to show that <em>any</em> solution requires
 at least this many moves.</p>
 </section>
 <section id="complete-induction">
-<span id="section-complete-induction"></span><h2><span class="section-number">2.2. </span>Complete induction<a class="headerlink" href="#complete-induction" title="Link to this heading"></a></h2>
+<span id="section-complete-induction"></span><h2><span class="section-number">2.2. </span>Complete induction<a class="headerlink" href="#complete-induction" title="Permalink to this heading"></a></h2>
 <p>As we have described it, the principle of induction is pretty rigid:
 in the inductive step, to show that <span class="math notranslate nohighlight">\(n+1\)</span> has some property,
 we can only use the corresponding property of <span class="math notranslate nohighlight">\(n\)</span>.
@@ -271,7 +265,7 @@ The easiest way to see that the recursion is well founded is
 to notice that the second argument decreases with each recursive call.</p>
 </section>
 <section id="generalized-induction-and-recursion">
-<span id="section-generalized-induction-and-recursion"></span><h2><span class="section-number">2.3. </span>Generalized induction and recursion<a class="headerlink" href="#generalized-induction-and-recursion" title="Link to this heading"></a></h2>
+<span id="section-generalized-induction-and-recursion"></span><h2><span class="section-number">2.3. </span>Generalized induction and recursion<a class="headerlink" href="#generalized-induction-and-recursion" title="Permalink to this heading"></a></h2>
 <p>The natural numbers are characterized inductively by the following clauses:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(0\)</span> is a natural number.</p></li>
@@ -447,7 +441,7 @@ in which case, what we have defined here computes the depth <em>plus one</em>
 for nonempty trees.</p>
 </section>
 <section id="invariants">
-<span id="section-invariants"></span><h2><span class="section-number">2.4. </span>Invariants<a class="headerlink" href="#invariants" title="Link to this heading"></a></h2>
+<span id="section-invariants"></span><h2><span class="section-number">2.4. </span>Invariants<a class="headerlink" href="#invariants" title="Permalink to this heading"></a></h2>
 <p>The <em>mutilated chessboard</em> problems involves an <span class="math notranslate nohighlight">\(8 \times 8\)</span> chessboard with the
 top right and bottom left corners removed.
 Imagine you are given a set of dominoes, each of which can cover exactly two squares.
@@ -496,7 +490,7 @@ Then put one tromino in the middle so that the other three chessboard also
 have one square removed, and apply the inductive hypothesis.</p>
 </section>
 <section id="exercises">
-<span id="section-mathematical-background-exercises"></span><h2><span class="section-number">2.5. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading"></a></h2>
+<span id="section-mathematical-background-exercises"></span><h2><span class="section-number">2.5. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
 <ol class="arabic">
 <li><p>Prove the formula for the sum of a geometric series:</p>
 <blockquote>
@@ -553,7 +547,7 @@ where <span class="math notranslate nohighlight">\(\fn{div}(x, y)\)</span> is th
 First show that for every <span class="math notranslate nohighlight">\(k\)</span>, <span class="math notranslate nohighlight">\(\fn{gcd}(x, y) = \fn{gcd}(x + ky, y)\)</span>,
 and use that fact.)</p></li>
 <li><p>Use the recursive description of <span class="math notranslate nohighlight">\(\fn{gcd}(x,y)\)</span> to show that for
-every nonnegative <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, there are integers <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b`\)</span> such that
+every nonnegative <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, there are integers <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> such that
 <span class="math notranslate nohighlight">\(\fn{gcd}(x, y) = a x + b y\)</span>.</p></li>
 <li><p>Use structural induction to prove</p>
 <blockquote>

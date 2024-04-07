@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>12. Decision Procedures for First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=2709fde1"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -33,15 +31,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="index.html" class="icon icon-home">
-            Logic and Mechanized Reasoning
+            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -89,8 +83,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">12. </span>Decision Procedures for First-Order Logic</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">12. </span>Decision Procedures for First-Order Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/decision_procedures_for_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -101,7 +95,7 @@
            <div itemprop="articleBody">
              
   <section id="decision-procedures-for-first-order-logic">
-<span id="chapter-decision-procedures-for-first-order-logic"></span><h1><span class="section-number">12. </span>Decision Procedures for First-Order Logic<a class="headerlink" href="#decision-procedures-for-first-order-logic" title="Link to this heading"></a></h1>
+<span id="chapter-decision-procedures-for-first-order-logic"></span><h1><span class="section-number">12. </span>Decision Procedures for First-Order Logic<a class="headerlink" href="#decision-procedures-for-first-order-logic" title="Permalink to this heading"></a></h1>
 <p>In the terminology of logic and computer science, a <em>decision procedure</em> is an
 algorithm that accepts a class of yes/no questions and answers them correctly. Fix a set of first-order sentences, <span class="math notranslate nohighlight">\(\Gamma\)</span>, which we can think of as a set of axioms of as a description of a
 possible state of affairs. Here are some questions we can ask:</p>
@@ -193,7 +187,7 @@ In <a class="reference internal" href="using_smt_solvers.html#chapter-using-smt-
 whose main strength is that they are capable of combining decision procedures for the
 quantifier-free parts of various theories and using them together effectively.</p>
 <section id="equality">
-<span id="section-equality"></span><h2><span class="section-number">12.1. </span>Equality<a class="headerlink" href="#equality" title="Link to this heading"></a></h2>
+<span id="section-equality"></span><h2><span class="section-number">12.1. </span>Equality<a class="headerlink" href="#equality" title="Permalink to this heading"></a></h2>
 <p>Fix a language, <span class="math notranslate nohighlight">\(L\)</span>. We will consider equations <span class="math notranslate nohighlight">\(s = t\)</span> and <em>disequations</em>
 <span class="math notranslate nohighlight">\(u \ne v\)</span> between closed terms.
 The fact that we are considering closed terms mean that there are no variables to substitute
@@ -401,13 +395,13 @@ determining whether a single equation follows from a set of universally
 quantified equations is known as the <em>word problem</em>, and, in general it is undecidable.</p>
 </section>
 <section id="implementing-congruence-closure">
-<h2><span class="section-number">12.2. </span>Implementing congruence closure<a class="headerlink" href="#implementing-congruence-closure" title="Link to this heading"></a></h2>
+<h2><span class="section-number">12.2. </span>Implementing congruence closure<a class="headerlink" href="#implementing-congruence-closure" title="Permalink to this heading"></a></h2>
 <p>Congruence closuure can be implemented efficiently (and <em>is</em> implemented efficiently in SMT
 solvers) using <em>union-find</em> data structures.</p>
 <p>[This section needs to be written. In the meanwhile, see the <a class="reference external" href="https://www.cs.cmu.edu/~mheule/15311-s24/slides/congruence-closure.pdf">slides</a> and the file <code class="docutils literal notranslate"><span class="pre">CongruenceClosure.lean</span></code>].</p>
 </section>
 <section id="deciding-universal-sentences">
-<span id="id1"></span><h2><span class="section-number">12.3. </span>Deciding universal sentences<a class="headerlink" href="#deciding-universal-sentences" title="Link to this heading"></a></h2>
+<span id="id1"></span><h2><span class="section-number">12.3. </span>Deciding universal sentences<a class="headerlink" href="#deciding-universal-sentences" title="Permalink to this heading"></a></h2>
 <p>Remember that the following problems are all intertranslatable:</p>
 <ul class="simple">
 <li><p>Given a universal sentence <span class="math notranslate nohighlight">\(A\)</span>, is <span class="math notranslate nohighlight">\(A\)</span> valid, that is, true in every model? (Equivalently:
@@ -469,7 +463,7 @@ Equivalently, the satisfiability of existential sentences is decidable.</p>
 </div>
 </section>
 <section id="linear-arithmetic">
-<h2><span class="section-number">12.4. </span>Linear arithmetic<a class="headerlink" href="#linear-arithmetic" title="Link to this heading"></a></h2>
+<h2><span class="section-number">12.4. </span>Linear arithmetic<a class="headerlink" href="#linear-arithmetic" title="Permalink to this heading"></a></h2>
 <p>We now turn from questions having to do with satisfiability and validity in arbitrary
 models to questions about satisfiability in a particular model, namely, the real numbers.
 A <em>linear expression</em> is one of the form <span class="math notranslate nohighlight">\(a_1 x_1 + a_2 x_2 + \cdots + a_n x_n + b\)</span>,
@@ -540,7 +534,7 @@ small.)</p>
 </div>
 </section>
 <section id="implementing-fourier-motzkin">
-<h2><span class="section-number">12.5. </span>Implementing Fourier-Motzkin<a class="headerlink" href="#implementing-fourier-motzkin" title="Link to this heading"></a></h2>
+<h2><span class="section-number">12.5. </span>Implementing Fourier-Motzkin<a class="headerlink" href="#implementing-fourier-motzkin" title="Permalink to this heading"></a></h2>
 <p>The procedure implicit in this proof is known as the <em>Fourier-Motzkin</em> procedure.
 The idea can be found in the work of Jean-Baptiste Joseph
 Fourier in the early nineteenth century (the same Fourier who gave us Fourier
@@ -555,7 +549,7 @@ modulo two components that we ask you to supply.
 SMT solvers use much more efficient methods based on the simplex algorithm from linear programming.</p>
 </section>
 <section id="a-full-decision-procedure">
-<h2><span class="section-number">12.6. </span>A full decision procedure<a class="headerlink" href="#a-full-decision-procedure" title="Link to this heading"></a></h2>
+<h2><span class="section-number">12.6. </span>A full decision procedure<a class="headerlink" href="#a-full-decision-procedure" title="Permalink to this heading"></a></h2>
 <p>We can describe the Fourier-Motzkin procedure more explicitly as a decision procedure
 for satisfiability of existential sentences in a langauge for the real numbers as follows.
 Suppose we are given a problem in linear arithmetic where the variables are labeled
@@ -616,7 +610,7 @@ In other words, the structure <span class="math notranslate nohighlight">\((\mat
 theory as <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;, \le)\)</span>.</p>
 </section>
 <section id="other-theories">
-<h2><span class="section-number">12.7. </span>Other theories<a class="headerlink" href="#other-theories" title="Link to this heading"></a></h2>
+<h2><span class="section-number">12.7. </span>Other theories<a class="headerlink" href="#other-theories" title="Permalink to this heading"></a></h2>
 <p>What happens if we extend linear arithmetic by adding multiplication between
 arbitrary terms? Formally, we are asking about the theory of the real numbers
 <span class="math notranslate nohighlight">\((\mathbb{R}, 0, 1, +, \times, &lt;)\)</span> with zero, one, addition,

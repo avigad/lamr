@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>14. Proof Systems for First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=2709fde1"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -33,15 +31,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="index.html" class="icon icon-home">
-            Logic and Mechanized Reasoning
+            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -63,10 +57,13 @@
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">14. Proof Systems for First-Order Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#axiomatic-systems">14.1. Axiomatic systems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#a-sequent-calculus">14.2. A sequent calculus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#resolution">14.3. Resolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#natural-deduction">14.4. Natural deduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resolution">14.1. Resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#completeness-of-resolution">14.2. Completeness of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#skolemization">14.3. Skolemization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-equality">14.4. Adding equality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#axiomatic-proof-systems">14.5. Axiomatic proof systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-sequent-calculus">14.6. A sequent calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#natural-deduction">14.7. Natural deduction</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
@@ -86,8 +83,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">14. </span>Proof Systems for First-Order Logic</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">14. </span>Proof Systems for First-Order Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/proof_systems_for_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -98,18 +95,386 @@
            <div itemprop="articleBody">
              
   <section id="proof-systems-for-first-order-logic">
-<span id="chapter-proof-systems-for-first-order-logic"></span><h1><span class="section-number">14. </span>Proof Systems for First-Order Logic<a class="headerlink" href="#proof-systems-for-first-order-logic" title="Link to this heading"></a></h1>
+<span id="chapter-proof-systems-for-first-order-logic"></span><h1><span class="section-number">14. </span>Proof Systems for First-Order Logic<a class="headerlink" href="#proof-systems-for-first-order-logic" title="Permalink to this heading"></a></h1>
 <p>The fundamental difference between propositional logic and first-order logic
 is that in first-order logic there are variables and terms
 that stand for objects, and we can form atomic propositions that depend on those objects.
-Within the framework, the two key ingredients are equality and the quantifiers.
-Deduction systems for first-order logic have to extend those for propositional logic
+Beyond that, the two key additions to the language of propositional logic are the equality symbol
+and the quantifiers.
+Proof systems for first-order logic have to extend those for propositional logic
 by providing rules for these.</p>
-<p>As was the case for propositional logic, all the deductive systems we describe in this
-section are sound and complete for first-order logic,
-though we do not provide detailed proofs here.</p>
-<section id="axiomatic-systems">
-<h2><span class="section-number">14.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Link to this heading"></a></h2>
+<p>When we studied propositional logic, we explored decision procedures for the validity question
+first, and only later determined that it is possible to extract proofs of propositional validity
+when, for example, DPLL search fails for find a countermodel. When it comes to first-order
+logic, however, the natural order is inverted. The validity problem is, in general, undecidable,
+so the best we can do is search for proofs.</p>
+<p>Remember that when we have a proof system in mind, we write <span class="math notranslate nohighlight">\(\Gamma \vdash A\)</span> to mean
+that there is a proof of <span class="math notranslate nohighlight">\(A\)</span> from the hypotheses in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+A proof system is <em>sound</em> if whenever <span class="math notranslate nohighlight">\(\Gamma \vdash A\)</span>, we have
+<span class="math notranslate nohighlight">\(\Gamma \models A\)</span>. It is <em>complete</em> if whenever <span class="math notranslate nohighlight">\(\Gamma \models A\)</span>, we have
+<span class="math notranslate nohighlight">\(\Gamma \vdash A\)</span>. It is <em>refutationally complete</em> if whenever <span class="math notranslate nohighlight">\(\Gamma \models \bot\)</span>,
+we have <span class="math notranslate nohighlight">\(\Gamma \vdash \bot\)</span>. Remember that the resolution proof system for propositional
+logic is refutationally complete; in general, establish <span class="math notranslate nohighlight">\(\Gamma \models A\)</span> we put the
+formulas in <span class="math notranslate nohighlight">\(\Gamma \cup \{ \lnot A \}\)</span> in conjunctive normal form, view the result as
+a set of clauses, and search for a refutation. The same is true of the resolution calculus
+for first-order logic, though we need an extra step, Skolemization, to put formulas into normal
+form. Instead of a set of clauses, the result is a set of <em>universally quantified clauses</em>,
+as we will explain below. We will show that the resolution calculus is refutationally complete for
+such sets.</p>
+<p>In <a class="reference internal" href="decision_procedures_for_first_order_logic.html#chapter-decision-procedures-for-first-order-logic"><span class="std std-numref">Chapter 12</span></a>, we considered
+proof systems and a decision procedure for equational reasoning.
+In this chapter, we will start with first-order logic <em>without</em> equality, and then
+consider how to bring equational reasoning back in. In fact, we will start with an additional
+restriction. Remember that a first-order formula is <em>universal</em> if it consists of any number
+of universal quantifiers followed by a quantifier-free formula, and it is <em>existential</em> if it
+consists of any number of existential quantifiers followed by a quantifier-free formula.
+In <a class="reference internal" href="decision_procedures_for_first_order_logic.html#chapter-decision-procedures-for-first-order-logic"><span class="std std-numref">Chapter 12</span></a>,
+we saw that the question as to the validity of a universal formula is decidable. In sharp contrast,
+the question
+as to the validity of an existential formula is undecidable. Since a formula
+<span class="math notranslate nohighlight">\(\ex {x_1, x_2, \ldots, x_n} A\)</span> is valid if and only if
+<span class="math notranslate nohighlight">\(\fa {x_1, x_2, \ldots, x_n} \lnot A\)</span> is unsatisfiable, we can design a search procedure
+for establishing the validity of an existential formula by designing a proof system that is
+refutationally complete for universal formulas and systematically searching for a refutation.</p>
+<p>In summary, we will obtain a search procedure for establishing the validity of first-order sentences
+in three steps:</p>
+<ol class="arabic simple">
+<li><p>We will design a proof system that is refutationally complete for universal formulas in first-order
+logic without equality.</p></li>
+<li><p>Will will show how to convert any first-order sentence <span class="math notranslate nohighlight">\(A\)</span> into an equisatisfiable universal
+sentence <span class="math notranslate nohighlight">\(A'\)</span>, so we can show that <span class="math notranslate nohighlight">\(A\)</span> is unsatisfiable by refuting <span class="math notranslate nohighlight">\(A'\)</span>.</p></li>
+<li><p>We will explain what to add to make resolution refutation complete for first-order logic with
+equality. (The reduction in step 2 will still work in this setting.)</p></li>
+</ol>
+<p>We can then establish the validity of a first-order sentence <span class="math notranslate nohighlight">\(A\)</span> by putting its negation
+in the appropriate form and searching for a refutation. Let us start with the first step.</p>
+<section id="resolution">
+<h2><span class="section-number">14.1. </span>Resolution<a class="headerlink" href="#resolution" title="Permalink to this heading"></a></h2>
+<p>Suppose <span class="math notranslate nohighlight">\(\fa {\vec x} A\)</span> is a universally quantified sentence in first-order logic,
+where <span class="math notranslate nohighlight">\(A\)</span> is quantifier free. We can put <span class="math notranslate nohighlight">\(A\)</span> in conjunctive normal form
+and write it as <span class="math notranslate nohighlight">\(A_1 \land \ldots \land A_n\)</span>, where each <span class="math notranslate nohighlight">\(A_i\)</span> is a
+clause. In that case, <span class="math notranslate nohighlight">\(\fa {\vec x} A\)</span> is equivalent to</p>
+<div class="math notranslate nohighlight">
+\[(\fa {\vec x} A_1) \land \ldots \land (\vec {\vec x} A_n).\]</div>
+<p>You should think about why this is true, that is, why any model of the first is a model
+of the second and vice-versa. As result, to show that a set <span class="math notranslate nohighlight">\(\Gamma\)</span> of
+universally quantified sentence is unsatisfiable, it suffices to have a refutationally complete
+procedure for sets of universally quantified clauses.</p>
+<p>To get a sense of how the resolution rule plays out in first-order logic, consider the following
+two universally quantified clauses:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y} P(f(x), y)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {w, z} \lnot P(w, g(z)) \lor Q(w, z)\)</span></p></li>
+</ul>
+<p>We can do the following:</p>
+<ul class="simple">
+<li><p>instantiate <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(y\)</span> to <span class="math notranslate nohighlight">\(g(v)\)</span> in the
+first to get <span class="math notranslate nohighlight">\(P(f(u),g(v))\)</span>,</p></li>
+<li><p>instantiate <span class="math notranslate nohighlight">\(w\)</span> to <span class="math notranslate nohighlight">\(f(u)\)</span> and <span class="math notranslate nohighlight">\(z\)</span> to <span class="math notranslate nohighlight">\(v\)</span> in the
+second to get <span class="math notranslate nohighlight">\(\lnot P(f(u), g(v)) \lor Q(f(u), v)\)</span>,</p></li>
+<li><p>resolve, to get <span class="math notranslate nohighlight">\(Q(f(u), v)\)</span>, and then</p></li>
+<li><p>generalize, to get <span class="math notranslate nohighlight">\(\fa {u, v} Q(f(u), v)\)</span>.</p></li>
+</ul>
+<p>We then say that <span class="math notranslate nohighlight">\(\fa {u, v} Q(f(u), v)\)</span> has been obtained by resolution from
+the two hypotheses. Notice that the substitution <span class="math notranslate nohighlight">\(\sigma\)</span> given by
+<span class="math notranslate nohighlight">\(\{x \mapsto u, y \mapsto g(v), w \mapsto f(u), z \mapsto v\}\)</span> is a emph{most
+general unifier} of <span class="math notranslate nohighlight">\(P(f(x), y)\)</span> and <span class="math notranslate nohighlight">\(\lnot P(w, g(z))\)</span>. (We have
+renamed <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(z\)</span> to <span class="math notranslate nohighlight">\(v\)</span> just for clarity, to
+make the universal variables in the conclusion fresh; but we could just as well have
+left them alone.) We could have carried out the procedure with a more specific unifier,
+but that would have resulted in a less general result. To obtain the strongest possible
+conclusion, it is always best to use a most general unifier, as described in
+<a class="reference internal" href="implementing_first_order_logic.html#section-unification"><span class="std std-numref">Section 11.4</span></a></p>
+<p>In the first-order setting, it is common to refer to call a universally quantified clause
+simply a “clause.” In the literature, the universal quantifiers are often left out, but
+you should keep in mind that in first-order resolution proofs, the clauses are universally
+quantified over their variables.</p>
+<p>In general, the resolution rule works as follows. Suppose we have two clauses</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}C_1 &amp; = \fa {x_1, \ldots, x_i} \ell \lor \ell_1 \lor \ldots \lor \ell_m \\
+C_2 &amp; = \fa {y_1, \ldots, y_j}. \ell' \lor \ell'_1 \lor \ldots \lor \ell'_n\end{split}\]</div>
+<p>where the literals <span class="math notranslate nohighlight">\(\ell\)</span> and <span class="math notranslate nohighlight">\(- \ell'\)</span> have a most general unifier <span class="math notranslate nohighlight">\(\sigma\)</span>.
+Then resolving <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> on <span class="math notranslate nohighlight">\(\ell\)</span> and <span class="math notranslate nohighlight">\(\ell'\)</span> yields</p>
+<div class="math notranslate nohighlight">
+\[\fa {z_1, \ldots, z_k} \sigma(\ell_1 \lor \ldots \ell_m \lor \ell'_1 \lor \ldots \lor \ell'_n)\]</div>
+<p>where <span class="math notranslate nohighlight">\(z_1, \ldots, z_k\)</span> are the variables that remain after the substitution.</p>
+<p>As with propositional logic, a first-order resolution refutation is a proof of the empty clause
+using the resolution rule. For example, suppose we have the following hypotheses:</p>
+<ul class="simple">
+<li><p>Every smart and motivated student likes logic.</p></li>
+<li><p>Every student at Carnegie Mellon is smart.</p></li>
+<li><p>At least one student at Carnegie Mellon is motivated.</p></li>
+</ul>
+<p>Let us show that someone likes logic.
+We introduce predicates <span class="math notranslate nohighlight">\(S(x)\)</span>, <span class="math notranslate nohighlight">\(M(x)\)</span>, <span class="math notranslate nohighlight">\(L(x)\)</span>, and <span class="math notranslate nohighlight">\(C(x)\)</span> for
+“smart,” “motivated,” “likes logic”, and “is at Carnegie Mellon.”
+Negating the conclusion and expressing
+the statements as universally quantified clauses, we get:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\fa x \lnot S(x) \lor \lnot M(x) \lor L(x)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa x \lnot C(x) \lor S(x)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(C(a)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(M(a)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa x \lnot L(x)\)</span>.</p></li>
+</ol>
+<p>Notice that we have replaced the existential quantifier in the third hypothesis by
+the constant <span class="math notranslate nohighlight">\(a\)</span>; that last step is a special
+case of Skolemization, which is discussed below.
+We then split the resulting conjunction into two singleton clauses.
+We now refute the hypotheses as follows:</p>
+<ol class="arabic simple" start="6">
+<li><p><span class="math notranslate nohighlight">\(\fa x \lnot C(x) \lor \lnot M(x) \lor L(x)\)</span>, from 1 and 2.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot M(a) \lor L(a)\)</span>, from 6 and 3.</p></li>
+<li><p><span class="math notranslate nohighlight">\(L(a)\)</span>, from 7 and 4.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bot\)</span> from 8 and 5.</p></li>
+</ol>
+<p>One thing to keep in mind is that in general, different choices of literals to resolve on
+can produce different results. This doesn’t happen in propositional logic; for example, we can resolve
+<span class="math notranslate nohighlight">\(P \lor Q \lor C\)</span> and <span class="math notranslate nohighlight">\(\lnot P \lor \lnot Q \lor D\)</span> on either <span class="math notranslate nohighlight">\(P\)</span>
+or <span class="math notranslate nohighlight">\(Q\)</span>, but both result in an tautology. In contrast, consider the two clauses</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}C_1 &amp; = \fa {x, y} P(f(x), y) \lor Q(x, f(y)) \\
+C_2 &amp; = \fa {w, z} \lnot P(w, g(z)) \lor \neg Q(g(w), z).\end{split}\]</div>
+<p>Resolving on the first literal gives <span class="math notranslate nohighlight">\(\fa {u,v} Q(u, f(g(v))) \lor \lnot Q(g(f(u)), v)\)</span>
+and resolving on the second gives <span class="math notranslate nohighlight">\(\fa {u,v} P(f(g(u)), v) \lor \lnot P(u, g(f(v)))\)</span>.</p>
+<p>Another example (stolen from John Harrison’s book) is the barber paradox.
+Suppose we are told that in a given town there is a male barber who shaves all and only
+those men who don’t shave themselves.
+We obtain a contradiction by asking who shaves the barber.
+Formally, this amounts to a refutation of the sentence
+<span class="math notranslate nohighlight">\(\ex x \fa y S(x, y) \liff \lnot S(y, y)\)</span>.
+To show that this has no model, we can once again replace <span class="math notranslate nohighlight">\(x\)</span> by a constant,
+<span class="math notranslate nohighlight">\(a\)</span>, and refute <span class="math notranslate nohighlight">\(\fa y S(a, y) \liff \lnot S(y, y)\)</span>.
+Expressing the sentence as a conjunction of clauses, we get:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\fa y \lnot S(a, y) \lor \lnot S(y,y)\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa z S(z, z) \lor S(a, z)\)</span>.</p></li>
+</ul>
+<p>Instantiating <span class="math notranslate nohighlight">\(y\)</span> and <span class="math notranslate nohighlight">\(z\)</span> to <span class="math notranslate nohighlight">\(a\)</span> in both cases and resolving yields the empty clause.</p>
+<p>This example illustrates that when looking for resolvents, it’s not always sufficient to cancel
+a single literal from each clause; sometimes a resolution step unifies two or more literals in
+one clause with the negation of a literal in the other.
+In the example of the barber paradox, if you remove only one disjunct from each clause you are
+left with a tautology.  Thus a proper statement of the
+resolution rule has us consider clauses <span class="math notranslate nohighlight">\(C_1 = D_1 \lor E_1\)</span> and <span class="math notranslate nohighlight">\(C_2 = D_2 \lor E_2\)</span>
+where there is a most general unifier for the literals in <span class="math notranslate nohighlight">\(D_1\)</span> and the negations of the
+literals in <span class="math notranslate nohighlight">\(D_2\)</span>. The result of the resolution step applies that unifier to <span class="math notranslate nohighlight">\(E_1 \lor E_2\)</span>.</p>
+</section>
+<section id="completeness-of-resolution">
+<h2><span class="section-number">14.2. </span>Completeness of resolution<a class="headerlink" href="#completeness-of-resolution" title="Permalink to this heading"></a></h2>
+<p>We need to show that the resolution calculus is refutationally complete, which is to say,
+if a set <span class="math notranslate nohighlight">\(\Gamma\)</span> of universally quantified clauses is unsatisfiable, then there is a
+a proof of the empty clause using hypothesis in <span class="math notranslate nohighlight">\(\Gamma\)</span>. This provides a complete search
+procedure for establishing the unsatisfiability
+of <span class="math notranslate nohighlight">\(\Gamma\)</span>: we systematically choose pairs of clauses and apply the resolution rule to
+derive new ones until we find a proof of the empty clause.</p>
+<p>It’s important to keep in mind that when <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable, the search can go on
+forever without terminating. For example, you should convince yourself that if we start with
+the clause <span class="math notranslate nohighlight">\(\fa x P(x) \lor \lnot P(f(x))\)</span>, we can obtain infinitely many clauses</p>
+<div class="math notranslate nohighlight">
+\[\fa x P(f(x)) \lor \lnot P(f(f(y))), \quad \fa z P(f(f(z))) \lor \lnot P(f(f(f(z)))), \quad \ldots\]</div>
+<p>without ever reaching a contradiction. In this case, it’s not hard to see that the original
+sentence is satisfiable, but in general we can’t avoid some sort of search. The question as
+to whether a particular Turing machine halts can be encoded as a question about the unsatisfiability
+of a universal formula, so an algorithm that could determine whether a resolution refutation exists
+would amount to a solution to the halting problem. At best, we can take comfort in the fact
+that the procedure is complete: if the hypotheses are unsatisfiable, we will eventually find
+a refutation.</p>
+<p>The proof of completeness we are about to give is sketchy, but more detail can be found in
+John Harrison’s book, <em>Practical Logic and Automated Reasoning</em>, on which much of our presentation
+is based. Given a universally quantified formula
+<span class="math notranslate nohighlight">\(\fa {x_1, \ldots, x_n} A(x_1, \ldots, x_n)\)</span>, a <em>substitution instance</em>, or <em>instance</em>
+for short, is any formula of the form <span class="math notranslate nohighlight">\(A(t_1, \ldots, t_n)\)</span> where <span class="math notranslate nohighlight">\(t_1, \ldots, t_n\)</span>
+are terms. Remember that a <em>sentence</em> is a formula without free variables; in the context of
+resolution, a clause without free variables (that is, a universally quantified clause without
+any universal quantifiers in front) is said to be <em>ground</em>.</p>
+<p>We will assume that the underlying language has at least one constant symbol. (If it doesn’t,
+just add one.) Our first step is to relate the first-order resolution calculus
+to the propositional resolution calculus as follows.</p>
+<div class="admonition-lemma admonition">
+<p class="admonition-title">Lemma</p>
+<p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a set of universally quantified clauses. Suppose there is a propositional
+resolution proof of a ground clause <span class="math notranslate nohighlight">\(C\)</span> from ground instances of the clauses in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+Then there is a first-order resolution proof of a universally quantified clauses <span class="math notranslate nohighlight">\(C'\)</span>
+from <span class="math notranslate nohighlight">\(\Gamma\)</span> such that <span class="math notranslate nohighlight">\(C\)</span> is an instance of <span class="math notranslate nohighlight">\(C'\)</span>.</p>
+</div>
+<p>In other words, a propositional resolution proof from instances of <span class="math notranslate nohighlight">\(\Gamma\)</span> can be “lifted”
+to a first-order resolution proof from <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+We prove the lemma by induction on the length of the propositional resolution proof. The base case is when <span class="math notranslate nohighlight">\(C\)</span> is
+an instance of a formula in <span class="math notranslate nohighlight">\(\Gamma\)</span>, in which case the conclusion is immediate. In the
+induction step, we need to show that if <span class="math notranslate nohighlight">\(C\)</span> is a ground instance of universally quantified
+clause <span class="math notranslate nohighlight">\(C'\)</span>, <span class="math notranslate nohighlight">\(D\)</span> is a ground instance of a universally quantified clause <span class="math notranslate nohighlight">\(D'\)</span>,
+and <span class="math notranslate nohighlight">\(E\)</span> is obtained from <span class="math notranslate nohighlight">\(C\)</span> and <span class="math notranslate nohighlight">\(D\)</span> by resolution, then there is a universally
+quantified clause <span class="math notranslate nohighlight">\(E'\)</span> such that <span class="math notranslate nohighlight">\(E\)</span> is an instance of <span class="math notranslate nohighlight">\(E'\)</span> and <span class="math notranslate nohighlight">\(E'\)</span> is
+obtained from <span class="math notranslate nohighlight">\(C'\)</span> and <span class="math notranslate nohighlight">\(D'\)</span> by the first-order resolution rule. In short, it requires
+showing that propositional resolution steps on instances can be lifted to first-order resolution
+steps. The details are a bit technical, but they can be found in Harrison’s book. The argument
+amounts to little more than writing everything down  carefully and reasoning about properties of
+most general unifiers.</p>
+<p>The lemma tells us in particular that if there is a propositional resolution refutation of a set
+of ground instances of universally quantified clauses in <span class="math notranslate nohighlight">\(\Gamma\)</span>, then there is a
+first-order resolution refutation of <span class="math notranslate nohighlight">\(\Gamma\)</span>. Turing it around, if there is no first-order
+resolution refutation of <span class="math notranslate nohighlight">\(\Gamma\)</span>, then there is no propositional resolution refutation
+of its instances.</p>
+<p>Suppose there is no first-order resolution refutation of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+In general, there may be infinitely many ground instances of formulas in <span class="math notranslate nohighlight">\(\Gamma\)</span>,
+even if <span class="math notranslate nohighlight">\(\Gamma\)</span> is finite. But now suppose we view each atomic formula
+<span class="math notranslate nohighlight">\(R(t_1, \ldots, t_k)\)</span> as a propositional variable. From the refutation completeness of
+propositional resolution, we know that for every finite set of ground instances of formulas in
+<span class="math notranslate nohighlight">\(\Gamma\)</span> there is a satisfying truth assignment. Thus the refutation completeness
+of first-order resolution follows from the following theorem.</p>
+<div class="admonition-theorem admonition">
+<p class="admonition-title">Theorem</p>
+<p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a set of of universal first-order formulas in a language that
+contains at least one constant. Suppose every finite set of closed instances of formulas
+in <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable as a set of propositional formulas. Then there is a model of
+<span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+</div>
+<p>This theorem is version of <em>Herbrand’s theorem</em>. As we have stated it, the theorem says nothing
+about provability; it is expressed entirely in terms of the semantics of propositional and
+first-order logic.</p>
+<div class="admonition-proof admonition">
+<p class="admonition-title">Proof</p>
+<p>Suppose every finite set of closed instances of the formulas in <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable as a
+set of propositional formulas. Then, by the compactness theorem for propositional logic,
+there is a truth assignment <span class="math notranslate nohighlight">\(\tau\)</span> that satisfies all the closed instances of the formulas
+in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+<p>We use this fact to define a first-order model <span class="math notranslate nohighlight">\(\mdl M\)</span> as follows. The universe of
+<span class="math notranslate nohighlight">\(\mdl M\)</span> is the set of all closed terms in the language of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+For each function symbol <span class="math notranslate nohighlight">\(f\)</span> of arity <span class="math notranslate nohighlight">\(n\)</span>, we define
+<span class="math notranslate nohighlight">\(f^{\mdl M}(t_1, \ldots, t_n)\)</span> to be the term <span class="math notranslate nohighlight">\(f(t_1, \ldots, t_n)\)</span>.
+In other words, we interpret each function <span class="math notranslate nohighlight">\(f^{\mdl M}\)</span> as the syntactic operation that
+takes a tuple of terms <span class="math notranslate nohighlight">\(t_1, \ldots, t_n\)</span> and returns the term <span class="math notranslate nohighlight">\(f(t_1, \ldots, t_n)\)</span>.
+Such a model is sometimes called a <em>term model</em> or an <em>Herbrand model</em>. A straightforward induction
+on terms shows that, in such a model, any closed term <span class="math notranslate nohighlight">\(t\)</span> is interpreted as itself.
+More generally, if <span class="math notranslate nohighlight">\(\sigma\)</span> is any assignment of terms to variables and <span class="math notranslate nohighlight">\(t\)</span> has
+the variables <span class="math notranslate nohighlight">\(x_1, \ldots, x_n\)</span> free, then <span class="math notranslate nohighlight">\(\tval{t}_{\mdl M, \sigma}\)</span> is exactly
+<span class="math notranslate nohighlight">\(t[\sigma(x_1)/x_1, \ldots, \sigma(x_n)/x_n]\)</span>.</p>
+<p>For each relation symbol <span class="math notranslate nohighlight">\(R\)</span> of arity <span class="math notranslate nohighlight">\(n\)</span>, we define <span class="math notranslate nohighlight">\(R^{\mdl M}\)</span> to hold if and
+only if <span class="math notranslate nohighlight">\(\tau(R(t_1, \ldots, t_n))\)</span> is true. In other words, we look to the truth assignment
+<span class="math notranslate nohighlight">\(\tau\)</span> to determine the truth of the atomic formulas in the language of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+Once again, an easy induction shows that for every quantifier-free sentence <span class="math notranslate nohighlight">\(A\)</span>,
+<span class="math notranslate nohighlight">\(\tval{A}_{\mdl M, \sigma} = \tval{A}_\tau\)</span>. In other words, first-order evaluation in the
+model <span class="math notranslate nohighlight">\(\mdl M\)</span> is the same as propositional evaluation under the truth assignment
+<span class="math notranslate nohighlight">\(\tau\)</span>.</p>
+<p>We now show that <span class="math notranslate nohighlight">\(\mdl M\)</span> is a model of <span class="math notranslate nohighlight">\(\Gamma\)</span>. Suppose
+<span class="math notranslate nohighlight">\(\fa {x_1, \ldots, x_n} A\)</span> is any formula in <span class="math notranslate nohighlight">\(\Gamma\)</span>. Since the universe of
+<span class="math notranslate nohighlight">\(\mdl M\)</span> consists of closed terms, the semantics of first-order logic tells us that
+<span class="math notranslate nohighlight">\(\fa {x_1, \ldots, x_n} A\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span> if and only if
+for every tuple <span class="math notranslate nohighlight">\(t_1, \ldots, t_n\)</span>, <span class="math notranslate nohighlight">\(A\)</span> is true
+under the assignment <span class="math notranslate nohighlight">\(\{ x_1 \mapsto t_1, \ldots, x_n \mapsto t_n \}\)</span>.
+By the definition of <span class="math notranslate nohighlight">\(\mdl M\)</span>, this is the case if and only if
+<span class="math notranslate nohighlight">\(\tau(A(t_1, \ldots, t_n))\)</span> is true. But this holds, in turn, because <span class="math notranslate nohighlight">\(\tau\)</span> satisfies
+every closed instance of a formula in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+</div>
+</section>
+<section id="skolemization">
+<span id="section-skolemization"></span><h2><span class="section-number">14.3. </span>Skolemization<a class="headerlink" href="#skolemization" title="Permalink to this heading"></a></h2>
+<p>We now explain how to apply first-order resolution to arbitrary first-order formulas.
+We follow a strategy analogous to that used for propositional logic.
+Remember that the propositional resolution calculus serves to refute sets of propositional
+clauses, which can be viewed as CNF formulas. To use it as a refutation calculus, we introduced
+the Tseitin transformation, which converts any propositional formula into an equisatisfiable
+CNF formula. Our goal here is to show how to convert any first-order formula into an an
+equisatisfiable universal formula. At that point, we can apply the transformation described
+above to turn it until a set of universally quantified clauses.</p>
+<p>Here is the idea. Suppose we are trying to refute a formula of the form
+<span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span>.
+From a semantic point of view, we are trying to show that this formula is unsatisfiable.
+Let <span class="math notranslate nohighlight">\(f(x)\)</span> be a new function symbol.
+We claim that <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span> is equisatisfiable with
+<span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span>.
+As a result, we can refute <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span> by refuting <span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span>.
+One direction of the claim is easy: any model of <span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span> is a model of
+<span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span>. To see this, notice that
+if <span class="math notranslate nohighlight">\(\mdl M\)</span> satisfies <span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span>,
+then it also satisfies <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span>: given any value <span class="math notranslate nohighlight">\(a\)</span> in the universe
+of <span class="math notranslate nohighlight">\(\mdl M\)</span>, if we set <span class="math notranslate nohighlight">\(b\)</span> equal to <span class="math notranslate nohighlight">\(f^{\mdl M}(a)\)</span>, then <span class="math notranslate nohighlight">\(A\)</span> holds
+of <span class="math notranslate nohighlight">\(a\)</span> and <cite>b</cite> in <span class="math notranslate nohighlight">\(\mdl M\)</span>.
+For the other direction, suppose <span class="math notranslate nohighlight">\(\mdl M\)</span> is a model of <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span>.
+That means that for every value <span class="math notranslate nohighlight">\(a\)</span> in the universe
+of <span class="math notranslate nohighlight">\(\mdl M\)</span>, there is a value <span class="math notranslate nohighlight">\(b\)</span> such that <span class="math notranslate nohighlight">\(A\)</span> holds
+of <span class="math notranslate nohighlight">\(a\)</span> and <cite>b</cite>. We can then interpret <span class="math notranslate nohighlight">\(f\)</span> as any function
+that, for any <span class="math notranslate nohighlight">\(a\)</span>, returns such a value <span class="math notranslate nohighlight">\(b\)</span>.</p>
+<p>More generally, given any formula <span class="math notranslate nohighlight">\(A(x, y)\)</span> and a new function symbol <span class="math notranslate nohighlight">\(f(x)\)</span>,
+we can expand any model for the language of <span class="math notranslate nohighlight">\(A\)</span> with an interpretation of <span class="math notranslate nohighlight">\(f(x)\)</span>
+satisfying <span class="math notranslate nohighlight">\(\fa x (\ex y A(x, y)) \liff A(x, f(x))\)</span>.
+We simply interpret <span class="math notranslate nohighlight">\(f(x)\)</span> as a function that, whenever there is a <span class="math notranslate nohighlight">\(y\)</span> in the model
+satisfying <span class="math notranslate nohighlight">\(A(x, y)\)</span>, returns such a <span class="math notranslate nohighlight">\(y\)</span>.
+Such a function is known as a <em>Skolem function</em> for <span class="math notranslate nohighlight">\(\ex y A(x, y)\)</span>,
+and the process of replacing <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span> by <span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span>
+is known as <em>Skolemization</em>. The equivalence <span class="math notranslate nohighlight">\(\fa x (\ex y A(x, y)) \liff A(x, f(x))\)</span>
+is known as the corresponding <em>Skolem axiom</em>.
+Because we can always choose <span class="math notranslate nohighlight">\(f\)</span> to satisfy the Skolem axiom, we can replace
+<span class="math notranslate nohighlight">\(\ex y A(x, y)\)</span> with <span class="math notranslate nohighlight">\(A(x, f(x))\)</span> in a set of hypotheses and preserve satisfiability.
+In general, a formula <span class="math notranslate nohighlight">\(\ex y A(y)\)</span> may have more than one free variable, in which case they should
+all be arguments to <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<p>Iteratively eliminating all the existential quantifiers in this way results in a formula in <em>Skolem
+normal form</em>. Given a formula <span class="math notranslate nohighlight">\(A\)</span>, we first put <span class="math notranslate nohighlight">\(A\)</span> in negation normal form, and then
+replace each existential quantifier by a Skolem function applied to the universally quantified
+variables that it depends on. For example, suppose we are given the sentence</p>
+<div class="math notranslate nohighlight">
+\[\fa {u, x} \ex y (\fa v Q(x, y, u, v)) \to \fa z \ex w R(x, y, z, w)\]</div>
+<p>where <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(R\)</span> are relation symbols.
+First, we rewrite the sentence as</p>
+<div class="math notranslate nohighlight">
+\[\fa {u, x} \ex y (\ex v \lnot Q(x, y, u, v)) \lor \fa z \ex w R(x, y, z, w).\]</div>
+<p>First, we replace <span class="math notranslate nohighlight">\(y\)</span> by a Skolem function that depends on <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\fa {u, x} (\ex v \lnot Q(x, f(u, x), u, v)) \lor \fa z \ex w R(x, f(u, x), z, w).\]</div>
+<p>Then we replace <span class="math notranslate nohighlight">\(v\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\fa {u, x} \lnot Q(x, f(u, x), u, g(u, x)) \lor \fa z \ex w R(x, f(u, x), z, w).\]</div>
+<p>Finally, we replace <span class="math notranslate nohighlight">\(w\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\fa {u, x} \lnot Q(x, f(u, x), u, g(u, x)) \lor \fa z R(x, f(u, x), z, h(u, x, z)).\]</div>
+<p>We are now left with only universal quantifiers.</p>
+<p>In this example, if we bring <span class="math notranslate nohighlight">\(z\)</span> to the front, we get a universally quantified clause:</p>
+<div class="math notranslate nohighlight">
+\[\fa {u, x, z} \lnot Q(x, f(u, x), u, g(u, x)) \lor R(x, f(u, x), z, h(u, x, z)).\]</div>
+<p>In general, we may have a more complicated propositional structure, but we can always bring
+universal quantifiers to the front and put the rest of the formula in conjunctive normal form.
+Using the identity <span class="math notranslate nohighlight">\((\fa x A \land B) \liff (\fa x A) \land (\fa x B)\)</span>,
+we can then reduce the original sentence to a conjunction of universally quantified clauses.</p>
+<p>As an example of how this plays out in first-order resolution, consider the following hypotheses:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Every students owns either an iphone or a laptop.</p></li>
+<li><p>Every student who owns a laptop also owns a pair of bluetooth headphones.</p></li>
+<li><p>Every iphone is buggy.</p></li>
+<li><p>Every pair of bluetooth headphones is buggy.</p></li>
+<li><p>Every student who owns something buggy is sad.</p></li>
+</ol>
+<p>From these we should be able to conclude that every student is sad.
+We can formalize the hypotheses as follows:</p>
+<ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\fa x \fn{Student}(x) \to \ex y \fn{Owns}(x, y) \land (\fn{Iphone}(y) \lor \fn{Laptop}(y))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x,y) \land \fn{Laptop}(y) \to \ex z \fn{Owns}(x, z) \land \fn{Headphones}(z)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa y \fn{Iphone}(y) \to \fn{Buggy}(y)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa y \fn{Headphones}(y) \to \fn{Buggy}(y)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x, y) \land \fn{Buggy}(y) \to \fn{Sad}(x)\)</span></p></li>
+</ol>
+</div></blockquote>
+<p>The desired conclusion is <span class="math notranslate nohighlight">\(\fa x \fn{Student}(x) \to \fn{Sad}(x)\)</span>.
+You can check that if we negate the conclusion, Skolemize, put the results in CNF,
+and move universal quantifiers through the hypotheses, we get the following:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><span class="math notranslate nohighlight">\(\fa x \lnot \fn{Student}(x) \lor \fn{Owns}(x, f(x))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa x \lnot \fn{Student}(x) \lor \fn{Iphone}(f(x)) \lor \fn{Laptop}(f(x))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Laptop}(y) \lor \fn{Headphones}(g(x,y))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Laptop}(y) \lor \fn{Owns}(x,g(x,y))\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa y \lnot \fn{Iphone}(y) \lor \fn{Buggy}(y)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa y \lnot \fn{Headphones}(y) \lor \fn{Buggy}(y)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Buggy}(y) \lor \fn{Sad}(x)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\fn{Student}(a)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\lnot \fn{Sad}(a)\)</span></p></li>
+</ol>
+</div></blockquote>
+<p>We leave it to you to construct a resolution proof of the empty clause from these.</p>
+</section>
+<section id="adding-equality">
+<span id="section-adding-equality"></span><h2><span class="section-number">14.4. </span>Adding equality<a class="headerlink" href="#adding-equality" title="Permalink to this heading"></a></h2>
 <p>We have already discussed equational reasoning in <a class="reference internal" href="decision_procedures_for_first_order_logic.html#section-equality"><span class="std std-numref">Section 12.1</span></a>.
 We have seen that the natural rules for equality are given by reflexivity, symmetry,
 transitivity, and congruence with respect to functions and relations.
@@ -131,7 +496,24 @@ Remember that we are adopting the convention what when we use notation like <spa
 we have in mind a certain variable <span class="math notranslate nohighlight">\(z\)</span> that <span class="math notranslate nohighlight">\(t\)</span> might depend on and we take
 <span class="math notranslate nohighlight">\(t(x)\)</span> to stand for <span class="math notranslate nohighlight">\(t[x/z]\)</span> and <span class="math notranslate nohighlight">\(t(y)\)</span> to stand for <span class="math notranslate nohighlight">\(t[y/z]\)</span>.
 Similar conventions hold for formula <span class="math notranslate nohighlight">\(A(x)\)</span>.</p>
-<p>The axioms for the quantifiers follow naturally from their meanings:</p>
+<p>On way to restore equality to first-order logic is to treat it like any other binary relation
+symbol, subject to the axioms above. In other words, we take first-order logic with equality
+to be first-order logic with a binary relation symbol, <span class="math notranslate nohighlight">\(=\)</span>, and the axioms above.
+The refutation completeness of first-order resolution tells us that if we fail to refute
+a set of first-order formulas together with the equality axioms, there is a model in which
+the equality symbol is interpreted as an equivalence relation that respects all the function
+symbols. A method similar to that used in our analysis of congruence closure, namely, replacing
+terms by equivalence classes, can be used to tern this into a model in which the equality symbol
+is replaced by actual equality.</p>
+<p>For efficiency, however, it is better to add rules to the resolution calculus that are specific
+to equality. Modern first-order provers use techniques based on <em>paramodulation</em> and <em>superposition</em>.
+You can learn more about these in a number of online sources.</p>
+</section>
+<section id="axiomatic-proof-systems">
+<h2><span class="section-number">14.5. </span>Axiomatic proof systems<a class="headerlink" href="#axiomatic-proof-systems" title="Permalink to this heading"></a></h2>
+<p>One can also obtain axiomatic proof systems for first-order logic that extend axiomatic
+systems for propositional logic with quantifiers and equality. We have already seen suitable
+axioms for equality. The axioms for the quantifiers follow naturally from their meanings:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\((\fa x A) \limplies A[t/x]\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(A[t/x] \limplies \ex x A\)</span>.</p></li>
@@ -161,7 +543,7 @@ that there exists an <span class="math notranslate nohighlight">\(x\)</span> sat
 </ul>
 </section>
 <section id="a-sequent-calculus">
-<h2><span class="section-number">14.2. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Link to this heading"></a></h2>
+<h2><span class="section-number">14.6. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this heading"></a></h2>
 <p>We can also extend the cut-free sequent calculus described in <a class="reference internal" href="proof_systems_for_propositional_logic.html#section-propositional-sequent-calculus"><span class="std std-numref">Section 8.5</span></a> to first-order logic.
 Remember that the system derives sets of formulas <span class="math notranslate nohighlight">\(\Gamma\)</span> in negation-normal form.
 We interpret a proof as telling us that in any model, and with any assignment to the free
@@ -204,201 +586,8 @@ You can think of it as saying that <span class="math notranslate nohighlight">\(
 a form of modus ponens. In class, we will sketch a proof that this system is complete even
 without the cut rule.</p>
 </section>
-<section id="resolution">
-<h2><span class="section-number">14.3. </span>Resolution<a class="headerlink" href="#resolution" title="Link to this heading"></a></h2>
-<p>We now explain how to extend propositional resolution to the first-order setting.
-As with propositional resolution, first-order resolution is a refutational proof system:
-to prove <span class="math notranslate nohighlight">\(A\)</span>, we assume <span class="math notranslate nohighlight">\(\lnot A\)</span> and derive a contradiction.
-Remember that propositional resolution required us to put formulas in conjunctive
-normal form.
-Having quantifiers complicates things.
-One option is to put <span class="math notranslate nohighlight">\(\lnot A\)</span> in prenex form, with all the quantifiers in front,
-and then put the quantifier-free part of the formula in CNF.
-This is a step in the right direction,
-but the presence of existential quantifiers makes automated reasoning more difficult,
-so we introduce a method, <em>Skolemization</em>, to get rid of them.</p>
-<p>Here is the idea. Suppose we are trying to refute a formula of the form
-<span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span>.
-From a semantic point of view, we are trying to show that this formula is unsatisfiable.
-Let <span class="math notranslate nohighlight">\(f(x)\)</span> be a new function symbol.
-We claim that <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span> is equisatisfiable with
-<span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span>.
-As a result, we can refute <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span> by refuting <span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span>.
-One direction of the claim is easy: any model of <span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span> is a model of
-<span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span>. To see this, notice that
-if <span class="math notranslate nohighlight">\(\mdl M\)</span> satisfies <span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span>,
-then it also satisfies <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span>: given any value <span class="math notranslate nohighlight">\(a\)</span> in the universe
-of <span class="math notranslate nohighlight">\(\mdl M\)</span>, if we set <span class="math notranslate nohighlight">\(b\)</span> equal to <span class="math notranslate nohighlight">\(f^{\mdl M}(a)\)</span>, then <span class="math notranslate nohighlight">\(A\)</span> holds
-of <span class="math notranslate nohighlight">\(a\)</span> and <cite>b</cite> in <span class="math notranslate nohighlight">\(\mdl M\)</span>.
-For the other direction, suppose <span class="math notranslate nohighlight">\(\mdl M\)</span> is a model of <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span>.
-That means that for every value <span class="math notranslate nohighlight">\(a\)</span> in the universe
-of <span class="math notranslate nohighlight">\(\mdl M\)</span>, there is a value <span class="math notranslate nohighlight">\(b\)</span> such that <span class="math notranslate nohighlight">\(A\)</span> holds
-of <span class="math notranslate nohighlight">\(a\)</span> and <cite>b</cite>. We can then interpret <span class="math notranslate nohighlight">\(f\)</span> as any function
-that, for any <span class="math notranslate nohighlight">\(a\)</span>, returns such a value <span class="math notranslate nohighlight">\(b\)</span>.</p>
-<p>More generally, given any formula <span class="math notranslate nohighlight">\(A(x, y)\)</span> and a new function symbol <span class="math notranslate nohighlight">\(f(x)\)</span>,
-we can expand any model for the language of <span class="math notranslate nohighlight">\(A\)</span> with an interpretation of <span class="math notranslate nohighlight">\(f(x)\)</span>
-satisfying <span class="math notranslate nohighlight">\(\fa x (\ex y A(x, y)) \liff A(x, f(x))\)</span>.
-We simply interpret <span class="math notranslate nohighlight">\(f(x)\)</span> as a function that, whenever there is a <span class="math notranslate nohighlight">\(y\)</span> in the model
-satisfying <span class="math notranslate nohighlight">\(A(x, y)\)</span>, returns such a <span class="math notranslate nohighlight">\(y\)</span>.
-Such a function is known as a <em>Skolem function</em> for <span class="math notranslate nohighlight">\(\ex y A(x, y)\)</span>,
-and the process of replacing <span class="math notranslate nohighlight">\(\fa x \ex y A(x, y)\)</span> by <span class="math notranslate nohighlight">\(\fa x A(x, f(x))\)</span>
-is known as <em>Skolemization</em>. The equivalence <span class="math notranslate nohighlight">\(\fa x (\ex y A(x, y)) \liff A(x, f(x))\)</span>
-is known as the corresponding <em>Skolem axiom</em>.
-Because we can always choose <span class="math notranslate nohighlight">\(f\)</span> to satisfy the Skolem axiom, we can replace
-<span class="math notranslate nohighlight">\(\ex y A(x, y)\)</span> with <span class="math notranslate nohighlight">\(A(x, f(x))\)</span> in a set of hypotheses and preserve satisfiability.
-In general, a formula <span class="math notranslate nohighlight">\(\ex y A(y)\)</span> may have more than one free variable, in which case they should
-all be arguments to <span class="math notranslate nohighlight">\(f\)</span>.</p>
-<p>Iteratively eliminating all the existential quantifiers in this way results in a formula in <em>Skolem
-normal form</em>. It helps to put the sentence in negation-normal form first, because existential
-quantifiers under negations or on the left side of an implication act like universal quantifiers
-and vice versa. For example, suppose we are given the sentence</p>
-<div class="math notranslate nohighlight">
-\[\fa {u, x} \ex y (\fa v Q(x, y, u, v)) \to \fa z \ex w R(x, y, z, w)\]</div>
-<p>where <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(R\)</span> are relation symbols.
-First, we rewrite the sentence as</p>
-<div class="math notranslate nohighlight">
-\[\fa {u, x} \ex y (\ex v \lnot Q(x, y, u, v)) \lor \fa z \ex w R(x, y, z, w).\]</div>
-<p>First, we replace <span class="math notranslate nohighlight">\(y\)</span> by a Skolem function that depends on <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(x\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\fa {u, x} (\ex v \lnot Q(x, f(u, x), u, v)) \lor \fa z \ex w R(x, f(u, x), z, w).\]</div>
-<p>Then we replace <span class="math notranslate nohighlight">\(v\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\fa {u, x} \lnot Q(x, f(u, x), u, g(u, x)) \lor \fa z \ex w R(x, f(u, x), z, w).\]</div>
-<p>Finally, we replace <span class="math notranslate nohighlight">\(w\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\fa {u, x} \lnot Q(x, f(u, x), u, g(u, x)) \lor \fa z R(x, f(u, x), z, h(u, x, z)).\]</div>
-<p>We are now left with only universal quantifiers.</p>
-<p>In this example, if we bring <span class="math notranslate nohighlight">\(z\)</span> to the front, we get a universally quantified clause:</p>
-<div class="math notranslate nohighlight">
-\[\fa {u, x, z} \lnot Q(x, f(u, x), u, g(u, x)) \lor R(x, f(u, x), z, h(u, x, z)).\]</div>
-<p>More generally, we can always bring the
-universal quantifiers to the front and put the rest of the formula in conjunctive normal form.
-Using the identity <span class="math notranslate nohighlight">\((\fa x A \land B) \liff (\fa x A) \land (\fa x B)\)</span>,
-we can then reduce the original sentence to a conjunction of universally quantified clauses.</p>
-<p>A <em>resolution proof</em> is designed to refute a set of universally quantified clauses.
-The <em>resolution rule</em> from first-order logic is now generalized as follows:
-given two universally quantified clauses, instantiate the universal quantifiers to
-obtain a complementary literal, resolve, and then generalize.
-For example, given</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\fa {x, y} A(f(x),y)\)</span> and</p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa {w, z} \lnot A(w, g(z)) \lor B(w, z)\)</span>,</p></li>
-</ul>
-<p>we can do the following:</p>
-<ul class="simple">
-<li><p>instantiate <span class="math notranslate nohighlight">\(x\)</span> to <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(y\)</span> to <span class="math notranslate nohighlight">\(g(v)\)</span> in the
-first to get <span class="math notranslate nohighlight">\(A(f(u),g(v))\)</span>,</p></li>
-<li><p>instantiate <span class="math notranslate nohighlight">\(w\)</span> to <span class="math notranslate nohighlight">\(f(u)\)</span> and <span class="math notranslate nohighlight">\(z\)</span> to <span class="math notranslate nohighlight">\(v\)</span> in the
-second to get <span class="math notranslate nohighlight">\(\lnot A(f(u), g(v)) \lor B(f(u), v)\)</span>,</p></li>
-<li><p>resolve, to get <span class="math notranslate nohighlight">\(B(f(u), v)\)</span>, and then</p></li>
-<li><p>generalize, to get <span class="math notranslate nohighlight">\(\fa {u, v} B(f(u), v)\)</span>.</p></li>
-</ul>
-<p>We then say that <span class="math notranslate nohighlight">\(\fa {u, v} B(f(u), v)\)</span> has been obtained by resolution from
-the two hypotheses.</p>
-<p>As with propositional logic, a first-order resolution refutation is a proof of the empty clause
-using the resolution rule. For example, suppose we have the following hypotheses:</p>
-<ul class="simple">
-<li><p>Every smart and motivated student likes logic.</p></li>
-<li><p>Every student at Carnegie Mellon is smart.</p></li>
-<li><p>At least one student at Carnegie Mellon is motivated.</p></li>
-</ul>
-<p>Let us show that someone likes logic.
-We introduce predicates <span class="math notranslate nohighlight">\(S(x)\)</span>, <span class="math notranslate nohighlight">\(M(x)\)</span>, <span class="math notranslate nohighlight">\(L(x)\)</span>, and <span class="math notranslate nohighlight">\(C(x)\)</span> for
-“smart,” “motivated,” “likes logic”, and “is at Carnegie Mellon.”
-Negating the conclusion and expressing
-the statements as universally quantified clauses, we get:</p>
-<ol class="arabic simple">
-<li><p><span class="math notranslate nohighlight">\(\fa x \lnot S(x) \lor \lnot M(x) \lor L(x)\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa x \lnot C(x) \lor S(x)\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(C(a)\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(M(a)\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa x \lnot L(x)\)</span>.</p></li>
-</ol>
-<p>Notice that the existential quantifier in the third hypothesis has been Skolemized to produce
-the constant <span class="math notranslate nohighlight">\(a\)</span>,
-and that we split the resulting conjunction into two singleton clauses.
-We now refute the hypotheses as follows:</p>
-<ol class="arabic simple" start="6">
-<li><p><span class="math notranslate nohighlight">\(\fa x \lnot C(x) \lor \lnot M(x) \lor L(x)\)</span>, from 1 and 2.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\lnot M(a) \lor L(a)\)</span>, from 6 and 3.</p></li>
-<li><p><span class="math notranslate nohighlight">\(L(a)\)</span>, from 7 and 4.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\bot\)</span> from 8 and 5.</p></li>
-</ol>
-<p>Another example (stolen from John Harrison’s book) is the barber paradox.
-Suppose we are told that in a given town there is a male barber who shaves all and only
-those men who don’t shave themselves.
-We obtain a contradiction by asking who shaves the barber.
-Formally, this amounts to a refutation of the sentence
-<span class="math notranslate nohighlight">\(\ex x \fa y S(x, y) \liff \lnot S(y, y)\)</span>.
-Skolemizing and expressing this as a conjunction of clauses, we get:</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\fa y \lnot S(a, y) \lor \lnot S(y,y)\)</span>.</p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa y S(y, y) \lor S(a, y)\)</span>.</p></li>
-</ul>
-<p>Instantiating <span class="math notranslate nohighlight">\(y\)</span> to <span class="math notranslate nohighlight">\(a\)</span> in both cases and resolving yields the empty clause.</p>
-<p>As you might have guessed,
-this is where <em>unification</em>, discussed in <a class="reference internal" href="implementing_first_order_logic.html#section-unification"><span class="std std-numref">Section 11.4</span></a>, comes in handy.
-When looking for resolvents, though, it’s not always sufficient to look for most general unifiers
-of a literal from each clause; sometimes a resolution step has to unify two or more literals
-in the same clause as well.
-The example of the barber paradox illustrates this. You can check that in this
-case we are not forced to instantiate both instances of <span class="math notranslate nohighlight">\(y\)</span> to <span class="math notranslate nohighlight">\(a\)</span> unless
-we consider more than two literals,
-and anything short of that fails to produce a new clause.</p>
-<p>The proof system we have just described is sound and complete for first-order logic without
-equality. The general method of proof search is implicit in the presentation:
-systematically searching for substitutions that yield complementary literals and resolving
-on them is guaranteed to find a refutation if one exists.
-In general, if there is no refutation, the search may continue forever.
-We can prove that the calculus is complete, as usual,
-by arguing that if the search fails to terminate,
-the failure points the way to the existence of a countermodel.</p>
-<p>To handle equality, one option is simply to add equality axioms to the hypotheses.
-This is inefficient, however. Modern first-order provers use techniques based on
-<em>paramodulation</em> and <em>superposition</em>.</p>
-<p>It is worth mentioning that Skolemization can also be used for search in the cut-free sequent
-calculus described in the previous section, or, more or less equivalently, in a tableau search.
-In an ordinary proof system (rather than a refutation system), rather than an equisatisfiable
-formula, we want one that is <em>equivalid</em>.
-This requires replacing the universally quantified variables rather than the existentially
-quantified variables, resulting in <em>Herbrand normal form</em> instead of
-<em>Skolem normal form</em>. Tableau systems are usually presented, instead, as refutation calculi,
-in which case Skolem normal form is appropriate.</p>
-<p>We close this section with one more example. Consider the following hypotheses:</p>
-<ol class="arabic simple">
-<li><p>Every students owns either an iphone or a laptop.</p></li>
-<li><p>Every student who owns a laptop also owns a pair of bluetooth headphones.</p></li>
-<li><p>Every iphone is buggy.</p></li>
-<li><p>Every pair of bluetooth headphones is buggy.</p></li>
-<li><p>Every student who owns something buggy is sad.</p></li>
-</ol>
-<p>From these we should be able to conclude that every student is sad.
-We can formalize the hypotheses as follows:</p>
-<ol class="arabic simple">
-<li><p><span class="math notranslate nohighlight">\(\fa x \fn{Student}(x) \to \ex y \fn{Owns}(x, y) \land (\fn{Iphone}(y) \lor \fn{Laptop}(y))\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x,y) \land \fn{Laptop}(y) \to \ex z \fn{Owns}(x, z) \land \fn{Headphones}(z)\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa y \fn{Iphone}(y) \to \fn{Buggy}(y)\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa y \fn{Headphones}(y) \to \fn{Buggy}(y)\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x, y) \land \fn{Buggy}(y) \to \fn{Sad}(x)\)</span></p></li>
-</ol>
-<p>The desired conclusion is <span class="math notranslate nohighlight">\(\fa x \fn{Student}(x) \to \fn{Sad}(x)\)</span>.
-You can check that if we negate the conclusion, Skolemize, put the results in CNF,
-and move universal quantifiers through the hypotheses, we get the following:</p>
-<ol class="arabic simple">
-<li><p><span class="math notranslate nohighlight">\(\fa x \lnot \fn{Student}(x) \lor \fn{Owns}(x, f(x))\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa x \lnot \fn{Student}(x) \lor \fn{Iphone}(f(x)) \lor \fn{Laptop}(f(x))\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Laptop}(y) \lor \fn{Headphones}(g(x,y))\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Laptop}(y) \lor \fn{Owns}(x,g(x,y))\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa y \lnot \fn{Iphone}(y) \lor \fn{Buggy}(y)\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa y \lnot \fn{Headphones}(y) \lor \fn{Buggy}(y)\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fa {x, y} \lnot \fn{Student}(x) \lor \lnot \fn{Owns}(x, y) \lor \lnot \fn{Buggy}(y) \lor \fn{Sad}(x)\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\fn{Student}(a)\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\lnot \fn{Sad}(a)\)</span></p></li>
-</ol>
-<p>We leave it to you to construct a resolution proof of the empty clause from these.</p>
-</section>
 <section id="natural-deduction">
-<h2><span class="section-number">14.4. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Link to this heading"></a></h2>
+<h2><span class="section-number">14.7. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Permalink to this heading"></a></h2>
 <p>Finally, we can extend the system of natural deduction of <a class="reference internal" href="proof_systems_for_propositional_logic.html#section-natural-deduction"><span class="std std-numref">Section 8.6</span></a>.
 The quantifier rules are as follows:</p>
 <blockquote>
