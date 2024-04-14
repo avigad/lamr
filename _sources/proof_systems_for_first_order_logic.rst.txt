@@ -71,7 +71,7 @@ clause. In that case, :math:`\fa {\vec x} A` is equivalent to
 
 .. math::
 
-  (\fa {\vec x} A_1) \land \ldots \land (\vec {\vec x} A_n).
+  (\fa {\vec x} A_1) \land \ldots \land (\fa {\vec x} A_n).
 
 You should think about why this is true, that is, why any model of the first is a model
 of the second and vice-versa. As result, to show that a set :math:`\Gamma` of
@@ -209,7 +209,7 @@ the clause :math:`\fa x P(x) \lor \lnot P(f(x))`, we can obtain infinitely many 
 
 .. math::
 
-  \fa x P(f(x)) \lor \lnot P(f(f(y))), \quad \fa z P(f(f(z))) \lor \lnot P(f(f(f(z)))), \quad \ldots
+  \fa y P(y) \lor \lnot P(f(f(y))), \quad \fa z P(z) \lor \lnot P(f(f(f(z)))), \quad \ldots
 
 without ever reaching a contradiction. In this case, it's not hard to see that the original
 sentence is satisfiable, but in general we can't avoid some sort of search. The question as
@@ -287,6 +287,7 @@ first-order logic.
 
   We use this fact to define a first-order model :math:`\mdl M` as follows. The universe of
   :math:`\mdl M` is the set of all closed terms in the language of :math:`\Gamma`.
+  For each constant symbol :math:`c`, we define :math:`c^{\mdl M}` to be the term :math:`c`.
   For each function symbol :math:`f` of arity :math:`n`, we define
   :math:`f^{\mdl M}(t_1, \ldots, t_n)` to be the term :math:`f(t_1, \ldots, t_n)`.
   In other words, we interpret each function :math:`f^{\mdl M}` as the syntactic operation that
@@ -412,14 +413,14 @@ we can then reduce the original sentence to a conjunction of universally quantif
 
 As an example of how this plays out in first-order resolution, consider the following hypotheses:
 
-  #. Every students owns either an iphone or a laptop.
+  #. Every student owns either an iphone or a laptop.
   #. Every student who owns a laptop also owns a pair of bluetooth headphones.
   #. Every iphone is buggy.
   #. Every pair of bluetooth headphones is buggy.
   #. Every student who owns something buggy is sad.
 
-  From these we should be able to conclude that every student is sad.
-  We can formalize the hypotheses as follows:
+From these we should be able to conclude that every student is sad.
+We can formalize the hypotheses as follows:
 
   #. :math:`\fa x \fn{Student}(x) \to \ex y \fn{Owns}(x, y) \land (\fn{Iphone}(y) \lor \fn{Laptop}(y))`
   #. :math:`\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x,y) \land \fn{Laptop}(y) \to \ex z \fn{Owns}(x, z) \land \fn{Headphones}(z)`

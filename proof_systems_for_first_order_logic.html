@@ -155,7 +155,7 @@ where <span class="math notranslate nohighlight">\(A\)</span> is quantifier free
 and write it as <span class="math notranslate nohighlight">\(A_1 \land \ldots \land A_n\)</span>, where each <span class="math notranslate nohighlight">\(A_i\)</span> is a
 clause. In that case, <span class="math notranslate nohighlight">\(\fa {\vec x} A\)</span> is equivalent to</p>
 <div class="math notranslate nohighlight">
-\[(\fa {\vec x} A_1) \land \ldots \land (\vec {\vec x} A_n).\]</div>
+\[(\fa {\vec x} A_1) \land \ldots \land (\fa {\vec x} A_n).\]</div>
 <p>You should think about why this is true, that is, why any model of the first is a model
 of the second and vice-versa. As result, to show that a set <span class="math notranslate nohighlight">\(\Gamma\)</span> of
 universally quantified sentence is unsatisfiable, it suffices to have a refutationally complete
@@ -272,7 +272,7 @@ derive new ones until we find a proof of the empty clause.</p>
 forever without terminating. For example, you should convince yourself that if we start with
 the clause <span class="math notranslate nohighlight">\(\fa x P(x) \lor \lnot P(f(x))\)</span>, we can obtain infinitely many clauses</p>
 <div class="math notranslate nohighlight">
-\[\fa x P(f(x)) \lor \lnot P(f(f(y))), \quad \fa z P(f(f(z))) \lor \lnot P(f(f(f(z)))), \quad \ldots\]</div>
+\[\fa y P(y) \lor \lnot P(f(f(y))), \quad \fa z P(z) \lor \lnot P(f(f(f(z)))), \quad \ldots\]</div>
 <p>without ever reaching a contradiction. In this case, it’s not hard to see that the original
 sentence is satisfiable, but in general we can’t avoid some sort of search. The question as
 to whether a particular Turing machine halts can be encoded as a question about the unsatisfiability
@@ -341,6 +341,7 @@ there is a truth assignment <span class="math notranslate nohighlight">\(\tau\)<
 in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
 <p>We use this fact to define a first-order model <span class="math notranslate nohighlight">\(\mdl M\)</span> as follows. The universe of
 <span class="math notranslate nohighlight">\(\mdl M\)</span> is the set of all closed terms in the language of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+For each constant symbol <span class="math notranslate nohighlight">\(c\)</span>, we define <span class="math notranslate nohighlight">\(c^{\mdl M}\)</span> to be the term <span class="math notranslate nohighlight">\(c\)</span>.
 For each function symbol <span class="math notranslate nohighlight">\(f\)</span> of arity <span class="math notranslate nohighlight">\(n\)</span>, we define
 <span class="math notranslate nohighlight">\(f^{\mdl M}(t_1, \ldots, t_n)\)</span> to be the term <span class="math notranslate nohighlight">\(f(t_1, \ldots, t_n)\)</span>.
 In other words, we interpret each function <span class="math notranslate nohighlight">\(f^{\mdl M}\)</span> as the syntactic operation that
@@ -439,15 +440,17 @@ we can then reduce the original sentence to a conjunction of universally quantif
 <p>As an example of how this plays out in first-order resolution, consider the following hypotheses:</p>
 <blockquote>
 <div><ol class="arabic simple">
-<li><p>Every students owns either an iphone or a laptop.</p></li>
+<li><p>Every student owns either an iphone or a laptop.</p></li>
 <li><p>Every student who owns a laptop also owns a pair of bluetooth headphones.</p></li>
 <li><p>Every iphone is buggy.</p></li>
 <li><p>Every pair of bluetooth headphones is buggy.</p></li>
 <li><p>Every student who owns something buggy is sad.</p></li>
 </ol>
+</div></blockquote>
 <p>From these we should be able to conclude that every student is sad.
 We can formalize the hypotheses as follows:</p>
-<ol class="arabic simple">
+<blockquote>
+<div><ol class="arabic simple">
 <li><p><span class="math notranslate nohighlight">\(\fa x \fn{Student}(x) \to \ex y \fn{Owns}(x, y) \land (\fn{Iphone}(y) \lor \fn{Laptop}(y))\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(\fa {x, y} \fn{Student}(x) \land \fn{Owns}(x,y) \land \fn{Laptop}(y) \to \ex z \fn{Owns}(x, z) \land \fn{Headphones}(z)\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(\fa y \fn{Iphone}(y) \to \fn{Buggy}(y)\)</span></p></li>
