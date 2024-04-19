@@ -203,8 +203,8 @@ private partial def toString : FOForm → String
   | disj p q => "(" ++ toString p ++ " ∨ " ++ toString q ++ ")"
   | impl p q => "(" ++ toString p ++ " → " ++ toString q ++ ")"
   | biImpl p q => "(" ++ toString p ++ " ↔ " ++ toString q ++ ")"
-  | all x p  => "∀ " ++ x ++ "." ++ toString p
-  | ex x p  => "∃ " ++ x ++ "." ++ toString p
+  | all x p  => "∀ " ++ x ++ ". " ++ toString p
+  | ex x p  => "∃ " ++ x ++ ". " ++ toString p
 
 instance : ToString FOForm := ⟨FOForm.toString⟩
 
