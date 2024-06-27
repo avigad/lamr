@@ -9,9 +9,9 @@ def sum_up_to : Nat → Nat
 example (n : Nat) : 2 * sum_up_to n = n * (n + 1) := by
   induction n with
   | zero =>
-      rw [Nat.zero_eq, sum_up_to]
+      rw [sum_up_to]
   | succ n ih =>
-      rw [Nat.succ_eq_add_one, sum_up_to, mul_add, ih]
+      rw [sum_up_to, mul_add, ih]
       ring
 -- end textbook
 
@@ -23,9 +23,9 @@ def sum_odds : Nat → Nat
 theorem sum_odds_eq_square (n : Nat) : sum_odds n = n^2 := by
   induction n with
   | zero =>
-      rw [sum_odds, Nat.zero_eq, pow_two, zero_mul]
+      rw [sum_odds, pow_two, zero_mul]
   | succ n ih =>
-      rw [sum_odds, ih, Nat.succ_eq_add_one]
+      rw [sum_odds, ih]
       ring
 -- end textbook
 
@@ -49,7 +49,7 @@ theorem succ_add' (m n : Nat) : add' (succ m) n = succ (add' m n) := by
 theorem add'_comm (m n : Nat) : add' m n = add' n m := by
   induction m with
   | zero =>
-    rw [zero_eq, zero_add', add']
+    rw [zero_add', add']
   | succ m ih =>
     rw [add', succ_add', ih]
 -- end textbook

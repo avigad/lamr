@@ -28,7 +28,7 @@ It is described well in the handbook [1].
 [1] Harrison J. *Handbook of Practical Logic and Automated Reasoning.* Cambridge University Press, 2009. -/
 
 open Lean (HashSet)
-open Std (HashMap)
+open Lean (HashMap)
 
 def HashSet.union [BEq α] [Hashable α] (a b : HashSet α) : HashSet α :=
   a.fold (init := b) fun acc x => acc.insert x

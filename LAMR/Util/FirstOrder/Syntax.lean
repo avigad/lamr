@@ -1,5 +1,5 @@
 import LAMR.Util.Misc
-open Std
+open Lean
 
 /-
 First-order terms.
@@ -102,13 +102,13 @@ open Lean in
 macro_rules
   | `( assign!{ $[$xs:ident ↦ $vs:term],* } ) =>
     let xs := xs.map fun x => quote x.getId.toString
-    `((List.toAssocList [$[( $xs , $vs )],*]))
+    `((List.toAssocList' [$[( $xs , $vs )],*]))
 
 -- for a term assignment, the default is the identity
 instance : Coe (AssocList String FOTerm) (FOAssignment FOTerm) :=
-  ⟨fun l x => if l.contains x then l.getA x else FOTerm.var x⟩
+  ⟨fun l x => l.find? x |>.getD (FOTerm.var x)⟩
 
-instance [Inhabited α] : Coe (AssocList String α) (FOAssignment α) := ⟨fun l => l.getA⟩
+instance [Inhabited α] : Coe (AssocList String α) (FOAssignment α) := ⟨fun l x => l.find? x |>.get!⟩
 
 namespace FOTerm
 

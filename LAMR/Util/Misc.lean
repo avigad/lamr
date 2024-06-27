@@ -1,5 +1,5 @@
-import Std
-open Std
+import Lean
+open Lean
 
 /-
 Misc utilities.
@@ -22,7 +22,7 @@ def List.foldlDep {α : Type u} {β : Type v} : (bs : List β) → (α → (b : 
   | nil,       _, a => a
   | cons b bs, f, a => foldlDep bs (fun a b h => f a b (List.mem_cons_of_mem _ h)) (f a b (List.mem_cons_self ..))
 
-def Std.AssocList.getA [BEq α] [Inhabited β] (l : AssocList α β) (a : α) : β :=
+def Lean.AssocList.getA [BEq α] [Inhabited β] (l : AssocList α β) (a : α) : β :=
   match l.find? a with
     | some x => x
     | none   => default

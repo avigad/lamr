@@ -1,5 +1,5 @@
 import LAMR.Util.FirstOrder
-open Std
+open Lean (AssocList)
 open FOTerm
 
 /-
@@ -42,7 +42,7 @@ partial def unify? (env : AssocList String FOTerm) : List (FOTerm × FOTerm) →
 
 -- textbook: fullUnify
 partial def usolve (env : AssocList String FOTerm) : AssocList String FOTerm := Id.run do
-  let env' := env.mapVal (fun _ => subst env)
+  let env' := env.mapVal (subst env)
   if env' == env then env else usolve env'
 
 partial def fullUnify (eqs : List (FOTerm × FOTerm)) : Option (AssocList String FOTerm) :=

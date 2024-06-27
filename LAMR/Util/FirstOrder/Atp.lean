@@ -1,6 +1,7 @@
 import LAMR.Util.FirstOrder.Smt
 import LAMR.Util.FirstOrder.Syntax
 import LAMR.System
+import Batteries
 
 def FOTerm.toSmtLib : FOTerm → Sexp
   | var s => s
@@ -24,7 +25,7 @@ def FOForm.toSmtLib : FOForm → Sexp
 def FOTerm.toTptp : FOTerm → String
   | var s => s.toUpper
   | app const [] => const.toLower
-  | app fn args => s!"{fn}({",".intercalate <| args.pmap (fun a _ => a.toTptp) fun _ => id})"
+  | app fn args => s!"{fn}({",".intercalate <| args.pmap  (fun a _ => a.toTptp) fun _ => id})"
 
 /-- Encodes a first-order formula in TPTP format. -/
 def FOForm.toTptp : FOForm → String
@@ -46,7 +47,7 @@ def FOForm.toTptpAxiom (nm : String) (φ : FOForm) : String :=
 def FOForm.toTptpGoal (nm : String) (φ : FOForm) : String :=
   s!"fof({nm},conjecture,{φ.toTptp})."
 
-def FOTerm.checkWf (ctx : Std.HashMap String String) : FOTerm → Except String Unit
+def FOTerm.checkWf (ctx : Lean.HashMap String String) : FOTerm → Except String Unit
   | var x => do
     let some x' := ctx.find? x.toLower
       | .error s!"unbound variable '{x}'"
@@ -76,7 +77,7 @@ whereas well-scopedness checks are _case-sensitive_ (`fo!{∀ x. %X = %X}` is re
 
 Return `.error e` in case of an error,
 otherwise `.ok ()`. -/
-def FOForm.checkWf (ctx : Std.HashMap String String) : FOForm → Except String Unit
+def FOForm.checkWf (ctx : Lean.HashMap String String) : FOForm → Except String Unit
   | eq s t => s.checkWf ctx >>= fun _ => t.checkWf ctx
   | rel R ts =>
     if ctx.contains R.toLower then

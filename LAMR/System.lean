@@ -1,4 +1,4 @@
-import Std
+import Lean
 
 inductive SystemType where
   | windows | windowsArm | osx | osxArm | linux

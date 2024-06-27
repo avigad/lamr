@@ -1,10 +1,9 @@
 import LAMR.Util.Propositional.Transformations
 import LAMR.Util.Propositional.DRAT
-import Std
-open Std
 open List
 open Nat
-open HashMap
+open Lean (HashMap)
+open Lean.HashMap (empty)
 
 def SNH := HashMap String Nat
 def NSH := HashMap Nat String

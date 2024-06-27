@@ -225,10 +225,10 @@ instance (l : Lit) (c : Clause) : Decidable (l ∈ c) := by
   unfold Clause
   exact inferInstance
 
-instance : HasSubset Clause := inferInstanceAs (HasSubset (List Lit))
+-- instance : HasSubset Clause := inferInstanceAs (HasSubset (List Lit))
 
-instance : DecidableRel (Subset : Clause → Clause → Prop) :=
-  inferInstanceAs (DecidableRel (Subset : List Lit → List Lit → Prop))
+-- instance : DecidableRel (Subset : Clause → Clause → Prop) :=
+--   inferInstanceAs (DecidableRel (Subset : List Lit → List Lit → Prop))
 
 end Clause
 

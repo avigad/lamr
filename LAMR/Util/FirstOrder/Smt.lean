@@ -1,4 +1,4 @@
-import Std
+import Lean
 import Lean.Parser
 import Lean.PrettyPrinter
 import LAMR.System
@@ -185,7 +185,7 @@ def toBVConst (nBits : Nat) (n : Nat) : String :=
   let bytes := List.range nBytes |>.map fun i => UInt8.ofNat ((n >>> (i*8)) &&& 0xff)
   "#x" ++ enhexLE bytes
 
-open Std (AssocList)
+open Lean (AssocList)
 
 /-- Extracts constants assigned in a model returned from an SMT solver.
 The model is expected to be a single s-expression representing a list,

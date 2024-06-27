@@ -1,5 +1,5 @@
-import Std
-open Std
+import Lean
+open Lean
 
 /-
 We will represent a linear expression as a mapping from variables (represented as strings)
@@ -11,9 +11,6 @@ the expression `b * one`, for a special variable named "one".
 A HashMap is a more efficient representation than an AssocList. If you ctrl-click on
 HashMap, you can see some of the functions available.
 -/
-
-#check AssocList
-#check HashMap
 
 def List.toHashMap [BEq α] [Hashable α]: List (α × β) → HashMap α β
   | []          => HashMap.empty

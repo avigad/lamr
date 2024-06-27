@@ -173,8 +173,7 @@ open Lean Elab in
 private opaque evalWorld (stx : Syntax) : TermElabM World
 
 @[widget]
-def tarskisWidget : Lean.Widget.UserWidgetDefinition where
-  name := "Tarski's World"
+def tarskisWidget : Lean.Widget.Module where
   javascript := include_str "TarskisWorld.js"
 
 syntax "#3d_world" term : command
@@ -182,7 +181,7 @@ open Lean Elab Command in
 elab_rules : command
   | `(command| #3d_world%$tk $w) => liftTermElabM do
     let w ← evalWorld w
-    Lean.Widget.saveWidgetInfo ``tarskisWidget (json% { world: $(w.toJson) }) tk
+    Lean.Widget.savePanelWidgetInfo tarskisWidget.javascriptHash (return json% { world: $(w.toJson) }) tk
 end widget
 
 /-

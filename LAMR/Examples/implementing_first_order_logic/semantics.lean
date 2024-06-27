@@ -1,5 +1,5 @@
 import LAMR.Util.FirstOrder.Syntax
-open Std
+open Lean
 
 /-
 Interpreting functions.
@@ -11,7 +11,7 @@ def FnInterp α := FOAssignment (List α → α)
 
 -- coerces an association list to a function
 instance [Inhabited α] : Coe (AssocList String (List α → α)) (FnInterp α) :=
-⟨fun l => l.getA⟩
+⟨fun l x => l.find? x |>.get!⟩
 -- end
 
 /- examples -/

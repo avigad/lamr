@@ -44,7 +44,7 @@ function mkThreeScene(world) {
   }
   const setMatrices = (inst, objs, isTet) => {
     for (let i = 0; i < objs.length; i++) {
-      const [r, c, sz] = objs[i]
+      const [c, r, sz] = objs[i]
       const S = szToScale(sz)
       const Tr = new T.Matrix4().makeTranslation(
         -TILE_WIDTH*0.5 - N_ROWS/2*TILE_WIDTH + c*TILE_WIDTH,
@@ -142,5 +142,8 @@ export default function(props) {
     divRef.current = div
     render()
   }, [])
-  return React.createElement('div', { ref: setRef }, [])
+  return React.createElement('details', { open: true }, [
+    React.createElement('summary', { className: 'mv2 pointer' }, "Tarski's World"),
+    React.createElement('div', { ref: setRef }, [])
+  ])
 }

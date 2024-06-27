@@ -3,11 +3,11 @@ Copyright (c) 2018-2022 Microsoft Corporation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Wojciech Nawrocki, Leonardo de Moura
 -/
-import Std.Data.HashMap
+import Lean.Data.HashMap
 
 /-! # Disjoint-set data structure -/
 
-open Std (HashMap)
+open Lean (HashMap)
 
 /-- A node in the forest of equivalence-class-trees. -/
 inductive DisjointSet.Node (α : Type u) where
