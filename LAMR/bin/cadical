@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOLVER=cadical-linux
+SOLVER=cadical-mac
 CNF=$1
 DRAT=$2
 

@@ -4,7 +4,7 @@ This repository is designed to accompany the course by the same name. See also:
 
 - the textbook (in progress): <https://avigad.github.io/lamr>
 - a PDF version of the textbook: <https://avigad.github.io/lamr/logic_and_mechanized_reasoning.pdf>
-- the course home page: <https://www.cs.cmu.edu/~mheule/15311-s24/>
+- the course home page: <https://www.cs.cmu.edu/~mheule/15311-s25/>
 
 This repository contains a supporting library
 and files containing examples from the textbook that you can edit and experiment with.
