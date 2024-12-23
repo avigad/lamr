@@ -1,6 +1,6 @@
 import LAMR.Util.Propositional
 
-inductive SudokuTile
+inductive SudokuTile where
   | val (n : Nat)
   | empty
   deriving Repr, Inhabited, DecidableEq

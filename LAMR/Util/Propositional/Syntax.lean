@@ -4,7 +4,7 @@ import LAMR.Util.Misc
 Propositional formulas.
 -/
 
-inductive PropForm
+inductive PropForm where
   | var    : String → PropForm
   | tr     : PropForm
   | fls    : PropForm
@@ -60,7 +60,7 @@ end PropForm
 Literals.
 -/
 
-inductive Lit
+inductive Lit where
   | tr  : Lit
   | fls : Lit
   | pos : String → Lit
@@ -134,7 +134,7 @@ end Lit
 Formulas in Negation-normal form.
 -/
 
-inductive NnfForm :=
+inductive NnfForm where
   | lit  (l : Lit)       : NnfForm
   | conj (p q : NnfForm) : NnfForm
   | disj (p q : NnfForm) : NnfForm

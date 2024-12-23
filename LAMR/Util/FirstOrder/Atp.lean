@@ -47,9 +47,9 @@ def FOForm.toTptpAxiom (nm : String) (φ : FOForm) : String :=
 def FOForm.toTptpGoal (nm : String) (φ : FOForm) : String :=
   s!"fof({nm},conjecture,{φ.toTptp})."
 
-def FOTerm.checkWf (ctx : Lean.HashMap String String) : FOTerm → Except String Unit
+def FOTerm.checkWf (ctx : Std.HashMap String String) : FOTerm → Except String Unit
   | var x => do
-    let some x' := ctx.find? x.toLower
+    let some x' := ctx[x.toLower]?
       | .error s!"unbound variable '{x}'"
     if x != x' then
       throw s!"unbound variable '{x}' ('{x'}' is bound)"
@@ -77,7 +77,7 @@ whereas well-scopedness checks are _case-sensitive_ (`fo!{∀ x. %X = %X}` is re
 
 Return `.error e` in case of an error,
 otherwise `.ok ()`. -/
-def FOForm.checkWf (ctx : Lean.HashMap String String) : FOForm → Except String Unit
+def FOForm.checkWf (ctx : Std.HashMap String String) : FOForm → Except String Unit
   | eq s t => s.checkWf ctx >>= fun _ => t.checkWf ctx
   | rel R ts =>
     if ctx.contains R.toLower then

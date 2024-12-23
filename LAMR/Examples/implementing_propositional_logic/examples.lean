@@ -3,7 +3,7 @@ import LAMR.Util.Propositional
 -- textbook: PropForm
 namespace hidden
 
-inductive PropForm
+inductive PropForm where
   | tr     : PropForm
   | fls    : PropForm
   | var    : String → PropForm
@@ -144,13 +144,13 @@ def PropForm.isSat(A : PropForm) : Bool := List.any (truthTable A) Prod.snd
 
 namespace hidden
 -- textbook: NnfForm
-inductive Lit
+inductive Lit where
   | tr  : Lit
   | fls : Lit
   | pos : String → Lit
   | neg : String → Lit
 
-inductive NnfForm :=
+inductive NnfForm where
   | lit  (l : Lit)       : NnfForm
   | conj (p q : NnfForm) : NnfForm
   | disj (p q : NnfForm) : NnfForm

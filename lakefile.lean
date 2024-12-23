@@ -3,8 +3,7 @@ open Lake DSL
 
 package LAMR
 
-require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git"
+require "leanprover-community" / "mathlib"
 
 @[default_target]
 lean_lib LAMR

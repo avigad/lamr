@@ -1,5 +1,5 @@
 -- textbook: BinTree
-inductive BinTree
+inductive BinTree where
   | empty : BinTree
   | node  : BinTree → BinTree → BinTree
   deriving Repr, DecidableEq, Inhabited

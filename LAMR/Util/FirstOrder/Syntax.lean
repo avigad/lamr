@@ -5,7 +5,7 @@ open Lean
 First-order terms.
 -/
 
-inductive FOTerm
+inductive FOTerm where
   | var : String → FOTerm
   | app : String → List FOTerm → FOTerm
   deriving Repr, Inhabited, BEq
@@ -123,7 +123,7 @@ end FOTerm
 First order formulas.
 -/
 
-inductive FOForm
+inductive FOForm where
   | eq     : FOTerm → FOTerm → FOForm
   | rel    : String → List FOTerm → FOForm
   | tr     : FOForm
@@ -213,10 +213,10 @@ instance : Repr FOForm where
 
 /-- Returns a list of all free variable occurrences in the formula. -/
 def freeVars : FOForm → List String :=
-  go Lean.HashSet.empty
-where go (bound : Lean.HashSet String) : FOForm → List String
+  go Std.HashSet.empty
+where go (bound : Std.HashSet String) : FOForm → List String
   | eq s t => (s.freeVars ++ t.freeVars).filter fun x => !bound.contains x
-  | rel _ ts => ts.map FOTerm.freeVars |>.join.filter fun x => !bound.contains x
+  | rel _ ts => ts.map FOTerm.freeVars |>.flatten.filter fun x => !bound.contains x
   | neg φ => go bound φ
   | conj φ ψ => go bound φ ++ go bound ψ
   | disj φ ψ => go bound φ ++ go bound ψ

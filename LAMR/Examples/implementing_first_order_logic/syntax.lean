@@ -7,7 +7,7 @@ First-order terms.
 namespace hidden
 
 -- textbook: FOTerm
-inductive FOTerm
+inductive FOTerm where
   | var : String → FOTerm
   | app : String → List FOTerm → FOTerm
   deriving Repr, Inhabited, BEq
@@ -89,6 +89,3 @@ First-order formulas
 
 #eval fo!{ r(x, y) ∧ r(x, z) → p(z) ∨ ⊤ }
 #eval fo!{ ∀ x. ∃ y. r (x, y) ∨ p(x) }
-
-
-

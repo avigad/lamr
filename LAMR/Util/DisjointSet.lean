@@ -3,11 +3,10 @@ Copyright (c) 2018-2022 Microsoft Corporation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Wojciech Nawrocki, Leonardo de Moura
 -/
-import Lean.Data.HashMap
-
+import Std
 /-! # Disjoint-set data structure -/
 
-open Lean (HashMap)
+open Std (HashMap)
 
 /-- A node in the forest of equivalence-class-trees. -/
 inductive DisjointSet.Node (α : Type u) where
@@ -59,7 +58,7 @@ private def findRoot (d : DisjointSet α) (a : α) : DisjointSet α × α × Nat
 where go (d : DisjointSet α) (a : α) : Nat → DisjointSet α × α × Nat
   | 0   => (d, a, 0)
   | n+1 =>
-    match d.findD a root with
+    match d.getD a root with
     | root rank  => (d, a, rank)
     | ptr parent =>
       let (d₁, rootA, rankA) := go d parent n

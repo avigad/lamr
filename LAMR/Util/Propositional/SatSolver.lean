@@ -2,8 +2,8 @@ import LAMR.Util.Propositional.Transformations
 import LAMR.Util.Propositional.DRAT
 open List
 open Nat
-open Lean (HashMap)
-open Lean.HashMap (empty)
+open Std (HashMap)
+open Std.HashMap (empty)
 
 def SNH := HashMap String Nat
 def NSH := HashMap Nat String
@@ -55,8 +55,8 @@ protected def String.toNat (s : String) : Option Nat := String.toNatCore 0 s
 def Lit.toDimacs (h : SNH) : Lit → String
 | tr    => ""  -- should not happen
 | fls   => ""
-| pos s => toString (h.findD s 0)
-| neg s => "-" ++ toString (h.findD s 0)
+| pos s => toString (h.getD s 0)
+| neg s => "-" ++ toString (h.getD s 0)
 
 protected def Clause.toDimacs (h : SNH) : Clause → String
 | [] => "0"
@@ -82,7 +82,7 @@ def run' (args : IO.Process.SpawnArgs) : IO String := do
   let out ← IO.Process.output args
   pure out.stdout
 
-inductive SatResult
+inductive SatResult where
 | Sat : List Lit → SatResult
 | Unsat : CnfForm → SatResult
 deriving Inhabited, Repr, DecidableEq
@@ -91,11 +91,11 @@ open SatResult
 def String.toLit (h : NSH) : String → Option Lit
 | ⟨'-' :: cs⟩ =>
   match String.toNat ⟨cs⟩ with
-  | some n => Lit.neg (h.findD n "ERROR")
+  | some n => Lit.neg (h.getD n "ERROR")
   | none => none
 | s =>
   match String.toNat s with
-  | some n => Lit.pos (h.findD n "ERROR")
+  | some n => Lit.pos (h.getD n "ERROR")
   | none => none
 
 /-- Given a list of solver output lines containing a model, returns the model. -/
@@ -140,9 +140,9 @@ if is_odd k
 then match k with
      | k' + 1 =>
        let k'' := k' / 2
-       some <| Lit.neg (h.findD k'' <| toString k'')
+       some <| Lit.neg (h.getD k'' <| toString k'')
      | _ => none
-else some <| Lit.pos (h.findD (k / 2) <| toString (k / 2))
+else some <| Lit.pos (h.getD (k / 2) <| toString (k / 2))
 
 def natsToLits (h : NSH) : List Nat → Option (List Lit)
 | [] => some []
