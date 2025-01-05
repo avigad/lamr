@@ -1,0 +1,219 @@
+.. _chapter_decision_procedures_for_arithmetic:
+
+Decision Procedures for Arithmetic
+==================================
+
+In this chapter, we describe a decision procedure for the
+satisfiability of quantifier-free formulas in the theory of linear equations and
+inequalities in the real numbers. Finally, we will state some other important decidability and
+undecidability results, to give you a fuller sense of the landscape.
+In :numref:`Chapter %s <chapter_using_smt_solvers>`, we will consider SMT solvers,
+whose main strength is that they are capable of combining decision procedures for the
+quantifier-free parts of various theories and using them together effectively.
+
+
+Linear real arithmetic
+----------------------
+
+We now turn from questions having to do with satisfiability and validity in arbitrary
+models to questions about satisfiability in a particular model, namely, the real numbers.
+A *linear expression* is one of the form :math:`a_1 x_1 + a_2 x_2 + \cdots + a_n x_n + b`,
+where each :math:`a_i` is a rational number, :math:`b` is a rational number,
+and each :math:`x_i` is a variable.
+We think of the variables :math:`x_i` as ranging over the real numbers.
+A *linear constraint* is one of the form :math:`s = t` or :math:`s < t`, where
+:math:`s` and :math:`t` are linear expressions. (In practice, we usually include constraints
+of the form :math:`s \le t` and sometimes :math:`s \ne t` as well. But the first can be
+written :math:`s < t` and the second can be written :math:`s < t \lor t < s`, so questions about
+those can be rexpressed in terms of :math:`<` and :math:`=`, and focusing on those will simplify
+the presentation below.)
+
+Notice that any linear constraint is equivalent to one of the form :math:`t = 0` or :math:`t > 0`,
+since we can move all the terms to one side. For example, the constraint :math:`3 x + 2 y < 3y + 4z`
+is equivalent to :math:`-3x + y + 4z > 0`.
+An important observation that we will use below is that any linear constraint that involves
+a variable :math:`x` can be written as :math:`x = t`, :math:`x < t`, or :math:`t < x`,
+where :math:`x` does not occur in :math:`t`.
+We do this by simply solving for :math:`x`.
+For example, the previous constraint can be expressed as :math:`x < (1/3)y + (4/3)z`.
+Remember that dividing both sides of an inequality by a negative number reverses the direction.
+
+In this section we say that a set :math:`\Gamma` of linear constraints is *satisfiable* if and only
+if there is an assignment of real
+values to the variables that makes them all true. Our first goal is to prove the following.
+
+.. admonition:: Theorem
+
+    The question as to whether a finite set of linear constraints is satisfiable is
+    decidable.
+
+.. admonition:: Proof
+
+    We use induction on the number of variables. If there are no variables at all,
+    :math:`\Gamma` contains only expressions of the form :math:`b_0 < b_1` or :math:`b_0 = b_1`
+    where :math:`b_0` and :math:`b_1` are constants, and we only need to perform
+    the comparisons to see whether they are true. Remember that if :math:`\Gamma`
+    is the empty set, we take it to be trivially satisfied.
+
+    In the inductive step, :math:`\Gamma` contains a variable.
+    If :math:`\Gamma` contains any false constant equations, it is unsatisfiable,
+    and it it contains any true constant equations, we can remove them without
+    affecting satisfiability.
+    If :math:`\Gamma` contains a nontrivial equation with a variable :math:`x`,
+    we put
+    it in the form :math:`x = t` and then substitute :math:`t` for :math:`x` everywhere.
+    The resulting set of constraints has one fewer variable, and clearly
+    it is equisatisfiable with the original one.
+    Given an assignment to the new set of constraints, we just assign :math:`x`
+    the value of :math:`t`.
+
+    So we can now assume that there are no equations in :math:`\Gamma`.
+    We can divide the inequalities in :math:`\Gamma` intro three kinds:
+
+    - those that don't contain :math:`x` at all
+    - those that can be expressed in the form :math:`s_i < x`
+    - those that can be expressed in the form :math:`x < t_j`
+
+    Let :math:`\Gamma'` be the set that results from removing the inequalities
+    in the last two categories
+    and replacing them with inequalities of the form :math:`s_i < t_j`.
+    We claim :math:`\Gamma'` is equisatisfiable with :math:`\Gamma`.
+    Clearly any assignment that satisfies :math:`\Gamma` also satisfies :math:`\Gamma'`.
+    Conversely, suppose :math:`\sigma` is an assignment that satisfies :math:`\Gamma'`.
+    Then, under that assignment, the value of each :math:`s_i` is less than the value
+    of every :math:`t_j`. We obtain an assignment satisfying :math:`\Gamma`
+    by mapping :math:`x` to any value between the largest :math:`s_i` and the
+    smallest :math:`t_j`. (If one of the last two categories is empty, we
+    remove the constraints in the other category entirely,
+    since they can be satisfied by taking :math:`x` sufficiently large or sufficiently
+    small.)
+
+Implementing Fourier-Motzkin
+----------------------------
+
+The procedure implicit in this proof is known as the *Fourier-Motzkin* procedure.
+The idea can be found in the work of Jean-Baptiste Joseph
+Fourier in the early nineteenth century (the same Fourier who gave us Fourier
+analysis), but it was rediscovered by multiple people in the nineteenth century, including Theo In the worst case, every elimination step divides the number of equations in half and
+then squares it, resulting in doubly exponential behavior.
+The procedure works well in practice, though, since in many applications each variable is
+contained in only a few equations. (There are obvious heuristics, like choosing a variable
+at each stage that minimizes the number of equations at the next stage.)
+There is an implementation of the procedure in the file `FourierMotzkin.lean` in the `Examples`
+folder,
+modulo two components that we ask you to supply.
+SMT solvers use much more efficient methods based on the simplex algorithm from linear programming.
+
+
+A full decision procedure
+-------------------------
+
+We can describe the Fourier-Motzkin procedure more explicitly as a decision procedure
+for satisfiability of existential sentences in a langauge for the real numbers as follows.
+Suppose we are given a problem in linear arithmetic where the variables are labeled
+:math:`x_1, x_2, \ldots, x_n` and the
+constraints are labeled :math:`c_1, c_2, \ldots, c_m`. Then what we are really asking as to whether
+the formula :math:`\ex {x_1, \ldots, x_n} c_1 \land c_2 \land \cdots \land c_m`
+is true of the real numbers when the constraints are interpreted in the expected way.
+To make this more precise, consider the structure :math:`(\mathbb R, 0, 1, +, <)`
+in a language with symbols :math:`0`, :math:`1`, :math:`+`, and :math:`<`.
+All the constraints can be expressed in this language, albeit in a clunky way. For example,
+we can write :math:`3 x` as :math:`x + x + x`, and express a constraint like :math:`x -(1/2)y + (4/3)z < 0`
+as :math:`6x + 8z < 3y`. Alternatively, we can add symbols for scalar multiplication to the language.
+
+We now obtain a decision procedure for arbitrary existential formulas
+:math:`\ex {x_1, \ldots, x_n} A` as follows.
+Given a formula :math:`\ex x A`, put :math:`A` into negation normal form, so that all the negations
+are pushed down to atomic formulas.
+Replace :math:`\lnot (s < t)` by :math:`t < s \lor s = t`, and we can replace
+:math:`s \ne t` by :math:`s < t \lor t < s`.
+(In practice, it is more efficient to include :math:`\le` in the language as well, and use the
+fact that :math:`\lnot (s \le t)` is equivalent to :math:`t < s`.)
+Putting the result into disjunctive normal form, we can assume that all the atomic
+formulas are of the form :math:`s < t` or :math:`s = t`.
+We can move the existential quantifiers through the disjunction as we did in :numref:`deciding_universal_sentences` and then apply the Fourier-Motzkin procedure to
+each disjunction.
+
+In fact, a modification of the algorithm provides a decision procedure for the satisfiability
+of *any* sentence in the language, not just the existential ones.
+
+.. admonition:: Theorem
+
+    The question as to whether a sentence :math:`A` is true in :math:`(\mathbb R, 0, 1, +, <, \le)`
+    is decidable.
+
+We will only sketch the details here.
+The algorithm uses an important method known as "elimination of quantifiers."
+The idea is to successively eliminate quantifiers, one by one, until we are left with a
+quantifier-free sentence. We can determine the truth of that by simply calculating.
+
+We will show that any formula :math:`\ex x A`, where :math:`A` is quantifier-free,
+is equivalent to a quantifier-free formula :math:`A'` that does not include :math:`x`.
+Repeating the process and using the fact that :math:`\fa x A` is equivalent to
+:math:`\lnot \ex x \lnot A`, we can eliminate all the quantifiers. We are then
+left with a quantifier-free sentence, that is, a boolean combination of equations and
+inequalities between closed terms. We can decide the truth of that sentence by evaluating
+the terms.
+
+We have already seen all the ideas. The procedure above allows us to write
+:math:`\ex x A` as :math:`(\ex x A_1) \lor (\ex x A_2) \lor \cdots \lor (\ex x A_n)`
+where each :math:`A_i` is a conjunction of atomic formulas.
+So we only need to show how to eliminate an existential quantifier from a conjunction
+of constraints of the form :math:`s < t` or :math:`s = t`.
+But that is exactly what the pivot step in the Fourier-Motzkin procedure does, and we are done.
+
+It is possible to write down axioms that justify every step of the transformation.
+The resulting set of axioms is known as the theory of *linear arithmetic*.
+The argument shows that the resulting set of axioms characterizes the structure exactly,
+and that the question of provability from those axioms is decidable.
+
+You should also notice that the justification of the procedure only used the fact basic
+facts about arithmetic on the real numbers, as well as the fact we can find a real number
+between any other two. So the procedure works just the same way, and returns the same answer,
+for other structures that satisfy these properties, like the rationals.
+In other words, the structure :math:`(\mathbb Q, 0, 1, +, <, \le)` has exactly the same
+theory as :math:`(\mathbb R, 0, 1, +, <, \le)`.
+
+
+Linear integer arithmetic
+-------------------------
+
+Returning to the language without multiplication, one can ask what happens if we replace
+the real numbers by the integers.
+In other words, we can ask whether the truth of sentences in the structure
+:math:`(\mathbb Z, 0, 1, +, <)` is decidable.
+In contrast to the reals, the order on the integers is *discrete*, since
+there is nothing between a value :math:`x` and :math:`x + 1`.
+The problem is nonetheless decidable.
+The result was first proved  in 1926 by Mojżesz Presburger, a student of Tarski's,
+who later died in the Holocaust. The story has it that Tarski did not think
+the result was enough for a dissertation, and made him do more work.
+The resulting theory is known as *Presburger arithmetic* or *linear integer arithmetic*.
+
+The decision procedure is more complicated than that for linear arithmetic,
+and we will not discuss it here.
+SMT solvers, however, use efficient implementations of the *existential fragment*
+of the theory, which is to say, the satisfiability problem for quantifier-free formulas.
+
+
+Other theories
+--------------
+
+What happens if we extend linear real arithmetic by adding multiplication between
+arbitrary terms? Formally, we are asking about the theory of the real numbers
+:math:`(\mathbb{R}, 0, 1, +, \times, <)` with zero, one, addition,
+multiplication, and the less-than relation. It is equivalent to extending
+linear arithmetic by allowing atomic formulas :math:`p = 0` and :math:`p > 0` where :math:`p` is
+an arbitrary polynomial. The theory, known also as the theory of *Real closed
+fields*, is still decidable. The theorem was proved by Alfred Tarski before World War II,
+but it wasn't published until 1948, after the war.
+
+What happens if we add multiplication to linear integer arithmetic?
+In contrast to the case with the real numbers, the theory of the integers
+with addition and multiplication is undecidable.
+In other words, there is no algorithm to decide truth in the model
+:math:`(\mathbb Z, 0, 1, +, \times)`.
+This follows from the methods that Gödel used to prove the incompleteness theorems,
+and it is also a consequence of *Tarski's theorem* on the undefinability of truth.
+The phenomena can be stated in very strong terms: no theory or structure in which one
+can interpret a small amount of arithmetic with addition and multiplication is decidable.

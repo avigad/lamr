@@ -278,13 +278,13 @@ the original CNF formula is unsatisfiable.
 
 It's easy to code this up in Lean. Notice that the resolution rule can be defined as follows:
 
-.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+.. literalinclude:: ../../LAMR/Examples/proof_systems_for_propositional_logic/resolution.lean
    :start-after: -- textbook: the resolution rule
    :end-before: -- end
 
 Given a list of clauses, we can sort them relative to the variable ``var`` as follows:
 
-.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+.. literalinclude:: ../../LAMR/Examples/proof_systems_for_propositional_logic/resolution.lean
    :start-after: -- textbook: get positive and negative clauses
    :end-before: -- end
 
@@ -293,7 +293,7 @@ Then, given a function ``CnfForm.getvar?`` that chooses a variable in a CNF form
 whether a clause is a tautology, we can determine whether there is a resolution refutation
 as follows:
 
-.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+.. literalinclude:: ../../LAMR/Examples/proof_systems_for_propositional_logic/resolution.lean
    :start-after: -- textbook: search for a resolution refutation
    :end-before: -- end
 
@@ -306,7 +306,7 @@ some of your own.
 This is a good place to mention that Lean will allow you do add print statements as
 debugging tools, and if you do that, you can trace the progress of the search.
 
-.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+.. literalinclude:: ../../LAMR/Examples/proof_systems_for_propositional_logic/resolution.lean
    :start-after: -- textbook: debugging the search for a resolution refutation
    :end-before: -- end
 
@@ -335,7 +335,7 @@ Our goal here is to think about how to obtain a proof in the latter case.
 For that, we need to have some sort of computational representation of resolution proofs.
 Here is one option:
 
-.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+.. literalinclude:: ../../LAMR/Examples/proof_systems_for_propositional_logic/resolution.lean
    :start-after: -- textbook: resolution proofs
    :end-before: -- end
 
@@ -347,7 +347,7 @@ is inherited from the underlying array representation.
 A proof is only well formed if each resolution step refers to prior steps, which we can
 check as follows.
 
-.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+.. literalinclude:: ../../LAMR/Examples/proof_systems_for_propositional_logic/resolution.lean
    :start-after: -- textbook: check a resolution proof is well formed
    :end-before: -- end
 
@@ -358,13 +358,13 @@ writing ``Step`` explicitly.
 
 Assuming the proof is well formed, we can pretty-print it.
 
-.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+.. literalinclude:: ../../LAMR/Examples/proof_systems_for_propositional_logic/resolution.lean
    :start-after: -- textbook: pretty-print a resolution proof
    :end-before: -- end
 
 This enables us to write resolution proofs by hand and see the results.
 
-.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+.. literalinclude:: ../../LAMR/Examples/proof_systems_for_propositional_logic/resolution.lean
    :start-after: -- textbook: resolution examples
    :end-before: -- end
 
@@ -374,7 +374,7 @@ But for some purposes,
 it is more convenient to use a representation that stores the clause with the
 resolution steps as well as with the hypotheses.
 
-.. literalinclude:: ../../LAMR/Examples/deduction_for_propositional_logic/resolution.lean
+.. literalinclude:: ../../LAMR/Examples/proof_systems_for_propositional_logic/resolution.lean
    :start-after: -- textbook: a verbose form of the resolution proof
    :end-before: -- end
 
@@ -658,7 +658,7 @@ negation normal form. Rather, the rules of a tableau system correspond to the se
 for the negation-normal-form equivalents. Since :math:`A \limplies B` is equivalent to
 :math:`\lnot A \lor B`,
 this requires changing :math:`A` to :math:`\lnot A` as we move up the tree. To avoid introducing
-new connectives, tableau systems often annotate formulas with \emph{polarities},
+new connectives, tableau systems often annotate formulas with *polarities*,
 so that :math:`A^+` represents :math:`A` and :math:`A^-` represents :math:`\lnot A`.
 The most jarring difference between sequent calculi and tableau systems is that the latter
 are often described in terms of search for a satisfying assignment rather than searching for a proof.

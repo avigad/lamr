@@ -22,7 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="3. Lean as a Programming Language" href="using_lean_as_a_programming_language.html" />
+    <link rel="next" title="3. Lean as a Programming Language" href="lean_as_a_programming_language.html" />
     <link rel="prev" title="1. Introduction" href="introduction.html" /> 
 </head>
 
@@ -52,7 +52,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#exercises">2.5. Exercises</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
@@ -61,11 +61,13 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_equality.html">12. Decision Procedures for Equality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equality_and_induction_in_lean.html">13. Equality and Induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_arithmetic.html">14. Decision Procedures for Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">15. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">16. Proof Systems for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">18. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -376,7 +378,7 @@ every pair of lists <span class="math notranslate nohighlight">\(\ell\)</span> a
 \[\fn{reverse}(\fn{reverse}(\ell)) = \ell\]</div>
 <p>From a mathematical point of view, this definition of the reverse function above
 is as good as any other, since it specifies the function we want unambiguously.
-But in <a class="reference internal" href="using_lean_as_a_programming_language.html#chapter-lean-as-a-programming-language"><span class="std std-numref">Chapter 3</span></a> we will see that such a definition can also be interpreted as executable code in a functional programming language such as Lean. In this case, the execution is quadratic in the length of the list (think about why). The following definition is more efficient in that sense:</p>
+But in <a class="reference internal" href="lean_as_a_programming_language.html#chapter-lean-as-a-programming-language"><span class="std std-numref">Chapter 3</span></a> we will see that such a definition can also be interpreted as executable code in a functional programming language such as Lean. In this case, the execution is quadratic in the length of the list (think about why). The following definition is more efficient in that sense:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\fn{reverseAux}([], m) &amp;= m \\
 \fn{reverseAux}((a \mathbin{::} \ell), m) &amp;= \fn{reverseAux}(\ell, (a \mathbin{::} m)) \\
@@ -597,7 +599,7 @@ of Is is not equal to zero modulo 3.)</p></li>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="introduction.html" class="btn btn-neutral float-left" title="1. Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="using_lean_as_a_programming_language.html" class="btn btn-neutral float-right" title="3. Lean as a Programming Language" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="lean_as_a_programming_language.html" class="btn btn-neutral float-right" title="3. Lean as a Programming Language" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

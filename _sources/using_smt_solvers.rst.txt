@@ -138,75 +138,13 @@ After stating the theory, the encoding consists of four parts: 1) declaring a va
 The formula shown below uses the quantifier-free theory of linear integer arithmetic (QF_LIA). The variable for the cell in row ``i`` and column ``j`` is called ``m_i_j``. The variable is declared using ``(declare-const m_i_j Int)``, while the lines
 with ``assert`` constrain the variables.
 
-.. code-block:: lisp
-
-    (set-logic QF_LIA)
-    (declare-const m_0_0 Int)
-    (declare-const m_0_1 Int)
-    (declare-const m_0_2 Int)
-    (declare-const m_1_0 Int)
-    (declare-const m_1_1 Int)
-    (declare-const m_1_2 Int)
-    (declare-const m_2_0 Int)
-    (declare-const m_2_1 Int)
-    (declare-const m_2_2 Int)
-    (assert (and (> m_0_0 0) (<= m_0_0 9)))
-    (assert (and (> m_0_1 0) (<= m_0_1 9)))
-    (assert (and (> m_0_2 0) (<= m_0_2 9)))
-    (assert (and (> m_1_0 0) (<= m_1_0 9)))
-    (assert (and (> m_1_1 0) (<= m_1_1 9)))
-    (assert (and (> m_1_2 0) (<= m_1_2 9)))
-    (assert (and (> m_2_0 0) (<= m_2_0 9)))
-    (assert (and (> m_2_1 0) (<= m_2_1 9)))
-    (assert (and (> m_2_2 0) (<= m_2_2 9)))
-    (assert (distinct m_0_0 m_0_1 m_0_2 m_1_0 m_1_1 m_1_2 m_2_0 m_2_1 m_2_2))
-    (assert (= 15 (+ m_0_0 m_0_1 m_0_2)))
-    (assert (= 15 (+ m_1_0 m_1_1 m_1_2)))
-    (assert (= 15 (+ m_2_0 m_2_1 m_2_2)))
-    (assert (= 15 (+ m_0_0 m_1_0 m_2_0)))
-    (assert (= 15 (+ m_0_1 m_1_1 m_2_1)))
-    (assert (= 15 (+ m_0_2 m_1_2 m_2_2)))
-    (assert (= 15 (+ m_0_2 m_1_1 m_2_0)))
-    (assert (= 15 (+ m_2_0 m_1_1 m_0_2)))
-    (check-sat)
-    (get-model)
-    (exit)
+.. literalinclude:: ../../preparation/SMT/magic/magic-int3.smt2
+   :language: lisp
 
 The encoding in the quantifier-free theory of bitvectors (QF_BV) is very similar and shown below. When using bitvectors, one needs to declare the number of bits. In this example, we use 16 bits, which is large enough to compute magic squares of reasonable size. Note that QF_BV uses the bitvector variants of +, -, >, >=, <, and <=, which are ``bvadd``, ``bvsub``, ``bvugt``, ``bvuge``, ``bvult``, and ``bvule``, respectively. Also, constants are expressed differently in QF_BV: they are written as ``#x`` followed by the bitvector in hexadecimal notation.
 
-.. code-block:: lisp
-
-    (set-logic QF_BV)
-    (declare-const m_0_0 (_ BitVec 16))
-    (declare-const m_0_1 (_ BitVec 16))
-    (declare-const m_0_2 (_ BitVec 16))
-    (declare-const m_1_0 (_ BitVec 16))
-    (declare-const m_1_1 (_ BitVec 16))
-    (declare-const m_1_2 (_ BitVec 16))
-    (declare-const m_2_0 (_ BitVec 16))
-    (declare-const m_2_1 (_ BitVec 16))
-    (declare-const m_2_2 (_ BitVec 16))
-    (assert (and (bvugt m_0_0 #x0000) (bvule m_0_0 #x0009)))
-    (assert (and (bvugt m_0_1 #x0000) (bvule m_0_1 #x0009)))
-    (assert (and (bvugt m_0_2 #x0000) (bvule m_0_2 #x0009)))
-    (assert (and (bvugt m_1_0 #x0000) (bvule m_1_0 #x0009)))
-    (assert (and (bvugt m_1_1 #x0000) (bvule m_1_1 #x0009)))
-    (assert (and (bvugt m_1_2 #x0000) (bvule m_1_2 #x0009)))
-    (assert (and (bvugt m_2_0 #x0000) (bvule m_2_0 #x0009)))
-    (assert (and (bvugt m_2_1 #x0000) (bvule m_2_1 #x0009)))
-    (assert (and (bvugt m_2_2 #x0000) (bvule m_2_2 #x0009)))
-    (assert (distinct m_0_0 m_0_1 m_0_2 m_1_0 m_1_1 m_1_2 m_2_0 m_2_1 m_2_2))
-    (assert (= #x000f (bvadd m_0_0 m_0_1 m_0_2)))
-    (assert (= #x000f (bvadd m_1_0 m_1_1 m_1_2)))
-    (assert (= #x000f (bvadd m_2_0 m_2_1 m_2_2)))
-    (assert (= #x000f (bvadd m_0_0 m_1_0 m_2_0)))
-    (assert (= #x000f (bvadd m_0_1 m_1_1 m_2_1)))
-    (assert (= #x000f (bvadd m_0_2 m_1_2 m_2_2)))
-    (assert (= #x000f (bvadd m_0_2 m_1_1 m_2_0)))
-    (assert (= #x000f (bvadd m_2_0 m_1_1 m_0_2)))
-    (check-sat)
-    (get-model)
-    (exit)
+.. literalinclude:: ../../preparation/SMT/magic/magic-bv3.smt2
+   :language: lisp
 
 Although the encodings of magic squares in QF_LIA and QF_BV look very similar, the performance of SMT solvers on these encodings differs a lot. For example, computing a magic square of order 5 is difficult for SMT solvers using the QF_LIA encoding, while it is easy when using the QF_BV encoding. In fact, it is even easy to solve the QF_BV encoding expressing the existence of a magic square of order 10. The main difference between these two theories is that the solver applies linear arithmetic when using QF_LIA, while it applies what is known as *bit blasting* when using QF_BV. Bit blasting transforms the formula into propositional logic by introducing a propositional variable for each bit in the problem. For some problems, such as magic squares, bit blasting can be very effective. For other problems, bit blasting can result in formulas that are hard to solve.
 
@@ -370,5 +308,3 @@ Step 2) For each pair of almost squares, express the constraint that they cannot
 Step 3) Determine a grid assignment showing that the almost squares of orders 1 to 8 can fully cover the almost square of order 15. SMT solvers should be able to quickly solve the intended encoding. The same encoding can also be used to cover the almost square of order 55 with the almost squares of order 1 to 20. Solving this formula can take minutes.
 
 Step 4) Encode the same problem using the theory QF_BV and compare the runtimes between the two theories.
-
-

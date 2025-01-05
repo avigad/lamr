@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>12. Decision Procedures for First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  <title>12. Decision Procedures for Equality &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
@@ -22,7 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="13. Using SMT solvers" href="using_smt_solvers.html" />
+    <link rel="next" title="13. Equality and Induction in Lean" href="equality_and_induction_in_lean.html" />
     <link rel="prev" title="11. Implementing First-Order Logic" href="implementing_first_order_logic.html" /> 
 </head>
 
@@ -45,7 +45,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
@@ -54,20 +54,18 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">12. Decision Procedures for First-Order Logic</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">12. Decision Procedures for Equality</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#equality">12.1. Equality</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#implementing-congruence-closure">12.2. Implementing congruence closure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deciding-universal-sentences">12.3. Deciding universal sentences</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#linear-arithmetic">12.4. Linear arithmetic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#implementing-fourier-motzkin">12.5. Implementing Fourier-Motzkin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#a-full-decision-procedure">12.6. A full decision procedure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#other-theories">12.7. Other theories</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equality_and_induction_in_lean.html">13. Equality and Induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_arithmetic.html">14. Decision Procedures for Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">15. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">16. Proof Systems for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">18. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -84,9 +82,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">12. </span>Decision Procedures for First-Order Logic</li>
+      <li><span class="section-number">12. </span>Decision Procedures for Equality</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/decision_procedures_for_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/decision_procedures_for_equality.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -94,11 +92,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="decision-procedures-for-first-order-logic">
-<span id="chapter-decision-procedures-for-first-order-logic"></span><h1><span class="section-number">12. </span>Decision Procedures for First-Order Logic<a class="headerlink" href="#decision-procedures-for-first-order-logic" title="Permalink to this heading"></a></h1>
+  <section id="decision-procedures-for-equality">
+<span id="chapter-decision-procedures-for-equality"></span><h1><span class="section-number">12. </span>Decision Procedures for Equality<a class="headerlink" href="#decision-procedures-for-equality" title="Permalink to this heading"></a></h1>
 <p>In the terminology of logic and computer science, a <em>decision procedure</em> is an
-algorithm that accepts a class of yes/no questions and answers them correctly. Fix a set of first-order sentences, <span class="math notranslate nohighlight">\(\Gamma\)</span>, which we can think of as a set of axioms of as a description of a
-possible state of affairs. Here are some questions we can ask:</p>
+algorithm that accepts a class of yes/no questions and answers them correctly.
+Fix a set of first-order sentences, <span class="math notranslate nohighlight">\(\Gamma\)</span>, which we can think of as a set of axioms of as
+a description of a possible state of affairs. Here are some questions we can ask:</p>
 <ul class="simple">
 <li><p>Given  a first-order sentence <span class="math notranslate nohighlight">\(A\)</span>,
 does <span class="math notranslate nohighlight">\(\Gamma\)</span> prove <span class="math notranslate nohighlight">\(A\)</span>, that is, <span class="math notranslate nohighlight">\(\Gamma \proves A\)</span>?</p></li>
@@ -110,7 +109,7 @@ is <span class="math notranslate nohighlight">\(\Gamma \cup \{ A \}\)</span> is 
 </ul>
 <p>The first two questions are equivalent. We
 have not yet presented deductive systems for first-order logic, but we will do so in
-<a class="reference internal" href="proof_systems_for_first_order_logic.html#chapter-proof-systems-for-first-order-logic"><span class="std std-numref">Chapter 14</span></a>, and by the soundness and
+<a class="reference internal" href="proof_systems_for_first_order_logic.html#chapter-proof-systems-for-first-order-logic"><span class="std std-numref">Chapter 16</span></a>, and by the soundness and
 completeness theorems for those systems, we will have that a sentence <span class="math notranslate nohighlight">\(A\)</span> is provable from
 a set of hypotheses <span class="math notranslate nohighlight">\(\Gamma\)</span> if and only if it is entailed by <span class="math notranslate nohighlight">\(\Gamma\)</span>.
 The third question is equivalent to the first two by translation: as with propositional logic,
@@ -179,13 +178,8 @@ existential formula in a model, and in some cases, we may have a positive answer
 the full problem is undecidable.</p>
 <p>In this chapter, we will describe, in detail,
 a decision procedure for the validity universal formulas in pure first-order logic, that is,
-first-order logic without any axioms. We will also describe a decision procedure for the
-satisfiability of quantifier-free formulas in the theory of linear equations and
-inequalities in the real numbers. Finally, we will state some other important decidability and
-undecidability results, to give you a fuller sense of the landscape.
-In <a class="reference internal" href="using_smt_solvers.html#chapter-using-smt-solvers"><span class="std std-numref">Chapter 13</span></a>, we will consider SMT solvers,
-whose main strength is that they are capable of combining decision procedures for the
-quantifier-free parts of various theories and using them together effectively.</p>
+first-order logic without any axioms.
+The central component to this is a decision procedure for equality, and so we start with that.</p>
 <section id="equality">
 <span id="section-equality"></span><h2><span class="section-number">12.1. </span>Equality<a class="headerlink" href="#equality" title="Permalink to this heading"></a></h2>
 <p>Fix a language, <span class="math notranslate nohighlight">\(L\)</span>. We will consider equations <span class="math notranslate nohighlight">\(s = t\)</span> and <em>disequations</em>
@@ -326,6 +320,8 @@ interpret each <span class="math notranslate nohighlight">\(n\)</span>-ary funct
 \end{cases}\end{split}\]</div>
 <p>In other words, what <span class="math notranslate nohighlight">\(f^{\mdl M}\)</span> does to each equivalence class is determined by what
 <span class="math notranslate nohighlight">\(f\)</span> does to each of the elements.
+If any of the arguments to <span class="math notranslate nohighlight">\(f^{\mdl M}\)</span> is <span class="math notranslate nohighlight">\(\star\)</span>, then
+<span class="math notranslate nohighlight">\(f^{\mdl M}\)</span> returns <span class="math notranslate nohighlight">\(\star\)</span>.
 The fact that <span class="math notranslate nohighlight">\(\equiv\)</span> is a congruence ensures that this makes sense.
 This is just a truncated version of the term model, in which provably equal terms
 are all glued together.</p>
@@ -336,6 +332,12 @@ same equivalence class, so they are equal in the model.
 And if <span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are not provably equal, then <span class="math notranslate nohighlight">\([s]\)</span> and <span class="math notranslate nohighlight">\([t]\)</span> are not the same, so
 every disequation <span class="math notranslate nohighlight">\(s \ne t\)</span> in <span class="math notranslate nohighlight">\(\Gamma\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span> as well.</p>
 </div>
+<p>In the construction of the counter-model, we don’t really need
+to introduce a new element <span class="math notranslate nohighlight">\(\star\)</span>.
+You can check that everything works if we pick an arbitrary equivalence class
+<span class="math notranslate nohighlight">\([t]\)</span> and use that as the default instead.
+We simply find it clearer to use <span class="math notranslate nohighlight">\(\star\)</span> as a catch-all for
+everything that falls outside the scope of the finite set of terms we started with.</p>
 <p>For examples of the algorithm in action, first let us show that the set</p>
 <div class="math notranslate nohighlight">
 \[f^3(a) = a, \, f^5(a) = a, \, f(a) \ne a\]</div>
@@ -373,10 +375,7 @@ equivalence classes:</p>
 f^{\mdl M}([f(a)]) &amp; = [a] \\
 f^{\mdl M}([b]) &amp; = \star \\
 f^{\mdl M}(\star) &amp; = \star\end{split}\]</div>
-<p>You can check that this satisfies the original set of equations and disequations. We don’t really need
-to introduce the new element <span class="math notranslate nohighlight">\(\star\)</span>; you can check that everything works if we replace it by
-any of the equivalence classes. We simply find it clearer to use <span class="math notranslate nohighlight">\(\star\)</span> as a catch-all for
-everything that falls outside the scope of the finite set of terms we started with.</p>
+<p>You can check that this satisfies the original set of equations and disequations.</p>
 <p>Our analysis establishes an interesting property of
 first-order logic: it is possible to prove a disjunction <span class="math notranslate nohighlight">\(u_1 = v_1 \lor \cdots \lor u_m = v_m\)</span>
 from a set of equation if and only if it is possible to prove <span class="math notranslate nohighlight">\(u_i = v_i\)</span> for some <span class="math notranslate nohighlight">\(i\)</span>.
@@ -396,9 +395,108 @@ quantified equations is known as the <em>word problem</em>, and, in general it i
 </section>
 <section id="implementing-congruence-closure">
 <h2><span class="section-number">12.2. </span>Implementing congruence closure<a class="headerlink" href="#implementing-congruence-closure" title="Permalink to this heading"></a></h2>
-<p>Congruence closuure can be implemented efficiently (and <em>is</em> implemented efficiently in SMT
-solvers) using <em>union-find</em> data structures.</p>
-<p>[This section needs to be written. In the meanwhile, see the <a class="reference external" href="https://www.cs.cmu.edu/~mheule/15311-s24/slides/congruence-closure.pdf">slides</a> and the file <code class="docutils literal notranslate"><span class="pre">CongruenceClosure.lean</span></code>].</p>
+<p>A high-level overview of the congruence closure algorithm is as follows:</p>
+<ul>
+<li><p>Given a set of equations and disequations, collect the set of all subterms.</p></li>
+<li><p>Start with each subterm in its own equivalence class.</p></li>
+<li><p>For each equation in the original problem:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Merge the equivalence classes specified by the equation.</p></li>
+<li><p>Keep merging classes according to the congruence rule, until it can no longer be applied.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>The resulting equivalence classes characterize all the equations that are implied by the
+set of the equations in the original problem.
+If they contradict one of the disequations, the original set is unsatisfiable, and
+otherwise it is satisfiable.
+Of course, one can stop the procedure early if a contradiction is found.</p>
+<p>For example, given the set <span class="math notranslate nohighlight">\(\{ f(a,b) = a, f(f(a,b),b) \neq a \}\)</span>, the set of all subterms is <span class="math notranslate nohighlight">\(\{a,b,f(a,b),f(f(a,b),b)\}\)</span>. The algorithm proceeds as follows:</p>
+<ul class="simple">
+<li><p>Initially, the equivalence classes are <span class="math notranslate nohighlight">\(\{a\}, \{b\}, \{f(a,b)\}, \{f(f(a,b),b)\}\)</span>.</p></li>
+<li><p>Processing the equation <span class="math notranslate nohighlight">\(f(a,b) = a\)</span>, we merge the equivalence classes of <span class="math notranslate nohighlight">\(\{f(a, b)\}\)</span> and
+<span class="math notranslate nohighlight">\(\{a\}\)</span> to get <span class="math notranslate nohighlight">\(\{a, f(a,b)\}, \{b\}, \{f(f(a,b),b)\}\)</span>.</p></li>
+<li><p>Considering the terms <span class="math notranslate nohighlight">\(f(a, b)\)</span> and <span class="math notranslate nohighlight">\(f(f(a,b), b)\)</span>, we see that the first
+immediate subterms of each, <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(f(a, b)\)</span>, and the second immediate subterms,
+both <span class="math notranslate nohighlight">\(b\)</span>, are pairwise in the same equivalence classes.
+This means we can merge the equivalence classes containing
+<span class="math notranslate nohighlight">\(f(a, b)\)</span> and <span class="math notranslate nohighlight">\(f(f(a,b), b)\)</span> to get <span class="math notranslate nohighlight">\(\{a, f(a,b), f(f(a,b),b)\}, \{b\}\)</span>.</p></li>
+<li><p>This contradicts <span class="math notranslate nohighlight">\(f(f(a,b), b) \neq a\)</span>, so the original set is unsatisfiable.</p></li>
+</ul>
+<p>Congruence closure can be implemented efficiently (and <em>is</em> implemented efficiently in SMT
+solvers) using a <em>union-find</em> data structure, a generic means of
+partitioning a set of nodes into equivalence classes. Each node has a
+pointer to its parent, which is another element in the equivalence class.
+Each class has a distinguished element, called the <em>representative</em>, with
+the property that it is the parent of itself.
+To initialize the algorithm with a set of elements, each in its own class,
+we create a new node for each element and set its parent to itself.
+The union-find structure supports two operations:</p>
+<ul>
+<li><p>The <em>find</em> operation returns the representative of the class of a given element
+by following the parent pointers. In pseudocode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">parent</span> <span class="o">==</span> <span class="n">x</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">parent</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can then determine whether two elements <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are equivalent by
+checking whether <code class="docutils literal notranslate"><span class="pre">find(x)</span></code> and <code class="docutils literal notranslate"><span class="pre">find(y)</span></code> are the same.</p>
+</li>
+<li><p>The <em>merge</em> operation takes two nodes, <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> and ensures that
+they are in the same class, by finding the representatives of each class,
+and, if they are not the same, making one point to the other:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+  <span class="n">xr</span> <span class="o">:=</span> <span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">yr</span> <span class="o">:=</span> <span class="n">find</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">xr</span> <span class="o">!=</span> <span class="n">yr</span><span class="p">:</span>
+    <span class="n">yr</span><span class="o">.</span><span class="n">parent</span> <span class="o">:=</span> <span class="n">xr</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>In an efficient implementation, there are two important optimizations.
+First, the find operation can be modified to update the parent pointers of all nodes on
+the path to the representative, so that future finds are faster.
+Second, the merge operation can be modified to make the smaller class a child of the larger class,
+which ensures that the depth of the tree is logarithmic in the number of elements.</p>
+<p>Using the union-find data structure, we can straightforwardly implement the congruence closure
+algorithm outlined at the beginning of this section.
+Because the set that is being partitioned into equivalence classes consists of the subterms
+of the terms in the original problem, there are <em>two</em> structures that are relevant:</p>
+<ul class="simple">
+<li><p>We need to keep track of the term structure, for example, the fact that <span class="math notranslate nohighlight">\(f(a, b)\)</span> is
+a subterm of <span class="math notranslate nohighlight">\(f(f(a, b), b)\)</span>.</p></li>
+<li><p>We need to keep track of the equivalence classes at each stage of the algorithm.</p></li>
+</ul>
+<p>Every time a merge identifies the classes represented by <code class="docutils literal notranslate"><span class="pre">s</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span></code> respectively, we should
+consider each subterm <code class="docutils literal notranslate"><span class="pre">u</span></code> that has an immediate subterm equivalent to <code class="docutils literal notranslate"><span class="pre">s</span></code> and each
+subterm <code class="docutils literal notranslate"><span class="pre">v</span></code> that has an immediate subterm equivalent to <code class="docutils literal notranslate"><span class="pre">t</span></code>, and ask whether <code class="docutils literal notranslate"><span class="pre">u</span></code> and <code class="docutils literal notranslate"><span class="pre">v</span></code>
+should be identified by the congruence rule; in other words, whether <code class="docutils literal notranslate"><span class="pre">u</span></code> and <code class="docutils literal notranslate"><span class="pre">v</span></code> have the
+same function symbol and the arguments have, pairwise, been identified as equivalent.
+In the example above, when we merge the equivalence classes of <span class="math notranslate nohighlight">\(f(a, b)\)</span> and <span class="math notranslate nohighlight">\(a\)</span>,
+we need to check whether <span class="math notranslate nohighlight">\(f(f(a, b), b)\)</span> should be identified with <span class="math notranslate nohighlight">\(f(a, b)\)</span>, because
+the first has <span class="math notranslate nohighlight">\(f(a, b)\)</span> as an immediate subterm and the second has
+<span class="math notranslate nohighlight">\(a\)</span> as an immediate subterm.
+One option is to iterate through <em>all</em> pairs of subterms in the original problem, but this
+is inefficient.
+Instead, we can maintain, for each class representative <code class="docutils literal notranslate"><span class="pre">s</span></code>, a list of all subterms that have
+an immediate subterm in the same class as <code class="docutils literal notranslate"><span class="pre">s</span></code>. These are called the <em>predecessors</em> of <code class="docutils literal notranslate"><span class="pre">s</span></code>.
+Whenever we merge classes with representatives <code class="docutils literal notranslate"><span class="pre">s</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span></code>, we check each pair
+consisting of a predecessor of <code class="docutils literal notranslate"><span class="pre">s</span></code> and a predecessor of <code class="docutils literal notranslate"><span class="pre">t</span></code> to see if they should be
+merged, according to the congruence closure rule, and the predecessors of the
+representative of the new class should be set to the union of the previous predecessors of
+<code class="docutils literal notranslate"><span class="pre">s</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span></code>.</p>
+<p>In the course repository for this textbook, there is an implementation of the union-find
+data structure in <code class="docutils literal notranslate"><span class="pre">LAMR/Util/DisjointSet.lean</span></code>, and there is an implementation of the
+congruence closure algorithm in the file <code class="docutils literal notranslate"><span class="pre">CongruenceClosure.lean</span></code> associated with
+this chapter. The latter closely follows the implementation in Harrison’s book,
+<em>Handbook of Practical Logic and Automated Reasoning</em>. Zohar and Manna’s book, <em>The Calculus of
+Computation</em>, is another good reference.</p>
 </section>
 <section id="deciding-universal-sentences">
 <span id="id1"></span><h2><span class="section-number">12.3. </span>Deciding universal sentences<a class="headerlink" href="#deciding-universal-sentences" title="Permalink to this heading"></a></h2>
@@ -462,188 +560,6 @@ of a universal sentence is an existential sentence, we have shown the following.
 Equivalently, the satisfiability of existential sentences is decidable.</p>
 </div>
 </section>
-<section id="linear-arithmetic">
-<h2><span class="section-number">12.4. </span>Linear arithmetic<a class="headerlink" href="#linear-arithmetic" title="Permalink to this heading"></a></h2>
-<p>We now turn from questions having to do with satisfiability and validity in arbitrary
-models to questions about satisfiability in a particular model, namely, the real numbers.
-A <em>linear expression</em> is one of the form <span class="math notranslate nohighlight">\(a_1 x_1 + a_2 x_2 + \cdots + a_n x_n + b\)</span>,
-where each <span class="math notranslate nohighlight">\(a_i\)</span> is a rational number, <span class="math notranslate nohighlight">\(b\)</span> is a rational number,
-and each <span class="math notranslate nohighlight">\(x_i\)</span> is a variable.
-We think of the variables <span class="math notranslate nohighlight">\(x_i\)</span> as ranging over the real numbers.
-A <em>linear constraint</em> is one of the form <span class="math notranslate nohighlight">\(s = t\)</span> or <span class="math notranslate nohighlight">\(s &lt; t\)</span>, where
-<span class="math notranslate nohighlight">\(s\)</span> and <span class="math notranslate nohighlight">\(t\)</span> are linear expressions. (In practice, we usually include constraints
-of the form <span class="math notranslate nohighlight">\(s \le t\)</span> and sometimes <span class="math notranslate nohighlight">\(s \ne t\)</span> as well. But the first can be
-written <span class="math notranslate nohighlight">\(s &lt; t\)</span> and the second can be written <span class="math notranslate nohighlight">\(s &lt; t \lor t &lt; s\)</span>, so questions about
-those can be rexpressed in terms of <span class="math notranslate nohighlight">\(&lt;\)</span> and <span class="math notranslate nohighlight">\(=\)</span>, and focusing on those will simplify
-the presentation below.)</p>
-<p>Notice that any linear constraint is equivalent to one of the form <span class="math notranslate nohighlight">\(t = 0\)</span> or <span class="math notranslate nohighlight">\(t &gt; 0\)</span>,
-since we can move all the terms to one side. For example, the constraint <span class="math notranslate nohighlight">\(3 x + 2 y &lt; 3y + 4z\)</span>
-is equivalent to <span class="math notranslate nohighlight">\(-3x + y + 4z &gt; 0\)</span>.
-An important observation that we will use below is that any linear constraint that involves
-a variable <span class="math notranslate nohighlight">\(x\)</span> can be written as <span class="math notranslate nohighlight">\(x = t\)</span>, <span class="math notranslate nohighlight">\(x &lt; t\)</span>, or <span class="math notranslate nohighlight">\(t &lt; x\)</span>,
-where <span class="math notranslate nohighlight">\(x\)</span> does not occur in <span class="math notranslate nohighlight">\(t\)</span>.
-We do this by simply solving for <span class="math notranslate nohighlight">\(x\)</span>.
-For example, the previous constraint can be expressed as <span class="math notranslate nohighlight">\(x &lt; (1/3)y + (4/3)z\)</span>.
-Remember that dividing both sides of an inequality by a negative number reverses the direction.</p>
-<p>In this section we say that a set <span class="math notranslate nohighlight">\(\Gamma\)</span> of linear constraints is <em>satisfiable</em> if and only
-if there is an assignment of real
-values to the variables that makes them all true. Our first goal is to prove the following.</p>
-<div class="admonition-theorem admonition">
-<p class="admonition-title">Theorem</p>
-<p>The question as to whether a finite set of linear constraints is satisfiable is
-decidable.</p>
-</div>
-<div class="admonition-proof admonition">
-<p class="admonition-title">Proof</p>
-<p>We use induction on the number of variables. If there are no variables at all,
-<span class="math notranslate nohighlight">\(\Gamma\)</span> contains only expressions of the form <span class="math notranslate nohighlight">\(b_0 &lt; b_1\)</span> or <span class="math notranslate nohighlight">\(b_0 = b_1\)</span>
-where <span class="math notranslate nohighlight">\(b_0\)</span> and <span class="math notranslate nohighlight">\(b_1\)</span> are constants, and we only need to perform
-the comparisons to see whether they are true. Remember that if <span class="math notranslate nohighlight">\(\Gamma\)</span>
-is the empty set, we take it to be trivially satisfied.</p>
-<p>In the inductive step, <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a variable.
-If <span class="math notranslate nohighlight">\(\Gamma\)</span> contains any false constant equations, it is unsatisfiable,
-and it it contains any true constant equations, we can remove them without
-affecting satisfiability.
-If <span class="math notranslate nohighlight">\(\Gamma\)</span> contains a nontrivial equation with a variable <span class="math notranslate nohighlight">\(x\)</span>,
-we put
-it in the form <span class="math notranslate nohighlight">\(x = t\)</span> and then substitute <span class="math notranslate nohighlight">\(t\)</span> for <span class="math notranslate nohighlight">\(x\)</span> everywhere.
-The resulting set of constraints has one fewer variable, and clearly
-it is equisatisfiable with the original one.
-Given an assignment to the new set of constraints, we just assign <span class="math notranslate nohighlight">\(x\)</span>
-the value of <span class="math notranslate nohighlight">\(t\)</span>.</p>
-<p>So we can now assume that there are no equations in <span class="math notranslate nohighlight">\(\Gamma\)</span>.
-We can divide the inequalities in <span class="math notranslate nohighlight">\(\Gamma\)</span> intro three kinds:</p>
-<ul class="simple">
-<li><p>those that don’t contain <span class="math notranslate nohighlight">\(x\)</span> at all</p></li>
-<li><p>those that can be expressed in the form <span class="math notranslate nohighlight">\(s_i &lt; x\)</span></p></li>
-<li><p>those that can be expressed in the form <span class="math notranslate nohighlight">\(x &lt; t_j\)</span></p></li>
-</ul>
-<p>Let <span class="math notranslate nohighlight">\(\Gamma'\)</span> be the set that results from removing the inequalities
-in the last two categories
-and replacing them with inequalities of the form <span class="math notranslate nohighlight">\(s_i &lt; t_j\)</span>.
-We claim <span class="math notranslate nohighlight">\(\Gamma'\)</span> is equisatisfiable with <span class="math notranslate nohighlight">\(\Gamma\)</span>.
-Clearly any assignment that satisfies <span class="math notranslate nohighlight">\(\Gamma\)</span> also satisfies <span class="math notranslate nohighlight">\(\Gamma'\)</span>.
-Conversely, suppose <span class="math notranslate nohighlight">\(\sigma\)</span> is an assignment that satisfies <span class="math notranslate nohighlight">\(\Gamma'\)</span>.
-Then, under that assignment, the value of each <span class="math notranslate nohighlight">\(s_i\)</span> is less than the value
-of every <span class="math notranslate nohighlight">\(t_j\)</span>. We obtain an assignment satisfying <span class="math notranslate nohighlight">\(\Gamma\)</span>
-by mapping <span class="math notranslate nohighlight">\(x\)</span> to any value between the largest <span class="math notranslate nohighlight">\(s_i\)</span> and the
-smallest <span class="math notranslate nohighlight">\(t_j\)</span>. (If one of the last two categories is empty, we
-remove the constraints in the other category entirely,
-since they can be satisfied by taking <span class="math notranslate nohighlight">\(x\)</span> sufficiently large or sufficiently
-small.)</p>
-</div>
-</section>
-<section id="implementing-fourier-motzkin">
-<h2><span class="section-number">12.5. </span>Implementing Fourier-Motzkin<a class="headerlink" href="#implementing-fourier-motzkin" title="Permalink to this heading"></a></h2>
-<p>The procedure implicit in this proof is known as the <em>Fourier-Motzkin</em> procedure.
-The idea can be found in the work of Jean-Baptiste Joseph
-Fourier in the early nineteenth century (the same Fourier who gave us Fourier
-analysis), but it was rediscovered by multiple people in the nineteenth century, including Theo In the worst case, every elimination step divides the number of equations in half and
-then squares it, resulting in doubly exponential behavior.
-The procedure works well in practice, though, since in many applications each variable is
-contained in only a few equations. (There are obvious heuristics, like choosing a variable
-at each stage that minimizes the number of equations at the next stage.)
-There is an implementation of the procedure in the file <cite>FourierMotzkin.lean</cite> in the <cite>Examples</cite>
-folder,
-modulo two components that we ask you to supply.
-SMT solvers use much more efficient methods based on the simplex algorithm from linear programming.</p>
-</section>
-<section id="a-full-decision-procedure">
-<h2><span class="section-number">12.6. </span>A full decision procedure<a class="headerlink" href="#a-full-decision-procedure" title="Permalink to this heading"></a></h2>
-<p>We can describe the Fourier-Motzkin procedure more explicitly as a decision procedure
-for satisfiability of existential sentences in a langauge for the real numbers as follows.
-Suppose we are given a problem in linear arithmetic where the variables are labeled
-<span class="math notranslate nohighlight">\(x_1, x_2, \ldots, x_n\)</span> and the
-constraints are labeled <span class="math notranslate nohighlight">\(c_1, c_2, \ldots, c_m\)</span>. Then what we are really asking as to whether
-the formula <span class="math notranslate nohighlight">\(\ex {x_1, \ldots, x_n} c_1 \land c_2 \land \cdots \land c_m\)</span>
-is true of the real numbers when the constraints are interpreted in the expected way.
-To make this more precise, consider the structure <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;)\)</span>
-in a language with symbols <span class="math notranslate nohighlight">\(0\)</span>, <span class="math notranslate nohighlight">\(1\)</span>, <span class="math notranslate nohighlight">\(+\)</span>, and <span class="math notranslate nohighlight">\(&lt;\)</span>.
-All the constraints can be expressed in this language, albeit in a clunky way. For example,
-we can write <span class="math notranslate nohighlight">\(3 x\)</span> as <span class="math notranslate nohighlight">\(x + x + x\)</span>, and express a constraint like <span class="math notranslate nohighlight">\(x -(1/2)y + (4/3)z &lt; 0\)</span>
-as <span class="math notranslate nohighlight">\(6x + 8z &lt; 3y\)</span>. Alternatively, we can add symbols for scalar multiplication to the language.</p>
-<p>We now obtain a decision procedure for arbitrary existential formulas
-<span class="math notranslate nohighlight">\(\ex {x_1, \ldots, x_n} A\)</span> as follows.
-Given a formula <span class="math notranslate nohighlight">\(\ex x A\)</span>, put <span class="math notranslate nohighlight">\(A\)</span> into negation normal form, so that all the negations
-are pushed down to atomic formulas.
-Replace <span class="math notranslate nohighlight">\(\lnot (s &lt; t)\)</span> by <span class="math notranslate nohighlight">\(t &lt; s \lor s = t\)</span>, and we can replace
-<span class="math notranslate nohighlight">\(s \ne t\)</span> by <span class="math notranslate nohighlight">\(s &lt; t \lor t &lt; s\)</span>.
-(In practice, it is more efficient to include <span class="math notranslate nohighlight">\(\le\)</span> in the language as well, and use the
-fact that <span class="math notranslate nohighlight">\(\lnot (s \le t)\)</span> is equivalent to <span class="math notranslate nohighlight">\(t &lt; s\)</span>.)
-Putting the result into disjunctive normal form, we can assume that all the atomic
-formulas are of the form <span class="math notranslate nohighlight">\(s &lt; t\)</span> or <span class="math notranslate nohighlight">\(s = t\)</span>.
-We can move the existential quantifiers through the disjunction as we did in <a class="reference internal" href="#deciding-universal-sentences"><span class="std std-numref">Section 12.3</span></a> and then apply the Fourier-Motzkin procedure to
-each disjunction.</p>
-<p>In fact, a modification of the algorithm provides a decision procedure for the satisfiability
-of <em>any</em> sentence in the language, not just the existential ones.</p>
-<div class="admonition-theorem admonition">
-<p class="admonition-title">Theorem</p>
-<p>The question as to whether a sentence <span class="math notranslate nohighlight">\(A\)</span> is true in <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;, \le)\)</span>
-is decidable.</p>
-</div>
-<p>We will only sketch the details here.
-The algorithm uses an important method known as “elimination of quantifiers.”
-The idea is to successively eliminate quantifiers, one by one, until we are left with a
-quantifier-free sentence. We can determine the truth of that by simply calculating.</p>
-<p>We will show that any formula <span class="math notranslate nohighlight">\(\ex x A\)</span>, where <span class="math notranslate nohighlight">\(A\)</span> is quantifier-free,
-is equivalent to a quantifier-free formula <span class="math notranslate nohighlight">\(A'\)</span> that does not include <span class="math notranslate nohighlight">\(x\)</span>.
-Repeating the process and using the fact that <span class="math notranslate nohighlight">\(\fa x A\)</span> is equivalent to
-<span class="math notranslate nohighlight">\(\lnot \ex x \lnot A\)</span>, we can eliminate all the quantifiers. We are then
-left with a quantifier-free sentence, that is, a boolean combination of equations and
-inequalities between closed terms. We can decide the truth of that sentence by evaluating
-the terms.</p>
-<p>We have already seen all the ideas. The procedure above allows us to write
-<span class="math notranslate nohighlight">\(\ex x A\)</span> as <span class="math notranslate nohighlight">\((\ex x A_1) \lor (\ex x A_2) \lor \cdots \lor (\ex x A_n)\)</span>
-where each <span class="math notranslate nohighlight">\(A_i\)</span> is a conjunction of atomic formulas.
-So we only need to show how to eliminate an existential quantifier from a conjunction
-of constraints of the form <span class="math notranslate nohighlight">\(s &lt; t\)</span> or <span class="math notranslate nohighlight">\(s = t\)</span>.
-But that is exactly what the pivot step in the Fourier-Motzkin procedure does, and we are done.</p>
-<p>It is possible to write down axioms that justify every step of the transformation.
-The resulting set of axioms is known as the theory of <em>linear arithmetic</em>.
-The argument shows that the resulting set of axioms characterizes the structure exactly,
-and that the question of provability from those axioms is decidable.</p>
-<p>You should also notice that the justification of the procedure only used the fact basic
-facts about arithmetic on the real numbers, as well as the fact we can find a real number
-between any other two. So the procedure works just the same way, and returns the same answer,
-for other structures that satisfy these properties, like the rationals.
-In other words, the structure <span class="math notranslate nohighlight">\((\mathbb Q, 0, 1, +, &lt;, \le)\)</span> has exactly the same
-theory as <span class="math notranslate nohighlight">\((\mathbb R, 0, 1, +, &lt;, \le)\)</span>.</p>
-</section>
-<section id="other-theories">
-<h2><span class="section-number">12.7. </span>Other theories<a class="headerlink" href="#other-theories" title="Permalink to this heading"></a></h2>
-<p>What happens if we extend linear arithmetic by adding multiplication between
-arbitrary terms? Formally, we are asking about the theory of the real numbers
-<span class="math notranslate nohighlight">\((\mathbb{R}, 0, 1, +, \times, &lt;)\)</span> with zero, one, addition,
-multiplication, and the less-than relation. It is equivalent to extending
-linear arithmetic by allowing atomic formulas <span class="math notranslate nohighlight">\(p = 0\)</span> and <span class="math notranslate nohighlight">\(p &gt; 0\)</span> where <span class="math notranslate nohighlight">\(p\)</span> is
-an arbitrary polynomial. The theory, known also as the theory of <em>Real closed
-fields</em>, is still decidable. The theorem was proved by Alfred Tarski before World War II,
-but it wasn’t published until 1948, after the war.</p>
-<p>Returning to the language without multiplication, one can ask what happens if we replace
-the real numbers by the integers.
-In other words, we can ask whether the truth of sentences in the structure
-<span class="math notranslate nohighlight">\((\mathbb Z, 0, 1, +, &lt;)\)</span> is decidable.
-In contrast to the reals, the order on the integers is <em>discrete</em>, since
-there is nothing between a value <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(x + 1\)</span>.
-The problem is nonetheless decidable.
-The result was first proved  in 1926 by Mojżesz Presburger, a student of Tarski’s,
-who later died in the Holocaust. The story has it that Tarski did not think
-the result was enough for a dissertation, and made him do more work.
-The resulting theory is known as <em>Presburger arithmetic</em> or <em>linear integer arithmetic</em>.</p>
-<p>The decision procedure is more complicated than that for linear arithmetic,
-and we will not discuss it here.
-SMT solvers, however, use efficient implementations of the <em>existential fragment</em>
-of the theory, which is to say, the satisfiability problem for quantifier-free formulas.</p>
-<p>What happens if we add multiplication?
-In contrast to the case with the real numbers, however, the theory of the integers
-with addition and multiplication is undecidable.
-In other words, there is no algorithm to decide truth in the model
-<span class="math notranslate nohighlight">\((\mathbb Z, 0, 1, +, \times)\)</span>.
-This follows from the methods that Gödel used to prove the incompleteness theorems,
-and it is also a consequence of <em>Tarski’s theorem</em> on the undefinability of truth.
-The phenomena can be stated in very strong terms: no theory or structure in which one
-can interpret a small amount of arithmetic with addition and multiplication is decidable.</p>
-</section>
 </section>
 
 
@@ -651,7 +567,7 @@ can interpret a small amount of arithmetic with addition and multiplication is d
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="implementing_first_order_logic.html" class="btn btn-neutral float-left" title="11. Implementing First-Order Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="using_smt_solvers.html" class="btn btn-neutral float-right" title="13. Using SMT solvers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="equality_and_induction_in_lean.html" class="btn btn-neutral float-right" title="13. Equality and Induction in Lean" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

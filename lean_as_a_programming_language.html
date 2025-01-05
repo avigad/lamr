@@ -61,11 +61,13 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_equality.html">12. Decision Procedures for Equality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equality_and_induction_in_lean.html">13. Equality and Induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_arithmetic.html">14. Decision Procedures for Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">15. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">16. Proof Systems for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">18. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -84,7 +86,7 @@
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li><span class="section-number">3. </span>Lean as a Programming Language</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/using_lean_as_a_programming_language.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/lean_as_a_programming_language.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -96,31 +98,32 @@
 <span id="chapter-lean-as-a-programming-language"></span><h1><span class="section-number">3. </span>Lean as a Programming Language<a class="headerlink" href="#lean-as-a-programming-language" title="Permalink to this heading"></a></h1>
 <section id="about-lean">
 <span id="section-about-lean"></span><h2><span class="section-number">3.1. </span>About Lean<a class="headerlink" href="#about-lean" title="Permalink to this heading"></a></h2>
-<p><em>Lean 4</em> is a new programming language and interactive proof assistant.
+<p><em>Lean 4</em> is both a programming language and an interactive proof assistant.
 It is currently used to formalize mathematics, to verify hardware and software,
-and to explore applications of machine learning to mathematical reasoning.
-Though the system is still new and under active development,
-in many ways it is an ideal system for working with logical syntax
-and putting logic to use.</p>
+and to support applications of machine learning to mathematical reasoning.
+Lean, the programming language and proof assistant, is implemented in Lean, the
+programming language. This means that the language has been designed to implement logical
+syntax and mechanize reasoning. We will, primarily, use it in that way. But as a proof assistant,
+Lean itself implements an expressive and powerful logic, in which we can interactively write
+formal proofs. In this course, we will also have a glimpse of that aspect of Lean.</p>
 <p>You can learn more about Lean on the <a class="reference external" href="http://leanprover.github.io/">Lean home page</a>,
-on the <a class="reference external" href="https://leanprover-community.github.io/">Lean community home page</a>,
+on the <a class="reference external" href="https://leanprover-community.github.io/">Lean Community home page</a>,
 and by asking questions on the <a class="reference external" href="https://leanprover.zulipchat.com/">Lean Zulip chat</a>,
 which you are heartily encouraged to join.
 Lean has a very large mathematical library, known as
-<a class="reference external" href="https://github.com/leanprover-community/mathlib">mathlib</a>, which you can
+<a class="reference external" href="https://github.com/leanprover-community/mathlib">Mathlib</a>, which you can
 learn more about on the Lean community pages.</p>
 <p>The following documentation is available:</p>
 <ul class="simple">
-<li><p>a <a class="reference external" href="https://leanprover.github.io/lean4/doc/">user manual</a></p></li>
-<li><p>an <a class="reference external" href="https://leanprover.github.io/functional_programming_in_lean/">introduction to functional programming in Lean</a></p></li>
-<li><p>a <a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">tutorial on theorem proving in Lean</a>.</p></li>
+<li><p><a class="reference external" href="https://leanprover.github.io/lean4/doc/">Lean Documentation Overview</a></p></li>
+<li><p><a class="reference external" href="https://lean-lang.org/doc/reference/latest/">Lean Language Reference</a></p></li>
+<li><p><a class="reference external" href="https://leanprover.github.io/functional_programming_in_lean/">Functional Programming in Lean</a></p></li>
+<li><p><a class="reference external" href="https://leanprover.github.io/theorem_proving_in_lean4/">Theorem Proving in Lean</a></p></li>
+<li><p><a class="reference external" href="https://leanprover-community.github.io/mathematics_in_lean/">Mathematics in Lean</a>.</p></li>
 </ul>
 <p>As a functional programming language, Lean bears some similarity to Haskell and OCaml.
 If you are new to functional programming, you might also find it helpful to consult an
-<a class="reference external" href="http://learnyouahaskell.com/">introduction to functional programming in Haskell</a>.
-Lean 4 has a number of interesting features, and it is designed for implementing
-powerful logic-based systems, as evidenced by the fact that most of Lean 4 is implemented
-in Lean 4 itself.</p>
+<a class="reference external" href="http://learnyouahaskell.com/">introduction to functional programming in Haskell</a>.</p>
 <p>The goal of this section is to give you a better sense of what Lean is, how it can
 possibly be a programming language and proof assistant at the same time,
 and why that makes sense.
@@ -143,7 +146,7 @@ In Lean, every well-formed expression has a type.</p>
 <span class="k">#check</span> <span class="k">fun</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="k">if</span> <span class="n">x</span> <span class="bp">=</span> <span class="mi">1</span> <span class="k">then</span> <span class="s2">&quot;yes&quot;</span> <span class="k">else</span> <span class="s2">&quot;no&quot;</span>
 </pre></div>
 </div>
-<p>You can find this example in the file <cite>using_lean_as_a_programming_language/examples1.lean</cite> in the
+<p>You can find this example in the file <cite>lean_as_a_programming_language/examples1.lean</cite> in the
 <cite>LAMR/Examples</cite> folder of the course repository.
 We strongly recommend copying that entire folder into the <code class="docutils literal notranslate"><span class="pre">User</span></code> folder,
 so you can edit the files and try examples of your own.
@@ -473,7 +476,7 @@ using structural recursion on such types.
 For example, here is a Lean definition of the extended
 binary trees that we defined in mathematical terms in
 <a class="reference internal" href="mathematical_background.html#section-generalized-induction-and-recursion"><span class="std std-numref">Section 2.3</span></a>:</p>
-<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">BinTree</span>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">BinTree</span> <span class="n">where</span>
   <span class="bp">|</span> <span class="n">empty</span> <span class="o">:</span> <span class="n">BinTree</span>
   <span class="bp">|</span> <span class="n">node</span>  <span class="o">:</span> <span class="n">BinTree</span> <span class="bp">→</span> <span class="n">BinTree</span> <span class="bp">→</span> <span class="n">BinTree</span>
   <span class="n">deriving</span> <span class="n">Repr</span><span class="o">,</span> <span class="n">DecidableEq</span><span class="o">,</span> <span class="n">Inhabited</span>

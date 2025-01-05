@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>13. Using SMT solvers &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  <title>15. Using SMT solvers &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
@@ -22,8 +22,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="14. Proof Systems for First-Order Logic" href="proof_systems_for_first_order_logic.html" />
-    <link rel="prev" title="12. Decision Procedures for First-Order Logic" href="decision_procedures_for_first_order_logic.html" /> 
+    <link rel="next" title="16. Proof Systems for First-Order Logic" href="proof_systems_for_first_order_logic.html" />
+    <link rel="prev" title="14. Decision Procedures for Arithmetic" href="decision_procedures_for_arithmetic.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,7 +45,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
@@ -54,18 +54,20 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">13. Using SMT solvers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#smt-lib-format">13.1. SMT-LIB Format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example-magic-squares">13.2. Example: Magic squares</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#calling-smt-solvers-from-lean">13.3. Calling SMT solvers from Lean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#application-verification">13.4. Application: Verification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#exercise-almost-squares">13.5. Exercise: Almost squares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_equality.html">12. Decision Procedures for Equality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equality_and_induction_in_lean.html">13. Equality and Induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_arithmetic.html">14. Decision Procedures for Arithmetic</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">15. Using SMT solvers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#smt-lib-format">15.1. SMT-LIB Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-magic-squares">15.2. Example: Magic squares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calling-smt-solvers-from-lean">15.3. Calling SMT solvers from Lean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application-verification">15.4. Application: Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercise-almost-squares">15.5. Exercise: Almost squares</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">16. Proof Systems for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">18. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -82,7 +84,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">13. </span>Using SMT solvers</li>
+      <li><span class="section-number">15. </span>Using SMT solvers</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/using_smt_solvers.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -93,10 +95,10 @@
            <div itemprop="articleBody">
              
   <section id="using-smt-solvers">
-<span id="chapter-using-smt-solvers"></span><h1><span class="section-number">13. </span>Using SMT solvers<a class="headerlink" href="#using-smt-solvers" title="Permalink to this heading"></a></h1>
+<span id="chapter-using-smt-solvers"></span><h1><span class="section-number">15. </span>Using SMT solvers<a class="headerlink" href="#using-smt-solvers" title="Permalink to this heading"></a></h1>
 <p>Satisfiability Modulo Theories (SMT) solvers determine whether a quantifier-free first-order formula can be satisfied with respect to some background theories. In many application areas, problem instances can be transformed into SMT formulas and the SMT solver determines whether there exists a satisfying assignment. The effectiveness of an SMT solver depends on the selection of background theories for a given problem instance. Several strong SMT solvers have been developed, including Z3, CVC4, and Boolector. SMT solvers are frequently used in industry and academia.</p>
 <section id="smt-lib-format">
-<h2><span class="section-number">13.1. </span>SMT-LIB Format<a class="headerlink" href="#smt-lib-format" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">15.1. </span>SMT-LIB Format<a class="headerlink" href="#smt-lib-format" title="Permalink to this heading"></a></h2>
 <p>The input format for SMT solvers is called SMT-LIB. SMT-LIB is much more readable than the DIMACS format for SAT solvers. For example, in SMT-LIB, variable names are strings, while DIMACS uses numbers. Also, whereas SAT solvers require the input to be in conjunctive normal form, this is not the case in SMT-LIB.</p>
 <p>Most SMT-LIB input files consist of five blocks:</p>
 <ul class="simple">
@@ -126,7 +128,7 @@
 </div>
 </section>
 <section id="example-magic-squares">
-<h2><span class="section-number">13.2. </span>Example: Magic squares<a class="headerlink" href="#example-magic-squares" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">15.2. </span>Example: Magic squares<a class="headerlink" href="#example-magic-squares" title="Permalink to this heading"></a></h2>
 <p>A magic square of order <span class="math notranslate nohighlight">\(n\)</span> is a <span class="math notranslate nohighlight">\(n \times n\)</span> grid with the numbers 1 to <span class="math notranslate nohighlight">\(n^2\)</span> occurring exactly once such that the sum for each row, column, and the two main diagonals is the same. Two magic squares are shown below, one of order 3 and one of order 8.</p>
 <table class="docutils align-default">
 <colgroup>
@@ -258,7 +260,6 @@ with <code class="docutils literal notranslate"><span class="pre">assert</span><
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">and</span><span class="w"> </span><span class="p">(</span><span class="nb">&gt;</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">&lt;=</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="mi">9</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">and</span><span class="w"> </span><span class="p">(</span><span class="nb">&gt;</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">&lt;=</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="mi">9</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">and</span><span class="w"> </span><span class="p">(</span><span class="nb">&gt;</span><span class="w"> </span><span class="nv">m_2_2</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nb">&lt;=</span><span class="w"> </span><span class="nv">m_2_2</span><span class="w"> </span><span class="mi">9</span><span class="p">)))</span><span class="w"></span>
-<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nv">distinct</span><span class="w"> </span><span class="nv">m_0_0</span><span class="w"> </span><span class="nv">m_0_1</span><span class="w"> </span><span class="nv">m_0_2</span><span class="w"> </span><span class="nv">m_1_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_1_2</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">m_0_0</span><span class="w"> </span><span class="nv">m_0_1</span><span class="w"> </span><span class="nv">m_0_2</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">m_1_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_1_2</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">)))</span><span class="w"></span>
@@ -266,7 +267,8 @@ with <code class="docutils literal notranslate"><span class="pre">assert</span><
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">m_0_1</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_2_1</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">m_0_2</span><span class="w"> </span><span class="nv">m_1_2</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">m_0_2</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_2_0</span><span class="p">)))</span><span class="w"></span>
-<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_0_2</span><span class="p">)))</span><span class="w"></span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">15</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">m_0_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">)))</span><span class="w"></span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nv">distinct</span><span class="w"> </span><span class="nv">m_0_0</span><span class="w"> </span><span class="nv">m_0_1</span><span class="w"> </span><span class="nv">m_0_2</span><span class="w"> </span><span class="nv">m_1_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_1_2</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">))</span><span class="w"></span>
 <span class="p">(</span><span class="nv">check-sat</span><span class="p">)</span><span class="w"></span>
 <span class="p">(</span><span class="nv">get-model</span><span class="p">)</span><span class="w"></span>
 <span class="p">(</span><span class="nv">exit</span><span class="p">)</span><span class="w"></span>
@@ -292,7 +294,6 @@ with <code class="docutils literal notranslate"><span class="pre">assert</span><
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">and</span><span class="w"> </span><span class="p">(</span><span class="nv">bvugt</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="mh">#x0000</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">bvule</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="mh">#x0009</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">and</span><span class="w"> </span><span class="p">(</span><span class="nv">bvugt</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="mh">#x0000</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">bvule</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="mh">#x0009</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">and</span><span class="w"> </span><span class="p">(</span><span class="nv">bvugt</span><span class="w"> </span><span class="nv">m_2_2</span><span class="w"> </span><span class="mh">#x0000</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nv">bvule</span><span class="w"> </span><span class="nv">m_2_2</span><span class="w"> </span><span class="mh">#x0009</span><span class="p">)))</span><span class="w"></span>
-<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nv">distinct</span><span class="w"> </span><span class="nv">m_0_0</span><span class="w"> </span><span class="nv">m_0_1</span><span class="w"> </span><span class="nv">m_0_2</span><span class="w"> </span><span class="nv">m_1_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_1_2</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mh">#x000f</span><span class="w"> </span><span class="p">(</span><span class="nv">bvadd</span><span class="w"> </span><span class="nv">m_0_0</span><span class="w"> </span><span class="nv">m_0_1</span><span class="w"> </span><span class="nv">m_0_2</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mh">#x000f</span><span class="w"> </span><span class="p">(</span><span class="nv">bvadd</span><span class="w"> </span><span class="nv">m_1_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_1_2</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mh">#x000f</span><span class="w"> </span><span class="p">(</span><span class="nv">bvadd</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">)))</span><span class="w"></span>
@@ -300,7 +301,8 @@ with <code class="docutils literal notranslate"><span class="pre">assert</span><
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mh">#x000f</span><span class="w"> </span><span class="p">(</span><span class="nv">bvadd</span><span class="w"> </span><span class="nv">m_0_1</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_2_1</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mh">#x000f</span><span class="w"> </span><span class="p">(</span><span class="nv">bvadd</span><span class="w"> </span><span class="nv">m_0_2</span><span class="w"> </span><span class="nv">m_1_2</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">)))</span><span class="w"></span>
 <span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mh">#x000f</span><span class="w"> </span><span class="p">(</span><span class="nv">bvadd</span><span class="w"> </span><span class="nv">m_0_2</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_2_0</span><span class="p">)))</span><span class="w"></span>
-<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mh">#x000f</span><span class="w"> </span><span class="p">(</span><span class="nv">bvadd</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_0_2</span><span class="p">)))</span><span class="w"></span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mh">#x000f</span><span class="w"> </span><span class="p">(</span><span class="nv">bvadd</span><span class="w"> </span><span class="nv">m_0_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">)))</span><span class="w"></span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="nv">distinct</span><span class="w"> </span><span class="nv">m_0_0</span><span class="w"> </span><span class="nv">m_0_1</span><span class="w"> </span><span class="nv">m_0_2</span><span class="w"> </span><span class="nv">m_1_0</span><span class="w"> </span><span class="nv">m_1_1</span><span class="w"> </span><span class="nv">m_1_2</span><span class="w"> </span><span class="nv">m_2_0</span><span class="w"> </span><span class="nv">m_2_1</span><span class="w"> </span><span class="nv">m_2_2</span><span class="p">))</span><span class="w"></span>
 <span class="p">(</span><span class="nv">check-sat</span><span class="p">)</span><span class="w"></span>
 <span class="p">(</span><span class="nv">get-model</span><span class="p">)</span><span class="w"></span>
 <span class="p">(</span><span class="nv">exit</span><span class="p">)</span><span class="w"></span>
@@ -309,7 +311,7 @@ with <code class="docutils literal notranslate"><span class="pre">assert</span><
 <p>Although the encodings of magic squares in QF_LIA and QF_BV look very similar, the performance of SMT solvers on these encodings differs a lot. For example, computing a magic square of order 5 is difficult for SMT solvers using the QF_LIA encoding, while it is easy when using the QF_BV encoding. In fact, it is even easy to solve the QF_BV encoding expressing the existence of a magic square of order 10. The main difference between these two theories is that the solver applies linear arithmetic when using QF_LIA, while it applies what is known as <em>bit blasting</em> when using QF_BV. Bit blasting transforms the formula into propositional logic by introducing a propositional variable for each bit in the problem. For some problems, such as magic squares, bit blasting can be very effective. For other problems, bit blasting can result in formulas that are hard to solve.</p>
 </section>
 <section id="calling-smt-solvers-from-lean">
-<h2><span class="section-number">13.3. </span>Calling SMT solvers from Lean<a class="headerlink" href="#calling-smt-solvers-from-lean" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">15.3. </span>Calling SMT solvers from Lean<a class="headerlink" href="#calling-smt-solvers-from-lean" title="Permalink to this heading"></a></h2>
 <p>To use an SMT solver, you can simply create an SMT-LIB file and run the solver on it.
 We also provide a convenient interface for calling any of the three popular solvers
 Z3, CVC4, and CVC5 from Lean. There is an example in the file <code class="docutils literal notranslate"><span class="pre">magicSquares.lean</span></code>
@@ -371,7 +373,7 @@ The following calls the SMT solver CVC5 on the resulting formula:</p>
 You can change <code class="docutils literal notranslate"><span class="pre">Cvc5</span></code> to <code class="docutils literal notranslate"><span class="pre">Cvc4</span></code> or <code class="docutils literal notranslate"><span class="pre">Z3</span></code>, as long as the relevant solver is in <code class="docutils literal notranslate"><span class="pre">LAMR/bin</span></code>.</p>
 </section>
 <section id="application-verification">
-<h2><span class="section-number">13.4. </span>Application: Verification<a class="headerlink" href="#application-verification" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">15.4. </span>Application: Verification<a class="headerlink" href="#application-verification" title="Permalink to this heading"></a></h2>
 <p>SMT solvers are frequently used for verification tasks. In software verification, SMT solvers can be used to validate whether some optimized code is functionally equivalent to some straightforward code (the specification). For example, consider the C code below, which efficiently computes the number of bits that are set to true in an unsigned integer (32-bit). This code is significantly more efficient compared to looping over the bits to perform the counting.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">popCount32</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x55555555</span><span class="p">);</span><span class="w"></span>
@@ -416,7 +418,7 @@ Try changing any of the bitvector parameters, and you will see that the SMT solv
 finds a counterexample to the equivalence instantaneously.</p>
 </section>
 <section id="exercise-almost-squares">
-<h2><span class="section-number">13.5. </span>Exercise: Almost squares<a class="headerlink" href="#exercise-almost-squares" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">15.5. </span>Exercise: Almost squares<a class="headerlink" href="#exercise-almost-squares" title="Permalink to this heading"></a></h2>
 <p>The almost square of order <span class="math notranslate nohighlight">\(n\)</span> is a rectangle of size <span class="math notranslate nohighlight">\(n \times (n + 1)\)</span>. The almost squares of orders 1 to 3 can fully cover the almost square of order 4. A solution is shown below.</p>
 <table class="docutils align-default">
 <colgroup>
@@ -485,8 +487,8 @@ finds a counterexample to the equivalence instantaneously.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="decision_procedures_for_first_order_logic.html" class="btn btn-neutral float-left" title="12. Decision Procedures for First-Order Logic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="proof_systems_for_first_order_logic.html" class="btn btn-neutral float-right" title="14. Proof Systems for First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="decision_procedures_for_arithmetic.html" class="btn btn-neutral float-left" title="14. Decision Procedures for Arithmetic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="proof_systems_for_first_order_logic.html" class="btn btn-neutral float-right" title="16. Proof Systems for First-Order Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

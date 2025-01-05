@@ -1,0 +1,332 @@
+.. highlight:: lean
+
+.. _chapter_equality_and_induction_in_lean:
+
+Equality and Induction in Lean
+==============================
+
+With the introduction of first-order logic, we have come a long way toward modeling full-blown
+mathematical and computational reasoning reasoning.
+Lean's internal logic subsumes first-order logic, which means that one can write down terms
+the describe objects, express relationships between them, and prove things about them.
+For example, if ``x`` and ``y``
+are variables ranging over integers and ``xs`` and ``ys`` are variables ranging over lists of
+integers, the expression ``(x + y) + 3``
+is a term denoting an integer and the expression ``x :: xs ++ [3] ++ ys`` is a term denoting a list
+of integers. In Lean, the expressions ``x < y + 3``, ``x = y + 3``, and ``x ∈ xs`` are
+*propositions* that say that ``x`` is less than ``y + 3``, ``x`` is equal to ``y + 3``, and
+``x`` is an element of the list ``xs``, respectively. The symbols ``<``, ``=``, and ``∈`` denote
+binary relations, since they express a relationship between the terms on either side.
+
+
+.. _section_equational_reasoning_in_lean:
+
+Equational reasoning
+--------------------
+
+
+Mathematically, the most fundamental relation is the equality relationship.
+Equality satisfies two axiomatic properties: first, everything is equal to itself, and
+second, equal terms can be substituted for one another. In Lean, these are implemented by the
+tactics ``rfl`` and ``rw``, respectively. The first is short for ``reflexivity``, and the
+second is short for ``rewrite``.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: rfl and rw
+   :end-before: -- end textbook
+
+In the second example, the rewrite tactic replaces ``b`` by ``c`` in the goal and then
+automatically applies reflexivity to finish it off.
+
+The ``rw`` tactic takes a list of identities and rewrites with them one at a time.
+You can use a left arrow to indicate that the tactic should use an equation in the
+reverse direction:
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: more rw
+   :end-before: -- end textbook
+
+Notice that even common properties like the symmetry and transitivity of equality can
+be reduced to the substitution property and reflexivity.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: symmetry and transitivity
+   :end-before: -- end textbook
+
+You can also rewrite with general identities. In Lean, when you write ``a * b * c``, parentheses
+associate to the left, so the expression is interpreted as ``(a * b) * c``. The identities
+``mul_assoc``, ``mul_comm``, and ``mul_left_comm`` can be used to move the parentheses around.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: moving parentheses around
+   :end-before: -- end textbook
+
+Notice that your cursor after the comma in the list of the identities shows that goal
+at the point, so you can step through a sequence of rewrites to see what is happening.
+
+You can specialize identities at particular arguments. For example, ``mul_comm c a`` is the
+identity ``c * a = a * c``, and ``mul_comm c`` is the identity ``∀ x, c * x = x * c``.
+Notice that Lean uses the same syntax for applying a theorem to arguments as it does for
+applying a function to arguments. In the underlying foundation, the two are instances
+of the same thing.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: rewriting with arguments
+   :end-before: -- end textbook
+
+You can also use ``rw`` with the ``at`` modifier to rewrite at a particular hypothesis.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: rewriting at a hypothesis
+   :end-before: -- end textbook
+
+Sometimes, you only want to replace a single occurrence of a term. You can use the ``nth_rw``
+tactic for that.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: using nth_rw
+   :end-before: -- end textbook
+
+In this example, ``nth_rw 1 [h]`` applies the rewrite ``h`` to the first occurrence of ``a``
+in the conclusion.
+
+Mathlib has specialized tactics for proving particular types of equations. For example,
+``norm_num`` can be used for concrete calculations and ``ring`` can be used to prove
+identities involving addition, subtraction, multiplication, integer coefficients, and
+natural number exponents.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: specialized calculations
+   :end-before: -- end textbook
+
+Rewriting with the name of a function amounts to unfolding the definition, or, if
+it is defined by cases, its defining clauses.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: rewriting with a function name
+   :end-before: -- end textbook
+
+Finally, Lean will let you rewrite with propositional equivalences.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: propositional equivalences
+   :end-before: -- end textbook
+
+Sometimes Lean will surprise you by not making you prove something you think you should have to.
+When it needs to, Lean will unfold definitions and apply computational rules to simplify
+an expression, and so it can often treat syntactically different expressions as being the
+same. In the next example, Lean unfolds the definition of addition and determines ``n + 0``
+and ``n`` are *definitionally equal*.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: definitional equality
+   :end-before: -- end textbook
+
+Replacing ``n + 0`` by ``0 + n`` does not work, however. Definitional equality
+is subtle and we will discuss it in detail here, but it might be helpful to know that Lean can
+generally unfold a recursive definition or a definition on cases when it has to.
+This feature of Lean is probably at play when you find that ``rw`` declares a
+goal solved when you thought you had more work to do.
+
+Lean has other automation that can handle equational reasoning, most notably, a tactic
+called ``simp`` that simplifies expressions using a database of identities that have been
+marked for its use.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/equational_reasoning.lean
+   :start-after: -- textbook: simp
+   :end-before: -- end textbook
+
+As usual, hovering over ``simp`` provides more information about how it works.
+In the real world, you should feel free to use automation like ``simp`` with reckless abandon.
+The more automation the better! That's what this course is all about. But for the
+exercises
+we will ask you to do proofs using more elementary tactics --- for example, using only
+the ``rw`` tactic to prove identities --- so that you acquire a solid understanding of the
+principles of reasoning that they implement.
+
+
+.. _section_lean_induction:
+
+Induction
+---------
+
+With only equality and the propositional connectives, our vocabulary is limited.
+In Lean, it is possible to describe any precise mathematical property or relationship, and,
+indeed, a vast number of them are already defined in Mathlib.
+But even with just equality and the propositional connectives, we can prove
+some interesting theorems, and so we will make a small start on that here.
+
+In :numref:`Chapter %s <chapter_mathematical_background>` we reviewed the principle
+of induction, and we have seen throughout this book that Lean allows us to define inductive
+data types and to define functions on those types by structural recursion.
+We now introduce Lean's ``induction`` tactic.
+In the next example, we define the function ``sum_up_to n`` that sums the numbers
+up to and including ``n``, and we use induction to prove that it is equal to
+``n * (n + 1) / 2`` for every ``n``.
+(We state this in a roundabout way to avoid having to deal with division.)
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: induction on Nat
+   :end-before: -- end textbook
+
+As usual, hovering over ``induction`` gives you more information about its syntax and usage,
+including variations. Here the two cases are named ``zero`` and ``succ``, corresponding to
+the two canonical ways of constructing a natural number. In the ``succ`` case
+we name the variable ``n`` and the inductive hypothesis ``ih``.
+It is unfortunate that the two cases of the induction use ``Nat.zero`` and ``Nat.succ n``
+instead of the (definitionally equal) expressions ``0`` and ``n + 1``, respectively, but the
+equations ``Nat.zero_eq`` and ``Nat.succ_eq_add_one`` fix that. Rewriting with
+``sum_up_to`` unfolds the definition, and hovering over ``mul_add`` shows that it
+distributes the multiplication over addition so that we can apply the inductive hypothesis.
+Remember that you can step through the rewrites in the infoview window by moving your cursor
+down the list. Here is another example of a proof by induction:
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: more induction on Nat
+   :end-before: -- end textbook
+
+In fact, in Lean's library, addition and multiplication on the natural numbers are defined
+recursively and their properties are proved using induction. In the example below,
+we define addition with the name ``add'`` to avoid clashing with names in the library,
+and we open the ``Nat`` namespace to shorten names like ``succ`` and ``zero_eq``.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: definition of addition
+   :end-before: -- end textbook
+
+Lean supports induction on any inductive type, not just the natural numbers.
+Remember that Lean's core library defines the ``List`` data type
+and notation for it.
+In the example below, we open the namespace, declare some variables, and
+confirm the recursive definition of the append function.
+The proofs by reflexivity show that ``nil_append`` and ``cons_append`` are definitionally
+true, which is to say, they following by unfolding the definition of ``append``.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: List
+   :end-before: -- end textbook
+
+The ``variable`` command does not do anything substantial.
+It tells Lean that when the corresponding identifiers are used
+in definitions and theorems that follow,
+they should be interpreted as arguments to those theorems and proofs,
+with the indicated types.
+The curly brackets around the declaration ``α : Type`` indicate that that
+argument is meant to be *implicit*, which is to say,
+users do not have to write it explicitly.
+Rather, Lean is expected to infer it from the context.
+
+The library stores the theorems ``[] ++ as`` and
+``(a :: as) ++ bs = a :: (as ++ bs)`` under the names ``nil_append``
+and ``cons_append``, respectively.
+You can see the statements by writing ``#check nil_append`` and ``#check cons_append``.
+Remember that we took these to be the defining equations for the
+``append`` function in :numref:`section_generalized_induction_and_recursion`.
+
+Lean's library also proves ``as ++ []`` under the name ``append_nil``,
+but to illustrate how proofs like this go, we will prove it again
+under the name ``append_nil'``.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: append_nil'
+   :end-before: -- end textbook
+
+Even though the proof is straightforward, some cleverness is needed to decide which variable
+to induct on. The fact that ``append`` is defined by recursion on the first argument makes
+``as`` the natural choice. Similarly, we can prove the associativity of the ``append`` function.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: append_assoc'
+   :end-before: -- end textbook
+
+Sometimes proving even simple identities can be challenging. Lean defines the list ``reverse``
+function using a tail recursive auxiliary function ``reverseAux as bs``,
+which in turn uses an accumulator to append the reverse of ``as`` to ``bs``
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: reverse
+   :end-before: -- end textbook
+
+If you try proving ``reverse (as ++ bs) = reverse bs ++ reverse as``, you'll find that
+it isn't easy. It turns out to be best to prove the following two identities first:
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: reverse identities
+   :end-before: -- end textbook
+
+The ``generalizing`` clause in the two induction tells Lean that the inductive hypothesis
+should be applied to any choice of second parameter, not just the one from the
+previous step. Mathematically, what is going on is that we are proving by induction
+on ``as`` that the identity holds *for every choice of* the second parameter.
+This is needed because the recursive step of ``reverseAux`` uses a different parameter in the
+recursive call.
+You should try deleting the ``generalizing`` clause to see what goes
+wrong when we omit it.
+
+With those facts in hand, we have the identity we are after:
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: reverse_append
+   :end-before: -- end textbook
+
+As a similar exercise, we encourage you to prove that for any list ``as``,
+``reverse (reverse as) = as``. You can do this by proving suitable lemmas about ``reverseAux``.
+
+Let's consider one last example, which brings us closer to the kinds of logical operations
+that we have been implementing in Lean.
+We have often relied on the fact that when we evaluate
+a propositional formula relative to a truth assignment, the resulting truth value only depends
+on the variables that occur in the formula.
+We can formalize in Lean what it means to say that a variable ``v`` occurs in ``A`` in Lean
+as follows:
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: occurs
+   :end-before: -- end textbook
+
+Here we follow Lean's convention of using capital letters for propositions, properties, and
+predicates. We could just as well have defined a function ``vars : PropForm → Finset String``
+that returns the finite set of variables contained in a propositional formula, in which case
+``Occurs v A`` would be equivalent to ``v ∈ vars A``.
+
+In the past, we have also defined an evaluation function for propositional formulas relative
+to a partial truth assignment, an element of type ``PropAssignment``.
+Here, to simplify the discussion, we will use total assignments to propositional variables,
+represented as functions of type ``String → Bool``.
+The evaluation function for propositional formulas is then defined straightforwardly as follows.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: eval
+   :end-before: -- end textbook
+
+The following theorem formalizes the statement that changing the value of a truth assignment
+at a variable that does not occur in a formula does not change the value of the formula.
+The proof is mainly a matter of unfolding definitions and checking all the cases.
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: eval_of_not_occurs
+   :end-before: -- end textbook
+
+The theorems ``if_pos h`` and ``if_neg h`` are used to rewrite an if-then-else expression
+given the knowledge ``h`` that the condition is true or false, respectively.
+You should step through the proof and make sure you understand how it works.
+
+Verifying proofs involving logical operations or programming constructs often looks like this,
+with lots of straightforwrd cases to check.
+Because such checking is tedious, the general practice is to verify only one or two
+representative cases in a pen-and-paper proof and claim that the others are "similar."
+This is often a source of bugs, however, since a corner case or subtle difference in one
+of the cases and render the claim false.
+When formalizing such a theorem, it would be nice if the cases can be checked automatically.
+Indeed, in this case Lean's simplifier reduces the proof to a one-liner:
+
+.. literalinclude:: ../../LAMR/Examples/equality_and_induction_in_lean/induction.lean
+   :start-after: -- textbook: eval_of_not_occurs with automation
+   :end-before: -- end textbook
+
+Lean has even more powerful automation, like `Aesop <https://github.com/leanprover-community/aesop>`_,
+that is designed for such purposes.
+Working through proofs like the one above by hand is a good way to come to terms with
+what we want such automation to do,
+and the techniques that we are describing in this course form the basis for writing
+such automation.

@@ -1,38 +1,344 @@
+.. highlight:: lean
+
 .. _chapter_beyond_first_order_logic:
 
 Beyond First-Order Logic
 ========================
 
+We have explored propositional logic, first-order logic, and axiomatic first-order
+theories like linear and integer arithmetic.
+These form the basis for several automated reasoning tools used today,
+including SAT solvers, SMT solvers, and first-order theorem provers.
+
+In a sense, we never need to go beyond first-order logic.
+Many mathematicians take Zermelo-Fraenkel set theory with the axiom of choice (ZFC),
+an axiomatic theory based on first-order logic,
+to be the official foundation of mathematics.
+In principle, we can encode any mathematical statement in ZFC and search for a proof using a first-order theorem prover.
+The line between logic and mathematics is not sharp, but many philosophers take first-order
+logic to be the embodiment of general logical reasoning,
+whereby additional axioms provide the rest of mathematics.
+
+
+Nonetheless, there are often practical reasons to add more syntax and rules to our logical
+systems and to give these special standing in our implementations.
+Doing so gives us better means to isolate decidable fragments
+of mathematical reasoning, and to design efficient decision procedures and search procedures
+based on the additional structure of the logics.
+It provides more expressive power to proof assistants,
+and it enables us to design better mechanisms to support interactive proof.
+
+There is a tradeoff: making a logic more powerful and more expressive generally makes it
+harder to automate.
+One common strategy is to choose a powerful and expressive logic as the basis for a proof
+assistant like Lean, and, within that framework, invoke automation built on more restricted logics
+to carry out focused reasoning tasks.
+
+Lean's underlying logic is a version of *dependent type theory*, which we will not discuss in
+detail here.
+You can learn more about dependent type theory from `Theorem Proving in Lean <https://lean-lang.org/theorem_proving_in_lean4/>`_ or a textbook like Avigad, *Mathematical Logic and Computation*.
+This chapter takes a complementary, bottom-up, approach to exploring extensions of
+first-order logic by describing specific extensions one at a time.
+All of them are subsumed by Lean's logic and we can therefore use Lean to illustrate the syntax.
+
+.. _section_sorts:
 
 Sorts
 -----
 
+We have already seen that Lean's foundation includes propositional
+logic and first-order logic.
 
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: propositional logic and first-order logic
+   :end-before: -- end: propositional logic and first-order logic
 
-Function types
---------------
+In first-order logic, as we have presented it, all the variables and quantifiers range
+over a single universe of objects.
+In many applications, it is useful to have different universes, or *sorts*, of objects.
+For example, in geometry, we might want separate variables ranging over points, lines,
+and planes.
+In *many-sorted first-order logic*, we can have different *sorts* of objects.
+Function symbols and relation symbols are specified with not only their arities but
+also the types of arguments they can have.
+We can easily model this in Lean by using type variables to represent the different
+sorts.
 
-.. function types and lambda
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: sorts
+   :end-before: -- end: sorts
 
-   introduce terminology, simple type theory
+In this example, ``h`` is a function that takes two arguments of sort ``U1``
+and returns an argument of sort ``U2``, and ``Q`` is a binary relation between
+``U1`` and ``U3``.
+In this way, for example, we can express the relationship of a point being on a line,
+and write down axioms that express that any two distinct points determine a unique line.
 
-   mention untyped lambda calculus.
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: geometry with sorts
+   :end-before: -- end: geometry with sorts
+
+We have already seen that SMT solvers distinguish between different sorts of objects,
+like  integers, real numbers, and bitvectors.
+Many first-order provers have native support for sorted reasoning as well.
+Many-sorted logic is only a mild extension of first-order logic, since we can
+instead use predicates and relativization to distinguish different types
+of objects.
+For example, the statements of geometry above could be represented in ordinary first-order
+logic with additional predicates :math:`\fn{Point}(x)`, :math:`\fn{Line}(x)`, and :math:`\fn{Plane}(x)`.
+
+.. _section_function_and_product_types:
+
+Function types and product types
+--------------------------------
+
+In first-order logic, we have function symbols, but we do not have
+*variables* that range over functions.
+We obtain such a system by adding *function types* to our logic.
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: function types
+   :end-before: -- end: function types
+
+In this example, we start with basic types ``Nat`` and ``Bool`` and declare a function
+``f`` from ``Nat`` to ``Nat``, a function ``g`` from ``Nat`` to ``Bool``, and a function
+``h`` that takes a function from ``Nat`` to ``Nat`` as an argument and returns a ``Nat``.
+
+A system known as the *simply-typed lambda calculus* provides two fundamental rules for
+building complex expressions:
+
+- *Function abstraction* (also known as *lambda abstraction*): If ``x`` is a variable of type ``A`` and ``t`` is an expression of type ``B``,
+  then ``fun x : A => t`` (also written ``λ x : A, t``) is an expression of type ``A → B``.
+- *Function application*: If ``s`` is an expression of type ``A → B`` and ``t`` is an expression of type ``A``,
+  then ``s t`` is an expression of type ``B``.
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: function abstraction and application
+   :end-before: -- end: function abstraction and application
+
+The two operations are related by an equation known as the *beta reduction rule*,
+which says that the result of applying ``λ x, s`` to ``t`` is equal to ``s[t/x]``,
+where ``s[t/x]`` denotes the result of substituting ``t`` for ``x`` in ``s``.
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: beta reduction
+   :end-before: -- end: beta reduction
+
+Some people take the simply-typed lambda calculus to include product types as well,
+with a pairing operation and projections. The corresponding reduction then says that
+pairing two objects and taking the first or second projection returns the first
+or second object, respectively.
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: product types
+   :end-before: -- end: product types
+
+As a logical system, the simply typed lambda calculus is usually presented as a purely
+equational calculus, that
+is, a system for deriving equations ``s = t`` using equality rules and axioms.
+You can think of the simply typed lambda calculus as a simple programming language
+together with a means for reasoning about it.
+One can extend the calculus, for example, with recursive definitions on the natural numbers
+or if-then-else expressions based on a boolean conditional.
+
+One can show that any expression can be reduced to a unique *normal form* by
+applying reduction rules until no more reductions are possible.
+As a result, one can decide whether two expressions are provably equal by
+determining whether they have the same normal form.
+
+In the simply typed lambda calculus, one can represent relations as functions that
+return an element of ``Bool``, but the built-in equality relation is not represented that way,
+no does the simply typed lambda calculus include quantifiers.
+Extending the simply typed lambda calculus to include equality and quantifiers as
+term-forming operations gives rise to a much more expressive system known as *simple type theory*.
+This is, in turn, a version of higher-order logic, which we turn to next.
+
+.. _section_higher_order_logic:
 
 Higher-order logic
 ------------------
 
-.. Can define quantifiers as functions to `Bool`. Often called `Prop` instead.
+First-order logic allows us to quantify over objects in the domain of discourse,
+but it does not allow us to quantify over functions, predicates, or relations.
+If we could do that in a theory of arithmetic, for example, we could express
+the principle of induction on the natural numbers as follows:
 
-   Example: induction axiom
+.. math::
 
-   Higher-order unification is undecidable.
+   \fa P (P(0) \land \fa n P(n) \to P(n+1) ) \to \fa n P(n).
 
-   No system that is sound and complete for full second-order semantics.
+This says that any property ``P`` of natural numbers that holds for 0 and is preserved
+by adding one holds of all the natural numbers. Without the ability to quantify over
+``P``, the best we can do is state an induction principle for each particular formula
+``A(x)`` separately.
+Similarly, if we can quantify over functions, we can say that the universe is infinite by
+saying that there exists an injective function that is not surjective.
+This something we cannot do in first-order logic.
+
+One option is to extend first-order logic with sorts for functions and predicates on the universe,
+and add variables ranging over those sorts. That gives rise to *second-order logic*.
+For unary predicates, for example, we would add an axiom that says
+that every formula :math:`A(x)` gives rise to a predicate:
+
+.. math::
+
+   \ex P \fa x (P(x) \liff A(x)).
+
+This is known as a *comprehension* axiom.
+Notice that ``A(x)`` may involve second-order quantifiers as well, so, in general, it's
+impossible to interpret predicates as ranging only over formulas. For example, if :math:`A`
+has a universal quantifier over predicates, then that quantifier ranges over all predicates,
+including the one :math:`P` that is defined by the axiom.
+
+Having added functions and predicates on objects, we might then want to add
+functions and predicates that take functions and predicates as arguments, and so on.
+Iterating this process gives rise to *higher-order logic*. The language of simple type
+theory provides a convenient way to do this. If we define a type of propositions, ``Prop``,
+we can take the propositional connectives to be functions on ``Prop``, and we can take
+the equality symbol to return values in ``Prop``.
+We can take the universal and existential quantifiers to be higher-order functions that
+take predicates to propositions:
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: quantifiers as predicates
+   :end-before: -- end: quantifiers as predicates
+
+(In Lean's foundation, the existential quantifier is treated this way, but the universal
+quantifier is not; the latter is more integrally a part of the logical foundation.)
+The comprehension axiom is now subsumed by function abstraction:
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: comprehension as abstraction
+   :end-before: -- end: comprehension as abstraction
+
+In other words, if ``A`` is any expression of type ``Prop``, possibly involving the variable ``x``,
+the expression ``fun x => A`` is the predicate that, when applied to an expression ``t``, asserts
+that ``A`` holds of ``t``.
+
+There is a duality between sets ``S`` of elements of a type ``U`` and predicates ``P : U → Prop``,
+namely,
+for any set ``S``, we can define the property ``fun x => x ∈ S``, and for any predicate ``P``,
+we can define the set ``{x | P x}``.
+For that reason, the philosopher W. V. O. Quine called second-order logic *set theory in sheep's
+clothing*, by which he meant that higher-order reasoning is really set-theoretic reasoning in disguise.
+That makes higher-order logic very powerful. If we add a basic type of natural numbers, for example,
+higher-order logic is strong enough to interpret a substantial amount of mathematics.
+
+This expressivity comes at a cost, however. To start with, there is no axiomatic proof system
+that is complete for even second-order logic, under the standard semantics where a quantifier
+over predicates is interpreted as ranging over all predicates on the universe.
+There is a precise technical sense in which
+second-order logic is more undecidable than first-order logic, and higher-order logic is
+even more undecidable than that.
+Even fundamental logical operations that are straightforwardly computable in the first-order
+setting can become uncomputable in the higher-order setting.
+For example, we have seen that there is a straightforward procedure for determining whether
+two first-order terms are unifiable.
+In contrast, the decision procedure for even second-order terms is undecidable.
+
+Because functions, predicates, and relations are so fundamental to mathematical
+reasoning, it often makes sense to consider them part of the underlying logic.
+Provers like Vampire have built-in support for higher-order reasoning.
+Theory tells us that there is no complete search procedure for certifying even second-order validity,
+but that need not dissuade us from trying to design search procedures that capture common
+patterns of inference, and the expressivity of higher-order logic is often useful in practice.
 
 
 Inductive Types
 ---------------
 
+Another way to extend a logic is to build in a notion of an *inductively defined data type*, or
+*inductive type* for short. An inductive type is a data type generated by
+*constructors*, where "generated by" means, first, that applying a constructor to an element of
+a type gives a new element, and second, that every element of the type is obtained in this way.
+The latter condition justified the principles of induction and recursion for the inductive type.
+
+You have already seen inductive data types informally, in
+:numref:`Chapter %s <chapter_mathematical_background>`, and formally, in Lean, in
+:numref:`Chapter %s <chapter_equality_and_induction_in_lean>`.
+The arcehtypal example of an inductive type is the natural numbers, ``Nat``, generated
+by an element ``zero : Nat`` and a function ``succ : Nat → Nat``.
+In Lean, it is declared as follows:
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: definition of Nat
+   :end-before: -- end: definition of Nat
+
+This declaration gives rise to the principles of induction and recursion that we saw in
+:numref:`Chapter %s <chapter_equality_and_induction_in_lean>`.
+Here is the analogous definition of a binary tree:
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: definition of BinaryTree
+   :end-before: -- end: definition of BinaryTree
+
+We have already seen the induction and recursion principles play out formally in
+:numref:`Chapter %s <chapter_equality_and_induction_in_lean>`.
+
+The data type of lists of elements of another type ``α`` is another example of an inductive type,
+generated by a constructor for the empty list and, for each ``a : α``, a constructor ``cons a``
+that takes a list ``l`` and returns a new list with ``a`` as its head and ``l`` as its tail.
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: definition of List
+   :end-before: -- end: definition of List
+
+Different logical systems allow different forms of inductive types. In Lean,
+constructor can take a function as argument.
+The example ``CBTree`` below is a type of *countably branching trees*; given a sequence
+of trees indexed by the natural numbers, the constructor ``sup`` returns a new one
+that has a node at the root and children given by the sequence.
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: definition of CBTree
+   :end-before: -- end: definition of CBTree
+
+The logical strength of adding inductive types depends on the nature of inductive types
+allowed and the other logical constructions and rules.
+Because induction and recursion are so fundamentally useful, it makes sense to give them
+special treatment in a system for interactive theorem proving or automated reasoning,
+rather than, say, simply adding axiomatized constants.
+For example, SMT solvers like cvc5 and Z3, as well as first-order provers like Vampire,
+have built-in support for reasoning about inductive types.
+
 
 Dependent Types
 ---------------
+
+We have seen that one can extend first-order logic by adding sorts,
+which are basic, unaxiomatized data types, as well as function types, product types, and
+inductive types.
+Dependent type theory goes one step further by making the type system more expressive.
+What makes dependent type theory "dependent" is that data types depend on parameters.
+For example, the type ``List α`` of lists of elements of type ``α`` depends on a variable
+``α`` that which can be instantiated in various ways.
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: instances of List
+   :end-before: -- end: instances of List
+
+In this case, the ``List`` type is parameterized by a data type ``α``.
+Types can also be parameterized by mathematical objects like numbers.
+For example, in Lean, the type ``Vector α n`` of vectors of length ``n`` of elements of type ``α`` depends on both the type ``α`` and the number ``n``.
+Similarly, ``Fin n``, the type of natural numbers less than ``n``, depends
+on the parameter ``n``.
+
+.. literalinclude:: ../../LAMR/Examples/beyond_first_order_logic/examples.lean
+   :start-after: -- textbook: dependence on parameters
+   :end-before: -- end: dependence on parameters
+
+In Lean's type theory, all the following types of expression are
+on the same footing:
+
+- data types, like ``Nat : Type`` and ``Bool : Type``
+- objects of those data types, like ``5 : Nat`` and ``true : Bool``
+- propositions, like ``2 + 2 = 4 : Prop`` and ``∀ x : Nat, ∃ y : Nat, y > x``
+- proof of those propositions, like ``rfl : 2 + 2 = 4``.
+
+Type dependency means that all these components can be mixed in a single expression.
+The syntactic details are complicated, and, as a result, dependent type theory
+is hard to automate.
+But the expressive power turns out to be very useful for interactive theorem proving,
+including formalization of mathematics and hardware and software verification.
+As a result, it provides a framework in which the methods we have explored in this course
+can be put to good use.

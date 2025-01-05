@@ -13,7 +13,7 @@ Logic and Mechanized Reasoning
 
    introduction
    mathematical_background
-   using_lean_as_a_programming_language
+   lean_as_a_programming_language
    propositional_logic
    implementing_propositional_logic
    decision_procedures_for_propositional_logic
@@ -22,7 +22,9 @@ Logic and Mechanized Reasoning
    using_lean_as_a_proof_assistant
    first_order_logic
    implementing_first_order_logic
-   decision_procedures_for_first_order_logic
+   decision_procedures_for_equality
+   equality_and_induction_in_lean
+   decision_procedures_for_arithmetic
    using_smt_solvers
    proof_systems_for_first_order_logic
    using_first_order_theorem_provers

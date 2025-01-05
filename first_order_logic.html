@@ -45,7 +45,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
@@ -60,11 +60,13 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_equality.html">12. Decision Procedures for Equality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equality_and_induction_in_lean.html">13. Equality and Induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_arithmetic.html">14. Decision Procedures for Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">15. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">16. Proof Systems for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">18. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -340,7 +342,7 @@ f^{\mdl M}(\tval{t_1}_{\mdl M, \sigma}, \ldots, \tval{t_n}_{\mdl M, \sigma})\)</
 </ul>
 </div></blockquote>
 <p>Remember that we can think of constant symbols as 0-ary function symbols, so
-<span class="math notranslate nohighlight">\(\tval{c}_{\mdl M, \sigma} = c_{\mdl M}\)</span> is implicit in the second clause.</p>
+<span class="math notranslate nohighlight">\(\tval{c}_{\mdl M, \sigma} = c^{\mdl M}\)</span> is implicit in the second clause.</p>
 <p>We can also say what it means for a formula <span class="math notranslate nohighlight">\(A\)</span> to be true in <span class="math notranslate nohighlight">\(\mdl M\)</span>
 relative to the assignment <span class="math notranslate nohighlight">\(\sigma\)</span>, which we write as <span class="math notranslate nohighlight">\(\mdl M \models_\sigma A\)</span>:</p>
 <blockquote>

@@ -403,14 +403,14 @@ and :math:`(z, w)`, since we can clean that up later, say, by assigning
 all the variables to :math:`w`.
 
 Suppose we have an association list :math:`\fn{env}` and we are considering adding
-the pair :math:`(x, t)`. The following function returns `some true` if the assignment
+the pair :math:`(x, t)`. The following function returns `trivial` if the assignment
 is trivial, which is to say, :math:`t` is :math:`x` or there is a chain of variable associations
 that amounts to assigning :math:`x` to :math:`x`. In that case, we can ignore the pair.
-The function returns `some false` for any nontrivial assignment, unless
-it detects a cycle, in which case it returns `none` to indicate failure.
+The function returns `ok` for any nontrivial assignment, unless
+it detects a cycle, in which case it returns `cycle`.
 
 .. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/unification.lean
-   :start-after: -- textbook: isTriv?
+   :start-after: -- textbook: checkAssignment
    :end-before: -- end
 
 With that in place, the following function takes an association list, `env`,
@@ -468,6 +468,3 @@ to the original pairs to make sure that the pairs are indeed unified.
 .. literalinclude:: ../../LAMR/Examples/implementing_first_order_logic/unification.lean
    :start-after: -- textbook: unify examples
    :end-before: -- end
-
-
-

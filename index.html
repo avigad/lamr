@@ -42,7 +42,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
@@ -51,11 +51,13 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_equality.html">12. Decision Procedures for Equality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equality_and_induction_in_lean.html">13. Equality and Induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_arithmetic.html">14. Decision Procedures for Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">15. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">16. Proof Systems for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">18. Beyond First-Order Logic</a></li>
 </ul>
 
         </div>
@@ -100,12 +102,12 @@
 <li class="toctree-l2"><a class="reference internal" href="mathematical_background.html#exercises">2.5. Exercises</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_programming_language.html#about-lean">3.1. About Lean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_programming_language.html#using-lean-as-a-functional-programming-language">3.2. Using Lean as a functional programming language</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_programming_language.html#inductive-data-types-in-lean">3.3. Inductive data types in Lean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_programming_language.html#using-lean-as-an-imperative-programming-language">3.4. Using Lean as an imperative programming language</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_programming_language.html#exercises">3.5. Exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lean_as_a_programming_language.html">3. Lean as a Programming Language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lean_as_a_programming_language.html#about-lean">3.1. About Lean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lean_as_a_programming_language.html#using-lean-as-a-functional-programming-language">3.2. Using Lean as a functional programming language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lean_as_a_programming_language.html#inductive-data-types-in-lean">3.3. Inductive data types in Lean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lean_as_a_programming_language.html#using-lean-as-an-imperative-programming-language">3.4. Using Lean as an imperative programming language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lean_as_a_programming_language.html#exercises">3.5. Exercises</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a><ul>
@@ -155,9 +157,7 @@
 <li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#propositional-logic">9.1. Propositional logic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#proof-terms">9.2. Proof terms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#structured-proofs">9.3. Structured proofs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#equational-reasoning">9.4. Equational reasoning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#induction">9.5. Induction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#exercises">9.6. Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_lean_as_a_proof_assistant.html#exercises">9.4. Exercises</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a><ul>
@@ -174,46 +174,55 @@
 <li class="toctree-l2"><a class="reference internal" href="implementing_first_order_logic.html#unification">11.4. Unification</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_first_order_logic.html#equality">12.1. Equality</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_first_order_logic.html#implementing-congruence-closure">12.2. Implementing congruence closure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_first_order_logic.html#deciding-universal-sentences">12.3. Deciding universal sentences</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_first_order_logic.html#linear-arithmetic">12.4. Linear arithmetic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_first_order_logic.html#implementing-fourier-motzkin">12.5. Implementing Fourier-Motzkin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_first_order_logic.html#a-full-decision-procedure">12.6. A full decision procedure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_first_order_logic.html#other-theories">12.7. Other theories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_equality.html">12. Decision Procedures for Equality</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_equality.html#equality">12.1. Equality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_equality.html#implementing-congruence-closure">12.2. Implementing congruence closure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_equality.html#deciding-universal-sentences">12.3. Deciding universal sentences</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#smt-lib-format">13.1. SMT-LIB Format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#example-magic-squares">13.2. Example: Magic squares</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#calling-smt-solvers-from-lean">13.3. Calling SMT solvers from Lean</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#application-verification">13.4. Application: Verification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#exercise-almost-squares">13.5. Exercise: Almost squares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equality_and_induction_in_lean.html">13. Equality and Induction in Lean</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="equality_and_induction_in_lean.html#equational-reasoning">13.1. Equational reasoning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="equality_and_induction_in_lean.html#induction">13.2. Induction</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#resolution">14.1. Resolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#completeness-of-resolution">14.2. Completeness of resolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#skolemization">14.3. Skolemization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#adding-equality">14.4. Adding equality</a></li>
-<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#axiomatic-proof-systems">14.5. Axiomatic proof systems</a></li>
-<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#a-sequent-calculus">14.6. A sequent calculus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#natural-deduction">14.7. Natural deduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_arithmetic.html">14. Decision Procedures for Arithmetic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_arithmetic.html#linear-real-arithmetic">14.1. Linear real arithmetic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_arithmetic.html#implementing-fourier-motzkin">14.2. Implementing Fourier-Motzkin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_arithmetic.html#a-full-decision-procedure">14.3. A full decision procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_arithmetic.html#linear-integer-arithmetic">14.4. Linear integer arithmetic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decision_procedures_for_arithmetic.html#other-theories">14.5. Other theories</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="using_first_order_theorem_provers.html#example-aunt-agatha">15.1. Example: Aunt Agatha</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_first_order_theorem_provers.html#example-the-eighth-asylum">15.2. Example: The Eighth Asylum</a></li>
-<li class="toctree-l2"><a class="reference internal" href="using_first_order_theorem_provers.html#exercise-the-last-asylum">15.3. Exercise: The Last Asylum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">15. Using SMT solvers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#smt-lib-format">15.1. SMT-LIB Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#example-magic-squares">15.2. Example: Magic squares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#calling-smt-solvers-from-lean">15.3. Calling SMT solvers from Lean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#application-verification">15.4. Application: Verification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_smt_solvers.html#exercise-almost-squares">15.5. Exercise: Almost squares</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">16. Beyond First-Order Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#sorts">16.1. Sorts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#function-types">16.2. Function types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#higher-order-logic">16.3. Higher-order logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#inductive-types">16.4. Inductive Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#dependent-types">16.5. Dependent Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">16. Proof Systems for First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#resolution">16.1. Resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#completeness-of-resolution">16.2. Completeness of resolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#skolemization">16.3. Skolemization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#adding-equality">16.4. Adding equality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#axiomatic-proof-systems">16.5. Axiomatic proof systems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#a-sequent-calculus">16.6. A sequent calculus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proof_systems_for_first_order_logic.html#natural-deduction">16.7. Natural deduction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="using_first_order_theorem_provers.html#example-aunt-agatha">17.1. Example: Aunt Agatha</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_first_order_theorem_provers.html#example-the-eighth-asylum">17.2. Example: The Eighth Asylum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="using_first_order_theorem_provers.html#exercise-the-last-asylum">17.3. Exercise: The Last Asylum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="beyond_first_order_logic.html">18. Beyond First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#sorts">18.1. Sorts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#function-types-and-product-types">18.2. Function types and product types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#higher-order-logic">18.3. Higher-order logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#inductive-types">18.4. Inductive Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beyond_first_order_logic.html#dependent-types">18.5. Dependent Types</a></li>
 </ul>
 </li>
 </ul>

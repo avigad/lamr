@@ -31,14 +31,14 @@ form. Instead of a set of clauses, the result is a set of *universally quantifie
 as we will explain below. We will show that the resolution calculus is refutationally complete for
 such sets.
 
-In :numref:`Chapter %s <chapter_decision_procedures_for_first_order_logic>`, we considered
+In :numref:`Chapter %s <chapter_decision_procedures_for_equality>`, we considered
 proof systems and a decision procedure for equational reasoning.
 In this chapter, we will start with first-order logic *without* equality, and then
 consider how to bring equational reasoning back in. In fact, we will start with an additional
 restriction. Remember that a first-order formula is *universal* if it consists of any number
 of universal quantifiers followed by a quantifier-free formula, and it is *existential* if it
 consists of any number of existential quantifiers followed by a quantifier-free formula.
-In :numref:`Chapter %s <chapter_decision_procedures_for_first_order_logic>`,
+In :numref:`Chapter %s <chapter_decision_procedures_for_equality>`,
 we saw that the question as to the validity of a universal formula is decidable. In sharp contrast,
 the question
 as to the validity of an existential formula is undecidable. Since a formula
@@ -95,8 +95,8 @@ We can do the following:
 
 We then say that :math:`\fa {u, v} Q(f(u), v)` has been obtained by resolution from
 the two hypotheses. Notice that the substitution :math:`\sigma` given by
-:math:`\{x \mapsto u, y \mapsto g(v), w \mapsto f(u), z \mapsto v\}` is a \emph{most
-general unifier} of :math:`P(f(x), y)` and :math:`\lnot P(w, g(z))`. (We have
+:math:`\{x \mapsto u, y \mapsto g(v), w \mapsto f(u), z \mapsto v\}` is a *most
+general unifier* of :math:`P(f(x), y)` and :math:`\lnot P(w, g(z))`. (We have
 renamed :math:`x` to :math:`u` and :math:`z` to :math:`v` just for clarity, to
 make the universal variables in the conclusion fresh; but we could just as well have
 left them alone.) We could have carried out the procedure with a more specific unifier,

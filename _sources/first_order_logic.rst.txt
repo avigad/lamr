@@ -275,7 +275,7 @@ defined recursively as follows:
     f^{\mdl M}(\tval{t_1}_{\mdl M, \sigma}, \ldots, \tval{t_n}_{\mdl M, \sigma})`
 
 Remember that we can think of constant symbols as 0-ary function symbols, so
-:math:`\tval{c}_{\mdl M, \sigma} = c_{\mdl M}` is implicit in the second clause.
+:math:`\tval{c}_{\mdl M, \sigma} = c^{\mdl M}` is implicit in the second clause.
 
 We can also say what it means for a formula :math:`A` to be true in :math:`\mdl M`
 relative to the assignment :math:`\sigma`, which we write as :math:`\mdl M \models_\sigma A`:
@@ -339,4 +339,3 @@ We can ensure that these apply by renaming the bound variable if necessary.
 We can then put the inside formula in CNF if we want. But it turns out to be more useful to
 automated reasoning to eliminate the quantifiers entirely.
 We can do that using *Skolem functions*, which we will tell you about later on.
-

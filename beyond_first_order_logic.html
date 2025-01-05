@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>16. Beyond First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
+  <title>18. Beyond First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
@@ -17,10 +17,12 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="15. Using First-Order Theorem Provers" href="using_first_order_theorem_provers.html" /> 
+    <link rel="prev" title="17. Using First-Order Theorem Provers" href="using_first_order_theorem_provers.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,7 +44,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mathematical_background.html">2. Mathematical Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lean_as_a_programming_language.html">3. Lean as a Programming Language</a></li>
 <li class="toctree-l1"><a class="reference internal" href="propositional_logic.html">4. Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_propositional_logic.html">5. Implementing Propositional Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_propositional_logic.html">6. Decision Procedures for Propositional Logic</a></li>
@@ -51,16 +53,18 @@
 <li class="toctree-l1"><a class="reference internal" href="using_lean_as_a_proof_assistant.html">9. Using Lean as a Proof Assistant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="first_order_logic.html">10. First-Order Logic</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implementing_first_order_logic.html">11. Implementing First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_first_order_logic.html">12. Decision Procedures for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">13. Using SMT solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">14. Proof Systems for First-Order Logic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">15. Using First-Order Theorem Provers</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">16. Beyond First-Order Logic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#sorts">16.1. Sorts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#function-types">16.2. Function types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#higher-order-logic">16.3. Higher-order logic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#inductive-types">16.4. Inductive Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dependent-types">16.5. Dependent Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_equality.html">12. Decision Procedures for Equality</a></li>
+<li class="toctree-l1"><a class="reference internal" href="equality_and_induction_in_lean.html">13. Equality and Induction in Lean</a></li>
+<li class="toctree-l1"><a class="reference internal" href="decision_procedures_for_arithmetic.html">14. Decision Procedures for Arithmetic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_smt_solvers.html">15. Using SMT solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proof_systems_for_first_order_logic.html">16. Proof Systems for First-Order Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="using_first_order_theorem_provers.html">17. Using First-Order Theorem Provers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">18. Beyond First-Order Logic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sorts">18.1. Sorts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#function-types-and-product-types">18.2. Function types and product types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#higher-order-logic">18.3. Higher-order logic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#inductive-types">18.4. Inductive Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependent-types">18.5. Dependent Types</a></li>
 </ul>
 </li>
 </ul>
@@ -79,7 +83,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">16. </span>Beyond First-Order Logic</li>
+      <li><span class="section-number">18. </span>Beyond First-Order Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/beyond_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -90,21 +94,341 @@
            <div itemprop="articleBody">
              
   <section id="beyond-first-order-logic">
-<span id="chapter-beyond-first-order-logic"></span><h1><span class="section-number">16. </span>Beyond First-Order Logic<a class="headerlink" href="#beyond-first-order-logic" title="Permalink to this heading"></a></h1>
+<span id="chapter-beyond-first-order-logic"></span><h1><span class="section-number">18. </span>Beyond First-Order Logic<a class="headerlink" href="#beyond-first-order-logic" title="Permalink to this heading"></a></h1>
+<p>We have explored propositional logic, first-order logic, and axiomatic first-order
+theories like linear and integer arithmetic.
+These form the basis for several automated reasoning tools used today,
+including SAT solvers, SMT solvers, and first-order theorem provers.</p>
+<p>In a sense, we never need to go beyond first-order logic.
+Many mathematicians take Zermelo-Fraenkel set theory with the axiom of choice (ZFC),
+an axiomatic theory based on first-order logic,
+to be the official foundation of mathematics.
+In principle, we can encode any mathematical statement in ZFC and search for a proof using a first-order theorem prover.
+The line between logic and mathematics is not sharp, but many philosophers take first-order
+logic to be the embodiment of general logical reasoning,
+whereby additional axioms provide the rest of mathematics.</p>
+<p>Nonetheless, there are often practical reasons to add more syntax and rules to our logical
+systems and to give these special standing in our implementations.
+Doing so gives us better means to isolate decidable fragments
+of mathematical reasoning, and to design efficient decision procedures and search procedures
+based on the additional structure of the logics.
+It provides more expressive power to proof assistants,
+and it enables us to design better mechanisms to support interactive proof.</p>
+<p>There is a tradeoff: making a logic more powerful and more expressive generally makes it
+harder to automate.
+One common strategy is to choose a powerful and expressive logic as the basis for a proof
+assistant like Lean, and, within that framework, invoke automation built on more restricted logics
+to carry out focused reasoning tasks.</p>
+<p>Lean’s underlying logic is a version of <em>dependent type theory</em>, which we will not discuss in
+detail here.
+You can learn more about dependent type theory from <a class="reference external" href="https://lean-lang.org/theorem_proving_in_lean4/">Theorem Proving in Lean</a> or a textbook like Avigad, <em>Mathematical Logic and Computation</em>.
+This chapter takes a complementary, bottom-up, approach to exploring extensions of
+first-order logic by describing specific extensions one at a time.
+All of them are subsumed by Lean’s logic and we can therefore use Lean to illustrate the syntax.</p>
 <section id="sorts">
-<h2><span class="section-number">16.1. </span>Sorts<a class="headerlink" href="#sorts" title="Permalink to this heading"></a></h2>
+<span id="section-sorts"></span><h2><span class="section-number">18.1. </span>Sorts<a class="headerlink" href="#sorts" title="Permalink to this heading"></a></h2>
+<p>We have already seen that Lean’s foundation includes propositional
+logic and first-order logic.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">P</span> <span class="n">Q</span> <span class="n">R</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span>
+
+<span class="k">#check</span> <span class="n">P</span> <span class="bp">∧</span> <span class="n">Q</span>
+<span class="k">#check</span> <span class="n">P</span> <span class="bp">∨</span> <span class="n">Q</span>
+<span class="k">#check</span> <span class="n">P</span> <span class="bp">→</span> <span class="n">Q</span>
+<span class="k">#check</span> <span class="n">True</span>
+<span class="k">#check</span> <span class="n">False</span>
+<span class="k">#check</span> <span class="bp">¬</span> <span class="n">P</span>
+<span class="k">#check</span> <span class="n">P</span> <span class="bp">↔</span> <span class="n">Q</span>
+
+<span class="kd">variable</span> <span class="o">(</span><span class="n">U</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">)</span>
+
+<span class="c1">-- function symbols</span>
+<span class="kd">variable</span> <span class="o">(</span><span class="n">f</span> <span class="o">:</span> <span class="n">U</span> <span class="bp">→</span> <span class="n">U</span><span class="o">)</span> <span class="o">(</span><span class="n">g</span> <span class="o">:</span> <span class="n">U</span> <span class="bp">→</span> <span class="n">U</span> <span class="bp">→</span> <span class="n">U</span><span class="o">)</span>
+
+<span class="c1">-- a unary predicate and a binary relation</span>
+<span class="kd">variable</span> <span class="o">(</span><span class="n">S</span> <span class="o">:</span> <span class="n">U</span> <span class="bp">→</span> <span class="kt">Prop</span><span class="o">)</span> <span class="o">(</span><span class="n">T</span> <span class="o">:</span> <span class="n">U</span> <span class="bp">→</span> <span class="n">U</span> <span class="bp">→</span> <span class="kt">Prop</span><span class="o">)</span>
+
+<span class="k">#check</span> <span class="bp">∀</span> <span class="n">x</span><span class="o">,</span> <span class="n">S</span> <span class="n">x</span> <span class="bp">→</span> <span class="bp">∃</span> <span class="n">y</span> <span class="n">z</span><span class="o">,</span> <span class="n">y</span> <span class="bp">≠</span> <span class="n">z</span> <span class="bp">∧</span> <span class="n">T</span> <span class="n">y</span> <span class="o">(</span><span class="n">g</span> <span class="n">x</span> <span class="n">z</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In first-order logic, as we have presented it, all the variables and quantifiers range
+over a single universe of objects.
+In many applications, it is useful to have different universes, or <em>sorts</em>, of objects.
+For example, in geometry, we might want separate variables ranging over points, lines,
+and planes.
+In <em>many-sorted first-order logic</em>, we can have different <em>sorts</em> of objects.
+Function symbols and relation symbols are specified with not only their arities but
+also the types of arguments they can have.
+We can easily model this in Lean by using type variables to represent the different
+sorts.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">U1</span> <span class="n">U2</span> <span class="n">U3</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">)</span>
+<span class="kd">variable</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">U1</span> <span class="bp">→</span> <span class="n">U1</span> <span class="bp">→</span> <span class="n">U2</span><span class="o">)</span>
+<span class="kd">variable</span> <span class="o">(</span><span class="n">Q</span> <span class="o">:</span> <span class="n">U1</span> <span class="bp">→</span> <span class="n">U3</span> <span class="bp">→</span> <span class="kt">Prop</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In this example, <code class="docutils literal notranslate"><span class="pre">h</span></code> is a function that takes two arguments of sort <code class="docutils literal notranslate"><span class="pre">U1</span></code>
+and returns an argument of sort <code class="docutils literal notranslate"><span class="pre">U2</span></code>, and <code class="docutils literal notranslate"><span class="pre">Q</span></code> is a binary relation between
+<code class="docutils literal notranslate"><span class="pre">U1</span></code> and <code class="docutils literal notranslate"><span class="pre">U3</span></code>.
+In this way, for example, we can express the relationship of a point being on a line,
+and write down axioms that express that any two distinct points determine a unique line.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">Point</span> <span class="n">Line</span> <span class="n">Plane</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">)</span>
+<span class="kd">variable</span> <span class="o">(</span><span class="n">onl</span> <span class="o">:</span> <span class="n">Point</span> <span class="bp">→</span> <span class="n">Line</span> <span class="bp">→</span> <span class="kt">Prop</span><span class="o">)</span>
+
+<span class="kd">variable</span> <span class="o">(</span><span class="n">ax1</span> <span class="o">:</span> <span class="bp">∀</span> <span class="n">p</span> <span class="n">q</span> <span class="o">:</span> <span class="n">Point</span><span class="o">,</span> <span class="bp">∃</span> <span class="n">L</span> <span class="o">:</span> <span class="n">Line</span><span class="o">,</span> <span class="n">onl</span> <span class="n">p</span> <span class="n">L</span> <span class="bp">∧</span> <span class="n">onl</span> <span class="n">q</span> <span class="n">L</span><span class="o">)</span>
+<span class="kd">variable</span> <span class="o">(</span><span class="n">ax2</span> <span class="o">:</span> <span class="bp">∀</span> <span class="n">p</span> <span class="n">q</span> <span class="o">:</span> <span class="n">Point</span><span class="o">,</span> <span class="bp">∀</span> <span class="n">L</span> <span class="n">M</span> <span class="o">:</span> <span class="n">Line</span><span class="o">,</span> <span class="n">p</span> <span class="bp">≠</span> <span class="n">q</span> <span class="bp">→</span> <span class="n">onl</span> <span class="n">p</span> <span class="n">L</span> <span class="bp">∧</span> <span class="n">onl</span> <span class="n">q</span> <span class="n">L</span> <span class="bp">→</span>
+  <span class="n">onl</span> <span class="n">p</span> <span class="n">M</span> <span class="bp">→</span> <span class="n">onl</span> <span class="n">q</span> <span class="n">M</span> <span class="bp">→</span> <span class="n">L</span> <span class="bp">=</span> <span class="n">M</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>We have already seen that SMT solvers distinguish between different sorts of objects,
+like  integers, real numbers, and bitvectors.
+Many first-order provers have native support for sorted reasoning as well.
+Many-sorted logic is only a mild extension of first-order logic, since we can
+instead use predicates and relativization to distinguish different types
+of objects.
+For example, the statements of geometry above could be represented in ordinary first-order
+logic with additional predicates <span class="math notranslate nohighlight">\(\fn{Point}(x)\)</span>, <span class="math notranslate nohighlight">\(\fn{Line}(x)\)</span>, and <span class="math notranslate nohighlight">\(\fn{Plane}(x)\)</span>.</p>
 </section>
-<section id="function-types">
-<h2><span class="section-number">16.2. </span>Function types<a class="headerlink" href="#function-types" title="Permalink to this heading"></a></h2>
+<section id="function-types-and-product-types">
+<span id="section-function-and-product-types"></span><h2><span class="section-number">18.2. </span>Function types and product types<a class="headerlink" href="#function-types-and-product-types" title="Permalink to this heading"></a></h2>
+<p>In first-order logic, we have function symbols, but we do not have
+<em>variables</em> that range over functions.
+We obtain such a system by adding <em>function types</em> to our logic.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#check</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Bool</span>
+<span class="k">#check</span> <span class="o">(</span><span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span><span class="o">)</span> <span class="bp">→</span> <span class="n">Nat</span>
+
+<span class="kd">variable</span> <span class="o">(</span><span class="n">f</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">(</span><span class="n">g</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Bool</span><span class="o">)</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="o">(</span><span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span><span class="o">)</span> <span class="bp">→</span> <span class="n">Nat</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In this example, we start with basic types <code class="docutils literal notranslate"><span class="pre">Nat</span></code> and <code class="docutils literal notranslate"><span class="pre">Bool</span></code> and declare a function
+<code class="docutils literal notranslate"><span class="pre">f</span></code> from <code class="docutils literal notranslate"><span class="pre">Nat</span></code> to <code class="docutils literal notranslate"><span class="pre">Nat</span></code>, a function <code class="docutils literal notranslate"><span class="pre">g</span></code> from <code class="docutils literal notranslate"><span class="pre">Nat</span></code> to <code class="docutils literal notranslate"><span class="pre">Bool</span></code>, and a function
+<code class="docutils literal notranslate"><span class="pre">h</span></code> that takes a function from <code class="docutils literal notranslate"><span class="pre">Nat</span></code> to <code class="docutils literal notranslate"><span class="pre">Nat</span></code> as an argument and returns a <code class="docutils literal notranslate"><span class="pre">Nat</span></code>.</p>
+<p>A system known as the <em>simply-typed lambda calculus</em> provides two fundamental rules for
+building complex expressions:</p>
+<ul class="simple">
+<li><p><em>Function abstraction</em> (also known as <em>lambda abstraction</em>): If <code class="docutils literal notranslate"><span class="pre">x</span></code> is a variable of type <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span></code> is an expression of type <code class="docutils literal notranslate"><span class="pre">B</span></code>,
+then <code class="docutils literal notranslate"><span class="pre">fun</span> <span class="pre">x</span> <span class="pre">:</span> <span class="pre">A</span> <span class="pre">=&gt;</span> <span class="pre">t</span></code> (also written <code class="docutils literal notranslate"><span class="pre">λ</span> <span class="pre">x</span> <span class="pre">:</span> <span class="pre">A,</span> <span class="pre">t</span></code>) is an expression of type <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">→</span> <span class="pre">B</span></code>.</p></li>
+<li><p><em>Function application</em>: If <code class="docutils literal notranslate"><span class="pre">s</span></code> is an expression of type <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">→</span> <span class="pre">B</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span></code> is an expression of type <code class="docutils literal notranslate"><span class="pre">A</span></code>,
+then <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">t</span></code> is an expression of type <code class="docutils literal notranslate"><span class="pre">B</span></code>.</p></li>
+</ul>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="c1">-- function abstraction</span>
+<span class="k">#check</span> <span class="k">fun</span> <span class="n">x</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">=&gt;</span> <span class="n">x</span>
+<span class="k">#check</span> <span class="bp">λ</span> <span class="n">x</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">=&gt;</span> <span class="n">x</span>    <span class="c1">-- alternate notation</span>
+
+<span class="c1">-- function application</span>
+<span class="k">#check</span> <span class="n">f</span> <span class="mi">3</span>
+<span class="k">#check</span> <span class="n">h</span> <span class="n">f</span>
+</pre></div>
+</div>
+<p>The two operations are related by an equation known as the <em>beta reduction rule</em>,
+which says that the result of applying <code class="docutils literal notranslate"><span class="pre">λ</span> <span class="pre">x,</span> <span class="pre">s</span></code> to <code class="docutils literal notranslate"><span class="pre">t</span></code> is equal to <code class="docutils literal notranslate"><span class="pre">s[t/x]</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">s[t/x]</span></code> denotes the result of substituting <code class="docutils literal notranslate"><span class="pre">t</span></code> for <code class="docutils literal notranslate"><span class="pre">x</span></code> in <code class="docutils literal notranslate"><span class="pre">s</span></code>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="k">fun</span> <span class="n">x</span> <span class="bp">=&gt;</span> <span class="n">f</span> <span class="o">(</span><span class="n">f</span> <span class="n">x</span><span class="o">))</span> <span class="o">(</span><span class="n">f</span> <span class="mi">3</span><span class="o">)</span> <span class="bp">=</span> <span class="n">f</span> <span class="o">(</span><span class="n">f</span> <span class="o">(</span><span class="n">f</span> <span class="mi">3</span><span class="o">))</span> <span class="o">:=</span> <span class="n">rfl</span>
+</pre></div>
+</div>
+<p>Some people take the simply-typed lambda calculus to include product types as well,
+with a pairing operation and projections. The corresponding reduction then says that
+pairing two objects and taking the first or second projection returns the first
+or second object, respectively.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">p</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">×</span> <span class="n">Nat</span><span class="o">)</span>
+
+<span class="k">#check</span> <span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span>
+<span class="k">#check</span> <span class="n">p.1</span>
+<span class="k">#check</span> <span class="n">p.2</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">5</span><span class="o">)</span><span class="bp">.</span><span class="mi">1</span> <span class="bp">=</span> <span class="mi">3</span> <span class="o">:=</span> <span class="n">rfl</span>
+</pre></div>
+</div>
+<p>As a logical system, the simply typed lambda calculus is usually presented as a purely
+equational calculus, that
+is, a system for deriving equations <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">t</span></code> using equality rules and axioms.
+You can think of the simply typed lambda calculus as a simple programming language
+together with a means for reasoning about it.
+One can extend the calculus, for example, with recursive definitions on the natural numbers
+or if-then-else expressions based on a boolean conditional.</p>
+<p>One can show that any expression can be reduced to a unique <em>normal form</em> by
+applying reduction rules until no more reductions are possible.
+As a result, one can decide whether two expressions are provably equal by
+determining whether they have the same normal form.</p>
+<p>In the simply typed lambda calculus, one can represent relations as functions that
+return an element of <code class="docutils literal notranslate"><span class="pre">Bool</span></code>, but the built-in equality relation is not represented that way,
+no does the simply typed lambda calculus include quantifiers.
+Extending the simply typed lambda calculus to include equality and quantifiers as
+term-forming operations gives rise to a much more expressive system known as <em>simple type theory</em>.
+This is, in turn, a version of higher-order logic, which we turn to next.</p>
 </section>
 <section id="higher-order-logic">
-<h2><span class="section-number">16.3. </span>Higher-order logic<a class="headerlink" href="#higher-order-logic" title="Permalink to this heading"></a></h2>
+<span id="section-higher-order-logic"></span><h2><span class="section-number">18.3. </span>Higher-order logic<a class="headerlink" href="#higher-order-logic" title="Permalink to this heading"></a></h2>
+<p>First-order logic allows us to quantify over objects in the domain of discourse,
+but it does not allow us to quantify over functions, predicates, or relations.
+If we could do that in a theory of arithmetic, for example, we could express
+the principle of induction on the natural numbers as follows:</p>
+<div class="math notranslate nohighlight">
+\[\fa P (P(0) \land \fa n P(n) \to P(n+1) ) \to \fa n P(n).\]</div>
+<p>This says that any property <code class="docutils literal notranslate"><span class="pre">P</span></code> of natural numbers that holds for 0 and is preserved
+by adding one holds of all the natural numbers. Without the ability to quantify over
+<code class="docutils literal notranslate"><span class="pre">P</span></code>, the best we can do is state an induction principle for each particular formula
+<code class="docutils literal notranslate"><span class="pre">A(x)</span></code> separately.
+Similarly, if we can quantify over functions, we can say that the universe is infinite by
+saying that there exists an injective function that is not surjective.
+This something we cannot do in first-order logic.</p>
+<p>One option is to extend first-order logic with sorts for functions and predicates on the universe,
+and add variables ranging over those sorts. That gives rise to <em>second-order logic</em>.
+For unary predicates, for example, we would add an axiom that says
+that every formula <span class="math notranslate nohighlight">\(A(x)\)</span> gives rise to a predicate:</p>
+<div class="math notranslate nohighlight">
+\[\ex P \fa x (P(x) \liff A(x)).\]</div>
+<p>This is known as a <em>comprehension</em> axiom.
+Notice that <code class="docutils literal notranslate"><span class="pre">A(x)</span></code> may involve second-order quantifiers as well, so, in general, it’s
+impossible to interpret predicates as ranging only over formulas. For example, if <span class="math notranslate nohighlight">\(A\)</span>
+has a universal quantifier over predicates, then that quantifier ranges over all predicates,
+including the one <span class="math notranslate nohighlight">\(P\)</span> that is defined by the axiom.</p>
+<p>Having added functions and predicates on objects, we might then want to add
+functions and predicates that take functions and predicates as arguments, and so on.
+Iterating this process gives rise to <em>higher-order logic</em>. The language of simple type
+theory provides a convenient way to do this. If we define a type of propositions, <code class="docutils literal notranslate"><span class="pre">Prop</span></code>,
+we can take the propositional connectives to be functions on <code class="docutils literal notranslate"><span class="pre">Prop</span></code>, and we can take
+the equality symbol to return values in <code class="docutils literal notranslate"><span class="pre">Prop</span></code>.
+We can take the universal and existential quantifiers to be higher-order functions that
+take predicates to propositions:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">U</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">)</span> <span class="o">(</span><span class="n">P</span> <span class="o">:</span> <span class="n">U</span> <span class="bp">→</span> <span class="kt">Prop</span><span class="o">)</span>
+
+<span class="k">#check</span> <span class="o">(</span><span class="n">Exists</span> <span class="o">:</span> <span class="o">(</span><span class="n">U</span> <span class="bp">→</span> <span class="kt">Prop</span><span class="o">)</span> <span class="bp">→</span> <span class="kt">Prop</span><span class="o">)</span>
+
+<span class="kd">example</span> <span class="o">:</span> <span class="o">(</span><span class="bp">∃</span> <span class="n">x</span><span class="o">,</span> <span class="n">P</span> <span class="n">x</span><span class="o">)</span> <span class="bp">=</span> <span class="n">Exists</span> <span class="n">P</span> <span class="o">:=</span> <span class="n">rfl</span>
+</pre></div>
+</div>
+<p>(In Lean’s foundation, the existential quantifier is treated this way, but the universal
+quantifier is not; the latter is more integrally a part of the logical foundation.)
+The comprehension axiom is now subsumed by function abstraction:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">f</span> <span class="n">g</span> <span class="o">:</span> <span class="n">U</span> <span class="bp">→</span> <span class="n">U</span><span class="o">)</span> <span class="o">(</span><span class="n">h</span> <span class="o">:</span> <span class="n">U</span> <span class="bp">→</span> <span class="n">U</span> <span class="bp">→</span> <span class="n">U</span><span class="o">)</span>
+
+<span class="k">#check</span> <span class="o">(</span><span class="k">fun</span> <span class="n">x</span> <span class="o">:</span> <span class="n">U</span> <span class="bp">=&gt;</span> <span class="bp">∀</span> <span class="n">y</span><span class="o">,</span> <span class="bp">∃</span> <span class="n">z</span><span class="o">,</span> <span class="n">f</span> <span class="o">(</span><span class="n">f</span> <span class="n">y</span><span class="o">)</span> <span class="bp">=</span> <span class="n">h</span> <span class="n">x</span> <span class="o">(</span><span class="n">g</span> <span class="n">z</span><span class="o">)</span> <span class="o">:</span> <span class="n">U</span> <span class="bp">→</span> <span class="kt">Prop</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In other words, if <code class="docutils literal notranslate"><span class="pre">A</span></code> is any expression of type <code class="docutils literal notranslate"><span class="pre">Prop</span></code>, possibly involving the variable <code class="docutils literal notranslate"><span class="pre">x</span></code>,
+the expression <code class="docutils literal notranslate"><span class="pre">fun</span> <span class="pre">x</span> <span class="pre">=&gt;</span> <span class="pre">A</span></code> is the predicate that, when applied to an expression <code class="docutils literal notranslate"><span class="pre">t</span></code>, asserts
+that <code class="docutils literal notranslate"><span class="pre">A</span></code> holds of <code class="docutils literal notranslate"><span class="pre">t</span></code>.</p>
+<p>There is a duality between sets <code class="docutils literal notranslate"><span class="pre">S</span></code> of elements of a type <code class="docutils literal notranslate"><span class="pre">U</span></code> and predicates <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">:</span> <span class="pre">U</span> <span class="pre">→</span> <span class="pre">Prop</span></code>,
+namely,
+for any set <code class="docutils literal notranslate"><span class="pre">S</span></code>, we can define the property <code class="docutils literal notranslate"><span class="pre">fun</span> <span class="pre">x</span> <span class="pre">=&gt;</span> <span class="pre">x</span> <span class="pre">∈</span> <span class="pre">S</span></code>, and for any predicate <code class="docutils literal notranslate"><span class="pre">P</span></code>,
+we can define the set <code class="docutils literal notranslate"><span class="pre">{x</span> <span class="pre">|</span> <span class="pre">P</span> <span class="pre">x}</span></code>.
+For that reason, the philosopher W. V. O. Quine called second-order logic <em>set theory in sheep’s
+clothing</em>, by which he meant that higher-order reasoning is really set-theoretic reasoning in disguise.
+That makes higher-order logic very powerful. If we add a basic type of natural numbers, for example,
+higher-order logic is strong enough to interpret a substantial amount of mathematics.</p>
+<p>This expressivity comes at a cost, however. To start with, there is no axiomatic proof system
+that is complete for even second-order logic, under the standard semantics where a quantifier
+over predicates is interpreted as ranging over all predicates on the universe.
+There is a precise technical sense in which
+second-order logic is more undecidable than first-order logic, and higher-order logic is
+even more undecidable than that.
+Even fundamental logical operations that are straightforwardly computable in the first-order
+setting can become uncomputable in the higher-order setting.
+For example, we have seen that there is a straightforward procedure for determining whether
+two first-order terms are unifiable.
+In contrast, the decision procedure for even second-order terms is undecidable.</p>
+<p>Because functions, predicates, and relations are so fundamental to mathematical
+reasoning, it often makes sense to consider them part of the underlying logic.
+Provers like Vampire have built-in support for higher-order reasoning.
+Theory tells us that there is no complete search procedure for certifying even second-order validity,
+but that need not dissuade us from trying to design search procedures that capture common
+patterns of inference, and the expressivity of higher-order logic is often useful in practice.</p>
 </section>
 <section id="inductive-types">
-<h2><span class="section-number">16.4. </span>Inductive Types<a class="headerlink" href="#inductive-types" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">18.4. </span>Inductive Types<a class="headerlink" href="#inductive-types" title="Permalink to this heading"></a></h2>
+<p>Another way to extend a logic is to build in a notion of an <em>inductively defined data type</em>, or
+<em>inductive type</em> for short. An inductive type is a data type generated by
+<em>constructors</em>, where “generated by” means, first, that applying a constructor to an element of
+a type gives a new element, and second, that every element of the type is obtained in this way.
+The latter condition justified the principles of induction and recursion for the inductive type.</p>
+<p>You have already seen inductive data types informally, in
+<a class="reference internal" href="mathematical_background.html#chapter-mathematical-background"><span class="std std-numref">Chapter 2</span></a>, and formally, in Lean, in
+<a class="reference internal" href="equality_and_induction_in_lean.html#chapter-equality-and-induction-in-lean"><span class="std std-numref">Chapter 13</span></a>.
+The arcehtypal example of an inductive type is the natural numbers, <code class="docutils literal notranslate"><span class="pre">Nat</span></code>, generated
+by an element <code class="docutils literal notranslate"><span class="pre">zero</span> <span class="pre">:</span> <span class="pre">Nat</span></code> and a function <code class="docutils literal notranslate"><span class="pre">succ</span> <span class="pre">:</span> <span class="pre">Nat</span> <span class="pre">→</span> <span class="pre">Nat</span></code>.
+In Lean, it is declared as follows:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">Nat</span> <span class="o">:</span> <span class="kt">Type</span> <span class="n">where</span>
+  <span class="bp">|</span> <span class="n">zero</span> <span class="o">:</span> <span class="n">Nat</span>
+  <span class="bp">|</span> <span class="n">succ</span> <span class="o">:</span> <span class="n">Nat</span> <span class="bp">→</span> <span class="n">Nat</span>
+</pre></div>
+</div>
+<p>This declaration gives rise to the principles of induction and recursion that we saw in
+<a class="reference internal" href="equality_and_induction_in_lean.html#chapter-equality-and-induction-in-lean"><span class="std std-numref">Chapter 13</span></a>.
+Here is the analogous definition of a binary tree:</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">BinaryTree</span> <span class="n">where</span>
+  <span class="bp">|</span> <span class="n">empty</span> <span class="o">:</span> <span class="n">BinaryTree</span>
+  <span class="bp">|</span> <span class="n">node</span> <span class="o">:</span> <span class="n">BinaryTree</span> <span class="bp">→</span> <span class="n">BinaryTree</span> <span class="bp">→</span> <span class="n">BinaryTree</span>
+</pre></div>
+</div>
+<p>We have already seen the induction and recursion principles play out formally in
+<a class="reference internal" href="equality_and_induction_in_lean.html#chapter-equality-and-induction-in-lean"><span class="std std-numref">Chapter 13</span></a>.</p>
+<p>The data type of lists of elements of another type <code class="docutils literal notranslate"><span class="pre">α</span></code> is another example of an inductive type,
+generated by a constructor for the empty list and, for each <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">:</span> <span class="pre">α</span></code>, a constructor <code class="docutils literal notranslate"><span class="pre">cons</span> <span class="pre">a</span></code>
+that takes a list <code class="docutils literal notranslate"><span class="pre">l</span></code> and returns a new list with <code class="docutils literal notranslate"><span class="pre">a</span></code> as its head and <code class="docutils literal notranslate"><span class="pre">l</span></code> as its tail.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">List</span> <span class="o">(</span><span class="n">α</span> <span class="o">:</span> <span class="kt">Type</span><span class="o">)</span> <span class="n">where</span>
+  <span class="bp">|</span> <span class="n">nil</span> <span class="o">:</span> <span class="n">List</span> <span class="n">α</span>
+  <span class="bp">|</span> <span class="n">cons</span> <span class="o">:</span> <span class="n">α</span> <span class="bp">→</span> <span class="n">List</span> <span class="n">α</span> <span class="bp">→</span> <span class="n">List</span> <span class="n">α</span>
+</pre></div>
+</div>
+<p>Different logical systems allow different forms of inductive types. In Lean,
+constructor can take a function as argument.
+The example <code class="docutils literal notranslate"><span class="pre">CBTree</span></code> below is a type of <em>countably branching trees</em>; given a sequence
+of trees indexed by the natural numbers, the constructor <code class="docutils literal notranslate"><span class="pre">sup</span></code> returns a new one
+that has a node at the root and children given by the sequence.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">CBTree</span> <span class="n">where</span>
+  <span class="bp">|</span> <span class="n">leaf</span> <span class="o">:</span> <span class="n">CBTree</span>
+  <span class="bp">|</span> <span class="n">sup</span> <span class="o">:</span> <span class="o">(</span><span class="n">Nat</span> <span class="bp">→</span> <span class="n">CBTree</span><span class="o">)</span> <span class="bp">→</span> <span class="n">CBTree</span>
+</pre></div>
+</div>
+<p>The logical strength of adding inductive types depends on the nature of inductive types
+allowed and the other logical constructions and rules.
+Because induction and recursion are so fundamentally useful, it makes sense to give them
+special treatment in a system for interactive theorem proving or automated reasoning,
+rather than, say, simply adding axiomatized constants.
+For example, SMT solvers like cvc5 and Z3, as well as first-order provers like Vampire,
+have built-in support for reasoning about inductive types.</p>
 </section>
 <section id="dependent-types">
-<h2><span class="section-number">16.5. </span>Dependent Types<a class="headerlink" href="#dependent-types" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">18.5. </span>Dependent Types<a class="headerlink" href="#dependent-types" title="Permalink to this heading"></a></h2>
+<p>We have seen that one can extend first-order logic by adding sorts,
+which are basic, unaxiomatized data types, as well as function types, product types, and
+inductive types.
+Dependent type theory goes one step further by making the type system more expressive.
+What makes dependent type theory “dependent” is that data types depend on parameters.
+For example, the type <code class="docutils literal notranslate"><span class="pre">List</span> <span class="pre">α</span></code> of lists of elements of type <code class="docutils literal notranslate"><span class="pre">α</span></code> depends on a variable
+<code class="docutils literal notranslate"><span class="pre">α</span></code> that which can be instantiated in various ways.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="k">#check</span> <span class="n">List</span> <span class="n">Nat</span>
+<span class="k">#check</span> <span class="n">List</span> <span class="o">(</span><span class="n">Nat</span> <span class="bp">×</span> <span class="n">Nat</span><span class="o">)</span>
+<span class="k">#check</span> <span class="n">List</span> <span class="o">(</span><span class="n">List</span> <span class="n">Nat</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In this case, the <code class="docutils literal notranslate"><span class="pre">List</span></code> type is parameterized by a data type <code class="docutils literal notranslate"><span class="pre">α</span></code>.
+Types can also be parameterized by mathematical objects like numbers.
+For example, in Lean, the type <code class="docutils literal notranslate"><span class="pre">Vector</span> <span class="pre">α</span> <span class="pre">n</span></code> of vectors of length <code class="docutils literal notranslate"><span class="pre">n</span></code> of elements of type <code class="docutils literal notranslate"><span class="pre">α</span></code> depends on both the type <code class="docutils literal notranslate"><span class="pre">α</span></code> and the number <code class="docutils literal notranslate"><span class="pre">n</span></code>.
+Similarly, <code class="docutils literal notranslate"><span class="pre">Fin</span> <span class="pre">n</span></code>, the type of natural numbers less than <code class="docutils literal notranslate"><span class="pre">n</span></code>, depends
+on the parameter <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p>
+<div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">n</span> <span class="o">:</span> <span class="n">Nat</span><span class="o">)</span>
+
+<span class="k">#check</span> <span class="n">Vector</span> <span class="o">(</span><span class="n">List</span> <span class="n">Nat</span><span class="o">)</span> <span class="mi">5</span>
+<span class="k">#check</span> <span class="n">Vector</span> <span class="n">Nat</span> <span class="o">(</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">3</span><span class="o">)</span>
+<span class="k">#check</span> <span class="n">Fin</span> <span class="n">n</span>
+<span class="k">#check</span> <span class="n">Fin</span> <span class="o">(</span><span class="mi">2</span><span class="bp">*</span><span class="n">n</span> <span class="bp">+</span> <span class="mi">5</span><span class="o">)</span>
+</pre></div>
+</div>
+<p>In Lean’s type theory, all the following types of expression are
+on the same footing:</p>
+<ul class="simple">
+<li><p>data types, like <code class="docutils literal notranslate"><span class="pre">Nat</span> <span class="pre">:</span> <span class="pre">Type</span></code> and <code class="docutils literal notranslate"><span class="pre">Bool</span> <span class="pre">:</span> <span class="pre">Type</span></code></p></li>
+<li><p>objects of those data types, like <code class="docutils literal notranslate"><span class="pre">5</span> <span class="pre">:</span> <span class="pre">Nat</span></code> and <code class="docutils literal notranslate"><span class="pre">true</span> <span class="pre">:</span> <span class="pre">Bool</span></code></p></li>
+<li><p>propositions, like <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">=</span> <span class="pre">4</span> <span class="pre">:</span> <span class="pre">Prop</span></code> and <code class="docutils literal notranslate"><span class="pre">∀</span> <span class="pre">x</span> <span class="pre">:</span> <span class="pre">Nat,</span> <span class="pre">∃</span> <span class="pre">y</span> <span class="pre">:</span> <span class="pre">Nat,</span> <span class="pre">y</span> <span class="pre">&gt;</span> <span class="pre">x</span></code></p></li>
+<li><p>proof of those propositions, like <code class="docutils literal notranslate"><span class="pre">rfl</span> <span class="pre">:</span> <span class="pre">2</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">=</span> <span class="pre">4</span></code>.</p></li>
+</ul>
+<p>Type dependency means that all these components can be mixed in a single expression.
+The syntactic details are complicated, and, as a result, dependent type theory
+is hard to automate.
+But the expressive power turns out to be very useful for interactive theorem proving,
+including formalization of mathematics and hardware and software verification.
+As a result, it provides a framework in which the methods we have explored in this course
+can be put to good use.</p>
 </section>
 </section>
 
@@ -112,7 +436,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="using_first_order_theorem_provers.html" class="btn btn-neutral float-left" title="15. Using First-Order Theorem Provers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="using_first_order_theorem_provers.html" class="btn btn-neutral float-left" title="17. Using First-Order Theorem Provers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
