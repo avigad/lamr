@@ -1,5 +1,5 @@
-import Lean
-open Lean
+import Std
+open Std
 
 /-
 We will represent a linear expression as a mapping from variables (represented as strings)

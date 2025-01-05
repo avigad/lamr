@@ -22,7 +22,7 @@ def Size.lt : Size → Size → Bool
 Objects are placed on an 8 x 8 grid, but we won't check the range.
 -/
 
-structure Object :=
+structure Object where
   (shape : Shape)
   (size : Size)
   (row : Nat)
@@ -172,7 +172,7 @@ open Lean Elab in
 @[implemented_by evalWorldUnsafe]
 private opaque evalWorld (stx : Syntax) : TermElabM World
 
-@[widget]
+@[widget_module]
 def tarskisWidget : Lean.Widget.Module where
   javascript := include_str "TarskisWorld.js"
 

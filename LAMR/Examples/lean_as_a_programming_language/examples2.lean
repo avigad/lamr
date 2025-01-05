@@ -18,7 +18,6 @@ def printExample : IO Unit:= do
 #eval printExample
 -- end: hello world
 
-
 -- textbook: factorial
 def factorial : Nat → Nat
   | 0       => 1
@@ -27,7 +26,6 @@ def factorial : Nat → Nat
 #eval factorial 10
 #eval factorial 100
 -- end: factorial
-
 
 -- textbook: hanoi
 def hanoi (numDisks start finish aux : Nat) : IO Unit :=
@@ -41,7 +39,6 @@ def hanoi (numDisks start finish aux : Nat) : IO Unit :=
 #eval hanoi 7 1 2 3
 -- end: hanoi
 
-
 -- textbook: recursion on lists
 def addNums : List Nat → Nat
   | []    => 0
@@ -49,7 +46,6 @@ def addNums : List Nat → Nat
 
 #eval addNums [0, 1, 2, 3, 4, 5, 6]
 -- end: recursion on lists
-
 
 -- textbook: list functions
 #eval List.range 7
@@ -65,12 +61,10 @@ open List
 end
 -- end: list functions
 
-
 -- textbook: projection notation
 def myRange := List.range 7
 #eval myRange.map fun x => x + 3
 -- end: projection notation
-
 
 -- textbook: reverse and append
 namespace hidden
@@ -88,7 +82,6 @@ protected def append (as bs : List α) : List α :=
 end hidden
 -- end: reverse and append
 
-
 -- textbook: gcd
 partial def gcd m n :=
   if n = 0 then m else gcd n (m % n)
@@ -97,11 +90,9 @@ partial def gcd m n :=
 #eval gcd 37252 49824
 -- end: gcd
 
-
 -- textbook: bad definition
 partial def bad (n : Nat) : Nat := bad (n + 1)
 -- end: bad definition
-
 
 -- textbook: inefficient Fibonacci
 def fib' : Nat → Nat
@@ -109,7 +100,6 @@ def fib' : Nat → Nat
   | 1 => 1
   | n + 2 => fib' (n + 1) + fib' n
 -- end: inefficient Fibonacci
-
 
 -- textbook: efficient Fibonacci
 def fibAux : Nat → Nat × Nat

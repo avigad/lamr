@@ -7,20 +7,24 @@ A unification algorithm, from John Harrison's book.
 
 -/
 
--- textbook: isTriv?
-partial def isTriv? (env : AssocList String FOTerm) (x : String) :
-    FOTerm → Option Bool
-  | var y      => if y = x then true
-                   else if !env.contains y then false
-                   else isTriv? env x (env.getA y)
+-- textbook: checkAssignment
+inductive checkResult where
+  | ok | trivial | cycle
+deriving Inhabited
+
+partial def checkAssignment (env : AssocList String FOTerm) (x : String) :
+    FOTerm → checkResult
+  | var y      => if y = x then .trivial
+                   else if !env.contains y then .ok
+                   else checkAssignment env x (env.getD y)
   | app _ l    => loop l
 where
-  loop : List FOTerm → Option Bool
-    | []    => false
-    | a::as => match isTriv? env x a with
-                  | true  => none
-                  | false => loop as
-                  | none  => none
+  loop : List FOTerm → checkResult
+    | []    => .ok
+    | a::as => match checkAssignment env x a with
+                  | .trivial => .cycle
+                  | .ok      => loop as
+                  | .cycle   => .cycle
 -- end
 
 -- textbook: unify?
@@ -32,11 +36,11 @@ partial def unify? (env : AssocList String FOTerm) : List (FOTerm × FOTerm) →
         unify? env ((l1.zip l2) ++ eqs)
       else none
   | (var x, t) :: eqs =>
-      if env.contains x then unify? env (eqs.cons (env.getA x, t))
-      else match isTriv? env x t with
-        | true  => unify? env eqs
-        | false => unify? (env.cons x t) eqs
-        | none  => none
+      if env.contains x then unify? env (eqs.cons (env.getD x, t))
+      else match checkAssignment env x t with
+        | .trivial  => unify? env eqs
+        | .ok => unify? (env.cons x t) eqs
+        | .cycle  => none
   | (t, var x) :: eqs => unify? env ((var x, t) :: eqs)
 -- end
 

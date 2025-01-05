@@ -111,7 +111,7 @@ structure FOModel (α : Type) where
 
 -- coerces an association list to a function
 instance [Inhabited α] : Coe (AssocList String (List α → Bool)) (RelInterp α) :=
-⟨fun l => l.getA⟩
+⟨fun l => l.getD⟩
 
 -- textbook: FOAssignment.update
 def FOAssignment.update (σ : FOAssignment α) (x : String) (v : α) : FOAssignment α

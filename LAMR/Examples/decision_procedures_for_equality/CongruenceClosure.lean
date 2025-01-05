@@ -27,11 +27,8 @@ It is described well in the handbook [1].
 
 [1] Harrison J. *Handbook of Practical Logic and Automated Reasoning.* Cambridge University Press, 2009. -/
 
-open Lean (HashSet)
-open Lean (HashMap)
-
-def HashSet.union [BEq α] [Hashable α] (a b : HashSet α) : HashSet α :=
-  a.fold (init := b) fun acc x => acc.insert x
+open Std (HashSet)
+open Std (HashMap)
 
 /-- Compute all the subterms of a term,
 including the term itself. -/
@@ -75,7 +72,7 @@ def equate (s t : FOTerm) : StateM CCState Unit := do
 /-- Return the predecessors of `s`. See `pfn`. -/
 def preds (s : FOTerm) : StateM CCState (HashSet FOTerm) := do
   let st ← get
-  return st.pfn.findD s HashSet.empty
+  return st.pfn.getD s HashSet.empty
 
 /-- Set the predecessors of `s`. See `pfn`. -/
 def setPreds (s : FOTerm) (ts : HashSet FOTerm) : StateM CCState Unit :=
@@ -83,7 +80,7 @@ def setPreds (s : FOTerm) (ts : HashSet FOTerm) : StateM CCState Unit :=
 
 /-- Add a predecessor `p` of `s`, inserting `s` into `pfn` if needed. See `pfn`. -/
 def addPred (p s : FOTerm) : StateM CCState Unit :=
-  modify fun st => { st with pfn := st.pfn.insert s (st.pfn.findD s HashSet.empty |>.insert p) }
+  modify fun st => { st with pfn := st.pfn.insert s (st.pfn.getD s HashSet.empty |>.insert p) }
 
 /-- Add `p` as an immediate predecessor
 of each of its arguments to `pfn`. -/

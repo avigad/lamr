@@ -36,7 +36,7 @@ Determines whether a clause is a tautology.
 -/
 def IsTautology (c : Clause) : Bool := aux c {}
   where
-aux : Clause -> Lean.HashSet Lit -> Bool
+aux : Clause -> Std.HashSet Lit -> Bool
   | [],          _    => false
   | lit :: lits, seen =>
       if seen.contains (-lit) then true else aux lits (seen.insert lit)
