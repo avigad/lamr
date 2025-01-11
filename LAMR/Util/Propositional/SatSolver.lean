@@ -1,5 +1,6 @@
 import LAMR.Util.Propositional.Transformations
 import LAMR.Util.Propositional.DRAT
+import LAMR.System
 open List
 open Nat
 open Std (HashMap)
@@ -73,9 +74,18 @@ let (sn, ns) := addCnfForm c
 let emptyStr := ""
 (sn, ns, s!"p cnf {sn.size} {c.length}\n{c.toDimacsCore sn emptyStr}")
 
-def runCadical : IO.Process.SpawnArgs := {
-  cmd := "LAMR/bin/cadical"
-  args := #["LAMR/bin/temp.cnf", "LAMR/bin/temp.drat"] }
+-- For unsupported architectures, just use `cadical` and leave it to the user
+-- to put the correct one in `LAMR/bin`.
+def runCadical : IO IO.Process.SpawnArgs := do
+  let sys ← getSystem
+  pure {
+    cmd := match sys with
+      | .linux => "LAMR/bin/cadical-linux"
+      | .osx => "LAMR/bin/cadical"
+      | .osxArm => "LAMR/bin/cadical-mac"
+      | .windows => "LAMR/bin/cadical"
+      | .windowsArm => "LAMR/bin/cadical"
+    args := #["LAMR/bin/temp.cnf", "LAMR/bin/temp.drat"] }
 
 -- Same as IO.Process.run, but does not require exitcode = 0
 def run' (args : IO.Process.SpawnArgs) : IO String := do
@@ -205,7 +215,7 @@ def parseSatOutput (h : NSH) (ss : List String) : IO SatResult :=
 def callCadical (cnf : CnfForm) : IO (String × SatResult) := do
   let (_, ns, cnfs) ← .ok <| CnfForm.toDimacs cnf
   IO.FS.writeFile "LAMR/bin/temp.cnf" cnfs
-  let s ← run' runCadical
+  let s ← run' (← runCadical)
   let ss := String.splitOn s "\n"
   let rst ← parseSatOutput ns ss
   pure (s, rst)
