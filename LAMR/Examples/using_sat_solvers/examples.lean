@@ -20,7 +20,7 @@ def exCnf2 := cnf!{
 }
 
 /-
-Examples of use of Cadical.
+Examples of use of CaDiCaL.
 -/
 
 -- textbook: SAT example

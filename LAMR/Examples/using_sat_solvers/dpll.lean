@@ -6,8 +6,8 @@ import LAMR.Util.Propositional.Syntax
 def PropAssignment.evalClause (τ : PropAssignment) (c : Clause) : Bool :=
   (c : List Lit).foldl (init := false) (fun v l => v ∨ (τ.evalLit? l |>.get!))
 
-def PropAssignment.evalCnf (τ : PropAssignment) (φ : CnfForm) : Bool :=
-  (φ : List Clause).foldl (init := true) (fun v c => v ∧ τ.evalClause c)
+def PropAssignment.evalCnf (τ : PropAssignment) (Γ : CnfForm) : Bool :=
+  (Γ : List Clause).foldl (init := true) (fun v c => v ∧ τ.evalClause c)
 
 /-- Erases all elements equal to the argument from the list. -/
 def List.eraseAll {α} [BEq α] : List α → α → List α
@@ -18,9 +18,9 @@ def List.eraseAll {α} [BEq α] : List α → α → List α
 
 /-- Simplifies the CNF assuming `x` is true. `x` must not be a constant. -/
 -- textbook: simplify
-def simplify (x : Lit) (φ : CnfForm) : CnfForm :=
+def simplify (x : Lit) (Γ : CnfForm) : CnfForm :=
   assert! x != lit!{⊥} && x != lit!{⊤}
-  match φ with
+  match Γ with
   | []      => []
   | c :: cs =>
                let cs' := simplify x cs
@@ -50,19 +50,19 @@ Returns an updated assignment and a simplified formula.
 Assumes no additions to `τ` since last `simplify _ φ` call.
 NB: If branching in DPLL, call `simplify` first. -/
 -- textbook: propagateUnits
-partial def propagateUnits (τ : PropAssignment) (φ : CnfForm) : PropAssignment × CnfForm :=
-  -- If `φ` is unsat, we're done.
-  if φ.hasEmpty then ⟨τ, φ⟩
-  else match φ.findUnit with
+partial def propagateUnits (τ : PropAssignment) (Γ : CnfForm) : PropAssignment × CnfForm :=
+  -- If `Γ` is unsat, we're done.
+  if Γ.hasEmpty then ⟨τ, Γ⟩
+  else match Γ.findUnit with
     -- If there are no unit clauses, we're done.
-    | none   => ⟨τ, φ⟩
+    | none   => ⟨τ, Γ⟩
     | some x =>
       -- If there is a unit clause `x`, simplify the formula
       -- assuming `x` is true and continue propagating.
-      let φ' := simplify x φ
+      let Γ' := simplify x Γ
       if τ.mem x.name
       then panic! s!"'{x}' has already been assigned and should not appear in the formula."
-      else propagateUnits (τ.withLit x) φ'
+      else propagateUnits (τ.withLit x) Γ'
 -- end: propagateUnits
 
 #eval toString <| propagateUnits [] cnf!{p, q, q -q}
@@ -71,9 +71,9 @@ partial def propagateUnits (τ : PropAssignment) (φ : CnfForm) : PropAssignment
 
 /-- Assign (previously unassigned) `x` to true and perform unit propagation. -/
 -- textbook: propagateWithNew
-def propagateWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) :
+def propagateWithNew (x : Lit) (τ : PropAssignment) (Γ : CnfForm) :
     PropAssignment × CnfForm :=
-  propagateUnits (τ.withLit x) (simplify x φ)
+  propagateUnits (τ.withLit x) (simplify x Γ)
 -- end: propagateWithNew
 
 /-- Picks which literal to split on. The parity (whether it's negated) returned should
@@ -88,38 +88,38 @@ def pickSplit? : CnfForm → Option Lit
 -- end: pickSplit?
 
 -- textbook: dpllSat
-partial def dpllSatAux (τ : PropAssignment) (φ : CnfForm) :
+partial def dpllSatAux (τ : PropAssignment) (Γ : CnfForm) :
     Option (PropAssignment × CnfForm) :=
-  if φ.hasEmpty then none
-  else match pickSplit? φ with
+  if Γ.hasEmpty then none
+  else match pickSplit? Γ with
   -- No variables left to split on, we found a solution.
-  | none => some (τ, φ)
+  | none => some (τ, Γ)
   -- Split on `x`.
   -- `<|>` is the "or else" operator, which tries one action and if that fails
   -- tries the other.
-  | some x => goWithNew x τ φ <|> goWithNew (-x) τ φ
+  | some x => goWithNew x τ Γ <|> goWithNew (-x) τ Γ
 
 where
   /-- Assigns `x` to true and continues out DPLL. -/
-  goWithNew (x : Lit) (τ : PropAssignment) (φ : CnfForm) :
+  goWithNew (x : Lit) (τ : PropAssignment) (Γ : CnfForm) :
       Option (PropAssignment × CnfForm) :=
-    let (τ', φ') := propagateWithNew x τ φ
-    dpllSatAux τ' φ'
+    let (τ', Γ') := propagateWithNew x τ Γ
+    dpllSatAux τ' Γ'
 
 /-- Solve `φ` using DPLL. Return a satisfying assignment if found, otherwise `none`. -/
-def dpllSat (φ : CnfForm) : Option PropAssignment :=
-  let ⟨τ, φ⟩ := propagateUnits [] φ
-  (dpllSatAux τ φ).map fun ⟨τ, _⟩ => τ
+def dpllSat (Γ : CnfForm) : Option PropAssignment :=
+  let ⟨τ, Γ⟩ := propagateUnits [] Γ
+  (dpllSatAux τ Γ).map fun ⟨τ, _⟩ => τ
 -- end: dpllSat
 
 namespace hidden
 
 -- Solve a formula.
 
-def ϕ := cnf!{p q -r, -p q r, -p -q r, p r, -p -r}
-def τ := dpllSat ϕ |>.get!
+def Γ  := cnf!{p q -r, -p q r, -p -q r, p r, -p -r}
+def τ := dpllSat Γ |>.get!
 #eval τ
-#eval τ.evalCnf ϕ
+#eval τ.evalCnf Γ
 
 -- Find no assignment for unsat formulas.
 

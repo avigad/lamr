@@ -55,7 +55,7 @@ protected def String.toNat (s : String) : Option Nat := String.toNatCore 0 s
 
 def Lit.toDimacs (h : SNH) : Lit → String
 | tr    => ""  -- should not happen
-| fls   => ""
+| fls    => ""
 | pos s => toString (h.getD s 0)
 | neg s => "-" ++ toString (h.getD s 0)
 

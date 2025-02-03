@@ -78,7 +78,7 @@ def iffToCnf (A B : NnfForm) : CnfForm :=
 
 def defsToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
   where aux : List NnfForm → Nat → CnfForm
-  | [],          n => []
+  | [],          _ => []
   | nnf :: nnfs, n => iffToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
 
 -- With the Plaisted-Greenbaum optimization, we only need implications.
@@ -89,13 +89,13 @@ def implToCnf (A B : NnfForm) : CnfForm :=
 
 def defsImplToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
   where aux : List NnfForm → Nat → CnfForm
-  | [],          n => []
+  | [],          _ => []
   | nnf :: nnfs, n => implToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
 -- end: implToCnf
 
 -- textbook: toCnf
 def orToCnf : NnfForm → Clause → Array NnfForm → Clause × Array NnfForm
-  | lit Lit.tr,  cls, defs  => ([Lit.tr], defs)
+  | lit Lit.tr,   _, defs  => ([Lit.tr], defs)
   | lit Lit.fls, cls, defs  => (cls, defs)
   | lit l, cls, defs        => (l :: cls, defs)
   | disj A B, cls, defs =>
@@ -159,3 +159,13 @@ def_4 -s    := ¬ s ∨ (p ∧ t)
 Each ':=' is really an implication.
 -/
 -- end: ex1.toCnf
+
+
+/-
+after simplification
+-p -q -r
+p r
+q r
+-s p,
+-s t,
+-/
