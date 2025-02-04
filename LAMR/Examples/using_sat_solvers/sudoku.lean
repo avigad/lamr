@@ -25,12 +25,6 @@ def empty (dim : Nat) : Sudoku :=
   let rows := List.replicate sz row
   { dim, rows : Sudoku }
 
-def allOnes (dim : Nat) : Sudoku :=
-  let sz := dim*dim
-  let row := List.replicate sz (SudokuTile.val 1)
-  let rows := List.replicate sz row
-  { dim, rows : Sudoku }
-
 private def groupN (n : Nat) : List α → List (List α) :=
   go [] n
 where go (acc : List α) : Nat → List α → List (List α)
@@ -55,7 +49,8 @@ instance : ToString Sudoku :=
 private def mkLit (row col val : Nat) :=
   Lit.pos s!"p_{row}_{col}_{val}"
 
-/-- Encodes the non-empty tiles as unit clauses. -/
+/- Encodes the non-empty tiles as unit clauses. -/
+
 def cnfEncodeTiles : Sudoku → CnfForm
   | { dim, rows : Sudoku} => Id.run do
     let mut cnf : CnfForm := []
@@ -65,9 +60,8 @@ def cnfEncodeTiles : Sudoku → CnfForm
         cnf := [mkLit i j v] :: cnf
     return cnf
 
-/-- Encodes the given Sudoku as CNF. -/
-def cnfEncode : Sudoku → CnfForm
-  | s@{ dim, rows : Sudoku } => Id.run do
+/- Encodes the given Sudoku as CNF. -/
+def cnfEncode (dim : Nat) : CnfForm := Id.run do
     let mut cnf : CnfForm := []
     let sz := dim*dim
 
@@ -102,8 +96,8 @@ def cnfEncode : Sudoku → CnfForm
             for (i₂, j₂) in slots[:k] do
               cnf := [-(mkLit i₁ j₁ v), -(mkLit i₂ j₂ v)] :: cnf
 
-    -- Assert the starting position
-    return cnf ++ cnfEncodeTiles s
+    -- Return the CNF
+    return cnf
 
 /-- Decodes a satisfying assignment to a Sudoku-CNF into a Sudoku. -/
 def decodeSolution (dim : Nat) (τ : List Lit) : Except String Sudoku := do
@@ -118,6 +112,22 @@ def decodeSolution (dim : Nat) (τ : List Lit) : Except String Sudoku := do
       let row := row.take j ++ [SudokuTile.val k] ++ row.drop (j+1)
       s := { s with rows := s.rows.take i ++ [row] ++ s.rows.drop (i+1) }
   return s
+
+/-
++-----------------------+
+|   4   | 3     |       |
+|       |       | 7 9   |
+|       | 6     |       |
++-------+-------+-------+
+|       | 1 4   | 5     |
+| 9     |       |   1   |
+| 2     |       |     6 |
++-------+-------+-------+
+|       |   7 2 |       |
+|   5   |       | 8     |
+|       |   9   |       |
++-----------------------+
+-/
 
 def units := [[(mkLit 0 1 3)],
               [(mkLit 0 3 2)],
@@ -140,7 +150,7 @@ def units := [[(mkLit 0 1 3)],
 -- Solve a 3-Sudoku.
 #eval (do
   let dim := 3
-  let cnf: List (List Lit) := empty dim |>.cnfEncode
+  let cnf: List (List Lit) := cnfEncode dim
   let cnf2 := cnf ++ units
   let (_, result) ← callCadical cnf2
   match result with
