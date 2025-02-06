@@ -91,13 +91,17 @@ def defsImplToCnf (defs : Array NnfForm) : CnfForm := aux defs.toList 0
   where aux : List NnfForm → Nat → CnfForm
   | [],          _ => []
   | nnf :: nnfs, n => implToCnf (lit (defLit n)) nnf ++ aux nnfs (n + 1)
+
+def defsImplToCnf' : List NnfForm → Nat → CnfForm
+  | [],          _ => []
+  | nnf :: nnfs, n => implToCnf (lit (defLit n)) nnf ++ defsImplToCnf' nnfs (n + 1)
 -- end: implToCnf
 
 -- textbook: toCnf
 def orToCnf : NnfForm → Clause → Array NnfForm → Clause × Array NnfForm
   | lit Lit.tr,   _, defs  => ([Lit.tr], defs)
   | lit Lit.fls, cls, defs  => (cls, defs)
-  | lit l, cls, defs        => (l :: cls, defs)
+  | lit l, cls, defs       => (l :: cls, defs)
   | disj A B, cls, defs =>
       let ⟨cls1, defs1⟩ := orToCnf A cls defs
       let ⟨cls2, defs2⟩ := orToCnf B cls1 defs1
@@ -118,12 +122,14 @@ def andToCnf : NnfForm → Array NnfForm → CnfForm × Array NnfForm
 def toCnf (A : NnfForm) : CnfForm :=
   let ⟨cnf, defs⟩ := andToCnf A #[]
   cnf.union' (defsImplToCnf defs)
+
 -- end: toCnf
 
 end hidden
 
 -- textbook: ex1.toCnf
 #eval toString ex1.toCnf
+
 
 /-
 Here is ex1:

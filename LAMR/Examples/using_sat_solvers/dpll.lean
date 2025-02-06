@@ -4,17 +4,18 @@ import LAMR.Util.Propositional.Syntax
 /-! A very basic DPLL SAT solver. -/
 
 def PropAssignment.evalClause (τ : PropAssignment) (c : Clause) : Bool :=
-  (c : List Lit).foldl (init := false) (fun v l => v ∨ (τ.evalLit? l |>.get!))
+  (c : List Lit).foldl (init := false) (fun v l => v ∨ τ.evalLit l)
+--  (c : List Lit).foldl (init := false) (fun v l => v ∨ (τ.evalLit? l |>.get!))
 
 def PropAssignment.evalCnf (τ : PropAssignment) (Γ : CnfForm) : Bool :=
   (Γ : List Clause).foldl (init := true) (fun v c => v ∧ τ.evalClause c)
 
 /-- Erases all elements equal to the argument from the list. -/
 def List.eraseAll {α} [BEq α] : List α → α → List α
-  | [],    _ => []
-  | a::as, b => match a == b with
-    | true  => List.eraseAll as b
-    | false => a :: List.eraseAll as b
+  | [],      _ => []
+  | a :: as, b => match a == b with
+    | true     => List.eraseAll as b
+    | false    => a :: List.eraseAll as b
 
 /-- Simplifies the CNF assuming `x` is true. `x` must not be a constant. -/
 -- textbook: simplify
@@ -44,7 +45,7 @@ def CnfForm.findUnit : CnfForm → Option Lit
   | [x] :: _ => some x
   | _ :: cs  => findUnit cs
 
-/-- Performs a round of unit propagation on `φ` under the assignment `τ`.
+/-- Performs a round of unit propagation on `Γ` under the assignment `τ`.
 Returns an updated assignment and a simplified formula.
 
 Assumes no additions to `τ` since last `simplify _ φ` call.
@@ -106,7 +107,7 @@ where
     let (τ', Γ') := propagateWithNew x τ Γ
     dpllSatAux τ' Γ'
 
-/-- Solve `φ` using DPLL. Return a satisfying assignment if found, otherwise `none`. -/
+/-- Solve `Γ` using DPLL. Return a satisfying assignment if found, otherwise `none`. -/
 def dpllSat (Γ : CnfForm) : Option PropAssignment :=
   let ⟨τ, Γ⟩ := propagateUnits [] Γ
   (dpllSatAux τ Γ).map fun ⟨τ, _⟩ => τ
@@ -128,9 +129,9 @@ def τ := dpllSat Γ |>.get!
 
 end hidden
 
-theorem dpllSatYesSpec : ∀ ϕ, ∀ τ, dpllSat ϕ = some τ ↔ τ.evalCnf ϕ = true := by
+theorem dpllSatYesSpec : ∀ Γ, ∀ τ, dpllSat Γ = some τ ↔ τ.evalCnf Γ = true := by
   admit -- TODO
-theorem dpllSatNoSpec : ∀ ϕ, dpllSat ϕ = none ↔ ∀ (τ : PropAssignment), τ.evalCnf ϕ = false := by
+theorem dpllSatNoSpec : ∀ Γ, dpllSat Γ = none ↔ ∀ (τ : PropAssignment), τ.evalCnf Γ = false := by
   admit -- TODO
 
 def String.splitOn' (s : String) (sep : String) : List String :=
@@ -151,12 +152,12 @@ def readDimacs (fname : String) : IO CnfForm := do
 
   let mut cnf : CnfForm := []
   for ln in lns do
-    let vars := ln.splitOn' " "
-    let vars := vars.take (vars.length - 1) -- drop "0"
-    let vars := vars.map Lit.ofDimacs?
-    if vars.any (·.isNone) then
+    let lits := ln.splitOn' " "
+    let lits := lits.take (lits.length - 1) -- drop "0"
+    let lits := lits.map Lit.ofDimacs?
+    if lits.any (·.isNone) then
       throw <| IO.userError s!"cannot parse line '{ln}'"
-    cnf := (vars.map Option.get!) :: cnf
+    cnf := (lits.map Option.get!) :: cnf
 
   return cnf
 
