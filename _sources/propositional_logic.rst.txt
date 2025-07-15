@@ -618,4 +618,4 @@ Exercises
    an odd number of the :math:`x_i` s are true.
    It is represented by the formula :math:`p_0 \oplus p_1 \oplus \cdots \oplus p_{n-1}`.
    Show that any CNF formula representing the parity function has to have at least
-   :math:`2^n` clauses.
+   :math:`2^{n-1}` clauses.
