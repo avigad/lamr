@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>11. Implementing First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,11 +30,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -82,8 +85,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">11. </span>Implementing First-Order Logic</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">11. </span>Implementing First-Order Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/implementing_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -94,14 +97,14 @@
            <div itemprop="articleBody">
              
   <section id="implementing-first-order-logic">
-<span id="chapter-implementing-first-order-logic"></span><h1><span class="section-number">11. </span>Implementing First-Order Logic<a class="headerlink" href="#implementing-first-order-logic" title="Permalink to this heading"></a></h1>
+<span id="chapter-implementing-first-order-logic"></span><h1><span class="section-number">11. </span>Implementing First-Order Logic<a class="headerlink" href="#implementing-first-order-logic" title="Link to this heading"></a></h1>
 <p>Our implementation of first-order logic in Lean is similar to our implementation of
 propositional logic in Lean,
 covering both the syntax and the semantics.
 We will also show how to implement <em>unification</em>, and algorithm that is fundamental
 to the mechanization of first-order reasoning.</p>
 <section id="terms">
-<h2><span class="section-number">11.1. </span>Terms<a class="headerlink" href="#terms" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">11.1. </span>Terms<a class="headerlink" href="#terms" title="Link to this heading"></a></h2>
 <p>Our implementation of terms is straightforward.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">inductive</span> <span class="n">FOTerm</span> <span class="n">where</span>
   <span class="bp">|</span> <span class="n">var</span> <span class="o">:</span> <span class="n">String</span> <span class="bp">→</span> <span class="n">FOTerm</span>
@@ -194,7 +197,7 @@ assigned terms.</p>
 </div>
 </section>
 <section id="evaluating-terms">
-<h2><span class="section-number">11.2. </span>Evaluating terms<a class="headerlink" href="#evaluating-terms" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">11.2. </span>Evaluating terms<a class="headerlink" href="#evaluating-terms" title="Link to this heading"></a></h2>
 <p>To evaluate a term, we need not only an assignment of values to the variables
 occurring in the term, but also an interpretation of all the function symbols.
 Setting aside concerns about arities, we can interpret any
@@ -295,7 +298,7 @@ as the function “build a term by applying <cite>f</cite>.”</p>
 <em>term model</em>.</p>
 </section>
 <section id="formulas">
-<h2><span class="section-number">11.3. </span>Formulas<a class="headerlink" href="#formulas" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">11.3. </span>Formulas<a class="headerlink" href="#formulas" title="Link to this heading"></a></h2>
 <p>Since the universe of a first-order model may be infinite, we would not
 expect to be able to evaluate arbitrary first-order formulas in
 an arbitrary model.
@@ -423,7 +426,7 @@ You can define a world and display it:</p>
 
 <span class="bp">#</span><span class="mi">3</span><span class="n">d_world</span> <span class="n">myWorld</span>
 
-<span class="c">/-</span><span class="cm"></span>
+<span class="c">/-</span>
 <span class="cm">-----------------------------------------</span>
 <span class="cm">| D- |    |    |    | D+ |    |    |    |</span>
 <span class="cm">-----------------------------------------</span>
@@ -461,7 +464,7 @@ You can then evaluate statements about the world:</p>
 <p>The file <cite>TWExamples</cite> provides two puzzles, taken from <em>Tarski’s World</em>, for you to try.</p>
 </section>
 <section id="unification">
-<span id="section-unification"></span><h2><span class="section-number">11.4. </span>Unification<a class="headerlink" href="#unification" title="Permalink to this heading"></a></h2>
+<span id="section-unification"></span><h2><span class="section-number">11.4. </span>Unification<a class="headerlink" href="#unification" title="Link to this heading"></a></h2>
 <p>Suppose we are working with a language that is meant to describe the real
 numbers and we have either proved or assumed the following sentence:</p>
 <div class="math notranslate nohighlight">

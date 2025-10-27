@@ -270,7 +270,7 @@ of first-order resolution follows from the following theorem.
 .. admonition:: Theorem
 
   Let :math:`\Gamma` be a set of of universal first-order formulas in a language that
-  contains at least one constant. Suppose every finite set of closed instances of formulas
+  contains at least one constant. Suppose every finite set of ground instances of formulas
   in :math:`\Gamma` is satisfiable as a set of propositional formulas. Then there is a model of
   :math:`\Gamma`.
 
@@ -280,20 +280,20 @@ first-order logic.
 
 .. admonition:: Proof
 
-  Suppose every finite set of closed instances of the formulas in :math:`\Gamma` is satisfiable as a
+  Suppose every finite set of ground instances of the formulas in :math:`\Gamma` is satisfiable as a
   set of propositional formulas. Then, by the compactness theorem for propositional logic,
-  there is a truth assignment :math:`\tau` that satisfies all the closed instances of the formulas
+  there is a truth assignment :math:`\tau` that satisfies all the ground instances of the formulas
   in :math:`\Gamma`.
 
   We use this fact to define a first-order model :math:`\mdl M` as follows. The universe of
-  :math:`\mdl M` is the set of all closed terms in the language of :math:`\Gamma`.
+  :math:`\mdl M` is the set of all ground terms in the language of :math:`\Gamma`.
   For each constant symbol :math:`c`, we define :math:`c^{\mdl M}` to be the term :math:`c`.
   For each function symbol :math:`f` of arity :math:`n`, we define
   :math:`f^{\mdl M}(t_1, \ldots, t_n)` to be the term :math:`f(t_1, \ldots, t_n)`.
   In other words, we interpret each function :math:`f^{\mdl M}` as the syntactic operation that
   takes a tuple of terms :math:`t_1, \ldots, t_n` and returns the term :math:`f(t_1, \ldots, t_n)`.
   Such a model is sometimes called a *term model* or an *Herbrand model*. A straightforward induction
-  on terms shows that, in such a model, any closed term :math:`t` is interpreted as itself.
+  on terms shows that, in such a model, any ground term :math:`t` is interpreted as itself.
   More generally, if :math:`\sigma` is any assignment of terms to variables and :math:`t` has
   the variables :math:`x_1, \ldots, x_n` free, then :math:`\tval{t}_{\mdl M, \sigma}` is exactly
   :math:`t[\sigma(x_1)/x_1, \ldots, \sigma(x_n)/x_n]`.
@@ -308,13 +308,13 @@ first-order logic.
 
   We now show that :math:`\mdl M` is a model of :math:`\Gamma`. Suppose
   :math:`\fa {x_1, \ldots, x_n} A` is any formula in :math:`\Gamma`. Since the universe of
-  :math:`\mdl M` consists of closed terms, the semantics of first-order logic tells us that
+  :math:`\mdl M` consists of ground terms, the semantics of first-order logic tells us that
   :math:`\fa {x_1, \ldots, x_n} A` is true in :math:`\mdl M` if and only if
   for every tuple :math:`t_1, \ldots, t_n`, :math:`A` is true
   under the assignment :math:`\{ x_1 \mapsto t_1, \ldots, x_n \mapsto t_n \}`.
   By the definition of :math:`\mdl M`, this is the case if and only if
   :math:`\tau(A(t_1, \ldots, t_n))` is true. But this holds, in turn, because :math:`\tau` satisfies
-  every closed instance of a formula in :math:`\Gamma`.
+  every ground instance of a formula in :math:`\Gamma`.
 
 
 .. _section_skolemization:

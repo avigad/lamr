@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>16. Proof Systems for First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,11 +30,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -85,8 +88,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">16. </span>Proof Systems for First-Order Logic</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">16. </span>Proof Systems for First-Order Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/proof_systems_for_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -97,7 +100,7 @@
            <div itemprop="articleBody">
              
   <section id="proof-systems-for-first-order-logic">
-<span id="chapter-proof-systems-for-first-order-logic"></span><h1><span class="section-number">16. </span>Proof Systems for First-Order Logic<a class="headerlink" href="#proof-systems-for-first-order-logic" title="Permalink to this heading"></a></h1>
+<span id="chapter-proof-systems-for-first-order-logic"></span><h1><span class="section-number">16. </span>Proof Systems for First-Order Logic<a class="headerlink" href="#proof-systems-for-first-order-logic" title="Link to this heading"></a></h1>
 <p>The fundamental difference between propositional logic and first-order logic
 is that in first-order logic there are variables and terms
 that stand for objects, and we can form atomic propositions that depend on those objects.
@@ -151,7 +154,7 @@ equality. (The reduction in step 2 will still work in this setting.)</p></li>
 <p>We can then establish the validity of a first-order sentence <span class="math notranslate nohighlight">\(A\)</span> by putting its negation
 in the appropriate form and searching for a refutation. Let us start with the first step.</p>
 <section id="resolution">
-<h2><span class="section-number">16.1. </span>Resolution<a class="headerlink" href="#resolution" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">16.1. </span>Resolution<a class="headerlink" href="#resolution" title="Link to this heading"></a></h2>
 <p>Suppose <span class="math notranslate nohighlight">\(\fa {\vec x} A\)</span> is a universally quantified sentence in first-order logic,
 where <span class="math notranslate nohighlight">\(A\)</span> is quantifier free. We can put <span class="math notranslate nohighlight">\(A\)</span> in conjunctive normal form
 and write it as <span class="math notranslate nohighlight">\(A_1 \land \ldots \land A_n\)</span>, where each <span class="math notranslate nohighlight">\(A_i\)</span> is a
@@ -263,7 +266,7 @@ where there is a most general unifier for the literals in <span class="math notr
 literals in <span class="math notranslate nohighlight">\(D_2\)</span>. The result of the resolution step applies that unifier to <span class="math notranslate nohighlight">\(E_1 \lor E_2\)</span>.</p>
 </section>
 <section id="completeness-of-resolution">
-<h2><span class="section-number">16.2. </span>Completeness of resolution<a class="headerlink" href="#completeness-of-resolution" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">16.2. </span>Completeness of resolution<a class="headerlink" href="#completeness-of-resolution" title="Link to this heading"></a></h2>
 <p>We need to show that the resolution calculus is refutationally complete, which is to say,
 if a set <span class="math notranslate nohighlight">\(\Gamma\)</span> of universally quantified clauses is unsatisfiable, then there is a
 a proof of the empty clause using hypothesis in <span class="math notranslate nohighlight">\(\Gamma\)</span>. This provides a complete search
@@ -328,7 +331,7 @@ of first-order resolution follows from the following theorem.</p>
 <div class="admonition-theorem admonition">
 <p class="admonition-title">Theorem</p>
 <p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a set of of universal first-order formulas in a language that
-contains at least one constant. Suppose every finite set of closed instances of formulas
+contains at least one constant. Suppose every finite set of ground instances of formulas
 in <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable as a set of propositional formulas. Then there is a model of
 <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
 </div>
@@ -337,19 +340,19 @@ about provability; it is expressed entirely in terms of the semantics of proposi
 first-order logic.</p>
 <div class="admonition-proof admonition">
 <p class="admonition-title">Proof</p>
-<p>Suppose every finite set of closed instances of the formulas in <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable as a
+<p>Suppose every finite set of ground instances of the formulas in <span class="math notranslate nohighlight">\(\Gamma\)</span> is satisfiable as a
 set of propositional formulas. Then, by the compactness theorem for propositional logic,
-there is a truth assignment <span class="math notranslate nohighlight">\(\tau\)</span> that satisfies all the closed instances of the formulas
+there is a truth assignment <span class="math notranslate nohighlight">\(\tau\)</span> that satisfies all the ground instances of the formulas
 in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
 <p>We use this fact to define a first-order model <span class="math notranslate nohighlight">\(\mdl M\)</span> as follows. The universe of
-<span class="math notranslate nohighlight">\(\mdl M\)</span> is the set of all closed terms in the language of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
+<span class="math notranslate nohighlight">\(\mdl M\)</span> is the set of all ground terms in the language of <span class="math notranslate nohighlight">\(\Gamma\)</span>.
 For each constant symbol <span class="math notranslate nohighlight">\(c\)</span>, we define <span class="math notranslate nohighlight">\(c^{\mdl M}\)</span> to be the term <span class="math notranslate nohighlight">\(c\)</span>.
 For each function symbol <span class="math notranslate nohighlight">\(f\)</span> of arity <span class="math notranslate nohighlight">\(n\)</span>, we define
 <span class="math notranslate nohighlight">\(f^{\mdl M}(t_1, \ldots, t_n)\)</span> to be the term <span class="math notranslate nohighlight">\(f(t_1, \ldots, t_n)\)</span>.
 In other words, we interpret each function <span class="math notranslate nohighlight">\(f^{\mdl M}\)</span> as the syntactic operation that
 takes a tuple of terms <span class="math notranslate nohighlight">\(t_1, \ldots, t_n\)</span> and returns the term <span class="math notranslate nohighlight">\(f(t_1, \ldots, t_n)\)</span>.
 Such a model is sometimes called a <em>term model</em> or an <em>Herbrand model</em>. A straightforward induction
-on terms shows that, in such a model, any closed term <span class="math notranslate nohighlight">\(t\)</span> is interpreted as itself.
+on terms shows that, in such a model, any ground term <span class="math notranslate nohighlight">\(t\)</span> is interpreted as itself.
 More generally, if <span class="math notranslate nohighlight">\(\sigma\)</span> is any assignment of terms to variables and <span class="math notranslate nohighlight">\(t\)</span> has
 the variables <span class="math notranslate nohighlight">\(x_1, \ldots, x_n\)</span> free, then <span class="math notranslate nohighlight">\(\tval{t}_{\mdl M, \sigma}\)</span> is exactly
 <span class="math notranslate nohighlight">\(t[\sigma(x_1)/x_1, \ldots, \sigma(x_n)/x_n]\)</span>.</p>
@@ -362,17 +365,17 @@ model <span class="math notranslate nohighlight">\(\mdl M\)</span> is the same a
 <span class="math notranslate nohighlight">\(\tau\)</span>.</p>
 <p>We now show that <span class="math notranslate nohighlight">\(\mdl M\)</span> is a model of <span class="math notranslate nohighlight">\(\Gamma\)</span>. Suppose
 <span class="math notranslate nohighlight">\(\fa {x_1, \ldots, x_n} A\)</span> is any formula in <span class="math notranslate nohighlight">\(\Gamma\)</span>. Since the universe of
-<span class="math notranslate nohighlight">\(\mdl M\)</span> consists of closed terms, the semantics of first-order logic tells us that
+<span class="math notranslate nohighlight">\(\mdl M\)</span> consists of ground terms, the semantics of first-order logic tells us that
 <span class="math notranslate nohighlight">\(\fa {x_1, \ldots, x_n} A\)</span> is true in <span class="math notranslate nohighlight">\(\mdl M\)</span> if and only if
 for every tuple <span class="math notranslate nohighlight">\(t_1, \ldots, t_n\)</span>, <span class="math notranslate nohighlight">\(A\)</span> is true
 under the assignment <span class="math notranslate nohighlight">\(\{ x_1 \mapsto t_1, \ldots, x_n \mapsto t_n \}\)</span>.
 By the definition of <span class="math notranslate nohighlight">\(\mdl M\)</span>, this is the case if and only if
 <span class="math notranslate nohighlight">\(\tau(A(t_1, \ldots, t_n))\)</span> is true. But this holds, in turn, because <span class="math notranslate nohighlight">\(\tau\)</span> satisfies
-every closed instance of a formula in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
+every ground instance of a formula in <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
 </div>
 </section>
 <section id="skolemization">
-<span id="section-skolemization"></span><h2><span class="section-number">16.3. </span>Skolemization<a class="headerlink" href="#skolemization" title="Permalink to this heading"></a></h2>
+<span id="section-skolemization"></span><h2><span class="section-number">16.3. </span>Skolemization<a class="headerlink" href="#skolemization" title="Link to this heading"></a></h2>
 <p>We now explain how to apply first-order resolution to arbitrary first-order formulas.
 We follow a strategy analogous to that used for propositional logic.
 Remember that the propositional resolution calculus serves to refute sets of propositional
@@ -479,7 +482,7 @@ and move universal quantifiers through the hypotheses, we get the following:</p>
 <p>We leave it to you to construct a resolution proof of the empty clause from these.</p>
 </section>
 <section id="adding-equality">
-<span id="section-adding-equality"></span><h2><span class="section-number">16.4. </span>Adding equality<a class="headerlink" href="#adding-equality" title="Permalink to this heading"></a></h2>
+<span id="section-adding-equality"></span><h2><span class="section-number">16.4. </span>Adding equality<a class="headerlink" href="#adding-equality" title="Link to this heading"></a></h2>
 <p>We have already discussed equational reasoning in <a class="reference internal" href="decision_procedures_for_equality.html#section-equality"><span class="std std-numref">Section 12.1</span></a>.
 We have seen that the natural rules for equality are given by reflexivity, symmetry,
 transitivity, and congruence with respect to functions and relations.
@@ -515,7 +518,7 @@ to equality. Modern first-order provers use techniques based on <em>paramodulati
 You can learn more about these in a number of online sources.</p>
 </section>
 <section id="axiomatic-proof-systems">
-<h2><span class="section-number">16.5. </span>Axiomatic proof systems<a class="headerlink" href="#axiomatic-proof-systems" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">16.5. </span>Axiomatic proof systems<a class="headerlink" href="#axiomatic-proof-systems" title="Link to this heading"></a></h2>
 <p>One can also obtain axiomatic proof systems for first-order logic that extend axiomatic
 systems for propositional logic with quantifiers and equality. We have already seen suitable
 axioms for equality. The axioms for the quantifiers follow naturally from their meanings:</p>
@@ -548,7 +551,7 @@ that there exists an <span class="math notranslate nohighlight">\(x\)</span> sat
 </ul>
 </section>
 <section id="a-sequent-calculus">
-<h2><span class="section-number">16.6. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">16.6. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Link to this heading"></a></h2>
 <p>We can also extend the cut-free sequent calculus described in <a class="reference internal" href="proof_systems_for_propositional_logic.html#section-propositional-sequent-calculus"><span class="std std-numref">Section 8.5</span></a> to first-order logic.
 Remember that the system derives sets of formulas <span class="math notranslate nohighlight">\(\Gamma\)</span> in negation-normal form.
 We interpret a proof as telling us that in any model, and with any assignment to the free
@@ -592,7 +595,7 @@ a form of modus ponens. In class, we will sketch a proof that this system is com
 without the cut rule.</p>
 </section>
 <section id="natural-deduction">
-<h2><span class="section-number">16.7. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">16.7. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Link to this heading"></a></h2>
 <p>Finally, we can extend the system of natural deduction of <a class="reference internal" href="proof_systems_for_propositional_logic.html#section-natural-deduction"><span class="std std-numref">Section 8.6</span></a>.
 The quantifier rules are as follows:</p>
 <blockquote>

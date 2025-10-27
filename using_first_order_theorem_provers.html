@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>17. Using First-Order Theorem Provers &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,11 +30,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -81,8 +84,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">17. </span>Using First-Order Theorem Provers</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">17. </span>Using First-Order Theorem Provers</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/using_first_order_theorem_provers.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -93,7 +96,7 @@
            <div itemprop="articleBody">
              
   <section id="using-first-order-theorem-provers">
-<span id="chapter-using-first-order-theorem-provers"></span><h1><span class="section-number">17. </span>Using First-Order Theorem Provers<a class="headerlink" href="#using-first-order-theorem-provers" title="Permalink to this heading"></a></h1>
+<span id="chapter-using-first-order-theorem-provers"></span><h1><span class="section-number">17. </span>Using First-Order Theorem Provers<a class="headerlink" href="#using-first-order-theorem-provers" title="Link to this heading"></a></h1>
 <p>Given a set of hypotheses and a conclusion, a first-order theorem prover
 does its best to find a proof of the conclusion from the hypotheses, using
 first-order logic with equality.
@@ -109,7 +112,7 @@ a search will be successful makes the quest all the more exciting.
 In this chapter, we show you how you can call a theorem prover from
 within Lean.</p>
 <section id="example-aunt-agatha">
-<h2><span class="section-number">17.1. </span>Example: Aunt Agatha<a class="headerlink" href="#example-aunt-agatha" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">17.1. </span>Example: Aunt Agatha<a class="headerlink" href="#example-aunt-agatha" title="Link to this heading"></a></h2>
 <p>The following story is taken from a talk by Peter Baumgartner.</p>
 <blockquote>
 <div><p>Someone who lives in Dreadbury Mansion killed Aunt Agatha.
@@ -170,7 +173,7 @@ Vampire confirms this:</p>
 <p>It is also worthwhile finding a proof on your own.</p>
 </section>
 <section id="example-the-eighth-asylum">
-<h2><span class="section-number">17.2. </span>Example: The Eighth Asylum<a class="headerlink" href="#example-the-eighth-asylum" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">17.2. </span>Example: The Eighth Asylum<a class="headerlink" href="#example-the-eighth-asylum" title="Link to this heading"></a></h2>
 <p>In an article called “The Asylum of Doctor Tarr and Professor Fether,” published
 in the <em>American Mathematical Monthly</em> and later in a collection <em>The Lady or the Tiger? and other Logic Puzzles</em>,
 Raymond Smullyan tells of an investigation of 11 insane asylums by Inspector Craig of Scotland Yard.
@@ -230,7 +233,7 @@ doesn’t hold. We can therefore formalize the hypotheses as follows:</p>
 Vampire to check some of your conclusions along the way.</p>
 </section>
 <section id="exercise-the-last-asylum">
-<h2><span class="section-number">17.3. </span>Exercise: The Last Asylum<a class="headerlink" href="#exercise-the-last-asylum" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">17.3. </span>Exercise: The Last Asylum<a class="headerlink" href="#exercise-the-last-asylum" title="Link to this heading"></a></h2>
 <p>The last puzzle in the chapter reads as follows:</p>
 <blockquote>
 <div><p>The last asylum Craig visited he found to the be the most bizarre of all.

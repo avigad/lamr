@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>8. Proof Systems for Propositional Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,11 +30,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -86,8 +89,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">8. </span>Proof Systems for Propositional Logic</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">8. </span>Proof Systems for Propositional Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/proof_systems_for_propositional_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -98,7 +101,7 @@
            <div itemprop="articleBody">
              
   <section id="proof-systems-for-propositional-logic">
-<span id="chapter-proof-systems-for-propositional-logic"></span><h1><span class="section-number">8. </span>Proof Systems for Propositional Logic<a class="headerlink" href="#proof-systems-for-propositional-logic" title="Permalink to this heading"></a></h1>
+<span id="chapter-proof-systems-for-propositional-logic"></span><h1><span class="section-number">8. </span>Proof Systems for Propositional Logic<a class="headerlink" href="#proof-systems-for-propositional-logic" title="Link to this heading"></a></h1>
 <p>In the study of computational complexity, a <em>language</em> is a set of strings
 over some alphabet. For example, we can consider the language PROP consisting of all
 propositional formulas, the language SAT consisting of all satisfiable formulas,
@@ -194,7 +197,7 @@ The last kind, natural deduction, is designed to closely model ordinary
 logical reasoning, such as the kind of logical reasoning we use to prove a theorem of
 mathematics. It forms the basis for a number of interactive proof systems.</p>
 <section id="axiomatic-systems">
-<span id="section-axiomatic-systems"></span><h2><span class="section-number">8.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Permalink to this heading"></a></h2>
+<span id="section-axiomatic-systems"></span><h2><span class="section-number">8.1. </span>Axiomatic systems<a class="headerlink" href="#axiomatic-systems" title="Link to this heading"></a></h2>
 <p>Historically, one way of describing a proof system for propositional logic is to give a list
 of axioms, like this one:</p>
 <ol class="arabic simple">
@@ -232,7 +235,7 @@ and they are not useful for automated reasoning or search.
 We will therefore set them aside and focus our attention on other types of proof systems.</p>
 </section>
 <section id="resolution">
-<span id="section-resolution"></span><h2><span class="section-number">8.2. </span>Resolution<a class="headerlink" href="#resolution" title="Permalink to this heading"></a></h2>
+<span id="section-resolution"></span><h2><span class="section-number">8.2. </span>Resolution<a class="headerlink" href="#resolution" title="Link to this heading"></a></h2>
 <p>A <em>resolution</em> proof is designed to <em>refute</em> a CNF formula, that is, to prove that
 it is unsatisfiable.
 Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a CNF formula, represented as a set of clauses.
@@ -322,7 +325,7 @@ requires one direction of this theorem, namely, that if <span class="math notran
 unsatisfiable, then so is <span class="math notranslate nohighlight">\(\Gamma\)</span>.</p>
 </section>
 <section id="implementing-resolution">
-<span id="section-implementing-resolution"></span><h2><span class="section-number">8.3. </span>Implementing resolution<a class="headerlink" href="#implementing-resolution" title="Permalink to this heading"></a></h2>
+<span id="section-implementing-resolution"></span><h2><span class="section-number">8.3. </span>Implementing resolution<a class="headerlink" href="#implementing-resolution" title="Link to this heading"></a></h2>
 <p>The completeness proof we have just seen gives rise to yet another decision procedure
 for propositional logic: given a CNF formula <span class="math notranslate nohighlight">\(\Gamma\)</span> as a set of clauses,
 pick any variable <span class="math notranslate nohighlight">\(p\)</span> and replace all the pairs of clauses of the form
@@ -533,7 +536,7 @@ We therefore also encourage you to think about how you can trim these proofs to 
 clauses that are needed.</p>
 </section>
 <section id="resolution-and-dpll">
-<h2><span class="section-number">8.4. </span>Resolution and DPLL<a class="headerlink" href="#resolution-and-dpll" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">8.4. </span>Resolution and DPLL<a class="headerlink" href="#resolution-and-dpll" title="Link to this heading"></a></h2>
 <p>Recall the theorem established in <a class="reference internal" href="#section-resolution"><span class="std std-numref">Section 8.2</span></a>:</p>
 <div class="admonition-theorem admonition">
 <p class="admonition-title">Theorem</p>
@@ -630,7 +633,7 @@ then there is a resolution proof of a clause <span class="math notranslate nohig
 <p>We leave the proof of this fact to you.</p>
 </section>
 <section id="a-sequent-calculus">
-<span id="section-propositional-sequent-calculus"></span><h2><span class="section-number">8.5. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Permalink to this heading"></a></h2>
+<span id="section-propositional-sequent-calculus"></span><h2><span class="section-number">8.5. </span>A sequent calculus<a class="headerlink" href="#a-sequent-calculus" title="Link to this heading"></a></h2>
 <p>Let <span class="math notranslate nohighlight">\(\Gamma\)</span> be a finite set of propositional formula in negation normal form.
 The next calculus we will consider is designed to prove that the disjunction of the formulas
 in <span class="math notranslate nohighlight">\(\Gamma\)</span> is valid, which is to say, for every truth assignment <span class="math notranslate nohighlight">\(\tau\)</span>,
@@ -753,7 +756,7 @@ It is therefore important to learn how to speak both languages,
 and to be able to translate between them on the fly.</p>
 </section>
 <section id="natural-deduction">
-<span id="section-natural-deduction"></span><h2><span class="section-number">8.6. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Permalink to this heading"></a></h2>
+<span id="section-natural-deduction"></span><h2><span class="section-number">8.6. </span>Natural deduction<a class="headerlink" href="#natural-deduction" title="Link to this heading"></a></h2>
 <p>We now consider a type of deductive system that was introduced by Gerhard Gentzen
 in the 1930s, known as <em>natural deduction</em>. As the name suggests,
 the system was designed to model the way someone might carry out an informal
@@ -898,7 +901,7 @@ proofs in Lean, and it will be helpful to understand the instructions we provide
 system as instructions for constructing natural deduction derivations.</p>
 </section>
 <section id="compactness">
-<span id="section-compactness"></span><h2><span class="section-number">8.7. </span>Compactness<a class="headerlink" href="#compactness" title="Permalink to this heading"></a></h2>
+<span id="section-compactness"></span><h2><span class="section-number">8.7. </span>Compactness<a class="headerlink" href="#compactness" title="Link to this heading"></a></h2>
 <p>In automated reasoning, when we write <span class="math notranslate nohighlight">\(\Gamma \models A\)</span> to express
 that <span class="math notranslate nohighlight">\(A\)</span> is entailed by hypotheses in <span class="math notranslate nohighlight">\(\Gamma\)</span>,
 we generally have the in mind case where <span class="math notranslate nohighlight">\(\Gamma\)</span> is finite.
@@ -976,7 +979,7 @@ plane with tiles from <span class="math notranslate nohighlight">\(S\)</span>.</
 <p>You should think about how this follows from the compactness theorem.</p>
 </section>
 <section id="exercises">
-<h2><span class="section-number">8.8. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">8.8. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading"></a></h2>
 <ol class="arabic">
 <li><p>Using only axioms 1 and 2 from <a class="reference internal" href="#section-axiomatic-systems"><span class="std std-numref">Section 8.1</span></a>
 and modus ponens, show how to derive <span class="math notranslate nohighlight">\(p \to p\)</span>. (It is surprisingly

@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>4. Propositional Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,11 +30,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -84,8 +87,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">4. </span>Propositional Logic</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">4. </span>Propositional Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/propositional_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -96,13 +99,13 @@
            <div itemprop="articleBody">
              
   <section id="propositional-logic">
-<span id="chapter-propositional-logic"></span><h1><span class="section-number">4. </span>Propositional Logic<a class="headerlink" href="#propositional-logic" title="Permalink to this heading"></a></h1>
+<span id="chapter-propositional-logic"></span><h1><span class="section-number">4. </span>Propositional Logic<a class="headerlink" href="#propositional-logic" title="Link to this heading"></a></h1>
 <p>We are finally ready to turn to the proper subject matter of this course, logic.
 We will see that although propositional logic has limited expressive power,
 it can be used to carry out useful combinatorial reasoning in a wide
 range of applications.</p>
 <section id="syntax">
-<span id="section-syntax-propositional-logic"></span><h2><span class="section-number">4.1. </span>Syntax<a class="headerlink" href="#syntax" title="Permalink to this heading"></a></h2>
+<span id="section-syntax-propositional-logic"></span><h2><span class="section-number">4.1. </span>Syntax<a class="headerlink" href="#syntax" title="Link to this heading"></a></h2>
 <p>We start with a stock of variables <span class="math notranslate nohighlight">\(p_0, p_1, p_2, \ldots\)</span>
 that we take to range over propositions, like “the sky is blue”
 or “2 + 2 = 5.”
@@ -215,7 +218,7 @@ a recursive definition:</p>
 (C \star D) [B / p] &amp; = C[B / p] \star D[B / p]\end{split}\]</div>
 </section>
 <section id="semantics">
-<span id="section-semantics-propositional-logic"></span><h2><span class="section-number">4.2. </span>Semantics<a class="headerlink" href="#semantics" title="Permalink to this heading"></a></h2>
+<span id="section-semantics-propositional-logic"></span><h2><span class="section-number">4.2. </span>Semantics<a class="headerlink" href="#semantics" title="Link to this heading"></a></h2>
 <p>Consider the formula <span class="math notranslate nohighlight">\(p \land (\lnot q \lor r)\)</span>. Is it true? Well,
 that depends on the propositions <span class="math notranslate nohighlight">\(p\)</span>, <span class="math notranslate nohighlight">\(q\)</span>, and <span class="math notranslate nohighlight">\(r\)</span>.
 More precisely, it depends on whether they are true — and, in fact, that is
@@ -320,7 +323,7 @@ unsatisfiable.</p>
 </div>
 </section>
 <section id="calculating-with-propositions">
-<span id="section-calculating-with-propositions"></span><h2><span class="section-number">4.3. </span>Calculating with propositions<a class="headerlink" href="#calculating-with-propositions" title="Permalink to this heading"></a></h2>
+<span id="section-calculating-with-propositions"></span><h2><span class="section-number">4.3. </span>Calculating with propositions<a class="headerlink" href="#calculating-with-propositions" title="Link to this heading"></a></h2>
 <p>Remember that Leibniz imagined that one day we would be able to
 calculate with propositions.
 What he had noticed is that propositions, like numbers, obey algebraic
@@ -379,7 +382,7 @@ between numbers modulo 12, like <span class="math notranslate nohighlight">\(5 +
 the structure <span class="math notranslate nohighlight">\(\bZ / 12 \bZ\)</span>.</p>
 </section>
 <section id="complete-sets-of-connectives">
-<span id="section-complete-sets-of-connectives"></span><h2><span class="section-number">4.4. </span>Complete sets of connectives<a class="headerlink" href="#complete-sets-of-connectives" title="Permalink to this heading"></a></h2>
+<span id="section-complete-sets-of-connectives"></span><h2><span class="section-number">4.4. </span>Complete sets of connectives<a class="headerlink" href="#complete-sets-of-connectives" title="Link to this heading"></a></h2>
 <p>You may have noticed that our choice of connectives is redundant.
 For example, the following equivalences show that we can get by
 with <span class="math notranslate nohighlight">\(\lnot\)</span>, <span class="math notranslate nohighlight">\(\lor\)</span>, and <span class="math notranslate nohighlight">\(\bot\)</span> alone:</p>
@@ -431,7 +434,7 @@ and the middle one is equivalent to <span class="math notranslate nohighlight">\
 </div>
 </section>
 <section id="normal-forms">
-<span id="section-normal-forms"></span><h2><span class="section-number">4.5. </span>Normal forms<a class="headerlink" href="#normal-forms" title="Permalink to this heading"></a></h2>
+<span id="section-normal-forms"></span><h2><span class="section-number">4.5. </span>Normal forms<a class="headerlink" href="#normal-forms" title="Link to this heading"></a></h2>
 <p>For both theoretical reasons and practical reasons, it is often useful to know that formulas
 can be expressed in particularly simple or convenient forms.</p>
 <div class="admonition-definition admonition">
@@ -559,7 +562,7 @@ In this example, any truth assignment that satisfies the formula has to set
 <span class="math notranslate nohighlight">\(p\)</span> false, <span class="math notranslate nohighlight">\(q\)</span> true, and <span class="math notranslate nohighlight">\(r\)</span> false.</p>
 </section>
 <section id="exercises">
-<h2><span class="section-number">4.6. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">4.6. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading"></a></h2>
 <ol class="arabic">
 <li><p>Prove that if <span class="math notranslate nohighlight">\(A\)</span> is a subformula of <span class="math notranslate nohighlight">\(B\)</span> and <span class="math notranslate nohighlight">\(B\)</span> is a subformula
 of <span class="math notranslate nohighlight">\(C\)</span> then <span class="math notranslate nohighlight">\(A\)</span> is a subformula of <span class="math notranslate nohighlight">\(C\)</span>. (Hint: prove by
@@ -580,9 +583,9 @@ the function defined</p>
         b &amp; \text{if $q$ is $p$} \\
         \tau(q) &amp; \text{otherwise}
     \end{cases}\end{split}\]</div>
-<p>In other words, <span class="math notranslate nohighlight">\(\tau[p \mapsto b]\)</span> is the (possible)
+<p>In other words, <span class="math notranslate nohighlight">\(\tau[p \mapsto b]`\)</span> is the (possible)
 modification of <span class="math notranslate nohighlight">\(\tau\)</span> that maps <span class="math notranslate nohighlight">\(p\)</span> to
-<span class="math notranslate nohighlight">\(b\)</span> and leaves the rest of the assignment the same.</p>
+<span class="math notranslate nohighlight">\(b`\)</span> and leaves the rest of the assignment the same.</p>
 <p>Prove that for any <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span>, <span class="math notranslate nohighlight">\(p\)</span>, and <span class="math notranslate nohighlight">\(\tau\)</span>,</p>
 <div class="math notranslate nohighlight">
 \[\tval{A[B/p]}_\tau = \tval{A}_{\tau[p \mapsto \tval{B}_\tau]}.\]</div>
@@ -619,7 +622,7 @@ conjunctive normal form.</p></li>
 an odd number of the <span class="math notranslate nohighlight">\(x_i\)</span> s are true.
 It is represented by the formula <span class="math notranslate nohighlight">\(p_0 \oplus p_1 \oplus \cdots \oplus p_{n-1}\)</span>.
 Show that any CNF formula representing the parity function has to have at least
-<span class="math notranslate nohighlight">\(2^n\)</span> clauses.</p></li>
+<span class="math notranslate nohighlight">\(2^{n-1}\)</span> clauses.</p></li>
 </ol>
 </section>
 </section>

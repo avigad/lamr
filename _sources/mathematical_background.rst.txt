@@ -536,7 +536,8 @@ Exercises
    from peg 2 to peg 1, from peg 2 to peg 3, or from peg 3 to peg 2, but not from
    peg 1 to peg 3 or from peg 3 to peg 1.
 
-   Describe a recursive procedure for solving this problem, and show that is requires
+   Describe a recursive procedure for moving all the disks from peg 1 to page 3, and show that
+   it requires
    :math:`3^n - 1` moves. If you are ambitious, show that this is optimal, and that
    it goes through all the :math:`3^n` valid positions.
 

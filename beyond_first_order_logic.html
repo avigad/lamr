@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>18. Beyond First-Order Logic &mdash; Logic and Mechanized Reasoning 0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0731ccc3" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/jquery.js?v=8dae8fb0"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script>window.MathJax = {"loader": {"load": ["[tex]/bussproofs"]}, "tex": {"packages": {"[+]": ["bussproofs"]}, "macros": {"fn": ["\\mathit{#1}", 1], "fa": ["\\forall #1. \\,", 1], "ex": ["\\exists #1. \\,", 1], "bN": "{\\mathbb{N}}", "bZ": "{\\mathbb{Z}}", "bR": "{\\mathbb{R}}", "limplies": "\\to", "liff": "\\leftrightarrow", "proves": "\\vdash", "append": "\\mathbin{+\\mkern-10mu+}", "tval": ["[\\![#1]\\!]", 1], "fCenter": "\\proves", "mdl": ["\\mathfrak{#1}", 1]}}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -30,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> Logic and Mechanized Reasoning
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Logic and Mechanized Reasoning
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -82,8 +85,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">18. </span>Beyond First-Order Logic</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">18. </span>Beyond First-Order Logic</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/beyond_first_order_logic.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -94,7 +97,7 @@
            <div itemprop="articleBody">
              
   <section id="beyond-first-order-logic">
-<span id="chapter-beyond-first-order-logic"></span><h1><span class="section-number">18. </span>Beyond First-Order Logic<a class="headerlink" href="#beyond-first-order-logic" title="Permalink to this heading"></a></h1>
+<span id="chapter-beyond-first-order-logic"></span><h1><span class="section-number">18. </span>Beyond First-Order Logic<a class="headerlink" href="#beyond-first-order-logic" title="Link to this heading"></a></h1>
 <p>We have explored propositional logic, first-order logic, and axiomatic first-order
 theories like linear and integer arithmetic.
 These form the basis for several automated reasoning tools used today,
@@ -126,7 +129,7 @@ This chapter takes a complementary, bottom-up, approach to exploring extensions 
 first-order logic by describing specific extensions one at a time.
 All of them are subsumed by Lean’s logic and we can therefore use Lean to illustrate the syntax.</p>
 <section id="sorts">
-<span id="section-sorts"></span><h2><span class="section-number">18.1. </span>Sorts<a class="headerlink" href="#sorts" title="Permalink to this heading"></a></h2>
+<span id="section-sorts"></span><h2><span class="section-number">18.1. </span>Sorts<a class="headerlink" href="#sorts" title="Link to this heading"></a></h2>
 <p>We have already seen that Lean’s foundation includes propositional
 logic and first-order logic.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">variable</span> <span class="o">(</span><span class="n">P</span> <span class="n">Q</span> <span class="n">R</span> <span class="o">:</span> <span class="kt">Prop</span><span class="o">)</span>
@@ -188,7 +191,7 @@ For example, the statements of geometry above could be represented in ordinary f
 logic with additional predicates <span class="math notranslate nohighlight">\(\fn{Point}(x)\)</span>, <span class="math notranslate nohighlight">\(\fn{Line}(x)\)</span>, and <span class="math notranslate nohighlight">\(\fn{Plane}(x)\)</span>.</p>
 </section>
 <section id="function-types-and-product-types">
-<span id="section-function-and-product-types"></span><h2><span class="section-number">18.2. </span>Function types and product types<a class="headerlink" href="#function-types-and-product-types" title="Permalink to this heading"></a></h2>
+<span id="section-function-and-product-types"></span><h2><span class="section-number">18.2. </span>Function types and product types<a class="headerlink" href="#function-types-and-product-types" title="Link to this heading"></a></h2>
 <p>In first-order logic, we have function symbols, but we do not have
 <em>variables</em> that range over functions.
 We obtain such a system by adding <em>function types</em> to our logic.</p>
@@ -256,7 +259,7 @@ term-forming operations gives rise to a much more expressive system known as <em
 This is, in turn, a version of higher-order logic, which we turn to next.</p>
 </section>
 <section id="higher-order-logic">
-<span id="section-higher-order-logic"></span><h2><span class="section-number">18.3. </span>Higher-order logic<a class="headerlink" href="#higher-order-logic" title="Permalink to this heading"></a></h2>
+<span id="section-higher-order-logic"></span><h2><span class="section-number">18.3. </span>Higher-order logic<a class="headerlink" href="#higher-order-logic" title="Link to this heading"></a></h2>
 <p>First-order logic allows us to quantify over objects in the domain of discourse,
 but it does not allow us to quantify over functions, predicates, or relations.
 If we could do that in a theory of arithmetic, for example, we could express
@@ -334,7 +337,7 @@ but that need not dissuade us from trying to design search procedures that captu
 patterns of inference, and the expressivity of higher-order logic is often useful in practice.</p>
 </section>
 <section id="inductive-types">
-<h2><span class="section-number">18.4. </span>Inductive Types<a class="headerlink" href="#inductive-types" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">18.4. </span>Inductive Types<a class="headerlink" href="#inductive-types" title="Link to this heading"></a></h2>
 <p>Another way to extend a logic is to build in a notion of an <em>inductively defined data type</em>, or
 <em>inductive type</em> for short. An inductive type is a data type generated by
 <em>constructors</em>, where “generated by” means, first, that applying a constructor to an element of
@@ -388,7 +391,7 @@ For example, SMT solvers like cvc5 and Z3, as well as first-order provers like V
 have built-in support for reasoning about inductive types.</p>
 </section>
 <section id="dependent-types">
-<h2><span class="section-number">18.5. </span>Dependent Types<a class="headerlink" href="#dependent-types" title="Permalink to this heading"></a></h2>
+<h2><span class="section-number">18.5. </span>Dependent Types<a class="headerlink" href="#dependent-types" title="Link to this heading"></a></h2>
 <p>We have seen that one can extend first-order logic by adding sorts,
 which are basic, unaxiomatized data types, as well as function types, product types, and
 inductive types.
