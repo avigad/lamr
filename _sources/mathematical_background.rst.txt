@@ -280,7 +280,7 @@ More generally, we can take :math:`[a, b, c, \ldots]` to be an abbreviation for
 :math:`a \mathbin{::} (b \mathbin{::} (c \mathbin{::} \ldots []))`.
 
 Saying that :math:`\fn{List}(\alpha)` is inductively defined means
-that we principles of recursion and induction on it. For example, the following
+that we can use principles of recursion and induction on it. For example, the following
 concatenates two lists:
 
 .. math::
