@@ -64,7 +64,7 @@ def mulTable : Array (Array Nat) := Id.run do
 
 -- textbook: mulTable'
 def mulTable' : Array (Array Nat) := Id.run do
-  let mut s : Array (Array Nat) := mkArray 10 (mkArray 10 0)
+  let mut s : Array (Array Nat) := Array.replicate 10 (Array.replicate 10 0)
   for i in [:10] do
     for j in [:10] do
       s := s.set! i <| s[i]!.set! j ((i + 1) * (j + 1))

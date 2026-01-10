@@ -54,8 +54,8 @@ private def mkLit (row col val : Nat) :=
 def cnfEncodeTiles : Sudoku → CnfForm
   | { dim, rows : Sudoku} => Id.run do
     let mut cnf : CnfForm := []
-    for (i, row) in rows.enum do
-      for (j, t) in row.enum do
+    for (row, i) in rows.zipIdx do
+      for (t, j) in row.zipIdx do
        if let SudokuTile.val v := t then
         cnf := [mkLit i j v] :: cnf
     return cnf
@@ -92,7 +92,7 @@ def cnfEncode (dim : Nat) : CnfForm := Id.run do
           for i in [:dim] do
             for j in [:dim] do
               slots := slots.push (dim*iSq + i, dim*jSq + j)
-          for (k, (i₁, j₁)) in slots.toList.enum do
+          for ((i₁, j₁), k) in slots.toList.zipIdx do
             for (i₂, j₂) in slots[:k] do
               cnf := [-(mkLit i₁ j₁ v), -(mkLit i₂ j₂ v)] :: cnf
 
@@ -108,7 +108,7 @@ def decodeSolution (dim : Nat) (τ : List Lit) : Except String Sudoku := do
         | throw s!"unexpected variable {x}"
       let [some i, some j, some k] := [i,j,k].map String.toNat?
         | throw s!"cannot decode numbers in {x}"
-      let row := s.rows.get! i
+      let row := s.rows[i]!
       let row := row.take j ++ [SudokuTile.val k] ++ row.drop (j+1)
       s := { s with rows := s.rows.take i ++ [row] ++ s.rows.drop (i+1) }
   return s

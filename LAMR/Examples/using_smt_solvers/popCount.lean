@@ -43,7 +43,7 @@ def popcount :=
 #eval (do
   let out ← callZ3 popcount (verbose := true)
 
-  if out.get! 0 == sexp!{unsat} then
+  if out[0]! == sexp!{unsat} then
     IO.println "Functions are equivalent."
   else
     IO.println "Not equivalent!"

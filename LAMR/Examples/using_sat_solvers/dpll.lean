@@ -4,18 +4,17 @@ import LAMR.Util.Propositional.Syntax
 /-! A very basic DPLL SAT solver. -/
 
 def PropAssignment.evalClause (τ : PropAssignment) (c : Clause) : Bool :=
-  (c : List Lit).foldl (init := false) (fun v l => v ∨ τ.evalLit l)
---  (c : List Lit).foldl (init := false) (fun v l => v ∨ (τ.evalLit? l |>.get!))
+  (c : List Lit).foldl (init := false) (fun v l => v ∨ (τ.evalLit? l |>.get!))
 
 def PropAssignment.evalCnf (τ : PropAssignment) (Γ : CnfForm) : Bool :=
   (Γ : List Clause).foldl (init := true) (fun v c => v ∧ τ.evalClause c)
 
 /-- Erases all elements equal to the argument from the list. -/
 def List.eraseAll {α} [BEq α] : List α → α → List α
-  | [],      _ => []
-  | a :: as, b => match a == b with
-    | true     => List.eraseAll as b
-    | false    => a :: List.eraseAll as b
+  | [],    _ => []
+  | a::as, b => match a == b with
+    | true  => List.eraseAll as b
+    | false => a :: List.eraseAll as b
 
 /-- Simplifies the CNF assuming `x` is true. `x` must not be a constant. -/
 -- textbook: simplify
@@ -48,7 +47,7 @@ def CnfForm.findUnit : CnfForm → Option Lit
 /-- Performs a round of unit propagation on `Γ` under the assignment `τ`.
 Returns an updated assignment and a simplified formula.
 
-Assumes no additions to `τ` since last `simplify _ φ` call.
+Assumes no additions to `τ` since last `simplify _ Γ` call.
 NB: If branching in DPLL, call `simplify` first. -/
 -- textbook: propagateUnits
 partial def propagateUnits (τ : PropAssignment) (Γ : CnfForm) : PropAssignment × CnfForm :=
@@ -117,7 +116,7 @@ namespace hidden
 
 -- Solve a formula.
 
-def Γ  := cnf!{p q -r, -p q r, -p -q r, p r, -p -r}
+def Γ := cnf!{p q -r, -p q r, -p -q r, p r, -p -r}
 def τ := dpllSat Γ |>.get!
 #eval τ
 #eval τ.evalCnf Γ
@@ -141,7 +140,7 @@ def String.splitOn' (s : String) (sep : String) : List String :=
 def readDimacs (fname : String) : IO CnfForm := do
   let lns ← IO.FS.lines fname
   let lns := lns.filter (fun ln => ln ≠ "" ∧ ln.front ≠ 'c')
-  let header := (lns.get! 0).splitOn' " "
+  let header := (lns[0]!).splitOn' " "
   let ["p", "cnf", n, m] ← .ok header
     | throw <| IO.userError "Invalid DIMACS header."
   let (some nVars, some nClauses) ← .ok (n.toNat?, m.toNat?)
@@ -152,12 +151,12 @@ def readDimacs (fname : String) : IO CnfForm := do
 
   let mut cnf : CnfForm := []
   for ln in lns do
-    let lits := ln.splitOn' " "
-    let lits := lits.take (lits.length - 1) -- drop "0"
-    let lits := lits.map Lit.ofDimacs?
-    if lits.any (·.isNone) then
+    let vars := ln.splitOn' " "
+    let vars := vars.take (vars.length - 1) -- drop "0"
+    let vars := vars.map Lit.ofDimacs?
+    if vars.any (·.isNone) then
       throw <| IO.userError s!"cannot parse line '{ln}'"
-    cnf := (lits.map Option.get!) :: cnf
+    cnf := (vars.map Option.get!) :: cnf
 
   return cnf
 

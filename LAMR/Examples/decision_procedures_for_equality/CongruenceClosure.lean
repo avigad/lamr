@@ -33,7 +33,7 @@ open Std (HashMap)
 /-- Compute all the subterms of a term,
 including the term itself. -/
 partial def subterms : FOTerm → HashSet FOTerm :=
-  go HashSet.empty
+  go {}
 where
   go (acc : HashSet FOTerm) : FOTerm → HashSet FOTerm
     | tm@(FOTerm.app _ args) => args.foldl (init := acc.insert tm) go
@@ -72,7 +72,7 @@ def equate (s t : FOTerm) : StateM CCState Unit := do
 /-- Return the predecessors of `s`. See `pfn`. -/
 def preds (s : FOTerm) : StateM CCState (HashSet FOTerm) := do
   let st ← get
-  return st.pfn.getD s HashSet.empty
+  return st.pfn.getD s {}
 
 /-- Set the predecessors of `s`. See `pfn`. -/
 def setPreds (s : FOTerm) (ts : HashSet FOTerm) : StateM CCState Unit :=
@@ -80,7 +80,7 @@ def setPreds (s : FOTerm) (ts : HashSet FOTerm) : StateM CCState Unit :=
 
 /-- Add a predecessor `p` of `s`, inserting `s` into `pfn` if needed. See `pfn`. -/
 def addPred (p s : FOTerm) : StateM CCState Unit :=
-  modify fun st => { st with pfn := st.pfn.insert s (st.pfn.getD s HashSet.empty |>.insert p) }
+  modify fun st => { st with pfn := st.pfn.insert s (st.pfn.getD s {} |>.insert p) }
 
 /-- Add `p` as an immediate predecessor
 of each of its arguments to `pfn`. -/
@@ -140,7 +140,7 @@ def computeCC (eqs : List (FOTerm × FOTerm)) (goal : FOTerm × FOTerm) : StateM
 def runCC (eqs : List (FOTerm × FOTerm)) (goal : FOTerm × FOTerm) : CCState :=
   let st : CCState := {
     eqv := DisjointSet.singletons FOTerm
-    pfn := HashMap.empty
+    pfn := {}
   }
   computeCC eqs goal |>.run st |>.snd
 

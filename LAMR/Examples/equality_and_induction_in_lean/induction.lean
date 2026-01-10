@@ -1,4 +1,5 @@
 import Mathlib.Data.Real.Basic
+import Mathlib.Tactic
 import LAMR
 
 -- textbook: induction on Nat
@@ -62,7 +63,7 @@ variable (as bs cs : List α)
 variable (a b c : α)
 
 example : [] ++ as = as := nil_append as
-example : (a :: as) ++ bs = a :: (as ++ bs) := cons_append a as bs
+example : (a :: as) ++ bs = a :: (as ++ bs) := cons_append
 
 example : [] ++ as = as := rfl
 example : (a :: as) ++ bs = a :: (as ++ bs) := rfl

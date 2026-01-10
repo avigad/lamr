@@ -4,7 +4,7 @@ import LAMR.System
 open List
 open Nat
 open Std (HashMap)
-open Std.HashMap (empty)
+open Std.HashMap (emptyWithCapacity)
 
 def SNH := HashMap String Nat
 def NSH := HashMap Nat String
@@ -29,7 +29,7 @@ def addCla : HH → Clause → HH
 | h, c => foldl addLiteral h c
 
 def addCnfForm : CnfForm → HH
-| c => foldl addCla (empty, empty) c
+| c => foldl addCla (emptyWithCapacity, emptyWithCapacity) c
 
 def charToNat : Char → Option Nat
 | '0' => some 0
@@ -44,18 +44,9 @@ def charToNat : Char → Option Nat
 | '9' => some 9
 | _ => none
 
-protected partial def String.toNatCore : Nat → String → Option Nat
-| k, ⟨[]⟩ => some k
-| k, ⟨c :: s⟩ =>
-  match charToNat c with
-  | some m => String.toNatCore ((k * 10) + m) ⟨s⟩
-  | none   => none
-
-protected def String.toNat (s : String) : Option Nat := String.toNatCore 0 s
-
 def Lit.toDimacs (h : SNH) : Lit → String
 | tr    => ""  -- should not happen
-| fls    => ""
+| fls   => ""
 | pos s => toString (h.getD s 0)
 | neg s => "-" ++ toString (h.getD s 0)
 
@@ -98,15 +89,16 @@ inductive SatResult where
 deriving Inhabited, Repr, DecidableEq
 open SatResult
 
-def String.toLit (h : NSH) : String → Option Lit
-| ⟨'-' :: cs⟩ =>
-  match String.toNat ⟨cs⟩ with
-  | some n => Lit.neg (h.getD n "ERROR")
-  | none => none
-| s =>
-  match String.toNat s with
-  | some n => Lit.pos (h.getD n "ERROR")
-  | none => none
+def String.toLit (h : NSH) (s : String) : Option Lit :=
+  match String.Pos.Raw.get? s 0 with
+  | some '-' =>
+    match s.drop 1 |>.toNat? with
+    | some n => Lit.neg (h.getD n "ERROR")
+    | none => none
+  | _ =>
+  match String.toNat? s with
+    | some n => Lit.pos (h.getD n "ERROR")
+    | none => none
 
 /-- Given a list of solver output lines containing a model, returns the model. -/
 private def parseModel (h : NSH) (lns : List String) : Except String (List Lit) :=

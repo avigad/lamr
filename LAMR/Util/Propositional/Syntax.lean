@@ -114,7 +114,7 @@ def name : Lit → String
 
 def ofDimacs? (s : String) : Option Lit :=
   if s.isEmpty then none
-  else if s.get! ⟨0⟩ == '-' then neg (s.drop 1)
+  else if String.Pos.Raw.get! s ⟨0⟩ == '-' then neg (s.drop 1).copy
   else pos s
 
 instance : Hashable Lit where
@@ -273,7 +273,7 @@ def disj (cnf1 cnf2 : CnfForm) : CnfForm :=
 def conj (cnf1 cnf2 : CnfForm) : CnfForm :=
   cnf1.union' cnf2
 
-instance : ForIn m CnfForm (List Lit) :=
+instance {m} [Monad m]: ForIn m CnfForm (List Lit) :=
   inferInstanceAs (ForIn m (List (List Lit)) (List Lit))
 
 end CnfForm

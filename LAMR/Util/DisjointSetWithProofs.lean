@@ -46,7 +46,7 @@ namespace DisjointSetWithProofs
 /-- Return the discrete equivalence relation on `α`,
 i.e., every element is only equivalent to itself. -/
 def singletons [BEq α] [Hashable α] : DisjointSetWithProofs α ρ :=
-  HashMap.empty
+  ({} : HashMap α _)
 
 variable {α : Type u} [BEq α] [Hashable α]
 
@@ -60,7 +60,7 @@ private def findRoot [IsPathOf α ρ] (d : DisjointSetWithProofs α ρ) (a : α)
 where go (d : DisjointSetWithProofs α ρ) (a : α) : Nat → DisjointSetWithProofs α ρ × α × ρ × Nat
   | 0   => (d, a, IsPathOf.refl a, 0)
   | n+1 =>
-    match d.findD a root with
+    match d.getD a root with
     | root rank  => (d, a, IsPathOf.refl a, rank)
     | ptr parent path =>
       let (d₁, rootA, pathA, rankA) := go d parent n

@@ -44,7 +44,7 @@ namespace DisjointSet
 /-- Return the discrete equivalence relation on `α`,
 i.e., every element is only equivalent to itself. -/
 def singletons (α : Type u) [BEq α] [Hashable α] : DisjointSet α :=
-  HashMap.empty
+  HashMap.emptyWithCapacity
 
 variable {α : Type u} [BEq α] [Hashable α]
 

@@ -33,7 +33,7 @@ def magicSquareToBvSmt (n : Nat) : List Sexp := Id.run do
   -- Each cell has a unique value
   -- The `...{ }` syntax splices a list of s-expressions into an s-expression.
   -- For example. `(foo ...{List.range 3 |>.map (toString ·)})` becomes `(foo 0 1 2)`.
-  asserts := asserts.push sexp!{(distinct ...{List.join (List.range n |>.map fun i =>
+  asserts := asserts.push sexp!{(distinct ...{List.flatten (List.range n |>.map fun i =>
     List.range n |>.map fun j => s!"m_{i}_{j}")})}
 
   -- Every row and column sums up to the magic constant
@@ -74,12 +74,12 @@ def String.ljust n s :=
   s ++ "".pushn ' ' (n - s.length)
 
 def printMagicSquare (n : Nat) (model : Sexp) : IO Unit := do
-  let mut grid := Array.mkArray n (Array.mkArray n 0)
+  let mut grid := Array.replicate n (Array.replicate n 0)
   for (x, b) in decodeModelConsts model do
     let (i, j) ← IO.ofExcept (decodeVar x)
     let some v := evalNumConst b
       | throwThe IO.Error s!"unexpected value {b}"
-    grid := grid.set! i (grid.get! i |>.set! j v)
+    grid := grid.set! i (grid[i]! |>.set! j v)
 
   let maxWidth := (toString <| n*n).length + 1
   for ln in grid do

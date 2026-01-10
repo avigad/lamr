@@ -213,7 +213,7 @@ instance : Repr FOForm where
 
 /-- Returns a list of all free variable occurrences in the formula. -/
 def freeVars : FOForm → List String :=
-  go Std.HashSet.empty
+  go {}
 where go (bound : Std.HashSet String) : FOForm → List String
   | eq s t => (s.freeVars ++ t.freeVars).filter fun x => !bound.contains x
   | rel _ ts => ts.map FOTerm.freeVars |>.flatten.filter fun x => !bound.contains x

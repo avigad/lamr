@@ -140,7 +140,7 @@ def problemToSmtLib (axioms : List FOForm) (goal : FOForm) : String :=
   Sexp.serializeMany cmds
 
 def problemToTptp (axioms : List FOForm) (goal : FOForm) : String :=
-  let axioms := axioms.enum.map fun (i, φ) => φ.toTptpAxiom s!"ax{i}"
+  let axioms := axioms.zipIdx.map fun (φ, i) => φ.toTptpAxiom s!"ax{i}"
   let goal := goal.toTptpGoal "c1"
   "\n".intercalate (axioms ++ [goal])
 

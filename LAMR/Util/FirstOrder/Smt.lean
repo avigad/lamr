@@ -14,7 +14,7 @@ def generalIdent : Parser :=
     fn := fun c s =>
       let startPos := s.pos
       let s := takeWhile1Fn (fun c => !("(){}[].".contains c) ∧ !c.isWhitespace) "expected generalized identifier" c s
-      mkNodeToken `generalIdent startPos c s }
+      mkNodeToken `generalIdent startPos true c s }
 
 def Lean.TSyntax.getGeneralId : TSyntax `generalIdent → String
   | ⟨.node _ `generalIdent args⟩ => args[0]!.getAtomVal
@@ -78,10 +78,10 @@ instance : Repr Sexp where
   reprPrec s _ := s!"sexp!\{{toString s}}"
 
 partial def parse (s : String) : Except String (List Sexp) :=
-  let tks := tokenize #[] s.toSubstring
+  let tks := tokenize #[] s.toRawSubstring
   parseMany #[] tks.toList |>.map Prod.fst |>.map Array.toList
 where
-  tokenize (stk : Array Substring) (s : Substring) : Array Substring :=
+  tokenize (stk : Array Substring.Raw) (s : Substring.Raw) : Array Substring.Raw :=
     if s.isEmpty then stk
     else
       let c := s.front
@@ -93,7 +93,7 @@ where
         if tk.bsize > 0 then tokenize (stk.push tk) (s.extract ⟨tk.bsize⟩ ⟨s.bsize⟩)
         else unreachable!
 
-  parseOne : List Substring → Except String (Sexp × List Substring)
+  parseOne : List Substring.Raw → Except String (Sexp × List Substring.Raw)
     | tk :: tks => do
       if tk.front == ')' then
         throw "mismatched parentheses"
@@ -104,7 +104,7 @@ where
         return  (atom tk.toString, tks)
     | [] => throw "expected input, got none"
 
-  parseMany (stk : Array Sexp) : List Substring → Except String (Array Sexp × List Substring)
+  parseMany (stk : Array Sexp) : List Substring.Raw → Except String (Array Sexp × List Substring.Raw)
     | tk :: tks => do
       if tk.front == ')' then .ok (stk, tks)
       else
@@ -168,9 +168,14 @@ def callBoolector := @callSolver argsBoolector
 private def hexdigits : Array Char :=
   #[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' ]
 
+#check ByteArray
+
+#check String.mk
+#check '0'.toString -- ++ '9'
+
 private def enhexByte (x : UInt8) : String :=
-  ⟨[hexdigits.get! <| UInt8.toNat <| (x.land 0xf0).shiftRight 4,
-    hexdigits.get! <| UInt8.toNat <| x.land 0xf ]⟩
+  String.ofList [hexdigits[UInt8.toNat <| (x.land 0xf0).shiftRight 4]!,
+    hexdigits[UInt8.toNat <| x.land 0xf]! ]
 
 /-- Convert a little-endian (LSB first) list of bytes to hexadecimal. -/
 private def enhexLE : List UInt8 → String

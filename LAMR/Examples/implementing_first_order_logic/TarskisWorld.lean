@@ -103,7 +103,7 @@ end Object
 
 def World := List Object
 
-instance : ForIn m World Object := inferInstanceAs (ForIn m (List Object) Object)
+instance  {m} [Monad m] : ForIn m World Object := inferInstanceAs (ForIn m (List Object) Object)
 
 /-
 To print it out.
@@ -129,7 +129,7 @@ instance : ToString (Option Object) :=
     | none     => "  "⟩
 
 def World.toArray (world : World) : Array (Array (Option Object)) := Id.run do
-  let mut arr : Array (Array (Option Object)) := mkArray 8 (mkArray 8 none)
+  let mut arr : Array (Array (Option Object)) := Array.replicate 8 (Array.replicate 8 none)
   for obj in world do
     assert! obj.row < 8
     assert! obj.col < 8

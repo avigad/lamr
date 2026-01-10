@@ -13,7 +13,7 @@ HashMap, you can see some of the functions available.
 -/
 
 def List.toHashMap [BEq α] [Hashable α]: List (α × β) → HashMap α β
-  | []          => HashMap.empty
+  | []          => {}
   | (a, b) :: l => HashMap.insert l.toHashMap a b
 
 /--
@@ -44,9 +44,9 @@ Assumes `a` and `b` are not zero.
 Note that this might result in an empty HashMap, which represents the expression `0`.
 -/
 def linearCombination (a : Int) (u : LinearExp) (b : Int) (v : LinearExp) : LinearExp := Id.run do
-  let mut result := HashMap.empty
+  let mut result := ({} : HashMap String Int)
   for (s, i) in u.toList do
-    let j := v.findD s 0    -- if not there, return 0
+    let j := v.getD s 0    -- if not there, return 0
     let newval := a * i + b * j
     if newval != 0 then
       result := result.insert s newval
@@ -69,7 +69,7 @@ def linearCombination (a : Int) (u : LinearExp) (b : Int) (v : LinearExp) : Line
       toString ex'
 
 -- you can find the coefficient a term in an expression
-#eval ex1.find! "x"
+#eval ex1.get! "x"
 
 /-- Returns some term in the expression, which is assumed to be nonempty. -/
 def LinearExp.getTerm (e : LinearExp) : String × Int := e.toList.head!
@@ -82,7 +82,7 @@ To implement the Fourier-Motzkin satisfiability test, we will use two lists of c
 
 The first are interpreted as constraints `e = 0`, and the second are constraints `e > 0`.
 
-Because we are using integer coeffients, we will scale constraints as we eliminate variables.
+Because we are using integer coefficients, we will scale constraints as we eliminate variables.
 Assuming `a != 0`, the constraint `e = 0` is the same as `a * e = 0`.
 Assuming `a > 0`, the constraint `e > 0` is the same as `a * e > 0`.
 
@@ -101,7 +101,7 @@ The same method works to eliminate `x` from a constraint `v > 0` if `a` is posit
 -/
 def elimEq (a : Int) (x : String) (u v : LinearExp) : LinearExp :=
   if v.contains x then
-    let b := v.findD x 0
+    let b := v.getD x 0
     linearCombination (-b) u a (v.erase x)
   else
     v
@@ -111,7 +111,7 @@ For constraints `v > 0` if `a` is negative, switch `a`/`-a` and `-b`/`b`.
 -/
 def elimEq' (a : Int) (x : String) (u v : LinearExp) : LinearExp :=
   if v.contains x then
-    let b := v.findD x 0
+    let b := v.getD x 0
     linearCombination b u (-a) (v.erase x)
   else
     v

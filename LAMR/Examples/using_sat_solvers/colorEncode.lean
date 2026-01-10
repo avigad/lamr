@@ -12,7 +12,7 @@ structure Graph where
 def parseEdgeFile (lines : Array String) : Except String Graph := do
   let lines := lines.filter (fun ln => ln ≠ "" ∧ ln.front ≠ 'c')
 
-  let header := lines.get! 0
+  let header := lines[0]!
   let ["p", "edge", nVerts, nEdges] ← .ok (header.splitOnNonEmpty " ")
     | throw s!"Invalid EDGE header: {header}"
   let (some nVerts, some nEdges) ← .ok (nVerts.toNat?, nEdges.toNat?)

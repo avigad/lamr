@@ -137,9 +137,7 @@ inductive CBTree where
   | sup : (Nat → CBTree) → CBTree
 -- end: definition of CBTree
 
-
-#exit
-
+end inductive_types
 
 /-
 Dependent type theory: types can depend on parameters
