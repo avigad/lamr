@@ -575,7 +575,7 @@ the result of a function call.</p>
 <p>But one of the interesting features of Lean is a functional programming language is
 that it incorporates features that make it <em>feel</em> like an imperative programming
 language. The following example shows how to print out, for each value <span class="math notranslate nohighlight">\(i\)</span>
-less than 100, the the sum of the numbers up to <span class="math notranslate nohighlight">\(i\)</span>.</p>
+less than 100, the sum of the numbers up to <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">showSums</span> <span class="o">:</span> <span class="n">IO</span> <span class="n">Unit</span> <span class="o">:=</span> <span class="k">do</span>
   <span class="k">let</span> <span class="n">mut</span> <span class="n">sum</span> <span class="o">:=</span> <span class="mi">0</span>
   <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[</span><span class="mi">0</span><span class="o">:</span><span class="mi">100</span><span class="o">]</span> <span class="k">do</span>
@@ -656,11 +656,11 @@ multiplication table.</p>
 <span class="k">#eval</span> <span class="n">mulTable</span>
 </pre></div>
 </div>
-<p>Alternatively, you can use the function <code class="docutils literal notranslate"><span class="pre">Array.mkArray</span></code> to initialize an array
+<p>Alternatively, you can use the function <code class="docutils literal notranslate"><span class="pre">Array.replicate</span></code> to initialize an array
 (in this case, to the values 0), and then use the <code class="docutils literal notranslate"><span class="pre">Array.set!</span></code> function
 to replace the elements later one.</p>
 <div class="highlight-lean notranslate"><div class="highlight"><pre><span></span><span class="kd">def</span> <span class="n">mulTable&#39;</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">Id.run</span> <span class="k">do</span>
-  <span class="k">let</span> <span class="n">mut</span> <span class="n">s</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">mkArray</span> <span class="mi">10</span> <span class="o">(</span><span class="n">mkArray</span> <span class="mi">10</span> <span class="mi">0</span><span class="o">)</span>
+  <span class="k">let</span> <span class="n">mut</span> <span class="n">s</span> <span class="o">:</span> <span class="n">Array</span> <span class="o">(</span><span class="n">Array</span> <span class="n">Nat</span><span class="o">)</span> <span class="o">:=</span> <span class="n">Array.replicate</span> <span class="mi">10</span> <span class="o">(</span><span class="n">Array.replicate</span> <span class="mi">10</span> <span class="mi">0</span><span class="o">)</span>
   <span class="n">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
     <span class="n">for</span> <span class="n">j</span> <span class="k">in</span> <span class="o">[:</span><span class="mi">10</span><span class="o">]</span> <span class="k">do</span>
       <span class="n">s</span> <span class="o">:=</span> <span class="n">s.set</span><span class="bp">!</span> <span class="n">i</span> <span class="bp">&lt;|</span> <span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="bp">!.</span><span class="n">set</span><span class="bp">!</span> <span class="n">j</span> <span class="o">((</span><span class="n">i</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">)</span> <span class="bp">*</span> <span class="o">(</span><span class="n">j</span> <span class="bp">+</span> <span class="mi">1</span><span class="o">))</span>

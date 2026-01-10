@@ -438,7 +438,7 @@ the result of a function call.
 But one of the interesting features of Lean is a functional programming language is
 that it incorporates features that make it *feel* like an imperative programming
 language. The following example shows how to print out, for each value :math:`i`
-less than 100, the the sum of the numbers up to :math:`i`.
+less than 100, the sum of the numbers up to :math:`i`.
 
 .. literalinclude:: ../../LAMR/Examples/lean_as_a_programming_language/examples4.lean
    :start-after: -- textbook: showSums
@@ -498,7 +498,7 @@ multiplication table.
    :start-after: -- textbook: mulTable
    :end-before: -- end: mulTable
 
-Alternatively, you can use the function ``Array.mkArray`` to initialize an array
+Alternatively, you can use the function ``Array.replicate`` to initialize an array
 (in this case, to the values 0), and then use the ``Array.set!`` function
 to replace the elements later one.
 

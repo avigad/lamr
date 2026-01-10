@@ -36,7 +36,7 @@ refers to the real one, that is, the one in the library.
 The command ``open PropForm`` means that we can write, for example,
 ``tr`` for the first constructor instead of ``PropForm.tr``.
 Try writing some propositional formulas of your own.
-There should be squiggly blue lines under the the ``#print``
+There should be squiggly blue lines under the ``#print``
 and ``#check`` commands in VSCode,
 indicating that there is Lean output associated with these.
 You can see it by hovering over the commands,
