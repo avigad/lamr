@@ -17,7 +17,7 @@
         "lakefile.lean": true,
         "lean-toolchain": true,
 	    ".lake": true,
-	    ".devcontainer": false
+	    ".devcontainer": true
     },
     "editor.minimap.enabled": false,
     "editor.acceptSuggestionOnEnter": "off",
