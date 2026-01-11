@@ -168,11 +168,6 @@ def callBoolector := @callSolver argsBoolector
 private def hexdigits : Array Char :=
   #[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' ]
 
-#check ByteArray
-
-#check String.mk
-#check '0'.toString -- ++ '9'
-
 private def enhexByte (x : UInt8) : String :=
   String.ofList [hexdigits[UInt8.toNat <| (x.land 0xf0).shiftRight 4]!,
     hexdigits[UInt8.toNat <| x.land 0xf]! ]

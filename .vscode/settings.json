@@ -1,4 +1,5 @@
 {
+    "workbench.colorTheme": "Default Light Modern",
     "files.exclude": {
         "**/.git": true,
         "**/.DS_Store": true,
@@ -6,7 +7,7 @@
         "**/.DS_yml": true,
         "**/.gitpod.yml": true,
         "**/.vscode": true,
-        ".devcontainer.json": true,
+        ".devcontainer.json": false,
         ".docker": true,
         "build": true,
         "html": true,
@@ -16,20 +17,14 @@
         "lakefile.lean": true,
         "lean-toolchain": true,
 	    ".lake": true,
-	    ".devcontainer": true
+	    ".devcontainer": false
     },
     "editor.minimap.enabled": false,
     "editor.acceptSuggestionOnEnter": "off",
-    "scm.diffDecorationsGutterVisibility": "hover",
-    "editor.semanticHighlighting.enabled": true,
-    "editor.semanticTokenColorCustomizations": {
-        "[Default Light+]": {"rules": {"variable": "#1a31da"}}
-    },
     "editor.unicodeHighlight.nonBasicASCII": false,
     "editor.unicodeHighlight.ambiguousCharacters": false,
     "editor.fontLigatures": true,
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
-    "lean4.infoview.emphasizeFirstGoal": true,
-    "lean4.infoview.showExpectedType": false
+    "lean4.infoview.emphasizeFirstGoal": true
 }

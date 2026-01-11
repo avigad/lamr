@@ -13,7 +13,7 @@ The course requires the Lean 4 programming language and theorem prover, as well 
 three additional automated reasoning tools: CaDiCaL (a SAT solver), Z3 (an SMT solver), and
 Vampire (a resolution theorem prover).
 
-There are three ways for you to use the software and supporting libraries.
+There are two ways for you to use the software and supporting libraries.
 
 ## Option 1: use this repository on your computer
 
@@ -58,12 +58,12 @@ You can also use this repository with Lean running in the cloud using Github Cod
 This requires a Github account. If you are signed in to Github, click here:
 <https://codespaces.new/avigad/lamr>.
 
-Make sure the Machine type is `4-core`, and then press `Create codespace`
-(this might take a few minutes).
+Make sure the Machine type is `4-core`, and then press `Create codespace`.
 This creates a virtual machine in the cloud,
 and installs Lean and Mathlib.
+Click on the extensions icon in the sidebar (the four squares), and install then `Lean 4` extension.
+Then type `lake build` in the terminal to build the local files.
 
-Opening any `.lean` file in the LAMR folder will start Lean.
 You can update the repository by opening a terminal in the browser
 and typing `git pull` followed by `lake exe cache get` and `lake build` as above.
 
@@ -74,32 +74,6 @@ If you forget, don't worry: the virtual machine will stop itself after a certain
 amount of time of inactivity.
 
 To restart a previous workspace, visit <https://github.com/codespaces>.
-
-## Option 3: use this repository with Gitpod
-
-Gitpod is an alternative to Github Codespaces, but is a little less convenient,
-since it requires you to verify your phone number.
-If you have a Gitpod account or are willing to sign up for one,
-point your browser to
-<https://gitpod.io/#/https://github.com/avigad/lamr>.
-This creates a virtual machine in the cloud,
-and installs Lean and Mathlib.
-It then presents you with a VS Code window, running in a virtual
-copy of the repository.
-When the terminal shows that the build has completed, you can open any `.lean`
-file in the `LAMR` folder to start Lean.
-
-You can update the repository by opening a terminal in the browser
-and typing `git pull` followed by `lake exe cache get` and `lake build` as above.
-
-Gitpod gives you 50 free hours every month.
-When you are done working, choose `Stop workspace` from the menu on the left.
-The workspace should also stop automatically
-30 minutes after the last interaction or 3 minutes after closing the tab.
-
-To restart a previous workspace, go to <https://gitpod.io/workspaces/>.
-If you change the filter from Active to All, you will see all your recent workspaces.
-You can pin a workspace to keep it on the list of active ones.
 
 ## To use the automated reasoning tools
 
