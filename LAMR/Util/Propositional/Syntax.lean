@@ -33,8 +33,8 @@ syntax:max "(" propform ")"             : propform
 
 macro_rules
   | `(prop!{$p:ident}) => `(PropForm.var $(Lean.quote p.getId.toString))
-  | `(prop!{⊤})        => `(ProfForm.tr)
-  | `(prop!{⊥})        => `(ProfForm.fls)
+  | `(prop!{⊤})        => `(PropForm.tr)
+  | `(prop!{⊥})        => `(PropForm.fls)
   | `(prop!{¬ $p})     => `(PropForm.neg prop!{$p})
   | `(prop!{$p ∧ $q})  => `(PropForm.conj prop!{$p} prop!{$q})
   | `(prop!{$p ∨ $q})  => `(PropForm.disj prop!{$p} prop!{$q})
